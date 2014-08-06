@@ -5,6 +5,13 @@
 
     author(s)
         - Alexis Schad : schadoc_alex@hotmail.fr
+
+    TODO :
+        - Comments
+        - Try serial port before validating one (maybe it's an USB key)
+        - Open xml file to get configuration values (so introduce XBee
+            name like "master" and "arduino" passed to the constructor)
+        - Use a logger in place of print() function
 """
 
 from serial import Serial
@@ -41,29 +48,29 @@ class XBee:
 
         print('Port opened : ' + self.link.name)
 
-        if not self.__enterCommandMode():
+        if not self.enterCommandMode():
             # Try with all others baudrates to reconfigure with baudrate variable value
             for i in [3,6,7,0,1,2,4,5]: # Most probably baudrate first (optimization)
                 new_baudrate = self.__convertNumberToBauds(i)
                 self.link.baudrate = new_baudrate
-                if self.__enterCommandMode():
+                if self.enterCommandMode():
                     break
                 else:
                     pass #print("Failed with "+ str(self.__convertNumberToBauds(i)) +" bauds")
 
-        self.__AT('RE')
-        self.__AT('BD', self.__convertBaudsToNumber(self.baudrate))
-        self.__AT('MY', '0042')
-        self.__AT('CH', '0013')
-        self.__AT('ID', '0666')
-        self.__AT('RR', '6')
+        self.AT('RE')
+        self.AT('BD', self.__convertBaudsToNumber(self.baudrate))
+        self.AT('MY', '0042')
+        self.AT('CH', '0013')
+        self.AT('ID', '0666')
+        self.AT('RR', '6')
 
-        self.address = self.__AT('MY')
-        self.channel = self.__AT('CH')
-        self.pan_id = self.__AT('ID')
+        self.address = self.AT('MY')
+        self.channel = self.AT('CH')
+        self.pan_id = self.AT('ID')
 
-        self.__saveCommands()
-        self.__closeCommandMode()
+        self.saveCommands()
+        self.closeCommandMode()
 
         print('Channel : \t' + self.channel)
         print('PAN ID : \t' + self.pan_id)
@@ -83,28 +90,28 @@ class XBee:
     ## Functions dedicated to COMMAND MODE
     ####
 
-    def __enterCommandMode(self):
+    def enterCommandMode(self):
         self.send('+++')
-        return self.__waitForOK()
+        return self.waitForOK()
 
-    def __closeCommandMode(self):
-        self.__AT('CN')
+    def closeCommandMode(self):
+        self.AT('CN')
 
-    def __reboot(self):
-        self.__AT('FR')
+    def reboot(self):
+        self.AT('FR')
 
-    def __saveCommands(self):
-        self.__AT('WR')
-        return self.__waitForOK()
+    def saveCommands(self):
+        self.AT('WR')
+        return self.waitForOK()
 
-    def __AT(self, command, parameter=''):
+    def AT(self, command, parameter=''):
         self.send('AT'+command+str(parameter)+'\r')
         if parameter == '':
             return self.read()
         else:
-            return self.__waitForOK()
+            return self.waitForOK()
 
-    def __waitForOK(self, nb_step=100):
+    def waitForOK(self, nb_step=100):
         for i in range(1,nb_step):
             if self.read(3) == 'OK\r':
                 return True
