@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """
-    Class for communicating with a XBee radio in transparent mode
+    ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
+    ║ ║ ║ ║  │ ││ │├─┘├┤ 
+    ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
+    │ xbee.class.py
+    └────────────────────
 
-    author(s)
+    Class for communicating with a XBee radio in transparent mode.
+    XBee radio parameters are replaced in constructor.
+
+    Author(s)
         - Alexis Schad : schadoc_alex@hotmail.fr
 
     TODO :
@@ -12,6 +19,7 @@
         - Open xml file to get configuration values (so introduce XBee
             name like "master" and "arduino" passed to the constructor)
         - Use a logger in place of print() function
+        - Let the choice to don't change parameters (but change them by default)
 """
 
 from serial import Serial
@@ -31,12 +39,12 @@ class XBee:
         # Choose existing port
         if not os.path.exists(port):
             # Try /dev/ttyUSB*
-            for i in range(0,6):
+            for i in range(0,7):
                 port = '/dev/ttyUSB'+str(i)
                 if os.path.exists(port):
                     break
             if i >= 6:
-                print("Error : can't open any /dev/ttyUSB* port (range 0-5)"+str(i))
+                print("Error : can't open any /dev/ttyUSB* port (range 0-5)")
                 exit()
 
         # Open serial communication
@@ -58,13 +66,15 @@ class XBee:
                 else:
                     pass #print("Failed with "+ str(self.__convertNumberToBauds(i)) +" bauds")
 
-        self.AT('RE')
-        self.AT('BD', self.__convertBaudsToNumber(self.baudrate))
-        self.AT('MY', '0042')
-        self.AT('CH', '0013')
-        self.AT('ID', '0666')
-        self.AT('RR', '6')
+        self.AT('RE') # Restore 
+        self.AT('BD', self.__convertBaudsToNumber(self.baudrate)) # Baudrate
+        self.AT('MY', '0043') # 16-bit Network Address of this XBee radio
+        self.AT('CH', '0013') # Channel in which XBee radios are
+        self.AT('ID', '0666') # Personal Area Network ID (PAN ID) in which XBee radios are
+        self.AT('DL', '0042') # 16-bit XBee Destination Address (0xFFFF = broadcast)
+        self.AT('RR', '6') # Number of Retry Rate
 
+        # We already know these variables but to be sure we read them again
         self.address = self.AT('MY')
         self.channel = self.AT('CH')
         self.pan_id = self.AT('ID')
