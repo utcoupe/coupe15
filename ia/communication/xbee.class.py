@@ -66,6 +66,7 @@ class XBee:
                 else:
                     pass #print("Failed with "+ str(self.__convertNumberToBauds(i)) +" bauds")
 
+        """
         self.AT('RE') # Restore 
         self.AT('BD', self.__convertBaudsToNumber(self.baudrate)) # Baudrate
         self.AT('MY', '0043') # 16-bit Network Address of this XBee radio
@@ -73,19 +74,31 @@ class XBee:
         self.AT('ID', '0666') # Personal Area Network ID (PAN ID) in which XBee radios are
         self.AT('DL', '0042') # 16-bit XBee Destination Address (0xFFFF = broadcast)
         self.AT('RR', '6') # Number of Retry Rate
+        """
+        self.AT('RE') # Restore 
+        self.AT('BD', self.__convertBaudsToNumber(self.baudrate)) # Baudrate
+        self.AT('AP', '2')
+        self.AT('CE', '1')
+        self.AT('CH', '0013') # Channel in which XBee radios are
+        self.AT('ID', '0666') # Personal Area Network ID (PAN ID) in which XBee radios are
+        self.AT('MY', '0042')
+        self.saveCommands()
 
         # We already know these variables but to be sure we read them again
         self.address = self.AT('MY')
         self.channel = self.AT('CH')
         self.pan_id = self.AT('ID')
+        self.api_mode = self.AT('AP')
+        self.coord = self.AT('CE')
 
-        self.saveCommands()
         self.closeCommandMode()
 
         print('Channel : \t' + self.channel)
         print('PAN ID : \t' + self.pan_id)
         print('Address : \t' + self.address)
         print('Baudrate : \t' + str(self.baudrate))
+        print('API mode : \t' + str(self.api_mode))
+        print('Coordinator : \t' + str(self.coord))
 
     def send(self, string):
         self.link.write(string.encode())
