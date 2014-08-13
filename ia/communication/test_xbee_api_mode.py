@@ -48,11 +48,13 @@ while True:
         # Code for TX
         x = int(input("Enter a number between 0 and 255: "))
         try:
-            x = x.to_bytes(1, "big")
+            y = x.to_bytes(1, "big")
+            for i in range(x-1):
+                y += x.to_bytes(1, "big")
         except:
             print(str(x)+" is not a valid value")
             continue
-        xbee.send('tx', dest_addr=b'\x00\x43', data=x)
+        xbee.send('tx', dest_addr=b'\x00\x43', data=y)
 
         # Code for RX
         """
