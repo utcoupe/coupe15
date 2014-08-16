@@ -24,7 +24,7 @@ from xbee import XBee
 import serial
 from time import sleep
 
-PORT = '/dev/ttyUSB0'
+PORT = '/dev/ttyUSB1'
 BAUD_RATE = 57600
 
 # Open serial port
@@ -41,20 +41,19 @@ def message_received(data):
 # Create API object
 xbee = XBee(ser, callback=message_received)
 """
-
-# Continuously read and print packets
+# Continuously read or print packets
 while True:
 	try:
 		# Code for TX
-		x = int(input("Enter a number between 0 and 255: "))
 		try:
-			y = x.to_bytes(1, "big")
-			for i in range(x-1):
-				y += x.to_bytes(1, "big")
+			y = b'\x43\x05\x04'
+			x = int(input("x: "))
+			x = y + x.to_bytes(1, "big") + x.to_bytes(1, "big")
+			print(x)
+			xbee.send('tx', dest_addr=b'\x00\x43', data=x)
 		except:
 			print(str(x)+" is not a valid value")
-			continue
-		xbee.send('tx', dest_addr=b'\x00\x43', data=y)
+			break
 
 		# Code for RX
 		"""

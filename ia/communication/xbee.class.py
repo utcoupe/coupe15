@@ -78,10 +78,10 @@ class XBee:
         self.AT('RE') # Restore 
         self.AT('BD', self.__convertBaudsToNumber(self.baudrate)) # Baudrate
         self.AT('AP', '2')
-        self.AT('CE', '1')
+        self.AT('CE', '0')
         self.AT('CH', '0013') # Channel in which XBee radios are
         self.AT('ID', '0666') # Personal Area Network ID (PAN ID) in which XBee radios are
-        self.AT('MY', '0042')
+        self.AT('MY', '0043')
         self.saveCommands()
 
         # We already know these variables but to be sure we read them again

@@ -1,88 +1,90 @@
 /*
-	╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
-	║ ║ ║ ║  │ ││ │├─┘├┤ 
-	╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-	│ PR00.ino
-	└────────────────────
+  ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
+  ║ ║ ║ ║  │ ││ │├─┘├┤ 
+  ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
+  │ PR00.ino
+  └────────────────────
 
-	Main file of Arduino board inside PR00
+  Main file of Arduino board inside PR00
 
-	Author(s)
-		- Alexis Schad : schadoc_alex@hotmail.fr
+  Author(s)
+    - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
 #include <XBee.h>
 #include "constants.h"
 #include "orders.h"
 
-typedef struct packet {
-	uint8_t id;
-	uint8_t type;
-	uint8_t length;
-	uint8_t* data;
-
-	packet* next;
-} Packet;
-
-
 // Variables
 XBee xbee = XBee();
 Rx16Response rx16 = Rx16Response();
-uint8_t* data = 0;
-uint8_t length = 0;
-
-Packet* packet_buffer_head = NULL;
-Packet* packet_buffer_end = NULL;
 
 void setup() {
-	Serial1.begin(BAUDRATE_XBEE);
-	xbee.setSerial(Serial1);
+  Serial1.begin(BAUDRATE_XBEE);
+  xbee.setSerial(Serial1);
 
-	#ifdef DEBUG
-		Serial.begin(BAUDRATE_USB);
-	#endif
+  #ifdef DEBUG
+    Serial.begin(BAUDRATE_USB);
+  #endif
 }
 
-void readPackets() {
-	int i;
-	Packet* new_packet;
+void loopOrder() {
+  uint8_t i;
+  uint8_t* data = 0;
+  uint8_t length = 0;
+  uint8_t address = 0;
+  uint8_t id = 0;
+  uint8_t type = 0;
+  uint8_t* params = 0;
 
-	xbee.readPacket();
+  xbee.readPacket();
 
-	if (xbee.getResponse().getApiId() == RX_16_RESPONSE) {
-		xbee.getResponse().getRx16Response(rx16);
-		
-		length = rx16.getDataLength();
-		data = rx16.getData();
+  if (xbee.getResponse().getApiId() == RX_16_RESPONSE) {
+    xbee.getResponse().getRx16Response(rx16);
+    
+    length = rx16.getDataLength();
+    data = rx16.getData();
 
-		if(length < 2) {
-			#ifdef DEBUG
-				Serial.println("Packet invalide, au moins deux octets attendus.");
-			#endif
-			return;
-		}
+    if(length < 3) {
+      #ifdef DEBUG
+        Serial.println("Packet invalide, au moins trois octets attendus.");
+      #endif
+      return;
+    }
 
-		new_packet->id = data[1];
-		new_packet->type = data[0];
+    address = data[0];
+    id = data[1];
+    type = data[2];
+    length -= 3;
+    params = (uint8_t*) malloc(length * sizeof(uint8_t));
+    for(i = 0; i < length; i++) {
+        params[i] = data[i+3];
+    }
 
-		// Send ACK Order TODO
-		
-		#ifdef DEBUG
-			Serial.print("length:");
-			Serial.println(length);
-			for(i = 0; i < length; i++) {
-				Serial.print("[");
-				Serial.print(i);
-				Serial.print("] ");
-				Serial.println(data[i]);
-			}
-			Serial.println("");
-		#endif
-	}
+    #ifdef DEBUG
+      Serial.println("[Packet]");
+      Serial.print("address:");
+      Serial.println(address);
+      Serial.print("id:");
+      Serial.println(id);
+      Serial.print("type:");
+      Serial.println(type);
+      Serial.print("length:");
+      Serial.println(length);
+
+      for(i = 0; i < length; i++) {
+        Serial.print("[");
+        Serial.print(i);
+        Serial.print("] ");
+        Serial.println(params[i]);
+      }
+      Serial.println("");
+    #endif
+  }
 
 }
 
 void loop() {
-	readPackets();
-	delay(1000);
+  loopOrder();
+  delay(1000);
 }

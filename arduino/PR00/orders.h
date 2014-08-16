@@ -1,14 +1,14 @@
 /*
-	╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
-	║ ║ ║ ║  │ ││ │├─┘├┤ 
-	╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-	│ orders.h
-	└────────────────────
+  ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
+  ║ ║ ║ ║  │ ││ │├─┘├┤ 
+  ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
+  │ orders.h
+  └────────────────────
 
-	Contain all orders define and parameters
+  Contain all orders define and parameters
 
-	Author(s)
-		- Alexis Schad : schadoc_alex@hotmail.fr
+  Author(s)
+    - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
 #ifndef ORDERS_H
@@ -21,36 +21,37 @@
 #define FLOAT 4
 
 /*
-	Orders:
-	id order,nb parameters[,type parameter 1,type parameter 2,...]
+  Orders:
+  id order,nb parameters[,type parameter 1,type parameter 2,...]
 
-	00-09 : Ordres spéciaux
-	10-49 : Ordres pour le gros robot
-	50-89 : Ordres pour le petit robot
-	90-99 : Ordres pour la tourelle
+  00-09 : Ordres spéciaux
+  10-49 : Ordres pour le gros robot
+  50-89 : Ordres pour le petit robot
+  90-99 : Ordres pour la tourelle
 */
-#define NO_ACK 	0
-#define ACK 	1
-#define ERROR 	2
-#define PING 	3
-#define TEST 	4
+#define NO_ACK  0
+#define ACK     1
+#define ERROR   2
+#define PING    3
+#define TEST    4
 
 #define NB_ORDERS 100
+#define NB_MAX_PARAMS_ORDER 8
 
 uint32_t orders[NB_ORDERS];
 void initOrders() {
-	int i, j;
-	// Initialisation
-	for(i = 0; i < NB_ORDERS; i++) {
-		orders[i] = 0;
-	}
-	/* Useless for Arduino
-	orders[NO_ACK]		= ;
-	orders[ACK]		= ;
-	orders[ERROR]		= ;
-	*/
-	orders[PING]		= 0x00;
-	orders[TEST]		= 0x01 + INT << 4;
+  int i, j;
+  // Initialisation
+  for(i = 0; i < NB_ORDERS; i++) {
+    orders[i] = 0;
+  }
+  /* Useless for Arduino
+  orders[NO_ACK]    = ;
+  orders[ACK]    = ;
+  orders[ERROR]    = ;
+  */
+  orders[PING]    = 0x00;
+  orders[TEST]    = 0x01 + INT << 4;
 }
 
 
