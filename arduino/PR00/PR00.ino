@@ -28,7 +28,7 @@ void setup() {
   #endif
 }
 
-void loopOrder() {
+void readPackets() {
   uint8_t i;
   uint8_t* data = 0;
   uint8_t length = 0;
@@ -37,9 +37,14 @@ void loopOrder() {
   uint8_t type = 0;
   uint8_t* params = 0;
 
+  /** Lecture du paquet en attente **/
+ 
   xbee.readPacket();
 
   if (xbee.getResponse().getApiId() == RX_16_RESPONSE) {
+    #ifdef DEBUG
+      Serial.println("### Reading packet");
+    #endif
     xbee.getResponse().getRx16Response(rx16);
     
     length = rx16.getDataLength();
@@ -47,7 +52,7 @@ void loopOrder() {
 
     if(length < 3) {
       #ifdef DEBUG
-        Serial.println("Packet invalide, au moins trois octets attendus.");
+        Serial.println("Invalid packet, three or more bytes needed.");
       #endif
       return;
     }
@@ -78,13 +83,39 @@ void loopOrder() {
         Serial.print("] ");
         Serial.println(params[i]);
       }
-      Serial.println("");
+    #endif
+    
+    /** Traitement du paquet **/
+    #ifdef DEBUG
+      Serial.println("### Computing packet");
+    #endif
+    
+    // Envoi ACK TODO
+    if(address != ADDRESS_ARDUINO) {
+      #ifdef DEBUG
+        Serial.print("Packet sent to another one (destination= ");
+        Serial.print(address);
+        Serial.print(", address Arduino=");
+        Serial.print(ADDRESS_ARDUINO);
+        Serial.println(")");
+      #endif
+    }
+    else {
+      
+    }
+  }
+  else {
+    #ifdef INFO
+      Serial.println("No packet available");
     #endif
   }
-
+  
 }
 
 void loop() {
+  #ifdef INFO
+    Serial.println("###### Begin of main loop ######");
+  #endif
   loopOrder();
   delay(1000);
 }
