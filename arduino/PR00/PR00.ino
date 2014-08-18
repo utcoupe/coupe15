@@ -104,8 +104,8 @@ void readPackets() {
     }
     else {
       #ifdef DEBUG
-        Serial.print("Number of order detected parameters: ");
-        Serial.println(orders[type]);
+        Serial.print("Number of expected parameters: ");
+        Serial.println(getNbParams(type));
       #endif
     }
   }
