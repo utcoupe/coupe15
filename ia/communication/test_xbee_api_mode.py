@@ -24,7 +24,7 @@ from xbee import XBee
 import serial
 from time import sleep
 
-PORT = '/dev/ttyUSB1'
+PORT = '/dev/ttyUSB0'
 BAUD_RATE = 57600
 
 # Open serial port
@@ -46,7 +46,7 @@ while True:
 	try:
 		# Code for TX
 		try:
-			y = b'\x43\x05\x04'
+			y = b'\x43\x04\x04'
 			x = int(input("x: "))
 			x = y + x.to_bytes(1, "big") + x.to_bytes(1, "big")
 			print(x)

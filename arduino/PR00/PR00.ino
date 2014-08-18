@@ -22,10 +22,11 @@ Rx16Response rx16 = Rx16Response();
 void setup() {
   Serial1.begin(BAUDRATE_XBEE);
   xbee.setSerial(Serial1);
-
   #ifdef DEBUG
     Serial.begin(BAUDRATE_USB);
   #endif
+  
+  initOrders();
 }
 
 void readPackets() {
@@ -58,8 +59,8 @@ void readPackets() {
     }
 
     address = data[0];
-    id = data[1];
-    type = data[2];
+    type = data[1];
+    id = data[2];
     length -= 3;
     params = (uint8_t*) malloc(length * sizeof(uint8_t));
     for(i = 0; i < length; i++) {
@@ -70,10 +71,10 @@ void readPackets() {
       Serial.println("[Packet]");
       Serial.print("address:");
       Serial.println(address);
-      Serial.print("id:");
-      Serial.println(id);
       Serial.print("type:");
       Serial.println(type);
+      Serial.print("id:");
+      Serial.println(id);
       Serial.print("length:");
       Serial.println(length);
 
@@ -91,6 +92,7 @@ void readPackets() {
     #endif
     
     // Envoi ACK TODO
+    
     if(address != ADDRESS_ARDUINO) {
       #ifdef DEBUG
         Serial.print("Packet sent to another one (destination= ");
@@ -101,7 +103,10 @@ void readPackets() {
       #endif
     }
     else {
-      
+      #ifdef DEBUG
+        Serial.print("Number of order detected parameters: ");
+        Serial.println(orders[type]);
+      #endif
     }
   }
   else {
@@ -116,6 +121,7 @@ void loop() {
   #ifdef INFO
     Serial.println("###### Begin of main loop ######");
   #endif
-  loopOrder();
+  
+  readPackets();
   delay(1000);
 }

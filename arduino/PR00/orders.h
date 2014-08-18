@@ -38,6 +38,18 @@
 #define NB_ORDERS 100
 #define NB_MAX_PARAMS_ORDER 8
 
+uint32_t params(uint32_t nb, ...) {
+  int i;
+  uint32_t final_param = nb;
+  va_list ap;
+  
+  va_start(ap, nb);
+  for(i = 0; i < nb; i++) {
+    final_param += va_arg(ap, uint32_t) << (4*(i+1));
+  }
+  va_end(ap);
+}
+
 uint32_t orders[NB_ORDERS];
 void initOrders() {
   int i, j;
@@ -50,9 +62,15 @@ void initOrders() {
   orders[ACK]    = ;
   orders[ERROR]    = ;
   */
-  orders[PING]    = 0x00;
-  orders[TEST]    = 0x01 + INT << 4;
+  orders[PING]    = params(0);
+  orders[TEST]    = params(1, INT);
 }
 
+int getNbParams(int type) {
+  return (int) (orders[type] & 0x0F);
+}
+int getParam(int type, int n) {
+  return (int) orders[type] & (0x0F << (n*4));
+}
 
 #endif
