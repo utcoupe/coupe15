@@ -2,10 +2,10 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ PR00.ino
+  │ Cesar.ino
   └────────────────────
 
-  Main file of Arduino board inside PR00
+  Main file of Arduino board inside Cesar
 
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
