@@ -33,7 +33,7 @@ void setup() {
 void readPackets() {
   uint8_t i;
   uint8_t* data = 0;
-  uint8_t length = 0;
+  uint8_t length = 0, nb_bytes_params;
   uint8_t address = 0;
   uint8_t id = 0;
   uint8_t type = 0;
@@ -94,7 +94,19 @@ void readPackets() {
     
     // Envoi ACK TODO
     
-    if(address != ADDRESS_ARDUINO) {
+    nb_bytes_params = getNbBytesData(type);
+    #ifdef DEBUG
+      Serial.print("Number of expected bytes: ");
+      Serial.println(nb_bytes_params);
+    #endif
+
+    if(length != nb_bytes_params) {
+      #ifdef DEBUG
+        Serial.println("Number of expected bytes is different from number of received bytes");
+      #endif
+      // TODO
+    }
+    else if(address != ADDRESS_ARDUINO) {
       #ifdef DEBUG
         Serial.print("Packet sent to another one (destination= ");
         Serial.print(address);
@@ -102,12 +114,10 @@ void readPackets() {
         Serial.print(ADDRESS_ARDUINO);
         Serial.println(")");
       #endif
+      // TODO
     }
     else {
-      #ifdef DEBUG
-        Serial.print("Number of expected parameters: ");
-        Serial.println(getNbParams(type));
-      #endif
+         
     }
   }
   else {

@@ -19,6 +19,10 @@
 #define CHAR 2
 #define LONG 3
 #define FLOAT 4
+#define NB_BYTES_INT 1
+#define NB_BYTES_CHAR 1
+#define NB_BYTES_LONG 4
+#define NB_BYTES_FLOAT 4
 
 // Orders:
 // id order,nb parameters[,type parameter 1,type parameter 2,...]
@@ -37,13 +41,13 @@
 #define NB_MAX_PARAMS_ORDER 8
 
 // Prototypes
-uint32_t params(uint32_t nb, ...);
+int* params(int nb, ...);
 int getNbParams(int type);
 int getParam(int type, int n);
 void initOrders();
 
 // Variables
-uint32_t orders[NB_ORDERS];
+int* orders[NB_ORDERS];
 
 
 #endif
