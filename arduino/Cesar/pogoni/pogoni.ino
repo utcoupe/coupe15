@@ -31,16 +31,13 @@ void setup() {
 }
 
 void readPackets() {
-  uint8_t i;
   uint8_t* data = 0;
-  uint8_t length = 0, nb_bytes_params;
-  uint8_t address = 0;
-  uint8_t id = 0;
-  uint8_t type = 0;
-  uint8_t* params = 0;
+  int length;
+  int address, id, type, nb_bytes_params;
+  byte* params = 0;
+  int i;
 
   /** Lecture du paquet en attente **/
- 
   xbee.readPacket();
 
   if (xbee.getResponse().getApiId() == RX_16_RESPONSE) {
@@ -49,7 +46,7 @@ void readPackets() {
     #endif
     xbee.getResponse().getRx16Response(rx16);
     
-    length = rx16.getDataLength();
+    length = (int) rx16.getDataLength();
     data = rx16.getData();
 
     if(length < 3) {
@@ -59,28 +56,29 @@ void readPackets() {
       return;
     }
 
-    address = data[0];
-    type = data[1];
-    id = data[2];
+    address = (int) data[0];
+    type = (int) data[1];
+    id = (int) data[2];
     length -= 3;
-    params = (uint8_t*) malloc(length * sizeof(uint8_t));
+    params = (byte*) malloc(length * sizeof(byte));
     for(i = 0; i < length; i++) {
-        params[i] = data[i+3];
+        params[i] = (byte) data[i+3];
     }
 
     #ifdef DEBUG
       Serial.println("[Packet]");
-      Serial.print("address:");
+      Serial.print("  address:");
       Serial.println(address);
-      Serial.print("type:");
+      Serial.print("  type:");
       Serial.println(type);
-      Serial.print("id:");
+      Serial.print("  id:");
       Serial.println(id);
-      Serial.print("length:");
+      Serial.print("  length:");
       Serial.println(length);
-
+      
+      Serial.println("  data:");
       for(i = 0; i < length; i++) {
-        Serial.print("[");
+        Serial.print("    [");
         Serial.print(i);
         Serial.print("] ");
         Serial.println(params[i]);
@@ -102,7 +100,7 @@ void readPackets() {
 
     if(length != nb_bytes_params) {
       #ifdef DEBUG
-        Serial.println("Number of expected bytes is different from number of received bytes");
+        Serial.println("ERROR: Number of expected bytes is different from number of received bytes");
       #endif
       // TODO
     }
