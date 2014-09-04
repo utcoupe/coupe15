@@ -14,6 +14,23 @@
 #include "constants.h"
 #include "orders.h"
 
+static int* orders[NB_ORDERS];
+
+void executeOrder() {
+  // Switch géant pour lancer les ordres
+}
+
+void initOrders() {
+  int i, j;
+  // Initialisation
+  for(i = 0; i < NB_ORDERS; i++) {
+    orders[i] = NULL;
+  }
+
+  orders[PING]    = params(0);
+  orders[TEST]    = params(2, INT, FLOAT);
+}
+
 int* params(int nb, ...) {
   int i;
   int* final_param = NULL;
@@ -39,7 +56,16 @@ int* params(int nb, ...) {
 }
 
 int getNbParams(int type) {
-  return getParam(type, 0);
+  return getTypeParam(type, 0);
+}
+
+int getNbBytes(int type) {
+  int i, nb_bytes = 0;
+  int nb_params = getNbParams(type);
+  for(i = 1; i <= nb_params; i++) {
+    nb_bytes += getNbBytesType(getTypeParam(type, i));
+  }
+  return nb_bytes;
 }
 
 int getNbBytesType(int type) {
@@ -57,33 +83,10 @@ int getNbBytesType(int type) {
   }
 }
 
-int getNbBytesData(int type) {
-  int i, nb_bytes = 0;
-  int nb_params = getNbParams(type);
-  for(i = 1; i <= nb_params; i++) {
-    nb_bytes += getNbBytesType(getParam(type, i));
-  }
-  return nb_bytes;
-}
-
-int getParam(int type, int n) {
+int getTypeParam(int type, int n) {
   if(orders[type] == NULL) {
     return 0;
   }
   return orders[type][n];
 }
 
-void initOrders() {
-  int i, j;
-  // Initialisation
-  for(i = 0; i < NB_ORDERS; i++) {
-    orders[i] = NULL;
-  }
-  /* Useless for this Arduino
-  orders[NO_ACK]    = ;
-  orders[ACK]    = ;
-  orders[ERROR]    = ;
-  */
-  orders[PING]    = params(0);
-  orders[TEST]    = params(2, INT, FLOAT);
-}

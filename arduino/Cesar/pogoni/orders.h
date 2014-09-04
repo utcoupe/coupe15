@@ -38,16 +38,15 @@
 #define TEST    4
 
 #define NB_ORDERS 100
-#define NB_MAX_PARAMS_ORDER 8
 
 // Prototypes
 int* params(int nb, ...);
 int getNbParams(int type);
+int getNbBytesData(int type);
 int getParam(int type, int n);
 void initOrders();
 
 // Variables
-int* orders[NB_ORDERS];
 
 
 #endif
