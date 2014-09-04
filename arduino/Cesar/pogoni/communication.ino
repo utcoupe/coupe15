@@ -49,6 +49,6 @@ void processPacket(int address, int type, int id, int length, byte* params) {
     // TODO
   }
   else {
-    
+    executeOrder(type, params);
   }
 }

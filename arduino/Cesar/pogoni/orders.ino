@@ -16,10 +16,18 @@
 
 static int* orders[NB_ORDERS];
 
-void executeOrder() {
-  // Switch géant pour lancer les ordres
+// Switch géant dans lequel sont exécutés les ordres
+void executeOrder(int type, byte* params) {
+  switch(type) {
+    case TEST:
+      int param1 = getParamInt(type, 1, params);
+      Serial.print("Order TEST: ");
+      Serial.println(param1);
+    break;
+  }
 }
 
+// Initialisation des ordres et des paramètres associés
 void initOrders() {
   int i, j;
   // Initialisation
@@ -28,8 +36,10 @@ void initOrders() {
   }
 
   orders[PING]    = params(0);
-  orders[TEST]    = params(2, INT, FLOAT);
+  orders[TEST]    = params(1, INT);
 }
+
+/** Fonctions permettant de gérer les paramètres des ordres **/
 
 int* params(int nb, ...) {
   int i;
@@ -90,3 +100,30 @@ int getTypeParam(int type, int n) {
   return orders[type][n];
 }
 
+int getParamInt(int type, int n, byte* params) {
+  int first_index_param_n = getNbBytesBeforeParam(type, n);
+  if(getTypeParam(type, n) != INT) {
+    #ifdef DEBUG
+      Serial.print("ERROR: type of param ");
+      Serial.print(n);
+      Serial.println(" isn't configured as INT");
+    #endif
+    return 0;
+  }
+  return (int) params[first_index_param_n];
+}
+
+/*int getParamLong(int type, int n, byte* params) {
+  int first_index_param_n = getNbBytesBeforeParam(type, n);
+  return (int) params[first_index_param_n];
+}*/
+
+int getNbBytesBeforeParam(int type, int n) {
+  int i, nb_bytes = 0;
+
+  for(i = 1; i < n; i++) {
+    nb_bytes += getNbBytesType(getTypeParam(type, i));
+  }
+
+  return nb_bytes;
+}

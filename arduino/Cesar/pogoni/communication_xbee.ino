@@ -62,7 +62,7 @@ void readPackets() {
       Serial.print("  length:");
       Serial.println(length);
       
-      Serial.println("  data:");
+      Serial.println("  params:");
       for(i = 0; i < length; i++) {
         Serial.print("    [");
         Serial.print(i);

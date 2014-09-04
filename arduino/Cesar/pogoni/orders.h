@@ -40,13 +40,12 @@
 #define NB_ORDERS 100
 
 // Prototypes
+void executeOrder(int type, byte* params);
+void initOrders();
 int* params(int nb, ...);
 int getNbParams(int type);
-int getNbBytesData(int type);
-int getParam(int type, int n);
-void initOrders();
-
-// Variables
-
+int getNbBytes(int type);
+int getNbBytesType(int type);
+int getTypeParam(int type, int n);
 
 #endif
