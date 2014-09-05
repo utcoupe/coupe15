@@ -32,7 +32,7 @@ ser = serial.Serial(PORT, BAUD_RATE)
 
 # Code for TX
 # Create API object
-xbee = XBee(ser)
+xbee = XBee(ser, escaped=True)
 
 # Code for RX
 """
@@ -46,15 +46,23 @@ while True:
 	try:
 		# Code for TX
 		try:
-			y = b'\x43\x04\x04'
+			head = b'\x43\x04\x04'
 			x = int(input("x: "))
 
 			if x < 0:
 				x += 4294967295
-			
-			x = y + x.to_bytes(4, "big")
+			"""
+			x = head + x.to_bytes(4, "big")
 			print(x)
 			xbee.send('tx', dest_addr=b'\x00\x43', data=x)
+			"""
+			for i in range(255):
+				y = i+1
+				x = b'\x43\x04\x04' + y.to_bytes(4, "big")
+				xbee.send('tx', dest_addr=b'\x00\x43', data=x)
+				print(x)
+				sleep(0.05)
+			
 		except:
 			print(str(x)+" is not a valid value")
 			break

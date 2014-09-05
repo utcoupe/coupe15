@@ -20,9 +20,9 @@ static int* orders[NB_ORDERS];
 void executeOrder(int type, byte* params) {
   switch(type) {
     case TEST:
-      float param1 = getParamFloat(type, 1, params);
+      long param1 = getParamLong(type, 1, params);
       Serial.print("Order TEST: ");
-      Serial.println(param1, 3);
+      Serial.println(param1);
     break;
   }
 }
