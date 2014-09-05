@@ -22,9 +22,11 @@ void readPackets() {
   int address, id, type;
   byte* params = 0;
   int i;
-
+  
+  xbee.readPacket();
+  
   /** Lecture du paquet en attente **/
-  if(xbee.readPacket(TIMEOUT_READPACKET)) {
+  if(xbee.getResponse().isAvailable()) {
     if (xbee.getResponse().getApiId() == RX_16_RESPONSE) {
       #ifdef DEBUG
         Serial.println("### Reading packet");

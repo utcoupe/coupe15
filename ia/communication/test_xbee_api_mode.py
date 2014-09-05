@@ -51,7 +51,7 @@ while True:
 
 			if x < 0:
 				x += 4294967295
-			"""
+			
 			x = head + x.to_bytes(4, "big")
 			print(x)
 			xbee.send('tx', dest_addr=b'\x00\x43', data=x)
@@ -62,7 +62,7 @@ while True:
 				xbee.send('tx', dest_addr=b'\x00\x43', data=x)
 				print(x)
 				sleep(0.05)
-			
+			"""
 		except:
 			print(str(x)+" is not a valid value")
 			break
