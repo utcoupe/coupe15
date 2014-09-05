@@ -48,7 +48,7 @@ while True:
 		try:
 			y = b'\x43\x04\x04'
 			x = int(input("x: "))
-			x = y + x.to_bytes(1, "big")
+			x = y + x.to_bytes(1, "big") + x.to_bytes(1, "big") + x.to_bytes(1, "big") + x.to_bytes(1, "big")
 			print(x)
 			xbee.send('tx', dest_addr=b'\x00\x43', data=x)
 		except:
