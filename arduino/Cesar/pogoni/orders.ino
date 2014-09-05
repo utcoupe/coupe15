@@ -20,9 +20,9 @@ static int* orders[NB_ORDERS];
 void executeOrder(int type, byte* params) {
   switch(type) {
     case TEST:
-      long param1 = getParamLong(type, 1, params);
+      float param1 = getParamFloat(type, 1, params);
       Serial.print("Order TEST: ");
-      Serial.println(param1);
+      Serial.println(param1, 3);
     break;
   }
 }
@@ -101,36 +101,29 @@ int getTypeParam(int type, int n) {
 }
 
 int getParamInt(int type, int n, byte* params) {
-  if(getTypeParam(type, n) != INT) {
-    #ifdef DEBUG
-      Serial.print("ERROR: type of param ");
-      Serial.print(n);
-      Serial.println(" isn't configured as INT");
-    #endif
-    return 0;
-  }
-
   return (int) params[getNbBytesBeforeParam(type, n)];
 }
 
 long getParamLong(int type, int n, byte* params) {
-  int first_index_param_n, i;
-  long param = 0, temp, temp2, temp3;
-
-  if(getTypeParam(type, n) != LONG) {
-    #ifdef DEBUG
-      Serial.print("ERROR: type of param ");
-      Serial.print(n);
-      Serial.println(" isn't configured as LONG");
-    #endif
-    return 0;
-  }
+  int first_index_param_n;
+  unsigned long param_temp = 0, i;
+  long param;
 
   first_index_param_n = getNbBytesBeforeParam(type, n);
   for(i = 0; i < NB_BYTES_LONG; i++) {
-    param += ((long) params[first_index_param_n + i]) << (8 * (NB_BYTES_LONG - i - 1));
+    param_temp += ((unsigned long) params[first_index_param_n + i]) << (8 * (NB_BYTES_LONG - i - 1));
   }
+
+  if(param_temp > LONG_MAX_POSITIVE_NUMBER)
+    param = param_temp - LONG_OFFSET;
+  else
+    param = param_temp;
+
   return param;
+}
+
+float getParamFloat(int type, int n, byte* params) {
+  return (float) getParamLong(type, n, params) / LONG_TO_FLOAT_COEFF;
 }
 
 int getNbBytesBeforeParam(int type, int n) {

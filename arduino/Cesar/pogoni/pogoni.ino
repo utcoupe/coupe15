@@ -38,5 +38,5 @@ void loop() {
   #endif
   
   readPackets();
-  delay(1000);
+  delay(10);
 }

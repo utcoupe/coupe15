@@ -24,6 +24,10 @@
 #define NB_BYTES_LONG 4
 #define NB_BYTES_FLOAT 4
 
+#define LONG_TO_FLOAT_COEFF 1000.0
+#define LONG_MAX_POSITIVE_NUMBER 2147483647
+#define LONG_OFFSET 4294967295
+
 // Orders:
 // id order,nb parameters[,type parameter 1,type parameter 2,...]
 // 00-09 : Ordres spéciaux
