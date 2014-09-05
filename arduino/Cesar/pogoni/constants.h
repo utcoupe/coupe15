@@ -14,12 +14,14 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-//#define DEBUG
+#define DEBUG
 
 #define BAUDRATE_XBEE 57600
 #define BAUDRATE_USB 9600
 
 #define ADDRESS_ARDUINO 0x43
 #define ADDRESS_ARDUINO_ASSERV 0x44
+
+#define TIMEOUT_READPACKET 10
 
 #endif
