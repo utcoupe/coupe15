@@ -2,10 +2,10 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ orders
+  │ orders.ino
   └────────────────────
 
-  Contain all functions relative to orders
+  Contient toutes les fonctions relatives à la gestion des ordres
 
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
@@ -102,6 +102,10 @@ int getTypeParam(int type, int n) {
 
 int getParamInt(int type, int n, byte* params) {
   return (int) params[getNbBytesBeforeParam(type, n)];
+}
+
+char getParamChar(int type, int n, byte* params) {
+  return (char) params[getNbBytesBeforeParam(type, n)];
 }
 
 long getParamLong(int type, int n, byte* params) {
