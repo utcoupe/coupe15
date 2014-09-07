@@ -46,25 +46,20 @@ while True:
 	try:
 		# Code for TX
 		try:
-			head = b'\x43\x04\x04'
-			x = int(input("x: "))
+			head = b'\x43\x04\x01' # \x43 : adresse du destinataire, \x04 : id de l'ordre, \x01 : id unique du packet
+			x = int(input("new pwm: "))
+			y = int(input("new delay: "))
 
-			if x < 0:
-				x += 4294967295
+			# if y < 0:
+			#	y += 4294967295
 			
-			x = head + x.to_bytes(4, "big")
+			order = head + x.to_bytes(1, "big") + y.to_bytes(4, "big")
+
+			xbee.send('tx', dest_addr=b'\x00\x43', data=order)
+
 			print(x)
-			xbee.send('tx', dest_addr=b'\x00\x43', data=x)
-			"""
-			for i in range(255):
-				y = i+1
-				x = b'\x43\x04\x04' + y.to_bytes(4, "big")
-				xbee.send('tx', dest_addr=b'\x00\x43', data=x)
-				print(x)
-				sleep(0.05)
-			"""
+			print("");
 		except:
-			print(str(x)+" is not a valid value")
 			break
 
 		# Code for RX
