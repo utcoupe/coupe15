@@ -14,15 +14,17 @@
 #include "constants.h"
 #include "orders.h"
 
+#include "order_BLINK.h"
+
 static int* orders[NB_ORDERS];
 
 // Switch géant dans lequel sont exécutés les ordres
 void executeOrder(int type, byte* params) {
   switch(type) {
-    case TEST:
-      long param1 = getParamLong(type, 1, params);
-      Serial.print("Order TEST: ");
-      Serial.println(param1);
+    case BLINK:
+      int param1 = getParamInt(type, 1, params);
+      int param2 = getParamLong(type, 2, params);
+      executeOrder_BLINK(param1, param2);
     break;
   }
 }
@@ -36,7 +38,7 @@ void initOrders() {
   }
 
   orders[PING]    = params(0);
-  orders[TEST]    = params(1, LONG);
+  orders[BLINK]    = params(2, INT, LONG);
 }
 
 /** Fonctions permettant de gérer les paramètres des ordres **/

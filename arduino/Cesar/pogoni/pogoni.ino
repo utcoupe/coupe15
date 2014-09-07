@@ -17,6 +17,7 @@
 #include "orders.h"
 #include "communication.h"
 #include "communication_xbee.h"
+#include "order_BLINK.h"
 
 // Variables
 XBee xbee = XBee();
@@ -38,5 +39,8 @@ void loop() {
   #endif
   
   readPackets();
+
+  loopOrder_BLINK();
+
   delay(10);
 }

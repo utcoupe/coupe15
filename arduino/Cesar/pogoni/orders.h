@@ -22,12 +22,21 @@
   90-99 : Ordres pour la tourelle
 
   Pour ajouter un ordre :
-  1 - Ajouter un define avec un id unique (exemple : #define TEST 4)
+  1 - Ajouter un define avec un id unique
   2 - Dans la fonction initOrders() de orders.ino, ajouter une ligne
       pour configurer les paramètres de l'ordre (nombre, type)
   3 - Dans la fonction executeOrder() de orders.ino, ajouter un case
       au switch pour récupérer les paramètres et appeler une
       fonction EXTERNE au switch.
+  4 - Ecrire la fonction externe dans un fichier order_NOM.ino,
+      deux fonctions obligatoires : initOrder_NOM et
+      executeOrder_NOM(). Une fonction optionnelle :
+      loopOrder_NOM(). Les fonctions ne doivent pas être bloquantes.
+  5 - Créer le fichier order_NOM.h et y ajouter les prototypes des
+      fonctions du point 4..
+  6 - Inclure le fichier header (.h) dans orders.ino
+  7 - Si une fonction loopOrder_NOM existe, inclure le header dans
+      pogoni.ino et ajouter l'appel à la fonction dans loop()
 */
 #define NB_ORDERS 100
 
@@ -35,7 +44,7 @@
 #define ACK     1
 #define ERROR   2
 #define PING    3
-#define TEST    4
+#define BLINK    4
 
 
 // List of parameters type
