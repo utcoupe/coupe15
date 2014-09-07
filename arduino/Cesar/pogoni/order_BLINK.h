@@ -2,24 +2,20 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ constants.h
+  │ orders.h
   └────────────────────
 
-  Contain all constants needed by the programm
+  Contient les prototypes des fonctions de order_BLINK.ino
 
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef ORDER_BLINK_H
+#define ORDER_BLINK_H
 
-#define DEBUG
-
-#define BAUDRATE_XBEE 57600
-#define BAUDRATE_USB 9600
-
-#define ADDRESS_ARDUINO 0x43
-#define ADDRESS_ARDUINO_ASSERV 0x44
+void initOrder_BLINK();
+void executeOrder_BLINK(int new_pwm, long new_delay);
+void loopOrder_BLINK();
 
 #endif

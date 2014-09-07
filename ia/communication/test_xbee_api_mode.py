@@ -57,7 +57,7 @@ while True:
 
 			xbee.send('tx', dest_addr=b'\x00\x43', data=order)
 
-			print(x)
+			print(order)
 			print("");
 		except:
 			break
