@@ -42,5 +42,5 @@ void loop() {
 
   loopOrder_BLINK();
 
-  //delay(10);
+  delay(10);
 }
