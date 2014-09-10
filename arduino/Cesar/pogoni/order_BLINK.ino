@@ -2,7 +2,7 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ orders.ino
+  │ order_BLINK.ino
   └────────────────────
 
   Contient les fonctions de l'ordre BLINK
@@ -10,6 +10,8 @@
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
+
+#include "order_BLINK.h"
 
 static const int PIN_LED = 13;
 static int pwm = 255;

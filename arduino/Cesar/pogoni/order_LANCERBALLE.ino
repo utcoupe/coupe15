@@ -2,20 +2,21 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ order_BLINK.h
+  │ order_LANCERBALLE.ino
   └────────────────────
 
-  Contient les prototypes des fonctions de order_BLINK.ino
+  Contient les fonctions de l'ordre LANCERBALLE
 
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
-#ifndef ORDER_BLINK_H
-#define ORDER_BLINK_H
+#include "order_LANCERBALLE.h"
 
-void initOrder_BLINK();
-void executeOrder_BLINK(int new_pwm, long new_delay);
-void loopOrder_BLINK();
+void initOrder_LANCERBALLE() {
+  
+}
 
-#endif
+void executeOrder_LANCERBALLE(int lanceur) {
+  
+}

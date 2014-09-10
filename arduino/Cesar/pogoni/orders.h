@@ -40,11 +40,12 @@
 */
 #define NB_ORDERS 100
 
-#define NO_ACK  0
-#define ACK     1
-#define ERROR   2
-#define PING    3
-#define BLINK    4
+#define NO_ACK        0
+#define ACK           1
+#define ERROR         2
+#define PING          3
+#define BLINK         4
+#define LANCERBALLE   50
 
 
 // List of parameters type

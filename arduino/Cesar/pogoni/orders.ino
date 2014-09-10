@@ -15,6 +15,7 @@
 #include "orders.h"
 
 #include "order_BLINK.h"
+#include "order_LANCERBALLE.h"
 
 static int* orders[NB_ORDERS];
 
@@ -25,6 +26,10 @@ void executeOrder(int type, byte* params) {
       int param1 = getParamInt(type, 1, params);
       int param2 = getParamLong(type, 2, params);
       executeOrder_BLINK(param1, param2);
+    break;
+    case LANCERBALLE:
+      int param1 = getParamInt(type, 1, params);
+      executeOrder_LANCERBALLE(param1);
     break;
   }
 }
@@ -37,8 +42,9 @@ void initOrders() {
     orders[i] = NULL;
   }
 
-  orders[PING]    = params(0);
-  orders[BLINK]    = params(2, INT, LONG);
+  orders[PING]        = params(0);
+  orders[BLINK]       = params(2, INT, LONG);
+  orders[LANCERBALLE] = params(1, INT);
 }
 
 /** Fonctions permettant de gérer les paramètres des ordres **/
