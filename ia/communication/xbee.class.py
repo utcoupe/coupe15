@@ -75,6 +75,7 @@ class XBee:
         self.AT('DL', '0042') # 16-bit XBee Destination Address (0xFFFF = broadcast)
         self.AT('RR', '6') # Number of Retry Rate
         """
+        """
         self.AT('RE') # Restore 
         self.AT('BD', self.__convertBaudsToNumber(self.baudrate)) # Baudrate
         self.AT('AP', '2')
@@ -83,7 +84,7 @@ class XBee:
         self.AT('ID', '0666') # Personal Area Network ID (PAN ID) in which XBee radios are
         self.AT('MY', '0043')
         self.saveCommands()
-
+        """
         # We already know these variables but to be sure we read them again
         self.address = self.AT('MY')
         self.channel = self.AT('CH')

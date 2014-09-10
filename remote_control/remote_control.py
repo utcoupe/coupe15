@@ -8,7 +8,7 @@ import serial
 
 pygame.init()
 
-fenetre = pygame.display.set_mode((0,0), FULLSCREEN)
+fenetre = pygame.display.set_mode((800,600))
 fusee = pygame.mixer.Sound("fusee.ogg")
 
 PORT = '/dev/ttyUSB0'
@@ -19,15 +19,16 @@ xbee = XBee(ser, escaped=True)
 ORDER_LANCERBALLE = 50
 
 def sendBytes(bytes):
-	head = b'\x43\x04\x01'
+	head = b'\x43'
 	order = head + bytes
 	xbee.send('tx', dest_addr=b'\x00\x43', data=order)
 
 def sendOrder_LANCERBALLE(lanceur):
+	sleep(0.1)
 	if not lanceur in [1,2,4,5,7,8]:
 		return
 	fusee.play()
-	bytes = ORDER_LANCERBALLE.to_bytes(1, "big") + lanceur.to_bytes(1, "big")
+	bytes = b'2\x00' + lanceur.to_bytes(1, "big")
 	sendBytes(bytes)
 
 """
