@@ -45,6 +45,7 @@
 #define ERROR         2
 #define PING          3
 #define BLINK         4
+#define MOVEROBOT     10
 #define LANCERBALLE   50
 
 

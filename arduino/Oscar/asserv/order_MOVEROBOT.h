@@ -2,24 +2,23 @@
   ╦ ╦╔╦╗╔═╗┌─┐┬ ┬┌─┐┌─┐
   ║ ║ ║ ║  │ ││ │├─┘├┤ 
   ╚═╝ ╩ ╚═╝└─┘└─┘┴  └─┘
-  │ constants.h
+  │ communication_xbee.h
   └────────────────────
 
-  Contain all constants needed by the programm
+  Contain all prototypes of communication_xbee.ino
 
   Author(s)
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef ORDER_MOVEROBOT_H
+#define ORDER_MOVEROBOT_H
 
-//#define DEBUG
+#include "AFMotor.h"
 
-#define BAUDRATE_XBEE 57600
-#define BAUDRATE_USB 9600
+#define NO_PWM 0
 
-#define ADDRESS_ARDUINO 0x43
-#define ADDRESS_ARDUINO_ASSERV 0x44
+void set_pwm_right(int pwm);
+void set_pwm_left(int pwm);
 
 #endif

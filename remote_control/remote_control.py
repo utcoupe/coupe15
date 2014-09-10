@@ -17,6 +17,7 @@ ser = serial.Serial(PORT, BAUD_RATE)
 xbee = XBee(ser, escaped=True)
 
 ORDER_LANCERBALLE = 50
+ORDER_MOVEROBOT = 10
 
 def sendBytes(bytes):
 	head = b'\x43'
@@ -28,23 +29,14 @@ def sendOrder_LANCERBALLE(lanceur):
 	if not lanceur in [1,2,4,5,7,8]:
 		return
 	fusee.play()
-	bytes = b'2\x00' + lanceur.to_bytes(1, "big")
+	bytes = ORDER_LANCERBALLE.to_bytes(1, "big") + b'\x00' + lanceur.to_bytes(1, "big")
 	sendBytes(bytes)
 
-"""
-#Chargement et collage du fond
-fond = pygame.image.load("background.jpg").convert()
-fenetre.blit(fond, (0,0))
+def sendPWM(pwm):
+	bytes = ORDER_MOVEROBOT.to_bytes(1, "big") + b'\x00' + pwm.to_bytes(1, "big")
+	print(bytes)
+	sendBytes(bytes)
 
-#Chargement et collage du personnage
-perso = pygame.image.load("perso.png").convert_alpha()
-position_perso = perso.get_rect()
-fenetre.blit(perso, position_perso)
-
-#Rafraîchissement de l'écran
-pygame.display.flip()
-
-"""
 loop = True
 while loop:
 	for event in pygame.event.get():
@@ -63,6 +55,24 @@ while loop:
 				sendOrder_LANCERBALLE(7)
 			if event.key == K_KP8:
 				sendOrder_LANCERBALLE(8)
+			if event.key == K_UP:
+				sendPWM(100);
+			if event.key == K_DOWN:
+				sendPWM(0);
+	"""
+	#Chargement et collage du fond
+	fond = pygame.image.load("background.jpg").convert()
+	fenetre.blit(fond, (0,0))
+
+	#Chargement et collage du personnage
+	perso = pygame.image.load("perso.png").convert_alpha()
+	position_perso = perso.get_rect()
+	fenetre.blit(perso, position_perso)
+
+	#Rafraîchissement de l'écran
+	pygame.display.flip()
+
+	"""	
 
 	"""
 	#Re-collage

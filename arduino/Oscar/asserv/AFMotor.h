@@ -18,6 +18,7 @@
 
 #include <inttypes.h>
 #include <avr/io.h>
+#include "Arduino.h"
 
 #define MOTOR12_64KHZ _BV(CS20)  // no prescale
 #define MOTOR12_8KHZ _BV(CS21)   // divide by 8

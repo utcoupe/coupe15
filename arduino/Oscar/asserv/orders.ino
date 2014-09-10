@@ -14,15 +14,16 @@
 #include "constants.h"
 #include "orders.h"
 
-#include "order_BLINK.h"
-#include "order_LANCERBALLE.h"
+#include "order_MOVEROBOT.h"
 
 static int* orders[NB_ORDERS];
 
 // Switch géant dans lequel sont exécutés les ordres
 void executeOrder(int type, byte* params) {
+  int int1;
+
   switch(type) {
-    case BLINK:
+    /*case BLINK:
       int param1 = getParamInt(type, 1, params);
       int param2 = getParamLong(type, 2, params);
       executeOrder_BLINK(param1, param2);
@@ -30,6 +31,11 @@ void executeOrder(int type, byte* params) {
     case LANCERBALLE:
       int param1 = getParamInt(type, 1, params);
       executeOrder_LANCERBALLE(param1);
+    break;
+    */
+    case MOVEROBOT:
+      int1 = getParamInt(type, 1, params);
+      executeOrder_MOVEROBOT(int1);
     break;
   }
 }
@@ -45,6 +51,7 @@ void initOrders() {
   orders[PING]        = params(0);
   orders[BLINK]       = params(2, INT, LONG);
   orders[LANCERBALLE] = params(1, INT);
+  orders[MOVEROBOT] = params(1, INT);
 }
 
 /** Fonctions permettant de gérer les paramètres des ordres **/

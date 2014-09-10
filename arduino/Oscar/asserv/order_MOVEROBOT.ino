@@ -15,8 +15,8 @@
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
-#include "motor.h"
-#include "parameters.h"
+#include "AFMotor.h"
+#include "order_MOVEROBOT.h"
 
 //Controleur :
 //-255:0 : Marche arrière
@@ -27,11 +27,12 @@ AF_DCMotor motor_right(2, MOTOR12_64KHZ);
 
 void set_pwm_left(int pwm){
 	pwm = -pwm;//les moteurs sont faces à face, pour avancer il faut qu'il tournent dans un sens différent
+	/*
 	if (pwm > 0)
 		pwm += PWM_MIN;
 	else if (pwm < 0)
 		pwm -= PWM_MIN;
-
+	*/
 	if(pwm > 255)
 		pwm = 255;
 	else if(pwm < -255)
@@ -45,12 +46,13 @@ void set_pwm_left(int pwm){
 	motor_left.setSpeed(abs(pwm));
 }
 
-void set_pwm_right(int pwm){
+void set_pwm_right(int pwm) {
+	/*
 	if (pwm > 0)
 		pwm += PWM_MIN;
 	else if (pwm < 0)
 		pwm -= PWM_MIN;
-
+	*/
 	if(pwm > 255)
 		pwm = 255;
 	else if(pwm < -255)
@@ -62,4 +64,14 @@ void set_pwm_right(int pwm){
 		motor_right.run(BACKWARD);
 	
 	motor_right.setSpeed(abs(pwm));
+}
+
+void initOrder_MOVEROBOT() {
+	set_pwm_right(0);
+	set_pwm_left(0);
+}
+
+void executeOrder_MOVEROBOT(int pwm) {
+	set_pwm_right(pwm);
+	set_pwm_left(pwm);
 }

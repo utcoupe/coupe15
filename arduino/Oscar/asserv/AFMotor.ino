@@ -15,6 +15,7 @@
     - Alexis Schad : schadoc_alex@hotmail.fr
 */
 
+#include <avr/io.h>
 #include "Arduino.h"
 #include "AFMotor.h"
 
