@@ -34,9 +34,11 @@
       loopOrder_NOM(). Les fonctions ne doivent pas être bloquantes.
   5 - Créer le fichier order_NOM.h et y ajouter les prototypes des
       fonctions du point 4..
-  6 - Inclure le fichier header (.h) dans orders.ino
-  7 - Si une fonction loopOrder_NOM existe, inclure le header dans
-      pogoni.ino et ajouter l'appel à la fonction dans loop()
+  6 - Inclure le fichier header (.h) dans orders.ino et dans 
+      pogoni.ino.
+  7 - Inclure la fonction initOrder_NOM() dans la fonction setup()
+  8 - Inclure la fonction loopOrder_NOM() si elle existe dans la
+      fonction loop()
 */
 #define NB_ORDERS 100
 

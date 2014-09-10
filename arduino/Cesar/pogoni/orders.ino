@@ -21,15 +21,18 @@ static int* orders[NB_ORDERS];
 
 // Switch géant dans lequel sont exécutés les ordres
 void executeOrder(int type, byte* params) {
+  int int1; int int2;
+  long long1; long long2;
+  
   switch(type) {
     case BLINK:
-      int param1 = getParamInt(type, 1, params);
-      int param2 = getParamLong(type, 2, params);
-      executeOrder_BLINK(param1, param2);
+      int1 = getParamInt(type, 1, params);
+      long1 = getParamLong(type, 2, params);
+      executeOrder_BLINK(int1, long1);
     break;
     case LANCERBALLE:
-      int param1 = getParamInt(type, 1, params);
-      executeOrder_LANCERBALLE(param1);
+      int1 = getParamInt(type, 1, params);
+      executeOrder_LANCERBALLE(int1);
     break;
   }
 }

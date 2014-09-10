@@ -19,6 +19,7 @@
 #include "communication_xbee.h"
 
 #include "order_BLINK.h"
+#include "order_LANCERBALLE.h"
 
 // Variables
 XBee xbee = XBee();
@@ -32,6 +33,8 @@ void setup() {
   #endif
   
   initOrders();
+  initOrder_BLINK();
+  initOrder_LANCERBALLE();
 }
 
 void loop() {
@@ -41,7 +44,7 @@ void loop() {
   
   readPackets();
 
-  loopOrder_BLINK();
+  // loopOrder_BLINK();
 
   delay(10);
 }
