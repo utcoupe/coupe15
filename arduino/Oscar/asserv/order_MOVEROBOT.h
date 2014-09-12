@@ -16,9 +16,18 @@
 
 #include "AFMotor.h"
 
-#define NO_PWM 0
+#define NO_PWM  0
+#define KUP     0
+#define KDOWN   1
+#define KLEFT   2
+#define KRIGHT  3
+#define KPDOWN  0
+#define KPUP    1
+
+void initOrder_MOVEROBOT();
+void executeOrder_MOVEROBOT(int type, int dir);
+void loopOrder_MOVEROBOT();
 
 void set_pwm_right(int pwm);
 void set_pwm_left(int pwm);
-
 #endif

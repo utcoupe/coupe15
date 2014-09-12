@@ -20,7 +20,7 @@ static int* orders[NB_ORDERS];
 
 // Switch géant dans lequel sont exécutés les ordres
 void executeOrder(int type, byte* params) {
-  int int1;
+  int int1; int int2;
 
   switch(type) {
     /*case BLINK:
@@ -35,7 +35,8 @@ void executeOrder(int type, byte* params) {
     */
     case MOVEROBOT:
       int1 = getParamInt(type, 1, params);
-      executeOrder_MOVEROBOT(int1);
+      int2 = getParamInt(type, 2, params);
+      executeOrder_MOVEROBOT(int1, int2);
     break;
   }
 }
@@ -51,7 +52,7 @@ void initOrders() {
   orders[PING]        = params(0);
   orders[BLINK]       = params(2, INT, LONG);
   orders[LANCERBALLE] = params(1, INT);
-  orders[MOVEROBOT] = params(1, INT);
+  orders[MOVEROBOT] = params(2, INT, INT);
 }
 
 /** Fonctions permettant de gérer les paramètres des ordres **/

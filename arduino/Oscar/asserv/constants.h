@@ -14,7 +14,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-//#define DEBUG
+#define DEBUG
 
 #define BAUDRATE_XBEE 57600
 #define BAUDRATE_USB 9600

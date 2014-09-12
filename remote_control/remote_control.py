@@ -8,7 +8,7 @@ import serial
 
 pygame.init()
 
-fenetre = pygame.display.set_mode((800,600))
+fenetre = pygame.display.set_mode((100,100))
 fusee = pygame.mixer.Sound("fusee.ogg")
 
 PORT = '/dev/ttyUSB0'
@@ -17,7 +17,14 @@ ser = serial.Serial(PORT, BAUD_RATE)
 xbee = XBee(ser, escaped=True)
 
 ORDER_LANCERBALLE = 50
+
 ORDER_MOVEROBOT = 10
+KUP = 0
+KDOWN = 1
+KLEFT = 2
+KRIGHT = 3
+KPDOWN = 0
+KPUP = 1
 
 def sendBytes(bytes):
 	head = b'\x43'
@@ -32,9 +39,11 @@ def sendOrder_LANCERBALLE(lanceur):
 	bytes = ORDER_LANCERBALLE.to_bytes(1, "big") + b'\x00' + lanceur.to_bytes(1, "big")
 	sendBytes(bytes)
 
-def sendPWM(pwm):
-	bytes = ORDER_MOVEROBOT.to_bytes(1, "big") + b'\x00' + pwm.to_bytes(1, "big")
-	print(bytes)
+def sendKeyDown(direction):
+	bytes = ORDER_MOVEROBOT.to_bytes(1, "big") + b'\x00' + KPDOWN.to_bytes(1, "big") + direction.to_bytes(1, "big")
+	sendBytes(bytes)
+def sendKeyUp(direction):
+	bytes = ORDER_MOVEROBOT.to_bytes(1, "big") + b'\x00' + KPUP.to_bytes(1, "big") + direction.to_bytes(1, "big")
 	sendBytes(bytes)
 
 loop = True
@@ -56,9 +65,23 @@ while loop:
 			if event.key == K_KP8:
 				sendOrder_LANCERBALLE(8)
 			if event.key == K_UP:
-				sendPWM(100);
+				sendKeyDown(KUP);
 			if event.key == K_DOWN:
-				sendPWM(0);
+				sendKeyDown(KDOWN);
+			if event.key == K_LEFT:
+				sendKeyDown(KLEFT);
+			if event.key == K_RIGHT:
+				sendKeyDown(KRIGHT);
+		if event.type == KEYUP:
+			if event.key == K_UP:
+				sendKeyUp(KUP);
+			if event.key == K_DOWN:
+				sendKeyUp(KDOWN);
+			if event.key == K_LEFT:
+				sendKeyUp(KLEFT);
+			if event.key == K_RIGHT:
+				sendKeyUp(KRIGHT);
+
 	"""
 	#Chargement et collage du fond
 	fond = pygame.image.load("background.jpg").convert()
