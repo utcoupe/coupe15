@@ -65,18 +65,18 @@ while loop:
 			if event.key == K_KP8:
 				sendOrder_LANCERBALLE(8)
 			if event.key == K_UP:
-				sendKeyDown(KUP);
-			if event.key == K_DOWN:
 				sendKeyDown(KDOWN);
+			if event.key == K_DOWN:
+				sendKeyDown(KUP);
 			if event.key == K_LEFT:
 				sendKeyDown(KLEFT);
 			if event.key == K_RIGHT:
 				sendKeyDown(KRIGHT);
 		if event.type == KEYUP:
 			if event.key == K_UP:
-				sendKeyUp(KUP);
-			if event.key == K_DOWN:
 				sendKeyUp(KDOWN);
+			if event.key == K_DOWN:
+				sendKeyUp(KUP);
 			if event.key == K_LEFT:
 				sendKeyUp(KLEFT);
 			if event.key == K_RIGHT:
