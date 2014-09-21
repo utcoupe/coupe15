@@ -24,7 +24,7 @@
 #define KPDOWN  0
 #define KPUP    1
 
-#define PWM_MIN    0
+#define PWM_MIN    8
 
 void initOrder_MOVEROBOT();
 void executeOrder_MOVEROBOT(int type, int dir);

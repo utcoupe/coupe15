@@ -35,8 +35,8 @@ void executeOrder(int type, byte* params) {
     */
     case MOVEROBOT:
       int1 = getParamInt(type, 1, params);
-      int2 = getParamInt(type, 2, params);
-      executeOrder_MOVEROBOT(int1, int2);
+      //int2 = getParamInt(type, 2, params);
+      executeOrder_MOVEROBOT(int1);
     break;
   }
 }
@@ -52,7 +52,7 @@ void initOrders() {
   orders[PING]        = params(0);
   orders[BLINK]       = params(2, INT, LONG);
   orders[LANCERBALLE] = params(1, INT);
-  orders[MOVEROBOT] = params(2, INT, INT);
+  orders[MOVEROBOT] = params(1, INT);//, INT);
 }
 
 /** Fonctions permettant de gérer les paramètres des ordres **/

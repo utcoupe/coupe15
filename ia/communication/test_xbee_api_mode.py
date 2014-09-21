@@ -32,29 +32,30 @@ ser = serial.Serial(PORT, BAUD_RATE)
 
 # Code for TX/RX
 # Create API object
-def message_received(data):
-	print(data)
-xbee = XBee(ser, callback=message_received)#, escaped=True)
-
+xbee = XBee(ser, escaped=True)
+order_move = 10
 # Code for RX
 """
 
 # Create API object
-xbee = XBee(ser, )
+
+def message_received(data):
+	print(data)
+xbee = XBee(ser, callback=message_received)
 """
 # Continuously read or print packets
 while True:
 	try:
 		# Code for TX
 		try:
-			head = b'\x43\x04\x01' # \x43 : adresse du destinataire, \x04 : id de l'ordre, \x01 : id unique du packet
-			x = int(input("data: "))
+			head = b'\x43' + order_move.to_bytes(1, "big") + b'\x01' # \x43 : adresse du destinataire, \x04 : id de l'ordre, \x01 : id unique du packet
+			x = int(input("PWM: "))
 			#y = int(input("new delay: "))
 
 			# if y < 0:
 			#	y += 4294967295
 			
-			order = x.to_bytes(1, "big")
+			order = head + x.to_bytes(1, "big")
 
 			xbee.send('tx', dest_addr=b'\x00\x43', data=order)
 
