@@ -28,17 +28,17 @@ static bool status[4] = {false,false,false,false};
 static unsigned long previous_time;
 
 static float acceleration = 0.010; // PWM / secondes (1000 ms)
-static int PMW_MAX = 128;
+static int PMW_MAX = 255;
 
 void initOrder_MOVEROBOT() {
-	set_pwm_right(666);
-	set_pwm_left(666);
+	set_pwm_right(0);
+	set_pwm_left(0);
 	previous_time = millis();
 }
 
 void executeOrder_MOVEROBOT(int pwm) {
-	set_pwm_left(pwm-127);
-	set_pwm_right(pwm-127);
+	set_pwm_left(pwm);
+	set_pwm_right(pwm);
 }
 
 /*
@@ -89,18 +89,18 @@ void loopOrder_MOVEROBOT() {
 */
 void set_pwm_left(int pwm){
 	if (pwm != NO_PWM) {
-		pwm = -pwm;//les moteurs sont faces à face, pour avancer il faut qu'il tournent dans un sens différent
+		/*pwm = -pwm;//les moteurs sont faces à face, pour avancer il faut qu'il tournent dans un sens différent
 		if (pwm > 0)
 			pwm += PWM_MIN;
 		else if (pwm < 0)
 			pwm -= PWM_MIN;
 
 		pwm += 127;
-
+*/
 		if(pwm > 255)
 			pwm = 255;
-		else if(pwm < 0)
-			pwm = 0;
+		else if(pwm < -255)
+			pwm = -255;
 	}
 	motor_left.setPwm(pwm);
 }

@@ -26,6 +26,9 @@ BrushlessMotor::BrushlessMotor(int n_motor_side) {
 		 	pinMode(MOTOR1_EN, OUTPUT);
 			digitalWrite(MOTOR1_EN, LOW); //Enable motor
 
+                        pinMode(MOTOR1_DIR, OUTPUT);
+			digitalWrite(MOTOR1_DIR, HIGH); //Enable motor
+
 			pinMode(MOTOR1_RDY, INPUT);
 			break;
 		}
@@ -45,17 +48,21 @@ void BrushlessMotor::setPwm(int pwm) {
 	switch (motor_side) {
 		case MOTOR_LEFT:{
 			analogWrite(MOTOR1_SPD, pwm);
-			if (pwm == NO_PWM) {
+                        digitalWrite(MOTOR1_EN,HIGH);
+			if (pwm == 0) {
 				digitalWrite(MOTOR1_EN,LOW); //disable motor when pwm = 0
 			}
-			else {
-				digitalWrite(MOTOR1_EN,HIGH); //enable motor when pwm != 0
+			else if (pwm < 0) {
+				digitalWrite(MOTOR1_DIR,HIGH); //enable motor when pwm != 0
+			}
+                        else {
+				digitalWrite(MOTOR1_DIR,LOW); //enable motor when pwm != 0
 			}
 		    	break;
 		}
 		case MOTOR_RIGHT:{
 			analogWrite(MOTOR2_SPD, pwm);
-			if (pwm == NO_PWM) {
+			if (pwm >= 122 && pwm <= 132) {
 				digitalWrite(MOTOR2_EN,LOW); //disable motor when pwm = 0
 			}
 			else {
