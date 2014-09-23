@@ -1,0 +1,14 @@
+Se placer dans le répertoire urg, exécutez les commandes suivantes :
+./configure
+make
+make install
+
+Code de test pour savoir si la librairie est installée
+Regarder dans le dossier /usr/local/c_urg/ pour les header
+en langage C, dans /usr/local/c_urg/ pour les headers en C++
+
+#include <c_urg/urg_ctrl.h>
+void main()
+{
+
+}
