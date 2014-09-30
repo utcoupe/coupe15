@@ -7,17 +7,14 @@
 
 #include "constants.h"
 
-#define MOTOR1_EN 38
-#define MOTOR2_EN 52
+#define MOTOR1_EN 30
+#define MOTOR2_EN 34
 
-#define MOTOR1_DIR 40
-#define MOTOR2_DIR 48
-
-#define MOTOR1_SPD 8
+#define MOTOR1_SPD 3
 #define MOTOR2_SPD 2
 
-#define MOTOR1_RDY 42
-#define MOTOR2_RDY 50
+#define MOTOR1_RDY 32
+#define MOTOR2_RDY 36
 
 #define MOTOR_LEFT 1
 #define MOTOR_RIGHT 2

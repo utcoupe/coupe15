@@ -25,6 +25,8 @@ XBee xbee = XBee();
 Rx16Response rx16 = Rx16Response();
 
 void setup() {
+  TCCR1B = (TCCR1B & 0xF8) | 0x01;
+
   Serial2.begin(BAUDRATE_XBEE);
   xbee.setSerial(Serial2);
   #ifdef DEBUG
@@ -43,7 +45,7 @@ void loop() {
   readPackets();
 
   // loopOrder_BLINK();
-  // loopOrder_MOVEROBOT();
+  loopOrder_MOVEROBOT();
 
   delay(10);
 }
