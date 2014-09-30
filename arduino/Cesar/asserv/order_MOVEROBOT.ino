@@ -30,6 +30,11 @@ static unsigned long previous_time;
 static float acceleration = 0.010; // PWM / secondes (1000 ms)
 static int PMW_MAX = 128;
 
+void initOrder_MOVEROBOT() {
+  set_pwm_left(30);
+  set_pwm_right(30);
+}
+
 void executeOrder_MOVEROBOT(int type, int dir) {
 	bool new_state;
 	if(type == KPDOWN)
@@ -41,7 +46,7 @@ void executeOrder_MOVEROBOT(int type, int dir) {
 }
 
 void loopOrder_MOVEROBOT() {
-  	unsigned long current_time = millis();
+  	/*unsigned long current_time = millis();
 	int i;
 	unsigned long delay_time = current_time - previous_time;
         
@@ -72,10 +77,11 @@ void loopOrder_MOVEROBOT() {
 		set_pwm_left(current_pwm - current_pwm_left);
 	}
 
-	previous_time = current_time;
+	previous_time = current_time;*/
 }
 
 void set_pwm_left(int pwm){
+        pwm = -pwm;
 	if (pwm != NO_PWM) {
 		pwm += 127;
 
