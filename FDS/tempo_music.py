@@ -14,6 +14,8 @@ last_c = 0
 tempo = 0.51959
 t = True
 #sleep(tempo/2)
+first_t = clock()
+nb_tempo = 0
 loop = True
 while loop:
 	c = clock()
@@ -23,7 +25,10 @@ while loop:
 				loop = False
 			if event.key == K_KP5:
 				last_c = c
-				#print(clock())
+				nb_tempo = nb_tempo + 1
+				print(c, end=" ")
+				print((c-first_t)/nb_tempo)
+	"""
 	if c - last_c > tempo:
 		last_c = c
 		if t:
@@ -31,4 +36,5 @@ while loop:
 		else:
 			print("TAC")
 		t = not t
+	"""
 
