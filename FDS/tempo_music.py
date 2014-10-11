@@ -6,7 +6,7 @@ from time import sleep, clock
 pygame.init()
 
 fenetre = pygame.display.set_mode((100,100))
-musique = pygame.mixer.Sound("Milky Chance - Stolen Dance.ogg")
+musique = pygame.mixer.Sound("Milky Chance - Stolen Dance - version courte.ogg")
 
 musique.play();
 
