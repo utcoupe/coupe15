@@ -8,7 +8,7 @@ pygame.init()
 fenetre = pygame.display.set_mode((100,100))
 musique = pygame.mixer.Sound("Milky Chance - Stolen Dance - version courte.ogg")
 
-musique.play();
+musique.play()
 
 last_c = 0
 tempo = 0.51959
