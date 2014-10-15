@@ -10,11 +10,11 @@ import time
 import random
 
 # The number of Dynamixels on our bus.
-nServos = 1
+nServos = 10
 
 # Set your serial port accordingly.
 if os.name == "posix":
-    portName = "/dev/ttyUSB0"
+    portName = "/dev/ttyACM0"
 else:
     portName = "COM6"
     
@@ -40,7 +40,7 @@ print("...Done")
 
 # Set the default speed and torque
 for actuator in myActuators:
-    actuator.moving_speed = 50
+    actuator.moving_speed = 300
     actuator.synchronized = True
     actuator.torque_enable = True
     actuator.torque_limit = 800
@@ -55,7 +55,7 @@ while True:
         actuator.read_all()
         time.sleep(0.01)
     for actuator in myActuators:
-        print(actuator.cache[dynamixel.defs.REGISTER['Id']] + actuator.cache[dynamixel.defs.REGISTER['CurrentPosition']])
+        print(actuator.cache[dynamixel.defs.REGISTER_AX12['Id']] + actuator.cache[dynamixel.defs.REGISTER_AX12['CurrentPosition']])
 
     time.sleep(2)
 
