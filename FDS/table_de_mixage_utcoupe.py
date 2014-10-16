@@ -11,7 +11,7 @@ from table_de_mixage.mix import *
 pygame.init()
 window = pygame.display.set_mode((600,300))
 
-initAX12()
+ax12.initAX12()
 
 # Initialisation des "mixs" (scripts de la table de mixage)
 mixs = {}
@@ -24,7 +24,7 @@ mixs[K_h] = ["home", 0]
 
 initMusics(mixs)
 
-moveAX12(getAX12PosFor("home"))
+ax12.moveAX12(getAX12PosFor("home"))
 
 loop = True
 t = time()

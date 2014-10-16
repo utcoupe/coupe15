@@ -1,17 +1,19 @@
 import usb2ax
 from time import sleep
 
-ax12 = usb2ax.Controller(fix_sync_read_delay=True)
+class Ax12:
+	def initAX12(self):
+		self.ax12 = usb2ax.Controller()
+		while(len(self.ax12.servo_list) < 6):
+			sleep(0.05)
+			self.ax12 = usb2ax.Controller()#fix_sync_read_delay=True)
 
-def initAX12():
-	while(len(ax12.servo_list) < 7):
-		sleep(0.1)
-		usb2ax.Controller(fix_sync_read_delay=True)
+	def moveAX12(self, l):
+		for i in self.ax12.servo_list:
+			self.ax12.write(i, "goal_position", l[i-1]*1024/300)
+			sleep(0.005)
 
-def moveAX12(l):
-	for i in ax12.servo_list:
-		ax12.write(i, "goal_position", l[i-1]*1024/300)
-		sleep(0.005)
+ax12 = Ax12()
 
 def getAX12PosFor(s):
 	if s == "home":
