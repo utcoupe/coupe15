@@ -8,26 +8,37 @@ def lunchMix(s, t):
 		playMusic(s)
 		lunchMix.t_sd = 0
 	if s == "home":
-		ax12.moveAX12(getAX12PosFor("home"))
+		ax12.move(getAX12PosFor("home"))
 	if s == "buzz_leclair_infini":
 		if t>=0 and t<2:
-			ax12.moveAX12([240,60,240,60,240,150])
+			ax12.move([240,60,240,60,240,150])
 		elif t>=2:
-			ax12.moveAX12([240,210,150,60,240,150])
+			ax12.move([240,210,150,60,240,150])
 	if s == "stolen_dance":
 		if t > tempo_stolen_dance[lunchMix.t_sd] - 1.654016:
 			lunchMix.t_sd += 1
 		if lunchMix.t_sd < 18:
 			if lunchMix.t_sd%2 == 0:
-				ax12.moveAX12(getAX12PosFor("applause_open"))
+				ax12.move(getAX12PosFor("applause_open"))
 			else:
-				ax12.moveAX12(getAX12PosFor("applause_close"))
+				ax12.move(getAX12PosFor("applause_close"))
 		else:
 			if lunchMix.t_sd%2 == 0:
-				ax12.moveAX12(getAX12PosFor("vague1_l"))
+				ax12.move(getAX12PosFor("vague1_l"))
 			else:
-				ax12.moveAX12(getAX12PosFor("vague1_r"))
+				ax12.move(getAX12PosFor("vague1_r"))
+	if s == "symetric_hand":
+		ax12.stopTorque([1,2,3])
+		ax12.write(4, 300-ax12.read(1))
+		ax12.write(5, 300-ax12.read(2))
+		ax12.write(6, 300-ax12.read(3))
+	if s == "symetric_hand":
+		pass
 
+def stopMix(s):
+	stopMusics()
+	if s == "symetric_hand":
+		lunchMix("home", 0)
 
 tempo_stolen_dance=[2.058016,2.409905,2.897159,3.420422,3.938955,4.488675,4.986282,5.53373,\
 6.043402,6.569312,7.101861,7.654766,8.17242,8.693614,9.224893,9.767137,10.278366,10.731506,\

@@ -1,16 +1,41 @@
 import usb2ax
 from time import sleep
 
-class Ax12:
-	def initAX12(self):
-		self.ax12 = usb2ax.Controller()
-		while(len(self.ax12.servo_list) < 6):
-			sleep(0.05)
-			self.ax12 = usb2ax.Controller()#fix_sync_read_delay=True)
+class Ax12():
+	def __init__(self):
+		self.ax12 = None
 
-	def moveAX12(self, l):
+	def init(self):
+		while True:
+			self.ax12 = usb2ax.Controller() #fix_sync_read_delay=True)
+			if len(self.ax12.servo_list) >= 6 :
+				break
+
+	def move(self, l):
 		for i in self.ax12.servo_list:
-			self.ax12.write(i, "goal_position", l[i-1]*1024/300)
+			self.write(i, l[i-1])
+
+	def write(self, i, p):
+		if i in self.ax12.servo_list:
+			sleep(0.005)
+			try:
+				self.ax12.write(i, "goal_position", p*1024/300)
+			except:
+				pass
+
+	def read(self, i):
+		if i in self.ax12.servo_list:
+			sleep(0.005)
+			try:
+				return self.ax12.read(i, "present_position")*300/1024
+			except:
+				return 150
+
+	def stopTorque(self, l=[]):
+		if l == []:
+			l = self.ax12.servo_list
+		for i in l:
+			self.ax12.write(i, "torque_enable", 0)
 			sleep(0.005)
 
 ax12 = Ax12()

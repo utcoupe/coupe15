@@ -11,10 +11,13 @@ def initMusics(mixs):
 		if os.path.isfile(temp):
 			musics[name] = pygame.mixer.Sound(temp)
 
-def playMusic(s):
+def stopMusics():
 	for i in musics:
 		musics[i].stop()
 
+def playMusic(s):
+	stopMusics()
+	
 	if s in musics:
 		musics[s].play()
 	else:
