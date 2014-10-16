@@ -28,6 +28,7 @@ def bouger(mouvement):
 	if mouvement=="position_basse" :
 		moveAX12([240,240,150,60,240,150]);
 
+
 	if mouvement=="devant" :
 		moveAX12([150,240,150,150,240,150]);
 
