@@ -251,15 +251,6 @@ class Controller:
     interface. You contruct one, use its read, write, sync_read
     and sync_write methods.
     """
-
-    sync_read_ok = True
-    servo_list = []
-    servo_models = {}
-    servo_map = {}
-
-    SYNC_READ_MAX = 9  # Sync reads will be split up to address at most this
-                       # number of servos at a time
-
     def __init__(self, device_id=0, fix_sync_read_delay = False):
         """
         Connect to the USB2AX device.
@@ -273,6 +264,14 @@ class Controller:
 
         Raises InitError if there was a problem.
         """
+
+        self.sync_read_ok = True
+        self.servo_list = []
+        self.servo_models = {}
+        self.servo_map = {}
+
+        self.SYNC_READ_MAX = 9  # Sync reads will be split up to address at most this
+                                # number of servos at a time
 
         result = dxl_initialize(device_id,1)
         if result == 0:
