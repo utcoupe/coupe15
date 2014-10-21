@@ -35,7 +35,7 @@
 #define HOK2_CONE_MIN (-M_PI/2)
 #define HOK2_CONE_MAX (M_PI/2)
 
-
+// CLUSTERS :
 #define CLUSTER_POINTS_BACKWARDS 15
 #define MAX_DIST 200
 #define MAX_SIZE_TO_MERGE 200

@@ -40,7 +40,7 @@ int main(int argc, char **argv){
 	hok1.urg = 0;
 	hok2.urg = 0;
 
-	atexit(exit_handler);
+	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "red") != 0 && strcmp(argv[1], "yellow") ) ){
 		fprintf(stderr, "usage: hokuyo {red|yellow} [path_pipe] [nbr_hok]\n");
@@ -53,15 +53,15 @@ int main(int argc, char **argv){
     }
 	
 	if (strcmp(argv[1], "yellow") == 0) {
-		symetry = 1;
+		symetry = 1; // XXX c'est quoi ça ?
 	}
 
 	if (argc >= 3) {
 		path = argv[2];
 		if (strcmp(path, "nocalib") == 0) {
-			calib = 0;
+			calib = 0; // XXX idem, ça sert à quoi ?
 		} else {
-			use_protocol = 1;
+			use_protocol = 1; // XXX idem
 		}
 	}
 	
@@ -75,7 +75,7 @@ int main(int argc, char **argv){
 	hok2 = initHokuyo("/dev/ttyACM1", HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
 
 	if (symetry) {
-		hok1 = applySymetry(hok1);
+		hok1 = applySymetry(hok1); // XXX why ?
 		hok2 = applySymetry(hok2);
 	}
 
@@ -105,6 +105,7 @@ int main(int argc, char **argv){
 	}
 	exit(EXIT_SUCCESS);
 }
+
 
 void frame(int nb_robots_to_find){
 	long timestamp;

@@ -43,6 +43,8 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 				continue;
 			}
 
+			/* si le pt actuel (i) est proche en distance avec un de ses précédents,
+			 on le range dans le même cluster */
 			int j = max(0, i - CLUSTER_POINTS_BACKWARDS);
 			for (j; j<i; j++) {
 				if (dist_squared(pt_list[j], pt_list[i]) < MAX_DIST*MAX_DIST) {
@@ -50,6 +52,7 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 					break;
 				}
 			}
+			/* si le point n'a pas été rangé ds un cluster, on en crée un */
 			if (j == i) {
 				clusters_index[i] = nbCluster;
 				nbCluster++;
@@ -60,6 +63,9 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 			}
 		}
 
+		/* 
+		Ça vire les points foirés (rangés au cluster -1)
+		*/
 		for (i=0; i<nbCluster; i++) {
 			clusters[i].nb = 0;
 		}
