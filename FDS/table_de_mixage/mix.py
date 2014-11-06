@@ -17,16 +17,26 @@ def lunchMix(s, t):
 	if s == "stolen_dance":
 		if t > tempo_stolen_dance[lunchMix.t_sd] - 1.654016:
 			lunchMix.t_sd += 1
-		if lunchMix.t_sd < 18:
+		if lunchMix.t_sd <= 17:
 			if lunchMix.t_sd%2 == 0:
 				ax12.move(getAX12PosFor("applause_open"))
 			else:
 				ax12.move(getAX12PosFor("applause_close"))
-		else:
+		elif lunchMix.t_sd <= 48:
 			if lunchMix.t_sd%2 == 0:
 				ax12.move(getAX12PosFor("vague1_l"))
 			else:
 				ax12.move(getAX12PosFor("vague1_r"))
+		elif lunchMix.t_sd <= 82:
+			if lunchMix.t_sd%2 == 0:
+				ax12.move(getAX12PosFor("marionette_1"))
+			else:
+				ax12.move(getAX12PosFor("marionette_2"))
+		else:
+			if lunchMix.t_sd%2 == 0:
+				ax12.move(getAX12PosFor("voler_h"))
+			else:
+				ax12.move(getAX12PosFor("voler_b"))
 	if s == "symetric_hand":
 		ax12.stopTorque([1,2,3])
 		ax12.write(4, 300-ax12.read(1))
