@@ -1,0 +1,4 @@
+TO DO :
+
+- finir de comprendre merge robot
+- voir communication et gui

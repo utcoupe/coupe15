@@ -16,7 +16,7 @@ typedef struct Hokuyo {
 	int imin, imax, nb_data, isWorking;
 	const char *path;
 	double error;
-	struct fastmathTrigo fm;
+	struct fastmathTrigo fm; // enregistre les cos et sin pour les n angles
 } Hok_t;
 
 Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt);

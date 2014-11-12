@@ -36,7 +36,7 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 	int i, j, nbCluster = 0;
 	if (nb_pts > 0) {
 		int *clusters_index = malloc(nb_pts*sizeof(int));
-		clusters_index[0] = 0;
+		clusters_index[0] = 0; // numéro de cluster pour chaque point scanné
 		for (i=0; i<nb_pts; i++) {
 			if (pt_list[i].x == -1 && pt_list[i].y == -1) {
 				clusters_index[i] = -1;
@@ -64,7 +64,8 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 		}
 
 		/* 
-		Ça vire les points foirés (rangés au cluster -1)
+		Ça compte le nombre de points par clusters, ça met dans clusters[i].pts[] la liste des points associés à ce cluster
+		et ça vire les points foirés (rangés au cluster -1)
 		*/
 		for (i=0; i<nbCluster; i++) {
 			clusters[i].nb = 0;
@@ -76,6 +77,9 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 			}
 		}
 
+		/*
+		On supprime les clusters de taille inférieure à NB_PTS_MIN
+		*/
 		i = 0;
 		while (i < nbCluster) {
 			if (clusters[i].nb < NB_PTS_MIN) {
@@ -89,6 +93,9 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 		}
 
 
+		/*
+		On calcule la taille (en profondeur) de chaque cluster et leur centre (moyenne des points)
+		*/
 		for (i=0; i<nbCluster; i++) {
 			clusters[i].size = sqrt(dist_squared(clusters[i].pts[0], clusters[i].pts[clusters[i].nb-1]));
 			long sumx = 0, sumy = 0;
@@ -108,16 +115,16 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find){
 	int i, nbr_robots = min(n, nb_robots_to_find);
 	Cluster_t *r = malloc(n*sizeof(Cluster_t));
-	memcpy(r, robots, n*sizeof(Cluster_t));
-	for(i=0; i<nbr_robots; i++){
+	memcpy(r, robots, n*sizeof(Cluster_t));// on copie nos clusters, pour pouvoir mettre les tailles des clusters rangés à 0
+	for(i=0; i<nbr_robots; i++){ // on garde les nbr_robots plus grand clusters, qu'on range par ordre décroissant XXX -> source d'oublis de robots !! (en cas de main d'arbitre par ex)
 		int maxSize = 0, maxId = 0;
-		for(int j=0; j<n; j++){
+		for(int j=0; j<n; j++){ // on cherche le cluster non rangé le plus grand
 			if(r[j].size > maxSize){
 				maxSize = r[j].size;
 				maxId = j;
 			}
 		}
-		robots[i].center = r[maxId].center;
+		robots[i].center = r[maxId].center; // on range le ième plus grand à la ième place !
 		robots[i].size = r[maxId].size;
 		r[maxId].size = 0;
 	}
@@ -127,6 +134,8 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find){
 int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find) {
 	Cluster_t all_bots[2*MAX_ROBOTS];
 	int i, n_tot=0;
+
+	// On copie les robots, n_tot va être égal à n1+n2
 	for (i=0; i<n1; i++) {
 		all_bots[n_tot++] = r1[i];
 	}
@@ -144,6 +153,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 	};
 	while (n_tot > nb_robots_to_find) {
 		//Brute force ici, on aura max 4 robots de chaque hokuyo, 4x4 = 16 cas, ca reste peu
+
 		//Calcul de la distance entre chaque combinaison de coords
 		int distR1R2[MAX_ROBOTS][MAX_ROBOTS], i, j;
 		struct corres dist_indexes[MAX_ROBOTS*MAX_ROBOTS]; //Tableau d'index de distR1R2, sert a trier les distances
@@ -158,7 +168,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 		}
 
 		for (i=0; i<n1*n2; i++) {
-			dist_indexes[i] = (struct corres){ i/n2, i%n2 };
+			dist_indexes[i] = (struct corres){ i/n2, i%n2 }; // tableau des index, dans l'ordre. C'est magique ^^
 		}
 
 		//Tri ordre decroissant
