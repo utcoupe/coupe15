@@ -51,3 +51,11 @@ def getAX12PosFor(s):
 		return [60,120,120,60,195,195]
 	if s == "vague1_r":
 		return [60,195,195,60,120,120]
+	if s == "voler_h":
+		return [110,60,150,190,240,150]
+	if s == "voler_b":
+		return [190,60,150,110,240,150]
+	if s == "marionette_1":
+		return [60,150,150,60,150,150]
+	if s == "marionette_2":
+		return [240,150,150,240,150,150]

@@ -22,6 +22,9 @@ mixs[K_i] = ["buzz_leclair_infini", 3.5]
 mixs[K_s] = ["stolen_dance", 102]
 mixs[K_h] = ["home", 0]
 mixs[K_b] = ["symetric_hand", 30]
+mixs[K_d] = ["dev", 3000]
+mixs[K_m] = ["macarena", 30]
+#mixs[K_m] = ["tir", 30]
 
 initMusics(mixs)
 
