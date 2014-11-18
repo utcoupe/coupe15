@@ -58,12 +58,12 @@ int main(int argc, char **argv){
 		symetry = 1; // si on est jaune, on fait la symétrie de l'autre couleur ! (au lieu de changer les cst)
 	}
 
-	if (argc >= 3) {
+	if (argc >= 3) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (debug), soit on communique
 		path = argv[2];
 		if (strcmp(path, "nocalib") == 0) {
-			calib = 0; // XXX ça ne sert à rien !! ^^
+			calib = 0;
 		} else {
-			use_protocol = 1; // si on utilise la communication (XXX if mal fait un peu non ?)
+			use_protocol = 1;
 		}
 	}
 	
@@ -118,14 +118,14 @@ void frame(int nb_robots_to_find){
 
 	if (hok1.isWorking && hok2.isWorking) {
 		printf("Both hokuyos working\n");
-		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
-		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
+		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
+		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
 		if (symetry) {
 			ScanZone_t temp = hok1.zone;
 			hok1.zone = hok2.zone;
 			hok2.zone = temp;
 		}
-	} else {
+	} else { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
 		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
 	}
 

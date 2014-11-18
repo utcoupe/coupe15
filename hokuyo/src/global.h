@@ -5,7 +5,7 @@
 #include <math.h>
 
 #define PREFIX "[C-HK]  "
-//#define SDL
+#define SDL
 
 #define TABLE_X 3000
 #define TABLE_Y 2000
@@ -23,13 +23,13 @@
 #define CALIB_Y (TABLE_Y/2)
 #define CALIB_PT (Pt_t) { CALIB_X, CALIB_Y } // inutilisé ! XXX
 
-#define HOK1_X -25 // XXX je mettrai plutôt 8cm / 2 = 40, non ? + conséquences l27 et 32
-#define HOK1_Y -25 
+#define HOK1_X -40 // old : 25
+#define HOK1_Y -40  // old : 25
 #define HOK1_A 0 // orientation
 #define HOK1_CONE_MIN 0
 #define HOK1_CONE_MAX (M_PI/2)
 
-#define HOK2_X 3025 
+#define HOK2_X 3040 // old 3025
 #define HOK2_Y 1000 
 #define HOK2_A M_PI
 #define HOK2_CONE_MIN (-M_PI/2)

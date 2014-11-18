@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1488.189"
+   height="1052.3622"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="plan.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3853"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Lend"
+       style="overflow:visible;">
+      <path
+         id="path3871"
+         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(1,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="689.08287"
+     inkscape:cy="466.49285"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="false"
+     inkscape:object-paths="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,2.2302535e-5)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.28455889"
+       id="rect2985"
+       width="1061.7076"
+       height="707.37683"
+       x="230.14227"
+       y="169.12874" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:#000000;stroke-width:1.18999999999999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2987"
+       width="28.14706"
+       height="28.170685"
+       x="201.99521"
+       y="140.95805" />
+    <rect
+       y="508.73181"
+       x="1291.8499"
+       height="28.170685"
+       width="28.14706"
+       id="rect3002"
+       style="fill:#008000;fill-opacity:1;stroke:#000000;stroke-width:1.18999999999999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <rect
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.18999999999999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3004"
+       width="28.14706"
+       height="28.170685"
+       x="201.99518"
+       y="508.73181" />
+    <rect
+       y="140.95802"
+       x="1291.8499"
+       height="28.170685"
+       width="28.14706"
+       id="rect3006"
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.19000006000000003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:#000000;stroke-width:1.18999999999999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3008"
+       width="28.14706"
+       height="28.170685"
+       x="201.99518"
+       y="876.50555" />
+    <rect
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.19000006000000003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3778"
+       width="28.14706"
+       height="28.170685"
+       x="1291.8499"
+       y="876.50555" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3780"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,-2.2302535e-5)"><flowRegion
+         id="flowRegion3782"><rect
+           id="rect3784"
+           width="535.38086"
+           height="74.751289"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         id="flowPara3786"
+         style="text-anchor:middle;text-align:center;font-size:25px;-inkscape-font-specification:TeX Gyre Chorus Medium;font-family:TeX Gyre Chorus;font-weight:500;font-style:normal;font-stretch:normal;font-variant:normal">haut de la table</flowPara></flowRoot>    <flowRoot
+       transform="translate(0,872.77178)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3788"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3790"><rect
+           y="82.615738"
+           x="488.91382"
+           height="74.751289"
+           width="535.38086"
+           id="rect3792" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara3794">public</flowPara></flowRoot>    <flowRoot
+       transform="translate(-479.2561,899.04553)"
+       xml:space="preserve"
+       id="flowRoot3780-0"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
+         id="flowRegion3782-8"><rect
+           id="rect3784-5"
+           width="571.74634"
+           height="78.791908"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;text-anchor:start;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara3840">telles que sont les constantes dans le Github, on est vert</flowPara><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;text-anchor:start;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara3823">(on fait la symetry si on est jaune changer selon notre couleur)</flowPara></flowRoot>    <rect
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:0.75179326999999985;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3825"
+       width="140.98048"
+       height="140.9805"
+       x="229.92319"
+       y="452.3269" />
+    <rect
+       y="452.3269"
+       x="1150.8694"
+       height="140.9805"
+       width="140.98048"
+       id="rect3838"
+       style="fill:#008000;fill-opacity:1;stroke:#000000;stroke-width:0.75179326999999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;marker-end:url(#Arrow1Lend)"
+       d="m 230.14227,876.50558 1190.13223,0"
+       id="path3844"
+       inkscape:connector-curvature="0"
+       transform="translate(0,-2.2302535e-5)" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;marker-end:url(#Arrow1Lend)"
+       d="m 230.14224,876.50558 0,-799.950756"
+       id="path4476"
+       inkscape:connector-curvature="0"
+       transform="translate(0,-2.2302535e-5)" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4662"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(876.81241,800.04079)"><flowRegion
+         id="flowRegion4664"><rect
+           id="rect4666"
+           width="98.994957"
+           height="44.44672"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         id="flowPara4668"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium">x</flowPara></flowRoot>    <flowRoot
+       transform="translate(-334.52798,-29.971016)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot4670"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4672"><rect
+           y="82.615738"
+           x="488.91382"
+           height="44.44672"
+           width="98.994957"
+           id="rect4674" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4676">y</flowPara></flowRoot>    <path
+       sodipodi:type="arc"
+       style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:1.19000006;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path4678"
+       sodipodi:cx="215.35715"
+       sodipodi:cy="889.14789"
+       sodipodi:rx="12.64232"
+       sodipodi:ry="12.64232"
+       d="m 227.99947,889.14789 a 12.64232,12.64232 0 1 1 -25.28464,0 12.64232,12.64232 0 1 1 25.28464,0 z"
+       transform="matrix(1.0707023,0,0,1.0707023,-14.514684,-61.421792)" />
+    <path
+       transform="matrix(1.0707023,0,0,1.0707023,1075.34,-429.19553)"
+       d="m 227.99947,889.14789 a 12.64232,12.64232 0 1 1 -25.28464,0 12.64232,12.64232 0 1 1 25.28464,0 z"
+       sodipodi:ry="12.64232"
+       sodipodi:rx="12.64232"
+       sodipodi:cy="889.14789"
+       sodipodi:cx="215.35715"
+       id="path4680"
+       style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:1.19000006;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4682"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(-411.47063,748.21633)"><flowRegion
+         id="flowRegion4684"><rect
+           id="rect4686"
+           width="101.63445"
+           height="152.05524"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         id="flowPara4688"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Bold">Hok1</flowPara><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4690">x=-25, y=-25, angle =  0</flowPara><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4692" /></flowRoot>    <path
+       style="color:#000000;fill:none;stroke:#666666;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 447.49758,890.59093 -231.42887,0 0,-227.14979 c 151.64495,0 231.42887,95.12162 231.42887,227.14979 z"
+       id="path4694"
+       inkscape:connector-curvature="0"
+       transform="translate(0,-2.2302535e-5)"
+       sodipodi:nodetypes="cccc" />
+    <flowRoot
+       transform="matrix(0,1,-1,0,294.82685,162.72698)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3788-3"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3790-9"><rect
+           y="82.615738"
+           x="488.91382"
+           height="40.406109"
+           width="147.48228"
+           id="rect3792-3" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara3794-9">cone_min = 0</flowPara></flowRoot>    <flowRoot
+       transform="translate(-200.70817,808.86225)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3788-3-8"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3790-9-2"><rect
+           y="82.615738"
+           x="488.91382"
+           height="29.564341"
+           width="176.3606"
+           id="rect3792-3-1" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4750">cone_max = pi/2</flowPara></flowRoot>    <path
+       style="color:#000000;fill:none;stroke:#666666;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 1306.8296,742.02026 -0.9062,-219.2031 0,-227.14979 c -358.72627,0 -334.47333,446.35289 0.9062,446.35289 z"
+       id="path4694-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <flowRoot
+       transform="matrix(0,1,-1,0,1437.8,95.380341)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3788-3-8-8"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3790-9-2-4"><rect
+           y="82.615738"
+           x="488.91382"
+           height="29.564341"
+           width="176.3606"
+           id="rect3792-3-1-0" /></flowRegion><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4750-9">cone_min = -pi/2</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4835"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="matrix(0,1,-1,0,1437.8,-191.50298)"><flowRegion
+         id="flowRegion4837"><rect
+           id="rect4839"
+           width="176.3606"
+           height="29.564341"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         id="flowPara4841"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium">cone_max = pi/2</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4682-4"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(882.24658,387.78164)"><flowRegion
+         id="flowRegion4684-1"><rect
+           id="rect4686-6"
+           width="116.36987"
+           height="148.7139"
+           x="488.91382"
+           y="82.615738" /></flowRegion><flowPara
+         id="flowPara4688-6"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Bold">Hok2</flowPara><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4876">x=3025, y=1000, angle =  pi</flowPara><flowPara
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:center;text-anchor:middle;font-family:TeX Gyre Chorus;-inkscape-font-specification:TeX Gyre Chorus Medium"
+         id="flowPara4692-7" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4880"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,-2.2302535e-5)"><flowRegion
+         id="flowRegion4882"><rect
+           id="rect4884"
+           width="1490.9852"
+           height="80.812202"
+           x="-4.0406232"
+           y="1.8035361" /></flowRegion><flowPara
+         id="flowPara4886"
+         style="text-anchor:middle;text-align:center">PLAN TABLE HOKUYOS</flowPara></flowRoot>  </g>
+</svg>

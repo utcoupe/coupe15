@@ -1,4 +1,11 @@
 TO DO :
 
 - finir de comprendre merge robot
-- voir communication et gui
+(- voir communication)
+
+À améliorer :
+- lancement pour les nuls (connection des hok, hauteur du l'hok, assiette,cap)
+- faire du tracking (retours dans l'ordre)
+- ignorer les marches (si monte les marches, on retourne -1 1 par exemple)
+- faire que les deux hokuyos scannent tout le terrain (au lieu de scanner que la moitié)
+- faire de la prédiction

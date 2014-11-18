@@ -17,7 +17,7 @@ dist_squared(Pt_t p1, Pt_t p2)
 }
 
 int
-dist_to_edge(Pt_t p, int largeurX, int largeurY) // fonction qui ne sert à rien XXX
+dist_to_edge(Pt_t p, int largeurX, int largeurY) // fonction qui inutilisée
 {
 	int x_to_edge = min(p.x, largeurX - p.x);
 	int y_to_edge = min(p.y, largeurY - p.y);
