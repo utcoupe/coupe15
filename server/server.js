@@ -1,18 +1,21 @@
-var http = require('http');
-var fs = require('fs');
+// Creating the server
+var server = require('http').createServer();
 
-// Chargement du fichier index.html affiché au client
-var server = http.createServer();
-
-// Chargement de socket.io
+// Loading socket.io
 var io = require('socket.io').listen(server);
 
-// Quand on client se connecte, on le note dans la console
-io.sockets.on('connection', function (socket) {
-	console.log('Un client est connecté !');
-});
-io.socket.on('disconnect', function (socket) {
-	console.log('Un client s\'est déconnecté !');
-});
+// When an user have just connected
+io.on('connection', function (socket) {
+	console.log('User '+socket.id+' is connected!');
+
+	socket.on('disconnect', function() {
+		console.log('User '+socket.id+' is disconnected!');
+	});
+
+	socket.on('name', function(data) {
+		socket.name = data.name;
+		socket.emit('name', {name:socket.name});
+	});
+})
 
 server.listen(8080);

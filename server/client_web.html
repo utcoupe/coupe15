@@ -11,6 +11,15 @@
 		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 		<script>
 			var socket = io.connect('http://localhost:8080');
+			socket.on('connect', function(){
+				socket.emit('name', {
+					name: 'client_web.js'
+				});
+			});
+			socket.on('name', function(data){
+				console.log('Your name is '+data.name);
+			});
+			socket.on('disconnect', function(){});
 		</script>
 	</body>
 </html>
