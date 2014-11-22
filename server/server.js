@@ -1,16 +1,18 @@
 var http = require('http');
-var url = require('url');
-var querystring = require('querystring');
+var fs = require('fs');
 
-var server = http.createServer(function(req, res) {
-    var params = querystring.parse(url.parse(req.url).query);
-    res.writeHead(200, {"Content-Type": "text/plain"});
-    if ('prenom' in params && 'nom' in params) {
-        res.write('Vous vous appelez ' + params['prenom'] + ' ' + params['nom']);
-    }
-    else {
-        res.write('Vous devez bien avoir un prénom et un nom, non ?');
-    }
-    res.end();
+// Chargement du fichier index.html affiché au client
+var server = http.createServer();
+
+// Chargement de socket.io
+var io = require('socket.io').listen(server);
+
+// Quand on client se connecte, on le note dans la console
+io.sockets.on('connection', function (socket) {
+	console.log('Un client est connecté !');
 });
+io.socket.on('disconnect', function (socket) {
+	console.log('Un client s\'est déconnecté !');
+});
+
 server.listen(8080);

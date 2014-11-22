@@ -4,7 +4,8 @@
   "description": "Server",
   "main": "server.js",
   "dependencies": {
-    "socket.io": "~1.2.1"
+    "socket.io": "~1.2.1",
+    "socket.io-client": "~1.2.1"
   },
   "devDependencies": {},
   "scripts": {
