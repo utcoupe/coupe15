@@ -26,6 +26,8 @@ void exit_handler() {
 		urg_disconnect(hok1.urg);
 	if (hok2.urg != 0)
 		urg_disconnect(hok2.urg);
+
+	// XXX on ne free rien ? genre nos hok et tout ?
 	printf("%sExitting\n", PREFIX);
 	kill(getppid(), SIGUSR1); //Erreur envoyee au pere
 }
@@ -53,15 +55,15 @@ int main(int argc, char **argv){
     }
 	
 	if (strcmp(argv[1], "yellow") == 0) {
-		symetry = 1; // XXX c'est quoi ça ?
+		symetry = 1; // si on est jaune, on fait la symétrie de l'autre couleur ! (au lieu de changer les cst)
 	}
 
-	if (argc >= 3) {
+	if (argc >= 3) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (debug), soit on communique
 		path = argv[2];
 		if (strcmp(path, "nocalib") == 0) {
-			calib = 0; // XXX idem, ça sert à quoi ?
+			calib = 0;
 		} else {
-			use_protocol = 1; // XXX idem
+			use_protocol = 1;
 		}
 	}
 	
@@ -74,8 +76,8 @@ int main(int argc, char **argv){
 	hok1 = initHokuyo("/dev/ttyACM0", HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y} );
 	hok2 = initHokuyo("/dev/ttyACM1", HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
 
-	if (symetry) {
-		hok1 = applySymetry(hok1); // XXX why ?
+	if (symetry) { // si besoin, on inverse les positions (quand on change de couleur)
+		hok1 = applySymetry(hok1);
 		hok2 = applySymetry(hok2);
 	}
 
@@ -116,14 +118,14 @@ void frame(int nb_robots_to_find){
 
 	if (hok1.isWorking && hok2.isWorking) {
 		printf("Both hokuyos working\n");
-		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
-		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
+		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
+		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
 		if (symetry) {
 			ScanZone_t temp = hok1.zone;
 			hok1.zone = hok2.zone;
 			hok2.zone = temp;
 		}
-	} else {
+	} else { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
 		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
 	}
 
@@ -146,7 +148,7 @@ void frame(int nb_robots_to_find){
 
 		timestamp = timeMillis() - timeStart;
 		//printf("%sDuration : %ld\n", PREFIX,timeMillis() - start_t);
-		//printf("%sGot %d ans %d points\n", PREFIX, nPts1, nPts2);
+		//printf("%sGot %d and %d points\n", PREFIX, nPts1, nPts2);
 
 		nRobots1 = getClustersFromPts(pts1, nPts1, robots1);
 		nRobots2 = getClustersFromPts(pts2, nPts2, robots2);

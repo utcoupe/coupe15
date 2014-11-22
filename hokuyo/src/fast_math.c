@@ -17,7 +17,7 @@ dist_squared(Pt_t p1, Pt_t p2)
 }
 
 int
-dist_to_edge(Pt_t p, int largeurX, int largeurY)
+dist_to_edge(Pt_t p, int largeurX, int largeurY) // fonction qui inutilisée
 {
 	int x_to_edge = min(p.x, largeurX - p.x);
 	int y_to_edge = min(p.y, largeurY - p.y);
@@ -34,7 +34,10 @@ initFastmath(int n, double *angles)
 	r.n = n;
 	r.cos = malloc(sizeof(double) * n);
 	r.sin = malloc(sizeof(double) * n);
-	if(r.cos == NULL || r.sin == NULL) exit(EXIT_FAILURE);
+	if(r.cos == NULL || r.sin == NULL) {
+		printf("\n%sFatal error in mallocs > initFastmath...\n", PREFIX);
+		exit(EXIT_FAILURE);
+	}
 
 	//printf("Should print anles from -90 to 0\n");
 	for(int i=0; i<n; i++){

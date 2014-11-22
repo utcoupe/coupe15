@@ -6,7 +6,7 @@
 
 typedef struct Cluster {
 	Pt_t pts[MAX_DATA];
-	int nb, size;
+	int nb, size; // nb de pts dans le cluster, taille (en profondeur)
 	Pt_t center;
 } Cluster_t;
 
@@ -17,21 +17,21 @@ typedef struct Cluster {
 */
 int getPoints(Hok_t hok, Pt_t* pt_list);
 
-/* 
+/* Calcule et filtre les clusters à partir des points
 	IN: liste de points, nb de points
 	OUT: clusters, nb de robots (= de clusters)
 */
 int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters);
 
-/* 
-	IN: 
-	OUT: 
+/* Range les robots (center et size uniquement) par ordre décroissant de taille. (attention, les points ne correspondent plus !)
+	IN: nb de clusters, tableau des clusters, nb robots à chercher
+	OUT: nb de clusters (= min entre n et nb_robots_to_find)
 */
 int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find);
 
 /* 
-	IN: 
-	OUT: 
+	IN: nombre de clusters et tab de clusters de chaque hok, nb_robots à trouver (>= n1 et >=n2)
+	OUT: retourne le nb de robot trouvés final + result (leur position)
 */
 int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find);
 
