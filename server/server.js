@@ -4,7 +4,7 @@ var server = require('http').createServer();
 // Loading socket.io
 var io = require('socket.io').listen(server);
 
-// When an user have just connected
+// When a user have just connected
 io.on('connection', function (socket) {
 	console.log('User '+socket.id+' is connected!');
 
