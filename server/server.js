@@ -12,9 +12,11 @@ io.on('connection', function (socket) {
 		console.log('User '+socket.id+' is disconnected!');
 	});
 
-	socket.on('name', function(data) {
-		socket.name = data.name;
-		socket.emit('name', {name:socket.name});
+	socket.on('type', function(data) {
+		
+		// TODO
+
+		socket.emit('log', "Hi beautiful web client, nice to meet you!");
 	});
 })
 
