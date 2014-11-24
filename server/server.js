@@ -1,8 +1,5 @@
-// Creating the server
-var server = require('http').createServer();
-
 // Loading socket.io
-var io = require('socket.io').listen(server);
+var io = require('socket.io')();
 
 // When a user have just connected
 io.on('connection', function (socket) {
@@ -20,4 +17,5 @@ io.on('connection', function (socket) {
 	});
 })
 
-server.listen(8080);
+// Listening port 8080
+io.listen(8080);
