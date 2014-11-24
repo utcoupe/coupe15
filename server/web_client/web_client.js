@@ -13,8 +13,6 @@
 
 		// Writing error message
 		$('#web_client').html('<p class="error" ><strong>Error</strong>: '+msg+'</p>');
-
-		return;
 	}
 
 	function error_serverNotFound() {
@@ -23,11 +21,16 @@
 	function error_serverTimeout() {
 		error('server timed out.<br />Please make sure the server is running.', true);
 	}
+	function error_socketIoNotFound() {
+		error('socket.io.js not found.<br />Please make sure you are in server/web_client folder.', false);
+	}
 
 	if(io == undefined) {
-		error_serverNotFound();
+		error_socketIoNotFound();
 	} else {
-		var socket = io.connect(server_host);
+		var socket = io(server_host);
+		if(socket.disconnected)
+			error_serverNotFound();
 
 		socket.on('connect', function(){
 			clearTimeout(reload_timeout);
