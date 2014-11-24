@@ -1,7 +1,7 @@
-$(document).ready(function() {
+(function() {
 	"use strict";
 
-	var server_host = "http://localhost:8080";
+	var server_host = 'http://'+(!!window.location.host?window.location.host:'localhost')+':3128';
 	var reload_timeout;
 
 	function error(msg, reload) {
@@ -12,16 +12,16 @@ $(document).ready(function() {
 		}
 
 		// Writing error message
-		$('#web_client').html('<p class="error" >'+msg+'</p>');
+		$('#web_client').html('<p class="error" ><strong>Error</strong>: '+msg+'</p>');
 
 		return;
 	}
 
 	function error_serverNotFound() {
-		error('Error: server not found.<br />Please make sure the server is running.', true);
+		error('server not found at '+server_host+'.<br />Please make sure the server is running.', true);
 	}
 	function error_serverTimeout() {
-		error('Error: server timed out.<br />Please make sure the server is running.', true);
+		error('server timed out.<br />Please make sure the server is running.', true);
 	}
 
 	if(io == undefined) {
@@ -34,7 +34,7 @@ $(document).ready(function() {
 			socket.emit('type', { name: 'web_client' });
 
 			// Lunching the web client
-			$('#web_client').html(' '); // Temp
+			$('#web_client').html('Hello, you\'re actually connected to the server!'); // Temp
 		});
 		socket.on('log', function(data){
 			console.log('[Server log] '+data);
@@ -43,4 +43,4 @@ $(document).ready(function() {
 			error_serverTimeout();
 		});
 	}
-});
+})();

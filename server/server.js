@@ -17,5 +17,5 @@ io.on('connection', function (socket) {
 	});
 })
 
-// Listening port 8080
-io.listen(8080);
+// Listening port 3128
+io.listen(3128);
