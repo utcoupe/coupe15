@@ -16,10 +16,10 @@
 	}
 
 	function error_serverNotFound() {
-		error('server not found at '+server_host+'.<br />Please make sure the server is running.', true);
+		error('server not found at '+server_host+'.<br />Please make sure the server is running.', false);
 	}
 	function error_serverTimeout() {
-		error('server timed out.<br />Please make sure the server is running.', true);
+		error('server timed out.<br />Please make sure the server is running.', false);
 	}
 	function error_socketIoNotFound() {
 		error('socket.io.js not found.<br />Please make sure you are in server/web_client folder.', false);
