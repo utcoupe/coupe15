@@ -34,7 +34,8 @@
 
 		socket.on('connect', function(){
 			clearTimeout(reload_timeout);
-			socket.emit('type', { name: 'web_client' });
+			socket.emit('type', 'web_client');
+			socket.emit('order', {to:'web_client',text:'Hello!'});
 
 			// Lunching the web client
 			$('#web_client').html('Hello, you\'re actually connected to the server!'); // Temp
@@ -44,6 +45,9 @@
 		});
 		socket.on('disconnect', function(){
 			error_serverTimeout();
+		});
+		socket.on('order', function(data){
+			console.log('[Order to '+data.to+'] '+ data.text);
 		});
 	}
 })();
