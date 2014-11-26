@@ -1,4 +1,6 @@
-var socket = require('socket.io-client')('http://localhost:8080');
+var server_ip = 'http://127.0.0.1:8080';
+
+var socket = require('socket.io-client')(server_ip);
 
 socket.on('connect', function(){
 	socket.emit('name', {
