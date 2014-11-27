@@ -2,7 +2,7 @@
 var server = require('socket.io')();
 
 // When a user have just connected
-server.on('connectservern', function (client) {
+server.on('connection', function (client) {
 	console.log("User "+client.id+" is connected!");
 
 	client.on('disconnect', function() {
