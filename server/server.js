@@ -1,12 +1,14 @@
+var server_port = 3128;
+
 // Loading socket.io and create the server
 var server = require('socket.io')();
 
 // When a user have just connected
 server.on('connection', function (client) {
-	console.log("User "+client.id+" is connected!");
+	console.log("User with id "+client.id+" is connected!");
 
 	client.on('disconnect', function() {
-		console.log("User "+client.id+" is disconnected!");
+		console.log("User with id "+client.id+" is disconnected!");
 	});
 
 	client.on('type', function(data) {
@@ -16,8 +18,7 @@ server.on('connection', function (client) {
 		}
 		client.join(data);
 		
-		client.emit('log', "Hi, est-ce que tu viens pour les vacances ? Moi je n'ai pas changé d'adresse : " + 
-			client.handshake.headers.host);
+		client.emit('log', "Connected to the server successfully" + client.handshake.headers.host);
 	});
 
 	// Forwarding orders
@@ -41,4 +42,5 @@ server.on('connection', function (client) {
 });
 
 // Listening port 3128
-server.listen(3128);
+server.listen(server_port);
+console.log("Server start at port "+server_port);
