@@ -51,9 +51,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="689.08287"
-     inkscape:cy="466.49285"
+     inkscape:zoom="0.7"
+     inkscape:cx="693.50362"
+     inkscape:cy="477.45776"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -74,7 +74,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -228,11 +228,11 @@
        sodipodi:cy="889.14789"
        sodipodi:rx="12.64232"
        sodipodi:ry="12.64232"
-       d="m 227.99947,889.14789 a 12.64232,12.64232 0 1 1 -25.28464,0 12.64232,12.64232 0 1 1 25.28464,0 z"
+       d="m 227.99947,889.14789 c 0,6.98216 -5.66016,12.64232 -12.64232,12.64232 -6.98216,0 -12.64232,-5.66016 -12.64232,-12.64232 0,-6.98216 5.66016,-12.64232 12.64232,-12.64232 6.98216,0 12.64232,5.66016 12.64232,12.64232 z"
        transform="matrix(1.0707023,0,0,1.0707023,-14.514684,-61.421792)" />
     <path
        transform="matrix(1.0707023,0,0,1.0707023,1075.34,-429.19553)"
-       d="m 227.99947,889.14789 a 12.64232,12.64232 0 1 1 -25.28464,0 12.64232,12.64232 0 1 1 25.28464,0 z"
+       d="m 227.99947,889.14789 c 0,6.98216 -5.66016,12.64232 -12.64232,12.64232 -6.98216,0 -12.64232,-5.66016 -12.64232,-12.64232 0,-6.98216 5.66016,-12.64232 12.64232,-12.64232 6.98216,0 12.64232,5.66016 12.64232,12.64232 z"
        sodipodi:ry="12.64232"
        sodipodi:rx="12.64232"
        sodipodi:cy="889.14789"
@@ -345,5 +345,21 @@
            x="-4.0406232"
            y="1.8035361" /></flowRegion><flowPara
          id="flowPara4886"
-         style="text-anchor:middle;text-align:center">PLAN TABLE HOKUYOS</flowPara></flowRoot>  </g>
+         style="text-anchor:middle;text-align:center">PLAN TABLE HOKUYOS</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3054"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,-2.2302535e-5)"><flowRegion
+         id="flowRegion3056"><rect
+           id="rect3058"
+           width="352.54324"
+           height="187.88837"
+           x="-425.27423"
+           y="700.8291" /></flowRegion><flowPara
+         style="font-size:15px"
+         id="flowPara3062">c'est bizarre, on dirait que c'est inversé... (le 0 est parallèle au public en green/red</flowPara><flowPara
+         style="font-size:15px"
+         id="flowPara3066" /><flowPara
+         style="font-size:15px"
+         id="flowPara3068">en yellow (inversé), le 0 est aussi // au public</flowPara></flowRoot>  </g>
 </svg>
