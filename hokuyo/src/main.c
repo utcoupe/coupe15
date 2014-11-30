@@ -44,8 +44,8 @@ int main(int argc, char **argv){
 
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
-	if(argc <= 1 || ( strcmp(argv[1], "red") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {red|yellow} [path_pipe] [nbr_hok]\n");
+	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
+		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [path_pipe] [nbr_hok]\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -54,31 +54,37 @@ int main(int argc, char **argv){
 		exit(EXIT_FAILURE);
     }
 	
-	if (strcmp(argv[1], "yellow") == 0) {
-		symetry = 1; // si on est jaune, on fait la symétrie de l'autre couleur ! (au lieu de changer les cst)
-	}
-
-	if (argc >= 3) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (debug), soit on communique
-		path = argv[2];
+	if (argc >= 4) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (=debug, inutile pour le moment), soit on communique
+		path = argv[3];
 		if (strcmp(path, "nocalib") == 0) {
 			calib = 0;
 		} else {
 			use_protocol = 1;
 		}
 	}
-	
-	if (argc >= 4) {
-		nb_robots_to_find = atoi(argv[3]);
+
+	if (argc >= 5) {
+		nb_robots_to_find = atoi(argv[4]);
 	} else {
 		nb_robots_to_find = MAX_ROBOTS;
 	}
 
+
 	hok1 = initHokuyo("/dev/ttyACM0", HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y} );
 	hok2 = initHokuyo("/dev/ttyACM1", HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
 
-	if (symetry) { // si besoin, on inverse les positions (quand on change de couleur)
+	if (strcmp(argv[1], "yellow") == 0) {
+		// si on est jaune, on inverse les positions ! (au lieu de changer les cst)
+		symetry = 1;
 		hok1 = applySymetry(hok1);
 		hok2 = applySymetry(hok2);
+	}
+
+	if (strcmp(argv[2], "use_init_wizard") == 0){
+		initWizard(&hok1, &hok2, symetry);
+
+		// Attente de l'ordre de départ du match
+		// XXX
 	}
 
 	checkAndConnect(&hok1);

@@ -16,12 +16,17 @@
 #define TIMEOUT 1000
 
 
-#define CONE_CALIB  (10.0/180)*M_PI // inutilisé ! XXX
-#define DIST_CALIB 100 // inutilisé ! XXX
-#define CALIB_MEASURES 10 // inutilisé ! XXX
+#define CONE_DIAM_MAX 100 // XXX à modifier en fonction du cône utilisé
+#define CONE_CALIB  CONE_DIAM_MAX/2 // diamètre du cône à l'horizontale de l'hokuyo <=> ø vu par l'hokuyo lorsque l'assiette est bonne
+#define CONE_HEIGHT 150// hauteur du cône XXX
+#define CONE_X_LEFT 967
+#define CONE_X_RIGHT 2033
+#define CONE_Y 1420
+// #define DIST_CALIB 100 // inutilisé ! XXX
+// #define CALIB_MEASURES 10 // inutilisé ! XXX
 #define CALIB_X (TABLE_X/2)
 #define CALIB_Y (TABLE_Y/2)
-#define CALIB_PT (Pt_t) { CALIB_X, CALIB_Y } // inutilisé ! XXX
+// #define CALIB_PT (Pt_t) { CALIB_X, CALIB_Y } // inutilisé ! XXX
 
 #define HOK1_X -40 // old : 25
 #define HOK1_Y -40  // old : 25

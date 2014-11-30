@@ -309,3 +309,23 @@ int isIn(int e, int *tab, int tab_size) {
 	}
 	return ret;
 }
+
+
+Cluster_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
+	int i, found = -1;
+	Cluster_t result;
+
+	for(i=0; i<n; i++){ // on cherche notre cône
+		if ((dist_squared(clusters[i].center, coneCenter) < 360) && (clusters[i].size < CONE_DIAM_MAX)) // (3% * 2m)² = 360 mm²
+			found = i;
+	}
+
+	if(found != -1){ // si cône trouvé
+		result = clusters[i];
+	} else { // si cône pas trouvé
+		result.center.x=-1;
+		result.center.y=-1;
+	}
+
+	return result;
+}

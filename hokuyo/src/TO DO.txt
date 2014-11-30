@@ -1,11 +1,18 @@
 TO DO :
 
 - finir de comprendre merge robot
-(- voir communication)
 
 À améliorer :
-- lancement pour les nuls (connection des hok, hauteur du l'hok, assiette,cap)
-- faire du tracking (retours dans l'ordre)
-- ignorer les marches (si monte les marches, on retourne -1 1 par exemple)
+- lancement pour les nuls (utiliser erreur de cap)
+- correction du cap dans le programme
+- faire du tracking
+- ignorer les clusters trop loin des précédents trackés (sauf si timestamp trop important ? ou alors on le retourne sous le nom d'obstacle inconnu ?)
+- ignorer les marches (si monte les marches, on retourne -1 1 par exemple) + les zones de départ ?
+- choisir les communications faites ac l'IA (comment on note un robot ds les marches...)
+- faire le client nodejs (si pas déjà fait par Alexis)
+
+
+
+- faire des tourelles auto-stabilisées
 - faire que les deux hokuyos scannent tout le terrain (au lieu de scanner que la moitié)
 - faire de la prédiction

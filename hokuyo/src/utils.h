@@ -6,7 +6,7 @@
 
 typedef struct Cluster {
 	Pt_t pts[MAX_DATA];
-	int nb, size; // nb de pts dans le cluster, taille (en profondeur)
+	int nb, size; // nb de pts dans le cluster, taille (entre les pts extrêmes du cluster)
 	Pt_t center;
 } Cluster_t;
 
@@ -28,6 +28,12 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters);
 	OUT: nb de clusters (= min entre n et nb_robots_to_find)
 */
 int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find);
+
+/* Trie les clusters (issus de getClustersFromPts) pour trouver le cône dans la zone attendue
+	IN: nb de clusters, tableau des clusters, cone
+	OUT: cluster du cône (en cas d'erreur, le centre est -1 -1)
+*/
+Cluster_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter);
 
 /* 
 	IN: nombre de clusters et tab de clusters de chaque hok, nb_robots à trouver (>= n1 et >=n2)
