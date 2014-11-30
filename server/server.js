@@ -15,7 +15,7 @@ server.on('connection', function (client) {
 			return;
 		}
 		client.join(data);
-		//console.log(client.handshake);
+		
 		client.emit('log', "Hi, est-ce que tu viens pour les vacances ? Moi je n'ai pas changé d'adresse : " + 
 			client.handshake.headers.host);
 	});
