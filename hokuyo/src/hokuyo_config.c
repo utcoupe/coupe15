@@ -67,15 +67,58 @@ void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 			checkAndConnect(hok1);
 		}
 		sleep(1);
-	} while (errors.pitch < 0.025); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance
+	} while (errors.pitch > 0.025); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance
 	// une fois l'erreur suffisement petite
 	printf("%sOk, let's say that's good\n", PREFIX);
 	// prendre l'erreur ce cap
 	hok1->error = errors.heading;
 	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
+	getchar();
+
 
 	// Début de l'initialisation du second Hokuyo
+	printf("%sPut the 2nd hokuyo on the platform which on the side of the area,\n", PREFIX);
+	if (symetry == 0) // On est vert
+		printf("%son the right-hand side.\n", PREFIX);
+	else
+		printf("%son the left-hand side.\n", PREFIX);
+	printf("%sIt must look to the other side.\n", PREFIX);
+	printf("%sOnce done, please plug it into the Rasp (press any key to continue)\n", PREFIX);
+	getchar(); // en attendant un ENTER
+	// boucle de vérification qu'il est branché
+	while (!hok2->isWorking) {
+		checkAndConnect(hok2);
+		sleep(1);
+	}
+	printf("%sOk, the second hokuyo has detected !\n", PREFIX);
 
+	printf("%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
+	getchar(); // en attendant un ENTER
+	// boucle de vérification de l'assiette
+	do{
+		if (hok2->isWorking){
+			errors = frameWizard (hok2, 4, symetry);
+
+			if ((errors.pitch == -1) && (errors.heading == -1)){
+				printf("%sHokuyo disconnected\n", PREFIX);
+				continue;
+			} else {
+				if ((errors.pitch == -2) && (errors.heading == -2))
+					printf("%sCan't see the cone\n", PREFIX);
+				else
+					printf("%sPitch error : %lf\n", PREFIX, errors.pitch);
+			}
+		} else {
+			checkAndConnect(hok2);
+		}
+		sleep(1);
+	} while (errors.pitch > 0.025); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance
+	// une fois l'erreur suffisement petite
+	printf("%sOk, let's say that's good\n", PREFIX);
+	// prendre l'erreur ce cap
+	hok2->error = errors.heading;
+	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
+	getchar();
 
 	printf("%sWaiting for the match to start...\n", PREFIX);
 }
@@ -129,7 +172,8 @@ Hok_t applySymetry(Hok_t hok) {
 Angles_t frameWizard (Hok_t *hok, int hok_pos, int symetry){
 	Pt_t pts[MAX_DATA], coneCenter;
 	Angles_t results;
-	Cluster_t clusters[MAX_CLUSTERS], cone;
+	Cluster_t clusters[MAX_CLUSTERS];
+	Cluster_simple_t cone;
 	int nPts = 0, nClusters = 0, distToCone;
 
 	if (hok->isWorking) {
@@ -177,10 +221,11 @@ Angles_t frameWizard (Hok_t *hok, int hok_pos, int symetry){
 
 		// Calcul des erreurs (normalement ce sont des tan-1 mais on les néglige vu l'angle)
 		// --- pitch
-		results.pitch = ((CONE_CALIB * CONE_HEIGHT/2)/(cone.size) - CONE_HEIGHT/2)/(distToCone);
+		results.pitch = ((CONE_CALIB * CONE_HEIGHT/2)/((float)cone.size) - CONE_HEIGHT/2)/(distToCone);
 		// --- heading
 		results.heading = (sqrt(dist_squared(cone.center, coneCenter)))/(distToCone);
 
+		return results;
 	} else {
 		results.pitch = -1;
 		results.heading = -1;
