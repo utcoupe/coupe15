@@ -16,9 +16,9 @@
 #define TIMEOUT 1000
 
 
-#define CONE_DIAM_MAX 100 // XXX à modifier en fonction du cône utilisé
+#define CONE_DIAM_MAX 690 // à modifier en fonction du cône utilisé
 #define CONE_CALIB  CONE_DIAM_MAX/2 // diamètre du cône à l'horizontale de l'hokuyo <=> ø vu par l'hokuyo lorsque l'assiette est bonne
-#define CONE_HEIGHT 150// hauteur du cône XXX
+#define CONE_HEIGHT 350// hauteur du cône
 #define CONE_X_LEFT 967
 #define CONE_X_RIGHT 2033
 #define CONE_Y 1420

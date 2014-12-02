@@ -9,6 +9,10 @@ typedef struct Cluster {
 	int nb, size; // nb de pts dans le cluster, taille (entre les pts extrêmes du cluster)
 	Pt_t center;
 } Cluster_t;
+typedef struct Cluster_simple {
+	int size;
+	Pt_t center;
+} Cluster_simple_t;
 
 /* Demande les points à l'Hokuyo
 	IN: structure de l'Hokuyo à appeler
@@ -33,7 +37,7 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find);
 	IN: nb de clusters, tableau des clusters, cone
 	OUT: cluster du cône (en cas d'erreur, le centre est -1 -1)
 */
-Cluster_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter);
+Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter);
 
 /* 
 	IN: nombre de clusters et tab de clusters de chaque hok, nb_robots à trouver (>= n1 et >=n2)
