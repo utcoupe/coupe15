@@ -316,9 +316,10 @@ Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
 	Cluster_simple_t result;
 
 	for(i=0; i<n; i++){ // on cherche notre cône
-		if ((dist_squared(clusters[i].center, coneCenter) < 2*3600) && (clusters[i].size < CONE_DIAM_MAX)){ // (3% * 2m)² = 3600 mm² + 200% "d'erreur" (à la louche)
+		if ((dist_squared(clusters[i].center, coneCenter) < 6*3600) && (clusters[i].size < CONE_DIAM_MAX)){ // (3% * 2m)² = 3600 mm² + 600% "d'erreur" (à la louche)
 			found = i;
 		}
+		// printf("%d %d, size : %d\n", clusters[i].center.x, clusters[i].center.y, clusters[i].size);
 	}
 
 	if(found != -1){ // si cône trouvé

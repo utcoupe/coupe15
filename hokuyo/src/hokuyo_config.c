@@ -54,24 +54,26 @@ void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 		if (hok1->isWorking){
 			errors = frameWizard (hok1, 4, symetry);
 
-			if ((errors.pitch == -1) && (errors.heading == -1)){
+			printf("%f %f\n", errors.pitch, errors.heading);
+
+			if ((errors.pitch == -1.) && (errors.heading == -1.)){
 				printf("%sHokuyo disconnected\n", PREFIX);
 				continue;
 			} else {
-				if ((errors.pitch == -2) && (errors.heading == -2))
+				if ((errors.pitch == -2.) && (errors.heading == -2.))
 					printf("%sCan't see the cone\n", PREFIX);
-				else
-					printf("%sPitch error : %lf\n", PREFIX, errors.pitch);
 			}
 		} else {
 			checkAndConnect(hok1);
 		}
 		sleep(1);
-	} while (errors.pitch > 0.025); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance
+	} while (pow(errors.pitch, 2) > 0.0125); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance (0.025²) 0.0125
 	// une fois l'erreur suffisement petite
-	printf("%sOk, let's say that's good\n", PREFIX);
 	// prendre l'erreur ce cap
 	hok1->error = errors.heading;
+	printf("%sHeading error is %f grad = %f°\n", PREFIX, hok1->error, (hok1->error*180)/M_PI);
+	printf("%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
+	printf("%sOk, let's say that's good\n", PREFIX);
 	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
 	getchar();
 
@@ -90,33 +92,35 @@ void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 		checkAndConnect(hok2);
 		sleep(1);
 	}
-	printf("%sOk, the second hokuyo has detected !\n", PREFIX);
+	printf("%sOk, 2nd hokuyo detected !\n", PREFIX);
 
 	printf("%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
 	getchar(); // en attendant un ENTER
 	// boucle de vérification de l'assiette
 	do{
 		if (hok2->isWorking){
-			errors = frameWizard (hok2, 4, symetry);
+			errors = frameWizard (hok2, 3, symetry);
 
-			if ((errors.pitch == -1) && (errors.heading == -1)){
+			printf("%f %f\n", errors.pitch, errors.heading);
+
+			if ((errors.pitch == -1.) && (errors.heading == -1.)){
 				printf("%sHokuyo disconnected\n", PREFIX);
 				continue;
 			} else {
-				if ((errors.pitch == -2) && (errors.heading == -2))
+				if ((errors.pitch == -2.) && (errors.heading == -2.))
 					printf("%sCan't see the cone\n", PREFIX);
-				else
-					printf("%sPitch error : %lf\n", PREFIX, errors.pitch);
 			}
 		} else {
 			checkAndConnect(hok2);
 		}
 		sleep(1);
-	} while (errors.pitch > 0.025); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance
+	} while (pow(errors.pitch, 2) > 0.0125); // trigo, en estimant que nos cylindres font 10cm de haut à max 2m de distance (0.025²) 0.0125
 	// une fois l'erreur suffisement petite
-	printf("%sOk, let's say that's good\n", PREFIX);
 	// prendre l'erreur ce cap
 	hok2->error = errors.heading;
+	printf("%sHeading error is %f grad = %f°\n", PREFIX, hok2->error, (hok2->error*180)/M_PI);
+	printf("%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
+	printf("%sOk, let's say that's good\n", PREFIX);
 	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
 	getchar();
 
@@ -151,7 +155,7 @@ void checkAndConnect(Hok_t *hok) {
 				for (i=0; i<hok->nb_data; i++) {
 					angles[i] = modTwoPi(urg_index2rad(hok->urg, i) + hok->orientation);
 				}
-				hok->fm = initFastmath(hok->nb_data, angles);
+				hok->fm = initFastmath(hok->nb_data, angles, hok->error);
 				free(angles);
 				
 				printf("%sCalculted sin/cos data for %s\n", PREFIX, hok->path);

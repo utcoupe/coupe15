@@ -27,6 +27,11 @@ void exit_handler() {
 	if (hok2.urg != 0)
 		urg_disconnect(hok2.urg);
 
+	if (use_protocol = 1){
+		printf("\n%sClosing socket, please wait...\n", PREFIX);
+		close_protocol();
+	}
+
 	// XXX on ne free rien ? genre nos hok et tout ?
 	printf("%sExitting\n", PREFIX);
 	kill(getppid(), SIGUSR1); //Erreur envoyee au pere
@@ -45,7 +50,7 @@ int main(int argc, char **argv){
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [path_pipe] [nbr_hok]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [path_sock] [nbr_hok]\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -82,9 +87,6 @@ int main(int argc, char **argv){
 
 	if (strcmp(argv[2], "use_init_wizard") == 0){
 		initWizard(&hok1, &hok2, symetry);
-
-		// Attente de l'ordre de départ du match
-		// XXX
 	}
 
 	checkAndConnect(&hok1);
@@ -95,7 +97,7 @@ int main(int argc, char **argv){
 	#endif
 
 	if (use_protocol) {
-		init_protocol(path);
+		init_protocol(path); // Attente de l'ordre de départ du match
 	}
 
 	printf("%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);

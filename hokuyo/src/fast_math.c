@@ -27,7 +27,7 @@ dist_to_edge(Pt_t p, int largeurX, int largeurY) // fonction qui inutilisée
 
 
 struct fastmathTrigo
-initFastmath(int n, double *angles)
+initFastmath(int n, double *angles, double headingError)
 {
 	struct fastmathTrigo r;
 
