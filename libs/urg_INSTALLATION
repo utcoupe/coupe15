@@ -1,6 +1,8 @@
 Ne PAS utiliser la librairie "urg-library-1.0.4", elle ne prend pas en charge plusieurs Hokuyo
 (cf: https://github.com/utcoupe/coupe15/commit/5440d893299106c750ed76e205b14ad46b645b3d#commitcomment-7904503)
 
+Utiliser plutôt la librairie modifée dans le github. Elle nécessite au moins la librairie SDL.
+
 Se placer dans le répertoire urg-0.8.18, exécutez les commandes suivantes :
 ./configure && make
 sudo make install
@@ -11,3 +13,5 @@ en langage C, dans /usr/local/urg/ pour les headers en C++
 
 #include <c_urg/urg_ctrl.h>
 void main() { }
+
+Il faut savoir que pour compiler des codes autres que samples de la librairies (qui sont bien pour tester si ça marche), il faut faire un fichier CMakeLists.txt (http://florian-goujeon.developpez.com/cours/cmake/initiation/)

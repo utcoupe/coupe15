@@ -9,7 +9,7 @@
 */
 
 #include <math.h>
-#include "urg_ctrl.h"
+#include <c_urg/urg_ctrl.h>
 #include <stdio.h>
 #include <stdlib.h>
 
