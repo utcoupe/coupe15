@@ -5,7 +5,9 @@
   "main": "server.js",
   "dependencies": {
     "socket.io": "~1.2.1",
-    "socket.io-client": "~1.2.1"
+    "socket.io-client": "~1.2.1",
+    "serialport": "~1.4.9",
+    "johnny-five": "~0.8.33"
   },
   "devDependencies": {},
   "scripts": {
