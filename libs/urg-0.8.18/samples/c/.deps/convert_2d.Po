@@ -11,10 +11,11 @@ convert_2d.o: convert_2d.c /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
- ../../src/c/urg/urg_ctrl.h ../../src/c/urg/urg_t.h \
- ../../src/c/urg/urg_parameter_t.h ../../src/c/connection/serial_t.h \
- ../../src/c/system/detect_os.h ../../src/c/connection/serial_t_lin.h \
- ../../src/c/connection/ring_buffer.h /usr/include/termios.h \
+ /usr/local/include/c_urg/urg_ctrl.h /usr/local/include/c_urg/urg_t.h \
+ /usr/local/include/c_urg/urg_parameter_t.h \
+ /usr/local/include/c_urg/serial_t.h /usr/local/include/c_urg/detect_os.h \
+ /usr/local/include/c_urg/serial_t_lin.h \
+ /usr/local/include/c_urg/ring_buffer.h /usr/include/termios.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
  /usr/include/x86_64-linux-gnu/bits/termios.h \
@@ -73,19 +74,19 @@ convert_2d.o: convert_2d.c /usr/include/stdc-predef.h /usr/include/math.h \
 
 /usr/include/x86_64-linux-gnu/bits/mathinline.h:
 
-../../src/c/urg/urg_ctrl.h:
+/usr/local/include/c_urg/urg_ctrl.h:
 
-../../src/c/urg/urg_t.h:
+/usr/local/include/c_urg/urg_t.h:
 
-../../src/c/urg/urg_parameter_t.h:
+/usr/local/include/c_urg/urg_parameter_t.h:
 
-../../src/c/connection/serial_t.h:
+/usr/local/include/c_urg/serial_t.h:
 
-../../src/c/system/detect_os.h:
+/usr/local/include/c_urg/detect_os.h:
 
-../../src/c/connection/serial_t_lin.h:
+/usr/local/include/c_urg/serial_t_lin.h:
 
-../../src/c/connection/ring_buffer.h:
+/usr/local/include/c_urg/ring_buffer.h:
 
 /usr/include/termios.h:
 
