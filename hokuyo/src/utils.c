@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <jansson.h>
 
 #define max(a, b) a>b?a:b
 #define min(a, b) a<b?a:b
@@ -329,5 +330,23 @@ Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
 		result.center.x=-1;
 		result.center.y=-1;
 	}
+	return result;
+}
+
+
+char* parse2JSON(Cluster_t *coords, int nbr){
+	char* result;
+	int i;
+
+	strcpy(result, "\"robots\": [");
+	for (i = 0; i < nbr; i++)
+	{
+		sprintf(result, "%s { \"id\": %d, \"x\": %d, \"y\": %d}", result, i, coords->center.x, coords->center.y);
+		if (i < nbr-1)
+			strcat(result, ", ");
+	}
+
+	strcpy(result, "]");
+
 	return result;
 }

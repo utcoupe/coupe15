@@ -25,6 +25,7 @@ add_executable(
 INCLUDE_DIRECTORIES( ${SDL_INCLUDE_DIR} )
 include_directories( /usr/local/include/c_urg )
 target_link_libraries( hokuyo
+	libjansson
 	c_urg 
 	c_urg_connection 
 	c_urg_system 
