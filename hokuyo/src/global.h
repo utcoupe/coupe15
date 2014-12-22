@@ -3,9 +3,10 @@
 
 #include "fast_math.h"
 #include <math.h>
+#include <sys/wait.h>
 
 #define PREFIX "[C-HK]  "
-#define SDL
+// #define SDL
 
 #define TABLE_X 3000
 #define TABLE_Y 2000
