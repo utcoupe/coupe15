@@ -21,6 +21,7 @@ static long timeStart = 0;
 static Hok_t hok1, hok2;
 
 void exit_handler() {
+	int status;
 	printf("\n%sClosing lidar(s), please wait...\n", PREFIX);
 	if (hok1.urg != 0)
 		urg_disconnect(hok1.urg);
@@ -31,6 +32,10 @@ void exit_handler() {
 		printf("\n%sClosing socket, please wait...\n", PREFIX);
 		close_protocol();
 	}
+
+
+	printf("%sWaiting for nodeJS son to quit...\n", PREFIX);
+	wait(&status);
 
 	// XXX on ne free rien ? genre nos hok et tout ?
 	printf("%sExitting\n", PREFIX);

@@ -9,6 +9,7 @@ typedef struct Cluster {
 	int nb, size; // nb de pts dans le cluster, taille (entre les pts extrêmes du cluster)
 	Pt_t center;
 } Cluster_t;
+
 typedef struct Cluster_simple {
 	int size;
 	Pt_t center;
@@ -50,5 +51,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 	OUT: 
 */
 int isIn(int e, int *tab, int tab_size);
+
+char* parse2JSON(Cluster_t *coords, int nbr);
 
 #endif

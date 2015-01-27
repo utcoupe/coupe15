@@ -21,6 +21,7 @@ static int sockfd[2]
 void init_protocol(char* path);
 
 void pushResults(Cluster_t *coords, int nbr, long timestamp);
+Cluster_simple_t* pullCommand();
 void close_protocol();
 
 #endif
