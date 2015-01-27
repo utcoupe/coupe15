@@ -1,0 +1,25 @@
+body{
+	margin: 0px;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+table{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+td{
+	width: 14.25%;
+	text-align: center;
+}
+
+.thing{
+	min-height: 70px;
+	border: solid lightgray 1px;
+	border-radius: 5px;
+	margin-top: 15px;
+}
+
+td.title{
+	border: solid gray 1px;
+}

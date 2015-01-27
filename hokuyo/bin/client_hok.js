@@ -19,8 +19,7 @@ if(process.argv.length>2){
 var socketUnix = net.connect({path: socketUnixPath},
 		function() { //'connect' listener
 	console.log(prefix+'I\'m connected to the Unix Socket server :)');
-	
-	socketUnix.write('Hello world!\r\n');
+	//socketUnix.write('Hello world!\r\n');
 });
 
 // If smt is written in the socket

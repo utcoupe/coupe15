@@ -1,0 +1,822 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sta",
+				"status"
+			],
+			[
+				"us",
+				"use_protocol"
+			],
+			[
+				"p",
+				"photoid"
+			],
+			[
+				"r",
+				"result"
+			],
+			[
+				"pro",
+				"process"
+			],
+			[
+				"cli",
+				"client_hok"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"socket",
+				"socketUnixPath"
+			],
+			[
+				"SOCK",
+				"socketUnixPath"
+			],
+			[
+				"so",
+				"socketUnixPath"
+			],
+			[
+				"EX",
+				"EXIT_FAILURE"
+			],
+			[
+				"pt",
+				"pt"
+			],
+			[
+				"pol",
+				"poly"
+			],
+			[
+				"lis",
+				"listePts"
+			],
+			[
+				"ce",
+				"cercle"
+			],
+			[
+				"MARGIN",
+				"margin-top"
+			],
+			[
+				"con",
+				"contact_item"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"min",
+				"min-width"
+			],
+			[
+				"add",
+				"addslashes"
+			],
+			[
+				"in",
+				"input	Tag"
+			],
+			[
+				"n",
+				"nb_data"
+			],
+			[
+				"set",
+				"setq"
+			],
+			[
+				"PRODUIT",
+				"produit_monome"
+			],
+			[
+				"ret",
+				"return"
+			],
+			[
+				"P",
+				"P"
+			],
+			[
+				"re",
+				"ret2"
+			],
+			[
+				"de",
+				"degre"
+			],
+			[
+				"affi",
+				"afficher_monome"
+			],
+			[
+				"E",
+				"EXERCICE"
+			],
+			[
+				"diff",
+				"diff2"
+			],
+			[
+				"ran",
+				"random"
+			],
+			[
+				"matrice",
+				"matrice_info"
+			],
+			[
+				"list",
+				"liste_visites"
+			],
+			[
+				"liste_",
+				"liste_resultat"
+			],
+			[
+				"fun",
+				"fun	Function"
+			],
+			[
+				"bac",
+				"background"
+			],
+			[
+				"mar",
+				"margin"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"margin",
+				"margin"
+			],
+			[
+				"EXE",
+				"EXECUTABLE_OUTPUT_PATH"
+			],
+			[
+				"tab",
+				"tab2"
+			],
+			[
+				"jour",
+				"joueur_cible"
+			],
+			[
+				"joueu",
+				"joueur_att"
+			],
+			[
+				"var",
+				"var_dump"
+			],
+			[
+				"li",
+				"listp"
+			],
+			[
+				"tournoi",
+				"tournoi2d"
+			],
+			[
+				"S",
+				"SELECTED"
+			],
+			[
+				"_",
+				"_POST"
+			],
+			[
+				"pr",
+				"printf	printf …"
+			],
+			[
+				"sd",
+				"sdiv2"
+			],
+			[
+				"sdi",
+				"sdiv4"
+			],
+			[
+				"border",
+				"border-style"
+			],
+			[
+				"selec",
+				"fSelectionnes"
+			],
+			[
+				"joueur",
+				"joueurs"
+			],
+			[
+				"joue",
+				"joueurs"
+			],
+			[
+				"age",
+				"age"
+			],
+			[
+				"nom",
+				"nomFichierDede"
+			],
+			[
+				"fSe",
+				"fSelectionnes"
+			],
+			[
+				"nJoueur",
+				"nJoueurTemp"
+			],
+			[
+				"fS",
+				"fSelectionneur"
+			],
+			[
+				"d",
+				"do	Do While Loop"
+			],
+			[
+				"Temp",
+				"tempMoyMensuelle"
+			],
+			[
+				"un",
+				"unReleveMensuel"
+			],
+			[
+				"une",
+				"uneCoordGPS"
+			],
+			[
+				"temp",
+				"template"
+			],
+			[
+				"els",
+				"elseif	elseif …"
+			],
+			[
+				"recher",
+				"rechercheArray"
+			],
+			[
+				"marg",
+				"margin-bottom"
+			],
+			[
+				"border-co",
+				"border-color"
+			],
+			[
+				"Ins",
+				"inscription"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"login",
+				"loginauth"
+			],
+			[
+				"v",
+				"Vide-coloc"
+			],
+			[
+				"text",
+				"text-decoration"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "reseau.css",
+			"settings":
+			{
+				"buffer_size": 291,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "reseau.html",
+			"settings":
+			{
+				"buffer_size": 1691,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "reseau.js",
+			"settings":
+			{
+				"buffer_size": 2827,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 180.0,
+		"selected_items":
+		[
+			[
+				"jaa",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"lis",
+				"Set Syntax: Lisp"
+			],
+			[
+				"lisp",
+				"Set Syntax: Lisp"
+			],
+			[
+				"ssc",
+				"Set Syntax: C"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 146.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/mewen/Bureau/UTCoupe/coupe15/UTCoupe/reseau.js",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/ready_resume.js",
+		"/home/mewen/Bureau/UTCoupe/coupe15/hokuyo/src/global.h",
+		"/home/mewen/Bureau/UTCoupe/coupe15/remote_control_v2/app.js",
+		"/home/mewen/Bureau/UTCoupe/coupe15/remote_control_v2/web_client.html",
+		"/home/mewen/Bureau/UTCoupe/coupe15/remote_control_v2/motors.js",
+		"/home/mewen/Bureau/UTCoupe/coupe15/remote_control_v2/web_client.js",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/ready_projets.js",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/load.js",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/ready.js",
+		"/home/mewen/Bureau/UTCoupe/coupe15/hokuyo/CMakeLists.txt",
+		"/home/mewen/Bureau/UTCoupe/coupe15/test.js",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD8/rapport.c",
+		"/home/mewen/Bureau/UTCoupe/Hors Github/Tests sockets/server_tcp_unix.c",
+		"/home/mewen/Bureau/UTCoupe/coupe15/hokuyo/bin/js_call.sh",
+		"/home/mewen/Bureau/UTCoupe/coupe15/server/README.md",
+		"/home/mewen/Bureau/UTCoupe/Hors Github/Tests sockets/client_tcp_unix.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD9/rapport TD9",
+		"/home/mewen/Documents/Stages.txt",
+		"/home/mewen/Bureau/UTCoupe/coupe15/server/server.js",
+		"/home/mewen/Polar Web/web/src/Polar/Services/Logger.php",
+		"/home/mewen/Polar Web/web/src/Polar/Services/Config.php",
+		"/home/mewen/Polar Web/web/src/Polar/Services/Caisse.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/en/page_samples/menu.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/en/projets.php",
+		"/home/mewen/Bureau/dessin.svg",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/form.js",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/style.css",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/scripts/load_projet.js",
+		"/home/mewen/Documents/Stock polar 13oct14.txt",
+		"/home/mewen/web/inc/objects/NewAnnales.class.php",
+		"/home/mewen/web/modules/commandes/_commentaire_poster_control.php",
+		"/home/mewen/web/inc/objects/Billetterie.class.php",
+		"/home/mewen/web/inc/objects/PolarObject.class.php",
+		"/home/mewen/web/inc/objects/Commande.class.php",
+		"/home/mewen/web/modules/commandes/posters_control.php",
+		"/home/mewen/web/modules/caisse/liste_articles.php",
+		"/home/mewen/web/modules/commandes/_liste_control.php",
+		"/home/mewen/web/modules/commandes/infos.php",
+		"/home/mewen/web/modules/caisse/coffre_control.php",
+		"/home/mewen/web/modules/commandes/gestion.php",
+		"/home/mewen/web/modules/caisse/coffre.php",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/communication.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/global.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/hokuyo_config.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/utils.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/hokuyo_config.c",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/communication.c",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/utils.c",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/test/src/hokuyo_config.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/main.c",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/test/src/hokuyo_config.c",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/test/src/main.c",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/compat.h",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/compat.c",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/fast_math.c",
+		"/home/mewen/Bureau/UTCoupe/coupe14/hokuyo/src/fast_math.h",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/test/src/samples/c/convert_2d",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/test/src/samples/c/plep.txt",
+		"/home/mewen/Bureau/NF16/td1.c",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Administration/module.php",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD4/mewen.c",
+		"/home/mewen/Bureau/plep.py",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD4/ex3a.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD4/ex3b.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD4/ex2c.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=sr01a013/volsme/user1x/uvs/sr01/sr01a013/TD4/ex1.c",
+		"/home/mewen/Bureau/IA01/ia01-tp/exo 2.lisp",
+		"/home/mewen/Bureau/IA01/ia01-tp/exo 3.lisp",
+		"/home/mewen/Bureau/IA01/ia01-tp/my-assoc.lisp",
+		"/home/mewen/Bureau/IA01/ia01-tp/rendu.lisp",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/style_projets.css",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/fr/projets.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/fr/index.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/js/boiteAffichePlus.js",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/index.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/inc/style_index.css",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/fr/page_samples/menu.php",
+		"/home/mewen/Bureau/UTCoupe/coupe15/libs/urg_INSTALLATION",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/src/test1.c",
+		"/home/mewen/Bureau/UTCoupe/Hokuyo/CMakeLists.txt",
+		"/usr/local/include/urg/RangeCaptureModebis.h",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Joueur/module.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/users.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Administration/creer_tournoi.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Joueur/afficher_resultats.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/default/accueil.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/classes/Defis.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Defis/afficher_mes_defis.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/classes/Mail.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/classes/Cas.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/index-ginger.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/includes/Site.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/default/default.php",
+		"/home/mewen/Bureau/temp.c",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Defis/afficher_mes_defis_simple.php",
+		"/home/mewen/Bureau/IA01/Projet 1/rendu.lisp",
+		"/home/mewen/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
+		"/home/mewen/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/mewen/.config/sublime-text-2/Packages/User/Lisp.sublime-settings",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/classes/Joueur.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Tournoi/module.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/css/style.css",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/default/regles.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Tournoi/afficher_tournoi.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/classes/Tournoi.class.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Defis/module.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/index.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/consultation.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/ajoutmodif.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/modifBDD.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/menu.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/style.css",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/style_result.css",
+		"/home/mewen/Bureau/LO01/TDs.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=lo01p057/volsme/user1x/uvs/lo01/lo01p057/lo01/tp6_mewen_franck/main.c",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/page_idee.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/article.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/result.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/entreeBDD.php",
+		"/run/user/1000/gvfs/sftp:host=mewen.fr,user=u75627692/videcoloc/add.php",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=lo01p057/volsme/user1x/uvs/lo01/lo01p057/lo01/tp6_mewen_franck/main_nouveau.c",
+		"/run/user/1000/gvfs/sftp:host=tuxa.sme.utc,user=lo01p057/volsme/user1x/uvs/lo01/lo01p057/lo01/TP6/main.c",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/default/module.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Administration/infos_joueurs.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Administration/menu_admin.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Historique/module.php",
+		"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc/modules/Joueur/afficher_personne.php"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/run/user/1000/gvfs/sftp:host=91.121.210.26,user=wtf/var/www/killerutc"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"newsockfd",
+			"prefix+prefix",
+			"console.log(",
+			"console.log(\"",
+			"printf(\"Error",
+			"pipe",
+			" \n",
+			"error(\"",
+			"newsockfd",
+			"sockfd",
+			"  ",
+			"socketUnix",
+			"➜  Tests sockets ",
+			"egrep",
+			"➜  Tests sockets ",
+			"/tmp",
+			":]]|))?$'",
+			"socket",
+			"  ",
+			"   ",
+			"symy",
+			"> (",
+			"(return-from =duplicate ",
+			")\n\n(",
+			" facteur)",
+			"zoom",
+			"x",
+			"symx",
+			" dx dy",
+			"translate",
+			"$",
+			"cote",
+			"	",
+			"y",
+			"page",
+			"a.",
+			"a{",
+			"a ",
+			"a",
+			"0",
+			"LANGU",
+			"\n	text-decoration:none;",
+			"color: transparent;",
+			"a ",
+			"menu",
+			"M",
+			"centeredmenu",
+			"menu",
+			"php",
+			"style=\"opacity: 0.2;",
+			"src=\"../inc/img/scroll.gif\" alt='Cliquez pour descendre !' width='40'",
+			"54a3f7",
+			"myButton",
+			"exp_date",
+			"prese",
+			"presen",
+			"identite",
+			"nett",
+			"    ",
+			"offset",
+			"  \n",
+			"	 ",
+			"   ",
+			"	 ",
+			"    ",
+			"	",
+			"7",
+			"		",
+			"		-",
+			"-		",
+			"	",
+			"select",
+			"crayon",
+			"hok.",
+			"hok->",
+			"\"%s",
+			"PREFIX",
+			"HOK1_A",
+			"hok.",
+			"hok",
+			"initHokuyo",
+			"checkAndConnect",
+			"	",
+			"()",
+			"Y",
+			", ",
+			"2,",
+			", ",
+			" i",
+			"i",
+			"3",
+			"    ",
+			"	",
+			"    ",
+			")(",
+			"p{",
+			"p:",
+			"h1",
+			"div_paralax_img",
+			"	",
+			"\n",
+			"; ",
+			"votre",
+			"	",
+			"(caddr exp)",
+			"(car exp)",
+			"	",
+			"((=",
+			"	",
+			"_connec",
+			"[",
+			"p",
+			" [",
+			"j2nouveau",
+			"type",
+			"lenp",
+			">",
+			"\n",
+			"19px",
+			"']);",
+			"session",
+			"conte",
+			"param2",
+			"$$",
+			"param2",
+			"			case 'ajout':\n				$param1=\"ajout\";\n				include(\"ajoutmodif.php\");\n				break;\n			case 'edit':\n				$param1=\"edit\";\n				$param2=$_GET['num'];\n				include(\"ajoutmodif.php\");\n				break;\n			case 'consultation':\n				$param1=\"consultation\";\n				if (isset($_GET['jour']))\n					$param2=$_GET['jour'];\n\n				include(\"consultation.php\");\n				break;",
+			"\n",
+			"':\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"#474747",
+			"#fbcb07",
+			"#colonne_droite"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "reseau.css",
+					"settings":
+					{
+						"buffer_size": 291,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "reseau.html",
+					"settings":
+					{
+						"buffer_size": 1691,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "reseau.js",
+					"settings":
+					{
+						"buffer_size": 2827,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 125.0,
+	"status_bar_visible": true
+}
