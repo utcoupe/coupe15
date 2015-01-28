@@ -50,7 +50,6 @@ var coupe15 = coupe15 || {};
 				this.network[client.type][client.id] = data.options;
 				client.join(client.type);
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
-				console.log(this.network);
 			}.bind(this));
 
 			// When the client send an order
