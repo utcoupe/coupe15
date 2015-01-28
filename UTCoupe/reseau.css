@@ -4,38 +4,54 @@ body{
 	display: block;
 }
 
-body:first-child {
-
-}
-
 .rects{
-	width:20%;
-	height: 90%;
+	width: 20%;
+	height: 80%;
 	text-align: center;
 	float: left;
 }
 
 .arrows{
-	width:6.65%;
-	height: 90%;
+	width: 6.65%;
+	height: 80%;
 	float: left;
 }
 
 .thing{
-	max-height: 25%;
-	min-height: 10%;
+	max-height: 20%;
+	min-height: 15%;
 	border: solid lightgray 1px;
 	border-radius: 10px;
+	margin-top: 5%;
 }
 
 textarea {
 	width: 90%;
-	height: 9%;
-	left: 1%;
+	height: 19%;
 }
 
 #updateGetClients {
 	vertical-align: top;
 	width: 9%;
-	height: 9%;
+	height: 19%;
+}
+
+div.green{
+	border: green solid 1px;
+}
+
+div.yellow{
+	border: gold solid 1px;
+}
+
+div.error{
+	border: firebrick solid 1px;
+}
+
+div.transparent{
+	opacity: 50%;
+}
+
+h3 {
+	margin-bottom: 0px;
 }
