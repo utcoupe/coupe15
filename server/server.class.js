@@ -1,4 +1,10 @@
 var coupe15 = coupe15 || {};
+
+// Get my IP address
+// var os = require('os');
+// var networkInterfaces = os.networkInterfaces();
+// console.log(networkInterfaces);
+
 (function () {
 	"use strict";
 	var log4js = require('log4js');
