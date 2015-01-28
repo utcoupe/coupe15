@@ -10,7 +10,7 @@ function addDiv (parentId, currentId, type, color, name, ip) {
 	else if (parentId == "2B3") 
 		more = " client";
 	more += " " + color;
-	
+
 	newDiv.id    = currentId;
 	newDiv.title = "ID de l'appareil : " + currentId;
 	newDiv.setAttribute('class', "thing device" + type + more);
@@ -18,6 +18,8 @@ function addDiv (parentId, currentId, type, color, name, ip) {
 	newDiv.innerHTML = "<h3>" + name + "</h3>";
 	if(color == "error")
 		newDiv.innerHTML += "<br>Impossible de se connecter !";
+	else if(type == "server")
+		newDiv.innerHTML += "<br>"+ip;
 
 	document.getElementById(parentId).appendChild(newDiv);
 }
@@ -76,16 +78,19 @@ function updateLayout (status) {
 
 		addDiv("2B2", "server", "server", "", "Serveur", status.server.ip);
 		console.log("nb Webclients :" + status.webclient.length);
+		console.log("Clés wc : " + Object.keys(status.webclient));
+		console.log("Clés wc[0] : " + Object.keys(status.webclient)[0]);
 
 		for(var i in status.webclient) {
 			var client = status.webclient[i];
-			addDiv("2B1", client.key, "smartphone", "", client.ip, client.ip);
+			console.log(i);
+			addDiv("2B1", i, "smartphone", "", client.ip, client.ip);
 		}
 
 
 		for(var i in status.client) {
 			var client = status.client[i];
-			addDiv("2B3", client.key, "smartphone", "", client.ip, client.ip);
+			addDiv("2B3", i, "robot", "", client.ip, client.ip);
 		}
 
 		resizeWC();
@@ -157,3 +162,25 @@ window.onresize = function () {
 var defaultStatus = { server: {},  webclient: {}, ia: {},  simulator: {},  client: {} }
 
 updateLayout(defaultStatus);
+
+/*
+{"server":
+		{"name":"Server","ip":"192.168.1.40:3128"},
+	"webclient":
+		{"Yp2ISL8HX-PA4LFbAAAB":
+			{"name":"Webclient","type":"laptop","ip":"192.168.1.24"},
+		"Xcdsfghfjxdz-PA4LFbAAAB":
+			{"name":"Webclient","type":"laptop","ip":"192.168.1.25"}},
+	"ia":{},
+	"simulator":{},
+	"client":
+		{"4rdqJf8hHNXxq6mcAAAA":
+			{"name":"Client","ip":"127.0.0.1"}}}
+
+
+{ server: { name: 'Server', ip: '192.168.1.40:3128' },
+  webclient: { HxGToWurI3JhLKx_AAAB: { name: 'Webclient', type: 'smartphone', ip: '192.168.1.24' } },
+  ia: {},
+  simulator: {},
+  client: { MuCTYaSuSvBD9JzQAAAA: { name: 'Client', ip: '127.0.0.1' } } }
+*/

@@ -8,137 +8,85 @@
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<!-- 	<table>
-		<tr>
-			<td class="title">Webclients connectés</td>
-			<td></td>
-			<td class="title">Serveur</td>
-			<td></td>
-			<td class="title">Robots/Hokuyos</td>
-			<td></td>
-			<td class="title">Devices</td>
-		</tr>
-		<tr>
-			<td id="webclients">
-				<div class="thing" id="t1">
+	<div id="page">
+		<div class="rects" id="webclients">
+			<div class="toBeCentered" id="2B1">
+				<div class="thing webclient" id="t1">
+					Truc 1
+				</div>
+				<div class="thing webclient" id="t5">
+					Truc 5
+				</div>
+				<div class="thing webclient" id="t11">
+					Truc 11
+				</div>
+	<!-- 			<div class="thing webclient" id="t12">
+					Truc 12
+				</div>
+				<div class="thing webclient" id="t13">
+					Truc 13
+				</div>
+				<div class="thing webclient" id="t14">
+					Truc 14
+				</div>
+				<div class="thing webclient" id="t15">
 					Truc
 				</div>
-				<div class="thing" id="t5">
+				<div class="thing webclient" id="t16">
 					Truc
 				</div>
-			</td>
-			<td>
-				<svg width="100%" height="100%" id="arrows1">
-				</svg>
-			</td>
-			<td id="server">
-				<div class="thing" id="t2">
+				<div class="thing webclient" id="t17">
 					Truc
 				</div>
-			</td>
-			<td>
-				<svg width="100%" height="100%"  id="arrows2">
-				</svg>
-			</td>
-			<td id="robots">
-				<div class="thing" id="t3">
+				<div class="thing webclient" id="t18">
 					Truc
 				</div>
-				<div class="thing" id="t6">
+				<div class="thing webclient" id="t19">
 					Truc
 				</div>
-			</td>
-			<td>
-				<svg width="100%" height="100%" id="arrows3">
-				</svg>
-			</td>
-			<td id="devices">
+				<div class="thing webclient" id="t20">
+					Truc
+				</div> -->
+			</div>
+		</div>
+		<div class="arrows">
+			<svg width="100%" height="100%" id="arrows1"></svg>
+		</div>
+		<div class="rects" id="brain">
+			<div class="toBeCentered" id="2B2">
+				<div class="thing" id="server">
+					Serveur
+				</div>
+			</div>
+		</div>
+		<div class="arrows">
+			<svg width="100%" height="100%" id="arrows2"></svg>
+		</div>
+		<div class="rects" id="clients">
+			<div class="toBeCentered" id="2B3">
+				<div class="thing client" id="t3">
+					Truc 3
+				</div>
+				<div class="thing client" id="t6">
+					Truc 6
+				</div>
+			</div>
+		</div>
+		<div class="arrows">
+			<svg width="100%" height="100%" id="arrows3"></svg>
+		</div>
+		<div class="rects" id="sensors_actuators">
+			<div class="toBeCentered" id="2B4">
 				<div class="thing" id="t4">
-					Truc
+					Truc 4
 				</div>
-				<button id="change">Changer la configuration du réseau</button>
-				<button id="add">Ajouter un div</button>
-				<button id="remove">Retirer un div</button>
-			</td>
-		</tr>
-	</table> -->
-	<div class="rects" id="webclients">
-		<div class="toBeCentered" id="2B1">
-			<div class="thing webclient" id="t1">
-				Truc 1
-			</div>
-			<div class="thing webclient" id="t5">
-				Truc 5
-			</div>
-			<div class="thing webclient" id="t11">
-				Truc 11
-			</div>
-<!-- 			<div class="thing webclient" id="t12">
-				Truc 12
-			</div>
-			<div class="thing webclient" id="t13">
-				Truc 13
-			</div>
-			<div class="thing webclient" id="t14">
-				Truc 14
-			</div>
-			<div class="thing webclient" id="t15">
-				Truc
-			</div>
-			<div class="thing webclient" id="t16">
-				Truc
-			</div>
-			<div class="thing webclient" id="t17">
-				Truc
-			</div>
-			<div class="thing webclient" id="t18">
-				Truc
-			</div>
-			<div class="thing webclient" id="t19">
-				Truc
-			</div>
-			<div class="thing webclient" id="t20">
-				Truc
-			</div> -->
-		</div>
-	</div>
-	<div class="arrows">
-		<svg width="100%" height="100%" id="arrows1"></svg>
-	</div>
-	<div class="rects" id="brain">
-		<div class="toBeCentered" id="2B2">
-			<div class="thing" id="server">
-				Serveur
 			</div>
 		</div>
-	</div>
-	<div class="arrows">
-		<svg width="100%" height="100%" id="arrows2"></svg>
-	</div>
-	<div class="rects" id="clients">
-		<div class="toBeCentered" id="2B3">
-			<div class="thing client" id="t3">
-				Truc 3
-			</div>
-			<div class="thing client" id="t6">
-				Truc 6
-			</div>
-		</div>
-	</div>
-	<div class="arrows">
-		<svg width="100%" height="100%" id="arrows3"></svg>
-	</div>
-	<div class="rects" id="sensors_actuators">
-		<div class="toBeCentered" id="2B4">
-			<div class="thing" id="t4">
-				Truc 4
-			</div>
-		</div>
-	</div>
 
-	<div>
-		<textarea id="getClients" noresize></textarea>
-		<button id="updateGetClients">update getClients</button>
+		<div>
+			<textarea id="getClients" noresize></textarea>
+			<button id="updateGetClients">update getClients</button>
+		</div>
 	</div>
 	<script type="text/javascript" src="./reseau.js"></script>
 </body>
