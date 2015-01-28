@@ -47,7 +47,9 @@ var coupe15 = coupe15 || {};
 				}
 				// The type is valid
 				client.type = data.type;
+				data.options.ip = client.handshake.address;
 				this.network[client.type][client.id] = data.options;
+				console.log(this.network);
 				client.join(client.type);
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 			}.bind(this));
