@@ -1,25 +1,41 @@
 body{
 	margin: 0px;
 	font-family: 'Ubuntu', sans-serif;
+	display: block;
 }
 
-table{
-	width: 100%;
-	border-collapse: collapse;
+body:first-child {
+
 }
 
-td{
-	width: 14.25%;
+.rects{
+	width:20%;
+	height: 90%;
 	text-align: center;
+	float: left;
+}
+
+.arrows{
+	width:6.65%;
+	height: 90%;
+	float: left;
 }
 
 .thing{
-	min-height: 70px;
+	max-height: 25%;
+	min-height: 10%;
 	border: solid lightgray 1px;
-	border-radius: 5px;
-	margin-top: 15px;
+	border-radius: 10px;
 }
 
-td.title{
-	border: solid gray 1px;
+textarea {
+	width: 90%;
+	height: 9%;
+	left: 1%;
+}
+
+#updateGetClients {
+	vertical-align: top;
+	width: 9%;
+	height: 9%;
 }

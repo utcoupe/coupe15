@@ -57,44 +57,44 @@ function removeLinks (id) {
 	};
 }
 
-document.getElementById("change").onclick = function (){
-	links = {"arrows1":
-				[[5, 2]],
-			"arrows2":
-				[[2, 3],
-				[2, 6]],
-			"arrows3":
-				[[3, 4]]
-			};
+// document.getElementById("change").onclick = function (){
+// 	links = {"arrows1":
+// 				[[5, 2]],
+// 			"arrows2":
+// 				[[2, 3],
+// 				[2, 6]],
+// 			"arrows3":
+// 				[[3, 4]]
+// 			};
 
-	updateArrows();
-};
+// 	updateArrows();
+// };
 
-document.getElementById("add").onclick = function (){
-	nb_dev++;
-	document.getElementById("webclients").innerHTML += "<div class='thing' id='t" + nb_dev + "'> Truc </div>";
-	if (document.getElementById("t2") != null)
-		links.arrows1[links.arrows1.length] = [nb_dev, 2];
+// document.getElementById("add").onclick = function (){
+// 	nb_dev++;
+// 	document.getElementById("webclients").innerHTML += "<div class='thing' id='t" + nb_dev + "'> Truc </div>";
+// 	if (document.getElementById("t2") != null)
+// 		links.arrows1[links.arrows1.length] = [nb_dev, 2];
 
-	updateArrows();
-};
+// 	updateArrows();
+// };
 
-document.getElementById("remove").onclick = function (){
-	var toBeRemoved = 0;
-	do {
-		toBeRemoved = Math.floor(Math.random() * nb_dev + 1);
-	} while (document.getElementById("t"+toBeRemoved) == null && toBeRemoved != 2);
+// document.getElementById("remove").onclick = function (){
+// 	var toBeRemoved = 0;
+// 	do {
+// 		toBeRemoved = Math.floor(Math.random() * nb_dev + 1);
+// 	} while (document.getElementById("t"+toBeRemoved) == null && toBeRemoved != 2);
 
-	document.getElementById("t"+toBeRemoved).remove();
-	if (document.getElementById("change") != null)
-		document.getElementById("change").remove();
+// 	document.getElementById("t"+toBeRemoved).remove();
+// 	if (document.getElementById("change") != null)
+// 		document.getElementById("change").remove();
 
-	console.log(links);
-	removeLinks(toBeRemoved);
-	console.log(links);
+// 	console.log(links);
+// 	removeLinks(toBeRemoved);
+// 	console.log(links);
 
-	updateArrows();
-};
+// 	updateArrows();
+// };
 
 var nb_dev = 6;
 var links = {"arrows1":
