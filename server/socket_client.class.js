@@ -8,21 +8,31 @@ var coupe15 = coupe15 || {};
 		this.server_ip = server_ip || '127.0.0.1:3128';
 		this.client = require('socket.io-client')('http://'+this.server_ip);
 
+		// When the client is connected to the server
 		this.client.on('connect', function(){
-			this.client.emit('type', 'client');//'webclient');
-			this.client.emit('order', {to:'client2',text:'Hello!'});
+			this.client.emit('type', {
+				type: 'client',
+				options: {
+					name: 'Client'
+				}
+			});
+			// this.client.emit('order', {to:'client2',text:'Hello!'});
 		}.bind(this));
+		// When the client is disconnected to the server
 		this.client.on('disconnect', function(){
 			this.errorServerTimeout();
 		}.bind(this));
 
+		// When the client receive log from the server
 		this.client.on('log', function(data){
 			logger.info('[Server log] '+data);
 		}.bind(this));
+		// When the client receive order from the server
 		this.client.on('order', function(data){
 			logger.info('[Order to '+data.to+'] '+data.text);
 		}.bind(this));
 
+		// If after 500ms the client isn't connected, throw "server not found" error
 		setTimeout(function() {
 			if(this.client.disconnected)
 				this.errorServerNotFound();
