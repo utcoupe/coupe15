@@ -41,6 +41,7 @@ function printNotConnected () {
 /* --------- Layout ------------- */
 
 function resizeWC () {
+	// ATTENTION !!  Cette fonction fonctionne mal !
 	var divs = document.querySelectorAll(".webclient");
 	// console.log(divs);
 	if (divs.length > 0) {
@@ -49,10 +50,18 @@ function resizeWC () {
 		if ((parseFloat(firstDiv.height.replace("px", "")) + parseFloat(firstDiv.marginTop.replace("px", ""))) * divs.length > window.getComputedStyle(document.getElementById("webclients")).height.replace("px", "")) {
 			// if there's too many divs in the column, they're reduced
 
+			var parentHeight = window.getComputedStyle(document.getElementById("webclients")).height.replace("px", "");
+			var height =  900/divs.length + "%";
+			var margin =  10/divs.length + "%";
+			// var height = parentHeight * 0.9/divs.length + "px";
+			// var margin = parentHeight * 0.1/divs.length + "px";
+
+			console.log("Les divs WC ont été redimensionnés à " + height + " ou 90/" + divs.length + " de " + parentHeight + " avec un intervalle de "+ margin);
+			console.log(divs);
 			for(var i=0; i < divs.length; i++) {
 				divs[i].style.minHeight = "0px";
-				divs[i].style.height = 90/divs.length + "%";
-				divs[i].style.marginTop = 10/divs.length + "%";
+				divs[i].style.height = height;
+				divs[i].style.marginTop = margin;
 			}
 		};
 	};
@@ -76,14 +85,17 @@ function updateLayout (status) {
 	if (status.server != null){
 		// Adds divs
 
+		addDiv("2B2", "simu", "simu", "", "Simulateur", "");
 		addDiv("2B2", "server", "server", "", "Serveur", status.server.ip);
-		console.log("nb Webclients :" + status.webclient.length);
-		console.log("Clés wc : " + Object.keys(status.webclient));
-		console.log("Clés wc[0] : " + Object.keys(status.webclient)[0]);
+		// console.log("nb Webclients :" + status.webclient.length);
+		// console.log("Clés wc : " + Object.keys(status.webclient));
+		// console.log("Clés wc[0] : " + Object.keys(status.webclient)[0]);
+		addDiv("2B2", "ia1", "ia", "green", "IA 1", "");
+		addDiv("2B2", "ia2", "ia", "yellow", "IA 2", "");
 
 		for(var i in status.webclient) {
 			var client = status.webclient[i];
-			console.log(i);
+			// console.log(i);
 			addDiv("2B1", i, "smartphone", "", client.ip, client.ip);
 		}
 
@@ -92,6 +104,7 @@ function updateLayout (status) {
 			var client = status.client[i];
 			addDiv("2B3", i, "robot", "", client.ip, client.ip);
 		}
+
 
 		resizeWC();
 		centerBlocs();

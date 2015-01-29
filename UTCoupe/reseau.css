@@ -34,6 +34,10 @@ body{
 	padding-left: 35%;
 }
 
+.toBeCentered {
+	max-height: 100%;
+}
+
 textarea {
 	width: 90%;
 	height: 19%;
