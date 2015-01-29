@@ -147,10 +147,9 @@ function linkDivs (div1Id, div2Id, colId) {
 function linkDivsArc (div1Id, div2Id, colId) {
     var middleDiv1 = document.getElementById(div1Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div1Id)).marginTop) + window.getComputedStyle(document.getElementById(div1Id)).height.replace("px", "")/2;
     var middleDiv2 = document.getElementById(div2Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div2Id)).marginTop) + window.getComputedStyle(document.getElementById(div2Id)).height.replace("px", "")/2;
-    var widthCol = window.getComputedStyle(document.getElementById(colId)).width.replace("px", "");
     var dist = middleDiv2 - middleDiv1;
-    var side = dist>0?0:1;
-    var path = "<path d='M " + widthCol + "," + middleDiv1 + " a" + Math.abs(dist) + "," + Math.abs(dist) + " 0 0 " + side + " 0," + dist + "' class='link'/>";
+    var side = dist>0?1:0;
+    var path = "<path d='M 0," + middleDiv1 + " a" + Math.abs(dist) + "," + Math.abs(dist) + " 0 0 " + side + " 0," + dist + "' class='link'/>";
     document.getElementById(colId).innerHTML += path;
 }
 
@@ -176,7 +175,7 @@ function updateArrows (){
 
     for (i = 0; i < document.querySelectorAll(".brain").length; i++) {
         source = document.querySelectorAll(".brain")[i].id;
-        linkDivsArc(source, "server", "arrows1");
+        linkDivsArc(source, "server", "arrows2");
     }
 
     // TODO : penser à ajouter les créations de links avec les I/O
