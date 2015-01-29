@@ -20,7 +20,7 @@ function addDiv (parentId, currentId, type, color, name, ip) {
     newDiv.innerHTML = "<h3>" + name + "</h3>";
     if(color == "error")
         newDiv.innerHTML += "<br>Impossible de se connecter !";
-    else if(type == "server")
+    else if(ip != "")
         newDiv.innerHTML += "<br>"+ip;
 
     document.getElementById(parentId).appendChild(newDiv);
@@ -87,6 +87,8 @@ function updateLayout (status) {
     if (!!status && !!status.server){
         // Adds divs
 
+        var client, i;
+
         if (Object.keys(status.simulator).length == 1) {
             addDiv("2B2", "simu", "simu", "", "Simulateur", "");
         }
@@ -96,16 +98,16 @@ function updateLayout (status) {
             addDiv("2B2", "ia2", "ia", "yellow", "IA 2", "");
         }
 
-        for(var i in status.webclient) {
-            var client = status.webclient[i];
+        for(i in status.webclient) {
+            client = status.webclient[i];
             // console.log(i);
-            addDiv("2B1", i, "smartphone", "", client.ip, client.ip);
+            addDiv("2B1", i, "smartphone", "", client.name, client.ip);
         }
 
 
         for(i in status.client) {
-            var client = status.client[i];
-            addDiv("2B3", i, "robot", "", client.ip, client.ip);
+            client = status.client[i];
+            addDiv("2B3", i, "robot", "", client.name, client.ip);
         }
 
 

@@ -65,6 +65,11 @@ div.transparent{
 	opacity: 50%;
 }
 
+.devicerobot {
+	background: url('./img/electronic58.png') no-repeat;
+	background-position: 5% 50%;
+}
+
 .devicesimu {
 	background: url('./img/seo1.png') no-repeat;
 	background-position: 5% 50%;
