@@ -36,7 +36,7 @@ function printNotConnected () {
         current.innerHTML = "";
     }
 
-    addDiv("2B1", "owner", "smartphone", "", "Toi", "127.0.0.1");
+    addDiv("2B1", "owner", "laptop", "", "Toi", "127.0.0.1");
     addDiv("2B2", "server", "server", "error", "Serveur", "?");
 }
 
@@ -103,7 +103,7 @@ function updateLayout (status) {
         for(i in status.webclient) {
             client = status.webclient[i];
             // console.log(i);
-            addDiv("2B1", i, "smartphone", "", client.name, client.ip);
+            addDiv("2B1", i, client.type, "", client.name, client.ip);
         }
 
 

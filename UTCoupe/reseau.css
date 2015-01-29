@@ -87,12 +87,18 @@ div.transparent{
 
 .devicesmartphone {
 	background: url('./img/smartphone11.png') no-repeat;
-	background-size: 15%;
+	background-size: 10%;
 	background-position: 5% 50%;
 }
 
 .devicelaptop {
 	background: url('./img/laptop107.png') no-repeat;
+	background-position: 5% 50%;
+}
+
+.devicetablet {
+	background: url('./img/tablet82.png') no-repeat;
+	background-size: 25%;
 	background-position: 5% 50%;
 }
 
