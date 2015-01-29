@@ -11,6 +11,8 @@ function addDiv (parentId, currentId, type, color, name, ip) {
         more = " webclient";
     else if (parentId == "2B3") 
         more = " client";
+    else if ((parentId == "2B2") && (type != "server"))
+        more = " brain";
     more += " " + color;
 
     newDiv.id    = currentId;
@@ -136,10 +138,20 @@ function clearColumns () {
 /* --------- Links ------------- */
 
 function linkDivs (div1Id, div2Id, colId) {
-    var middleDiv1 = document.getElementById(div1Id).offsetTop + window.getComputedStyle(document.getElementById(div1Id)).height.replace("px", "")/2;
-    var middleDiv2 = document.getElementById(div2Id).offsetTop + window.getComputedStyle(document.getElementById(div2Id)).height.replace("px", "")/2;
+    var middleDiv1 = document.getElementById(div1Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div1Id)).marginTop) + window.getComputedStyle(document.getElementById(div1Id)).height.replace("px", "")/2;
+    var middleDiv2 = document.getElementById(div2Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div2Id)).marginTop) + window.getComputedStyle(document.getElementById(div2Id)).height.replace("px", "")/2;
     var widthCol = window.getComputedStyle(document.getElementById(colId)).width.replace("px", "");
-    document.getElementById(colId).innerHTML += "<path d='M0," + middleDiv1 + " L" + widthCol + "," + middleDiv2 + "' style='stroke:lightblue; stroke-width: 1.25px; fill: none;'/>";   
+    document.getElementById(colId).innerHTML += "<path d='M0," + middleDiv1 + " L" + widthCol + "," + middleDiv2 + "' class='link'/>";   
+}
+
+function linkDivsArc (div1Id, div2Id, colId) {
+    var middleDiv1 = document.getElementById(div1Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div1Id)).marginTop) + window.getComputedStyle(document.getElementById(div1Id)).height.replace("px", "")/2;
+    var middleDiv2 = document.getElementById(div2Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div2Id)).marginTop) + window.getComputedStyle(document.getElementById(div2Id)).height.replace("px", "")/2;
+    var widthCol = window.getComputedStyle(document.getElementById(colId)).width.replace("px", "");
+    var dist = middleDiv2 - middleDiv1;
+    var side = dist>0?0:1;
+    var path = "<path d='M " + widthCol + "," + middleDiv1 + " a" + Math.abs(dist) + "," + Math.abs(dist) + " 0 0 " + side + " 0," + dist + "' class='link'/>";
+    document.getElementById(colId).innerHTML += path;
 }
 
 function clearArrows () {
@@ -150,15 +162,21 @@ function clearArrows () {
 
 function updateArrows (){
     clearArrows();
+    var source, target;
 
     for (var i = 0; i < document.querySelectorAll(".webclient").length; i++) {
-        var source = document.querySelectorAll(".webclient")[i].id;
+        source = document.querySelectorAll(".webclient")[i].id;
         linkDivs(source, "server", "arrows1");
     }
 
     for (i = 0; i < document.querySelectorAll(".client").length; i++) {
-        var target = document.querySelectorAll(".client")[i].id;
+        target = document.querySelectorAll(".client")[i].id;
         linkDivs("server", target, "arrows2");
+    }
+
+    for (i = 0; i < document.querySelectorAll(".brain").length; i++) {
+        source = document.querySelectorAll(".brain")[i].id;
+        linkDivsArc(source, "server", "arrows1");
     }
 
     // TODO : penser à ajouter les créations de links avec les I/O
