@@ -13,8 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node utcoupe.js"
+    "start": "nw"
   },
   "repository": {
     "type": "git",
@@ -25,14 +24,10 @@
   "bugs": {
     "url": "https://github.com/utcoupe/coupe15/issues"
   },
-
-  "scripts": {
-    "start": "nw"
-  },
   "window": {
-    "width"  : 500,
-    "height" : 500,
+    "width": 500,
+    "height": 500,
     "toolbar": true,
-    "frame"  : true
+    "frame": true
   }
 }

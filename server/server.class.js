@@ -1,22 +1,26 @@
-var coupe15 = coupe15 || {};
-(function () {
+module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Server');
 
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
-		this.server = require('socket.io')();
-
-		// Getting server IP address
+		
+		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
-		this.server_ip = networkInterfaces.wlan0[0].address+':'+this.server_port;
+		this.ip = networkInterfaces.wlan0[0].address;
+		this.ip_port = this.ip+':'+this.server_port;
+		this.webclient_url = this.ip+'/webclient.html';
 
+		// Create the server
+		this.server = require('socket.io')();
+
+		// Create the network default object
 		this.network = {
 			server: {
 				name: "Server",
-				ip: this.server_ip
+				ip: this.ip_port
 			},
 			webclient: {},
 			ia: {},
@@ -77,10 +81,8 @@ var coupe15 = coupe15 || {};
 		}.bind(this));
 
 		this.server.listen(this.server_port);
-		logger.info("Server started at "+this.server_ip);
+		logger.info("Server started at "+this.ip_port);
 	}
 
-	coupe15.Server = Server;
+	return Server;
 })();
-
-var server = new coupe15.Server();
