@@ -1,6 +1,3 @@
-/**
- * Created by matthieu on 02/02/15.
- */
 
 
 function creerGobelet(tab,x,y,z){
@@ -14,6 +11,7 @@ function creerGobelet(tab,x,y,z){
         dae.tailleContenu = 0;  //au depart chaque gobelet contient 4 popcorn
         for(var i=0;i<4;i++)
             ajouterPopcorn(dae);
+        dae.ok = true;			//propriete ok si le gobelet se trouve encore al la position de départ
         tab.push(dae);
     });
 }
@@ -52,3 +50,11 @@ function ajouterPopcorn(gob){
         gob.tailleContenu++;
     }
 }
+
+
+/*
+
+function verifCollisionGobelet(gob){
+	if(
+
+}*/

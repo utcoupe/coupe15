@@ -1,6 +1,3 @@
-/**
- * Created by matthieu on 03/02/15.
- */
 
 
 function creerAmpoule(pos){

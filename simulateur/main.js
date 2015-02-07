@@ -36,16 +36,19 @@ var directionLight = new THREE.DirectionalLight(0xffffff,1);
 directionLight.position.set(-2,5,-2);
 directionLight.intensity = 0.5;
 scene.add(directionLight);
+
 var directionLight2 = new THREE.DirectionalLight(0xffffff,1);
-directionLight2.position.set(-2,4,2);
+directionLight2.position.set(-2,5,2);
 directionLight.intensity2 = 0.5;
 scene.add(directionLight2);
+
 var directionLight3 = new THREE.DirectionalLight(0xffffff,1);
-directionLight3.position.set(2,3,-2);
+directionLight3.position.set(2,5,-2);
 directionLight.intensity3 = 0.5;
 scene.add(directionLight3);
+
 var directionLight4 = new THREE.DirectionalLight(0xffffff,1);
-directionLight4.position.set(2,2,2);
+directionLight4.position.set(2,5,2);
 directionLight.intensity4 = 0.5;
 scene.add(directionLight4);
 
@@ -67,6 +70,11 @@ loader.load('3d/plateau_mieux.dae',function(collada){
     dae.scale.set(1,1,1);
     scene.add(dae);
 })
+
+
+
+
+
 
 
 //tester ici **********************************
@@ -116,6 +124,31 @@ initGobelets(tabGobelets);
 
 var tabAmpoules = [];
 initAmpoules(tabAmpoules);
+
+
+//robot1 : grand
+//robot2: petit
+//robot3 : grand ennemi
+//robot4: petit ennemi
+
+
+window.addEventListener("keydown",function(event){
+	switch(event.which){
+		case 86: 
+			robot1.avancer(0.01);
+			break;
+		case 71:
+			robot1.tourner(10);
+			break;
+	}
+
+})
+
+var robot1 = creerRobotPrincipal("gauche");
+var robot2 = creerRobotSecondaire("gauche");
+
+var robot3 = creerRobotPrincipal("droit");
+var robot4 = creerRobotSecondaire("droit");
 
 //**************************************
 
