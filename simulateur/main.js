@@ -113,8 +113,9 @@ for(var i=1;i<=4;i++) {
 
 //var pied = creerPied("jaune",0,0.01,0);
 var tabPiedsJaunes = [];
+var tabPiedsVerts = [];
 
-initPieds(tabPiedsJaunes);
+initPieds(tabPiedsJaunes,tabPiedsVerts);
 
 var tabGobelets = [];
 //creerGobelet(tabGobelets,0,0.01,0);
@@ -135,10 +136,16 @@ initAmpoules(tabAmpoules);
 window.addEventListener("keydown",function(event){
 	switch(event.which){
 		case 86: 
-			robot1.avancer(0.01);
+			robot2.avancer(0.01);
+			break;
+		case 82:
+			robot2.reculer(0.01);
 			break;
 		case 71:
-			robot1.tourner(10);
+			robot2.tournerGauche(10);
+			break;
+		case 72:
+			robot2.tournerDroite(10);
 			break;
 	}
 
