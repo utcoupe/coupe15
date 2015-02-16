@@ -11,7 +11,7 @@ module.exports = (function () {
 		var networkInterfaces = os.networkInterfaces();
 		this.ip = networkInterfaces.wlan0[0].address;
 		this.ip_port = this.ip+':'+this.server_port;
-		this.webclient_url = this.ip+'/webclient.html';
+		this.webclient_url = this.ip+'/webclient/webclient.html';
 
 		// Create the server
 		this.server = require('socket.io')();

@@ -27,7 +27,7 @@
   "window": {
     "width": 500,
     "height": 500,
-    "toolbar": true,
+    "toolbar": false,
     "frame": true
   }
 }
