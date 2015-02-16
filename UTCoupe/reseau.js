@@ -194,25 +194,26 @@ window.onresize = function () {
     updateLayout(document.querySelector("textarea#getClients").value);
 };
 
-function addServerEvents(){
-    $(document).one("click", "#server span.ip", function(e) {
-        $(this).html("<input type='text' id='ipServer' style='width:70%' value='"+$(this).html()+"'></input><button id='updateIpServer'>✓</button>");
+// Adds the possibility to edit a span content (uncomment updateIpServer too)
+// function addServerEvents(){
+//     $(document).one("click", "#server span.ip", function(e) {
+//         $(this).html("<input type='text' id='ipServer' style='width:70%' value='"+$(this).html()+"'></input><button id='updateIpServer'>✓</button>");
 
-        $("#ipServer").select();
+//         $("#ipServer").select();
 
-        $(document).one("click", "#updateIpServer", function(e) {
-            updateIpServer($("#ipServer").val());
+//         $(document).one("click", "#updateIpServer", function(e) {
+//             updateIpServer($("#ipServer").val());
 
-            addServerEvents();
-        });
-    });
-}
+//             addServerEvents();
+//         });
+//     });
+// }
 
 /* --------- Server communication ------------- */
-function updateIpServer(ip){
-    // TODO : Penser à changer la fonction !
-    $("#server .ip").html(ip);
-}
+// function updateIpServer(ip){
+//     // TODO : Penser à changer la fonction !
+//     $("#server .ip").html(ip);
+// }
 
 /* --------- Server events ------------- */
 
@@ -221,7 +222,7 @@ function updateIpServer(ip){
 var defaultStatus = {};
 
 updateLayout(defaultStatus);
-addServerEvents();
+// addServerEvents();
 })();
 
 /*
