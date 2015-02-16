@@ -21,9 +21,9 @@ function addDiv (parentId, currentId, type, color, name, ip) {
 
     newDiv.innerHTML = "<h3>" + name + "</h3>";
     if(color == "error")
-        newDiv.innerHTML += "<br>Impossible de se connecter !";
+        newDiv.innerHTML += "<br><span class='ip'>Impossible de se connecter !</span>";
     else if(ip != "")
-        newDiv.innerHTML += "<br>"+ip;
+        newDiv.innerHTML += "<br><span class='ip'>"+ip+"</span>";
 
     document.getElementById(parentId).appendChild(newDiv);
 }
@@ -94,7 +94,9 @@ function updateLayout (status) {
         if (Object.keys(status.simulator).length == 1) {
             addDiv("2B2", "simu", "simu", "", "Simulateur", "");
         }
+
         addDiv("2B2", "server", "server", "", "Serveur", status.server.ip);
+
         if (Object.keys(status.ia).length !== 0) {
             addDiv("2B2", "ia1", "ia", "green", "IA 1", "");
             addDiv("2B2", "ia2", "ia", "yellow", "IA 2", "");
@@ -181,7 +183,7 @@ function updateArrows (){
     // TODO : penser à ajouter les créations de links avec les I/O
 }
 
-/* --------- Events ------------- */
+/* --------- Clients events ------------- */
 
 document.getElementById("updateGetClients").addEventListener('click', function (e){
     // penser à virer le JSON parse !!
@@ -192,11 +194,35 @@ window.onresize = function () {
     updateLayout(document.querySelector("textarea#getClients").value);
 };
 
+// Adds the possibility to edit a span content (uncomment updateIpServer too)
+// function addServerEvents(){
+//     $(document).one("click", "#server span.ip", function(e) {
+//         $(this).html("<input type='text' id='ipServer' style='width:70%' value='"+$(this).html()+"'></input><button id='updateIpServer'>✓</button>");
+
+//         $("#ipServer").select();
+
+//         $(document).one("click", "#updateIpServer", function(e) {
+//             updateIpServer($("#ipServer").val());
+
+//             addServerEvents();
+//         });
+//     });
+// }
+
+/* --------- Server communication ------------- */
+// function updateIpServer(ip){
+//     // TODO : Penser à changer la fonction !
+//     $("#server .ip").html(ip);
+// }
+
+/* --------- Server events ------------- */
+
 
 /* --------- "Main" ------------- */
 var defaultStatus = {};
 
 updateLayout(defaultStatus);
+// addServerEvents();
 })();
 
 /*
