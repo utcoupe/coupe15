@@ -54,3 +54,7 @@ function descendrePopcorn(distri){
         distri.enVidage = false;
     }
 }
+
+function deposerObjet(){
+	
+}

@@ -39,6 +39,14 @@ function creerRobotPrincipal(cote){
     robot.position.set(posx[cote],0.185,0);
     var vect = new THREE.Vector3(robot.position.x,0,robot.position.z);
     robot.direction = vect.negate().normalize();
+
+
+    robot.points = [];
+    robot.largeur = 0.250;
+    robot.longueur = 0.350;
+    robot.hauteur = 0.350;
+  	robot.diago = Math.sqrt(0.25*0.25+0.35*0.35);
+
     
     robot.nom = "robot principal "+cote;
     robot.cote = cote;
@@ -50,12 +58,15 @@ function creerRobotPrincipal(cote){
     robot.verifPosition = verifPosition;
     robot.verifCollisionObjets = verifCollisionObjets;
     robot.verifCollisionObjet = verifCollisionObjet;
+    robot.verifCollisionRobot = verifCollisionRobot;
+    robot.verifCollisionRobots = verifCollisionRobots;
+
+    robot.prendreObjet = prendreObjet;
+    robot.verifCibleAtteignable = verifCibleAtteignable;
+	robot.objetsTenus = [];
+	robot.objetsTenus.dessus = robot.hauteur/2 + 0.02;
 
 
-    robot.points = [];
-    robot.largeur = 0.250;
-    robot.longueur = 0.350;
-	robot.diago = Math.sqrt(0.25*0.25+0.35*0.35);
 
 	robot.updatePoints();
     scene.add(robot);
@@ -88,6 +99,13 @@ function creerRobotSecondaire(cote){
     var vect = new THREE.Vector3(rob.position.x,0,rob.position.z);
     rob.direction = vect.negate().normalize();
 
+
+    rob.points = [];
+    rob.largeur = 0.150;
+    rob.longueur = 0.200;
+    rob.hauteur = 0.350;
+	rob.diago = Math.sqrt(0.150*0.150+0.200*0.200);
+
 	rob.nom = "robot secondaire "+cote;
 	rob.cote = cote;
 	rob.avancer = avancer;
@@ -98,17 +116,15 @@ function creerRobotSecondaire(cote){
     rob.verifPosition = verifPosition;
     rob.verifCollisionObjets = verifCollisionObjets;
     rob.verifCollisionObjet = verifCollisionObjet;
-
     rob.verifCollisionRobot = verifCollisionRobot;
     rob.verifCollisionRobots = verifCollisionRobots;
 
-    rob.prendreGobelet = prendreGobelet;
+    rob.prendreObjet = prendreObjet;
     rob.verifCibleAtteignable = verifCibleAtteignable;
+    rob.objetsTenus = [];
+    rob.objetsTenus.dessus = rob.hauteur/2 + 0.02;;
 
-    rob.points = [];
-    rob.largeur = 0.150;
-    rob.longueur = 0.200;
-	rob.diago = Math.sqrt(0.150*0.150+0.200*0.200);
+
 
 	scene.add(rob);
 
@@ -279,15 +295,39 @@ function getVecteur(p1,p2){
 	return {x: p2.x-p1.x, z: p2.z-p1.z};
 }
 
-function prendreGobelet(gobelet){
+function prendreObjet(objet){
+
 	//quand on robot tient un objet on l'affiche au-dessus
-	if(this.verifCibleAtteignable(gobelet.scene.position)){
-		gobelet.scene.ok = false;
-		scene.remove(gobelet.scene);
-		this.add(gobelet.scene);
-		gobelet.scene.position.set(0,0.5,0);
+	var objScene;
+	if(objet.scene){	 	 	 	 //si objet charge avec collada
+		objScene = objet.scene;
+	}else{ 		 	 	 	 	 //si simple objet
+		objScene = objet;
+	}
+	//console.log("objet  :",objet);
+	//console.log("objscene : ",objScene);
+
+	if(objScene.ok && this.verifCibleAtteignable(objScene.position)){
+		this.objetsTenus.push(objet);
+		objScene.ok = false;
+		scene.remove(objScene);
+		this.add(objScene);
+		console.log("hatueur = ",this.position.y+this.hauteur/2 + this.objetsTenus.dessus + objScene.hauteur/2);
+		console.log("this.position.y = ",this.position.y);
+		console.log("this.hauteur/2 = ",this.hauteur/2);
+		console.log("this.objetsTenus.dessus  = ",this.objetsTenus.dessus );
+		console.log("objScene.hauteur/2 = ",objScene.hauteur/2);
+
+		var y = this.objetsTenus.dessus;
+		/*if(objScene.type==="pied")
+			y += objScene.hauteur /2 ;*/
+
+
+		objScene.position.set(0,y,0);//this.hauteur + this.objetsTenus.dessus,0);
+		this.objetsTenus.dessus += objScene.hauteur + 0.01;
 	}else
 		console.log("CIBLE NON ATTEIGNABLE !!!!!");
+	
 }
 
 function verifCibleAtteignable(pos){

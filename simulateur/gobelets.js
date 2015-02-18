@@ -4,6 +4,8 @@ function creerGobelet(tab,x,y,z){
     loader.load("3d/gobelet.dae",function(collada){
         var dae = collada.scene;
         console.log("scene : ",collada);
+        dae.hauteur = 0.150;
+        dae.type="gobelet";
         dae.position.set(x,y,z);
         collada.dae.effects["Material_002-effect"].shader.material.opacity = 0.65;
         collada.dae.effects["Material_002-effect"].shader.material.transparent = true;
@@ -24,8 +26,7 @@ function initGobelets(tab){
                        {x:0,z: 0.650},
                        {x:0.590,z: -0.170},
                        {x:1.250,z: 0.750}];
-    console.log("psogibeler = ",posGobelets);
-    var positionY = 0.01;
+    var positionY = 0.02;
     for(var i=0;i<5;i++)
         creerGobelet(tab,posGobelets[i].x,positionY,posGobelets[i].z);
 }

@@ -9,6 +9,8 @@ function creerPied(tab,coul,x,y,z){
     loader.load("3d/pied_"+coul+".dae",function(collada){
         var dae = collada.scene;
        // console.log("collada.dae",dae);
+        dae.type="pied";
+        dae.hauteur = 0.070;
         dae.position.set(x,y,z);
         dae.scale.set(1,1,1);
         scene.add(dae);

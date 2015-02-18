@@ -148,7 +148,20 @@ window.addEventListener("keydown",function(event){
 			robot4.tournerDroite(10);
 			break;
 		case 74:
-			robot4.prendreGobelet(tabGobelets[1]);
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsVerts[1]);
+			break;
+		case 75:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsVerts[2]);
+			break;
+		case 76:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabGobelets[2]);
+			break;
+		case 77:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsJaunes[1]);
 			break;
 	}
 
