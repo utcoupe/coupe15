@@ -13,7 +13,7 @@ function creerPied(tab,coul,x,y,z){
         dae.scale.set(1,1,1);
         scene.add(dae);
         dae.ok = true;		 	//ok = true si l'objet n'a pas été déplacé
-        tab.push(dae);
+        tab.push(collada);
     });
 }
 

@@ -3,6 +3,7 @@
 function creerGobelet(tab,x,y,z){
     loader.load("3d/gobelet.dae",function(collada){
         var dae = collada.scene;
+        console.log("scene : ",collada);
         dae.position.set(x,y,z);
         collada.dae.effects["Material_002-effect"].shader.material.opacity = 0.65;
         collada.dae.effects["Material_002-effect"].shader.material.transparent = true;
@@ -12,7 +13,8 @@ function creerGobelet(tab,x,y,z){
         for(var i=0;i<4;i++)
             ajouterPopcorn(dae);
         dae.ok = true;			//propriete ok si le gobelet se trouve encore a la position de départ
-        tab.push(dae);
+        tab.push(collada);
+       // console.log("gobelet : ",dae);
     });
 }
 

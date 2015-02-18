@@ -40,7 +40,8 @@ function creerRobotPrincipal(cote){
     var vect = new THREE.Vector3(robot.position.x,0,robot.position.z);
     robot.direction = vect.negate().normalize();
     
-
+    robot.nom = "robot principal "+cote;
+    robot.cote = cote;
     robot.avancer = avancer;
     robot.reculer = reculer;
     robot.tournerDroite = tournerDroite;
@@ -56,6 +57,7 @@ function creerRobotPrincipal(cote){
     robot.longueur = 0.350;
 	robot.diago = Math.sqrt(0.25*0.25+0.35*0.35);
 
+	robot.updatePoints();
     scene.add(robot);
     return robot;
 }
@@ -86,6 +88,8 @@ function creerRobotSecondaire(cote){
     var vect = new THREE.Vector3(rob.position.x,0,rob.position.z);
     rob.direction = vect.negate().normalize();
 
+	rob.nom = "robot secondaire "+cote;
+	rob.cote = cote;
 	rob.avancer = avancer;
     rob.reculer = reculer;
     rob.tournerDroite = tournerDroite;
@@ -95,6 +99,12 @@ function creerRobotSecondaire(cote){
     rob.verifCollisionObjets = verifCollisionObjets;
     rob.verifCollisionObjet = verifCollisionObjet;
 
+    rob.verifCollisionRobot = verifCollisionRobot;
+    rob.verifCollisionRobots = verifCollisionRobots;
+
+    rob.prendreGobelet = prendreGobelet;
+    rob.verifCibleAtteignable = verifCibleAtteignable;
+
     rob.points = [];
     rob.largeur = 0.150;
     rob.longueur = 0.200;
@@ -102,6 +112,7 @@ function creerRobotSecondaire(cote){
 
 	scene.add(rob);
 
+	rob.updatePoints();
 	return rob;
 }
 
@@ -152,6 +163,12 @@ function updatePoints(){
 		this.points[i] = {x:p.x+Math.cos(rotation+angles[i]*Math.PI/180)*d,z:p.z+Math.sin(rotation+angles[i]*Math.PI/180)*d};
 	this.points[4] = {x:p.x+Math.cos(rotation+angles[4]*Math.PI/180)*largeur/2,z:p.z+Math.sin(rotation+angles[4]*Math.PI/180)*largeur/2};
 	this.points[5] = {x:p.x+Math.cos(rotation+angles[5]*Math.PI/180)*largeur/2,z:p.z+Math.sin(rotation+angles[5]*Math.PI/180)*largeur/2};
+
+	if(this.cote ==="droit"){
+		echangerPoints(this.points,0,2);
+		echangerPoints(this.points,1,3);
+		echangerPoints(this.points,4,5);
+	}
 }
 
 
@@ -159,12 +176,13 @@ function updatePoints(){
 function verifPosition(){
 	this.updatePoints();
 	this.verifCollisionObjets();
+	var collision_robots = this.verifCollisionRobots();
 	var ok = true;
 	for(var i=0;i<6;i++){
 		if(!verifPoint(this.points[i]))
 			ok = false;
 	}
-	return ok;
+	return ok && !collision_robots;
 }
 
 function verifPoint(p){
@@ -200,24 +218,27 @@ function verifPoint(p){
 function verifCollisionObjets(){
 	//console.log("verif collision gobelets");
 	for(var i=0;i<5;i++){
-		if(tabGobelets[i].ok && this.verifCollisionObjet(tabGobelets[i].position)){
-			//console.log("gobelet : ",tabGobelets[i]);
-			tabGobelets[i].visible = false;
-			tabGobelets[i].ok = false;
+		if(tabGobelets[i].scene.ok && this.verifCollisionObjet(tabGobelets[i].scene.position)){
 
+			tabGobelets[i].scene.ok = false;
+			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
+			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0,b:0}; 
+	
 			console.log("collision GOBELETS - ROBOT !!!");
 		}
 	}
 	for(var i=0;i<8;i++)
 	{
-		if(tabPiedsVerts[i].ok && this.verifCollisionObjet(tabPiedsVerts[i].position)){
-			tabPiedsVerts[i].visible=false;
-		tabPiedsVerts[i].ok=false;
+		if(tabPiedsVerts[i].scene.ok && this.verifCollisionObjet(tabPiedsVerts[i].scene.position)){
+			//tabPiedsVerts[i].scene.visible=false;
+			tabPiedsVerts[i].scene.ok=false;
+			tabPiedsVerts[i].dae.effects["vertPied-effect"].shader.material.color = {r:1,g:0,b:0};
 			console.log("collision pied vert");
 		}
-		if(tabPiedsJaunes[i].ok && this.verifCollisionObjet(tabPiedsJaunes[i].position)){
-			tabPiedsJaunes[i].visible=false;
-			tabPiedsJaunes[i].ok=false;
+		if(tabPiedsJaunes[i].scene.ok && this.verifCollisionObjet(tabPiedsJaunes[i].scene.position)){
+			//tabPiedsJaunes[i].scene.visible=false;
+			tabPiedsJaunes[i].scene.ok=false;
+			tabPiedsJaunes[i].dae.effects["Material-effect"].shader.material.color = {r:1,g:0,b:0};
 			console.log("collision pied jaune");
 		}
 	}
@@ -234,7 +255,7 @@ function verifCollisionObjet(pos){
 	var origines = [ getVecteur(this.points[0],pos),getVecteur(this.points[0],pos),getVecteur(this.points[2],pos),getVecteur(this.points[2],pos)]
 	var collision = true;
 	for(var i=0;i<4;i++){
-		if(angle(vectTangents[i],origines[i])>=90)
+		if(angle(vectTangents[i],origines[i])>90)
 			collision = false;
 	}
 
@@ -256,4 +277,66 @@ function prodScal(u,v){
 }
 function getVecteur(p1,p2){
 	return {x: p2.x-p1.x, z: p2.z-p1.z};
+}
+
+function prendreGobelet(gobelet){
+	//quand on robot tient un objet on l'affiche au-dessus
+	if(this.verifCibleAtteignable(gobelet.scene.position)){
+		gobelet.scene.ok = false;
+		scene.remove(gobelet.scene);
+		this.add(gobelet.scene);
+		gobelet.scene.position.set(0,0.5,0);
+	}else
+		console.log("CIBLE NON ATTEIGNABLE !!!!!");
+}
+
+function verifCibleAtteignable(pos){
+	this.updatePoints();
+	var LIMITE = 0.4;
+	var a;
+	console.log("point0 : ",this.points[0]);
+	console.log("point1 : ",this.points[1]);
+	console.log("pos : ",pos);
+	var d = dist(this.points[0],pos)+dist(this.points[1],pos);
+	console.log("distance : ",d);
+	if(d<LIMITE){
+		a = angle(getVecteur(this.points[1],this.points[0]),getVecteur(this.points[0],pos));
+		console.log("angle = ",a);
+		if(a>=0)
+			return true;
+	}
+	return false;
+}
+
+
+
+function verifCollisionRobots(){
+	var col = false;
+	for(var i=0;i<4;i++){
+		if(tabRobots[i].nom !== this.nom && this.verifCollisionRobot(tabRobots[i])){
+			col = true;
+		}
+	}
+	return col;
+}
+
+
+function verifCollisionRobot(robot){
+	//on verifie que les 6 points de robot ne sont pas dans le robot this
+	var collision = false;
+	for(var i=0;i<6 && !collision;i++){
+		if(this.verifCollisionObjet(robot.points[i])){
+			collision = true;
+		}
+	}
+	return collision;
+}
+
+function echangerPoints(tab,a,b){
+	var xa = tab[a].x;
+	var za = tab[a].z;
+	tab[a].x = tab[b].x;
+	tab[a].z = tab[b].z;
+	tab[b].x = xa;
+	tab[b].z = za;
 }

@@ -136,16 +136,19 @@ initAmpoules(tabAmpoules);
 window.addEventListener("keydown",function(event){
 	switch(event.which){
 		case 86: 
-			robot2.avancer(0.01);
+			robot4.avancer(0.01);
 			break;
 		case 82:
-			robot2.reculer(0.01);
+			robot4.reculer(0.01);
 			break;
 		case 71:
-			robot2.tournerGauche(10);
+			robot4.tournerGauche(10);
 			break;
 		case 72:
-			robot2.tournerDroite(10);
+			robot4.tournerDroite(10);
+			break;
+		case 74:
+			robot4.prendreGobelet(tabGobelets[1]);
 			break;
 	}
 
@@ -156,6 +159,8 @@ var robot2 = creerRobotSecondaire("gauche");
 
 var robot3 = creerRobotPrincipal("droit");
 var robot4 = creerRobotSecondaire("droit");
+
+var tabRobots = [robot1,robot2,robot3,robot4];
 
 //**************************************
 
