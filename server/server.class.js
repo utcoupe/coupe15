@@ -82,6 +82,7 @@ module.exports = (function () {
 
 		this.server.listen(this.server_port);
 		logger.info("Server started at "+this.ip_port);
+		logger.info("Webclient: "+this.webclient_url);
 	}
 
 	return Server;
