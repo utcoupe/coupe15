@@ -36,16 +36,19 @@ var directionLight = new THREE.DirectionalLight(0xffffff,1);
 directionLight.position.set(-2,5,-2);
 directionLight.intensity = 0.5;
 scene.add(directionLight);
+
 var directionLight2 = new THREE.DirectionalLight(0xffffff,1);
-directionLight2.position.set(-2,4,2);
+directionLight2.position.set(-2,5,2);
 directionLight.intensity2 = 0.5;
 scene.add(directionLight2);
+
 var directionLight3 = new THREE.DirectionalLight(0xffffff,1);
-directionLight3.position.set(2,3,-2);
+directionLight3.position.set(2,5,-2);
 directionLight.intensity3 = 0.5;
 scene.add(directionLight3);
+
 var directionLight4 = new THREE.DirectionalLight(0xffffff,1);
-directionLight4.position.set(2,2,2);
+directionLight4.position.set(2,5,2);
 directionLight.intensity4 = 0.5;
 scene.add(directionLight4);
 
@@ -67,6 +70,11 @@ loader.load('3d/plateau_mieux.dae',function(collada){
     dae.scale.set(1,1,1);
     scene.add(dae);
 })
+
+
+
+
+
 
 
 //tester ici **********************************
@@ -105,8 +113,9 @@ for(var i=1;i<=4;i++) {
 
 //var pied = creerPied("jaune",0,0.01,0);
 var tabPiedsJaunes = [];
+var tabPiedsVerts = [];
 
-initPieds(tabPiedsJaunes);
+initPieds(tabPiedsJaunes,tabPiedsVerts);
 
 var tabGobelets = [];
 //creerGobelet(tabGobelets,0,0.01,0);
@@ -116,6 +125,55 @@ initGobelets(tabGobelets);
 
 var tabAmpoules = [];
 initAmpoules(tabAmpoules);
+
+
+//robot1 : grand
+//robot2: petit
+//robot3 : grand ennemi
+//robot4: petit ennemi
+
+
+window.addEventListener("keydown",function(event){
+	switch(event.which){
+		case 86: 
+			robot4.avancer(0.01);
+			break;
+		case 82:
+			robot4.reculer(0.01);
+			break;
+		case 71:
+			robot4.tournerGauche(10);
+			break;
+		case 72:
+			robot4.tournerDroite(10);
+			break;
+		case 74:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsVerts[1]);
+			break;
+		case 75:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsVerts[2]);
+			break;
+		case 76:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabGobelets[2]);
+			break;
+		case 77:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabPiedsJaunes[1]);
+			break;
+	}
+
+})
+
+var robot1 = creerRobotPrincipal("gauche");
+var robot2 = creerRobotSecondaire("gauche");
+
+var robot3 = creerRobotPrincipal("droit");
+var robot4 = creerRobotSecondaire("droit");
+
+var tabRobots = [robot1,robot2,robot3,robot4];
 
 //**************************************
 

@@ -29,6 +29,7 @@ function addDiv (parentId, currentId, type, color, name, ip) {
 }
 
 function printNotConnected () {
+    clearArrows();
     var blocstoBeCentered = document.querySelectorAll(".toBeCentered");
 
     for(var i=0; i < blocstoBeCentered.length; i++) {
