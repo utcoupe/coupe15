@@ -92,19 +92,16 @@ window.addEventListener('keydown', function(event) {
         tabClapets[k - 97].enFermeture = true;
         fermeture = true;
     }else if(k>=65 && k<=68 && !tabDistributeurs[k-65].enVidage){
-        if(viderDistributeur(tabDistributeurs[k-65])) {
-            tabDistributeurs[k - 65].enVidage = true;
-            vidage = true;
+       	if(robot4.prendrePopcorn(tabDistributeurs[k-65])){
+        	tabDistributeurs[k - 65].enVidage = true;
+        	vidage = true;
         }
-
     }
-
 });
 
 var tabDistributeurs = [];
-for(var i=1;i<=4;i++) {
+for(var i=0;i<4;i++) {
     tabDistributeurs.push(creerDistributeur(i));
-    initDistributeur(tabDistributeurs[i-1]);
 }
 
 
@@ -163,6 +160,14 @@ window.addEventListener("keydown",function(event){
 			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabPiedsJaunes[1]);
 			break;
+		case 78:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.deposerObjet(0);
+			break;
+		case 79:
+			//robot4.prendreObjet(tabGobelets[1]);
+			robot4.prendreObjet(tabAmpoules[2]);
+			break;		
 	}
 
 })
@@ -196,7 +201,7 @@ function render(){
     if(vidage){
         for(var i=0;i<4;i++)
             if(tabDistributeurs[i].enVidage){
-                descendrePopcorn(tabDistributeurs[i]);
+                tabDistributeurs[i].descendrePopcorn();
                 vidage = true;
             }
     }

@@ -62,9 +62,13 @@ function creerRobotPrincipal(cote){
     robot.verifCollisionRobots = verifCollisionRobots;
 
     robot.prendreObjet = prendreObjet;
+    robot.deposerObjet = deposerObjet;
     robot.verifCibleAtteignable = verifCibleAtteignable;
 	robot.objetsTenus = [];
 	robot.objetsTenus.dessus = robot.hauteur/2 + 0.02;
+	robot.objetsTenus.nombre = 0;
+	robot.prendrePopcorn = prendrePopcorn;
+
 
 
 
@@ -120,10 +124,12 @@ function creerRobotSecondaire(cote){
     rob.verifCollisionRobots = verifCollisionRobots;
 
     rob.prendreObjet = prendreObjet;
+    rob.deposerObjet = deposerObjet;
     rob.verifCibleAtteignable = verifCibleAtteignable;
     rob.objetsTenus = [];
     rob.objetsTenus.dessus = rob.hauteur/2 + 0.02;;
-
+	rob.objetsTenus.nombre = 0;
+	rob.prendrePopcorn = prendrePopcorn;
 
 
 	scene.add(rob);
@@ -299,10 +305,13 @@ function prendreObjet(objet){
 
 	//quand on robot tient un objet on l'affiche au-dessus
 	var objScene;
+	var decalage;	 //quand l'objet est cree avec threejs son centre est au milieu
 	if(objet.scene){	 	 	 	 //si objet charge avec collada
 		objScene = objet.scene;
+		decalage = 0;
 	}else{ 		 	 	 	 	 //si simple objet
 		objScene = objet;
+		decalage = objet.hauteur/2;
 	}
 	//console.log("objet  :",objet);
 	//console.log("objscene : ",objScene);
@@ -312,21 +321,12 @@ function prendreObjet(objet){
 		objScene.ok = false;
 		scene.remove(objScene);
 		this.add(objScene);
-		console.log("hatueur = ",this.position.y+this.hauteur/2 + this.objetsTenus.dessus + objScene.hauteur/2);
-		console.log("this.position.y = ",this.position.y);
-		console.log("this.hauteur/2 = ",this.hauteur/2);
-		console.log("this.objetsTenus.dessus  = ",this.objetsTenus.dessus );
-		console.log("objScene.hauteur/2 = ",objScene.hauteur/2);
-
-		var y = this.objetsTenus.dessus;
-		/*if(objScene.type==="pied")
-			y += objScene.hauteur /2 ;*/
-
-
-		objScene.position.set(0,y,0);//this.hauteur + this.objetsTenus.dessus,0);
+		objScene.position.set(0,this.objetsTenus.dessus+decalage,0);//this.hauteur + this.objetsTenus.dessus,0);
 		this.objetsTenus.dessus += objScene.hauteur + 0.01;
-	}else
+		this.objetsTenus.nombre++;
+	}else{
 		console.log("CIBLE NON ATTEIGNABLE !!!!!");
+	}
 	
 }
 
@@ -379,4 +379,56 @@ function echangerPoints(tab,a,b){
 	tab[a].z = tab[b].z;
 	tab[b].x = xa;
 	tab[b].z = za;
+}
+
+
+
+function deposerObjet(num){
+	if(num>=0 && num<this.objetsTenus.nombre){
+
+		console.log("this.objetsTenus : ",this.objetsTenus);
+
+
+		var objScene;
+		var decalage;
+		if(this.objetsTenus[num].scene){	 	 	 	 //si objet charge avec collada
+			objScene = this.objetsTenus[num].scene;
+			decalage = 0;
+		}		else{ 		 	 	 	 	 //si simple objet
+			objScene = this.objetsTenus[num];
+			decalage = objScene.hauteur/2;
+		}
+		
+		var v1 = getVecteur(this.position,this.points[0]);
+		var v2 = getVecteur(this.position,this.points[1]);
+		var cible = {x:this.position.x+v1.x+v2.x,y:0.01+decalage,z : this.position.z+v1.z+v2.z};
+
+		if(verifPoint(cible)){
+			this.remove(objScene);
+
+			for(var i=num;i<this.objetsTenus.nombre;i++){
+				if(this.objetsTenus[i].scene)
+					this.objetsTenus[i].scene.position.y -= objScene.hauteur;    // ATTENTION à ce qui est dans le tableau this.objtenus ? 
+				else
+					this.objetsTenus[i].position.y -= objScene.hauteur; 
+			}
+			this.objetsTenus.dessus -= objScene.hauteur;
+
+			scene.add(objScene);
+			objScene.position.set(cible.x,cible.y,cible.z);
+			this.objetsTenus.splice(num,1);
+			this.objetsTenus.nombre--;
+		}
+		console.log("this.objetsTenus : ",this.objetsTenus);
+	}
+}
+
+
+function prendrePopcorn(distri){
+	if(distri.tailleReservoir>0 && this.verifCibleAtteignable({x:distri.x,z:distri.z})){
+		var pop = distri.vider();
+		this.prendreObjet(pop);
+		return true;
+	}else
+		return false;
 }

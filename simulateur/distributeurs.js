@@ -3,58 +3,70 @@ function creerPopcorn(x,y,z){
     var mat = new THREE.MeshLambertMaterial({color:'white',side:THREE.DoubleSide});
     var sphere = new THREE.Mesh(geo,mat);
     sphere.position.set(x,y,z);
+    sphere.ok = true;
+    sphere.hauteur = 0.04;
     scene.add(sphere);
     return sphere;
 }
 
 
-function remplirDistributeur(distri){
-    if(distri.tailleReservoir<5){
-        var yy = distri.y+0.04*distri.tailleReservoir;
-        distri.reservoir.push(creerPopcorn(distri.x,yy,distri.z));
-        distri.tailleReservoir++;
-    }
-}
 
-function viderDistributeur(distri){
-    if(distri.tailleReservoir>0){
-        var pop = distri.reservoir.shift();
-        scene.remove(pop);
-        distri.tailleReservoir--;
-        return true;
-    }else
-        return false;
-}
+
 
 function creerDistributeur(n) {
 
-    if(n>=1 && n<=4) {
+    if(n>=0 && n<4) {
         var position = [-1.2,-0.9,0.9,1.2];
-        var xx = position[n - 1];
+        var xx = position[n];
         var zz = -0.965;
         //le popcorn du dessous s'enfonce de 2.67mm
         var yy = (190 + 10 - 2.68) / 1000;
-        return {num: n, tailleReservoir: 0, x: xx, y: yy, z: zz, reservoir: [],enVidage:false};
+        var distri = {num: n, tailleReservoir: 0, x: xx, y: yy, z: zz, reservoir: [],enVidage:false};
+
+
+        distri.remplir = remplirDistributeur;
+        distri.vider = viderDistributeur;
+        distri.descendrePopcorn = descendrePopcorn;
+
+        for(var i=1;i<=5;i++)
+      		distri.remplir();
+   		
+      	console.log("disitrbuteur : ",distri);
+        return distri;
     }
 }
 
 
-function initDistributeur(distri){
-    for(var i=1;i<=5;i++){
-        remplirDistributeur(distri);
+
+
+
+function remplirDistributeur(){
+    if(this.tailleReservoir<5){
+        var yy = this.y+0.04*this.tailleReservoir;
+        this.reservoir.push(creerPopcorn(this.x,yy,this.z));
+        this.tailleReservoir++;
     }
 }
 
-function descendrePopcorn(distri){
-    if(distri.tailleReservoir>0 && distri.reservoir[0].position.y>distri.y){
-        for(var i=0;i<distri.tailleReservoir;i++){
-            distri.reservoir[i].position.y -= 0.01;
+function viderDistributeur(){
+	console.log("vidage distri ",this.num);
+    if(this.tailleReservoir>0){
+        var pop = this.reservoir.shift();
+        scene.remove(pop);
+        this.tailleReservoir--;
+        return pop;
+    }else
+        return undefined;
+}
+
+
+function descendrePopcorn(){
+    if(this.tailleReservoir>0 && this.reservoir[0].position.y>this.y){
+        for(var i=0;i<this.tailleReservoir;i++){
+            this.reservoir[i].position.y -= 0.01;
         }
     }else{
-        distri.enVidage = false;
+        this.enVidage = false;
     }
 }
 
-function deposerObjet(){
-	
-}
