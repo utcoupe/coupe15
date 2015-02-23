@@ -19,6 +19,7 @@ void frame(int nb_robots_to_find);
 static int use_protocol = 0, symetry = 0;
 static long timeStart = 0;
 static Hok_t hok1, hok2;
+static char* path = 0;
 
 void exit_handler() {
 	int status;
@@ -37,6 +38,12 @@ void exit_handler() {
 	printf("%sWaiting for nodeJS son to quit...\n", PREFIX);
 	wait(&status);
 
+	int ret = remove(path);
+	if(ret == 0)
+		printf("%sPipe deleted\n", PREFIX);
+	else 
+		printf("%s Warning: unable to delete the pipe\n", PREFIX);
+
 	// XXX on ne free rien ? genre nos hok et tout ?
 	printf("%sExitting\n", PREFIX);
 	kill(getppid(), SIGUSR1); //Erreur envoyee au pere
@@ -48,7 +55,6 @@ static void catch_SIGINT(int signal){
 
 int main(int argc, char **argv){
 	int calib = 1, nb_robots_to_find = 4;
-	char *path = 0;
 	hok1.urg = 0;
 	hok2.urg = 0;
 
@@ -60,9 +66,9 @@ int main(int argc, char **argv){
 	}
 
 	if (signal(SIGINT, catch_SIGINT) == SIG_ERR) {
-        fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
+		  fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
 		exit(EXIT_FAILURE);
-    }
+	 }
 	
 	if (argc >= 4) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (=debug, inutile pour le moment), soit on communique
 		path = argv[3];
