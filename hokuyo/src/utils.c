@@ -9,6 +9,8 @@
 #define max(a, b) a>b?a:b
 #define min(a, b) a<b?a:b
 
+extern FILE* logfile;
+
 int inZone(Pt_t pt, ScanZone_t zone) {
 	return !(pt.x > zone.xmax || pt.x < zone.xmin || pt.y > zone.ymax || pt.y < zone.ymin);
 }
@@ -28,7 +30,7 @@ int getPoints(Hok_t hok, Pt_t* pt_list) {
 		}
 		return hok.imax-hok.imin;
 	} else {
-		printf("%s%s : %s\n", PREFIX, hok.path, urg_error(hok.urg));
+		fprintf(logfile, "%s%s : %s\n", PREFIX, hok.path, urg_error(hok.urg));
 		return -1;
 	}
 }
@@ -59,7 +61,7 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 				nbCluster++;
 
 				if (nbCluster > MAX_CLUSTERS) {
-					printf("%sToo many clusters\n", PREFIX);
+					fprintf(logfile, "%sToo many clusters\n", PREFIX);
 				}
 			}
 		}
@@ -320,7 +322,7 @@ Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
 		if ((dist_squared(clusters[i].center, coneCenter) < 6*3600) && (clusters[i].size < CONE_DIAM_MAX)){ // (3% * 2m)² = 3600 mm² + 600% "d'erreur" (à la louche)
 			found = i;
 		}
-		// printf("%d %d, size : %d\n", clusters[i].center.x, clusters[i].center.y, clusters[i].size);
+		// fprintf(logfile, "%d %d, size : %d\n", clusters[i].center.x, clusters[i].center.y, clusters[i].size);
 	}
 
 	if(found != -1){ // si cône trouvé
@@ -330,23 +332,5 @@ Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
 		result.center.x=-1;
 		result.center.y=-1;
 	}
-	return result;
-}
-
-
-char* parse2JSON(Cluster_t *coords, int nbr){
-	char* result;
-	int i;
-
-	strcpy(result, "\"robots\": [");
-	for (i = 0; i < nbr; i++)
-	{
-		sprintf(result, "%s { \"id\": %d, \"x\": %d, \"y\": %d}", result, i, coords->center.x, coords->center.y);
-		if (i < nbr-1)
-			strcat(result, ", ");
-	}
-
-	strcpy(result, "]");
-
 	return result;
 }
