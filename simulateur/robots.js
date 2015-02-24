@@ -68,7 +68,7 @@ function creerRobotPrincipal(cote){
 	robot.objetsTenus.dessus = robot.hauteur/2 + 0.02;
 	robot.objetsTenus.nombre = 0;
 	robot.prendrePopcorn = prendrePopcorn;
-
+	robot.fermerClapet = fermerClapet;
 
 
 
@@ -130,6 +130,7 @@ function creerRobotSecondaire(cote){
     rob.objetsTenus.dessus = rob.hauteur/2 + 0.02;;
 	rob.objetsTenus.nombre = 0;
 	rob.prendrePopcorn = prendrePopcorn;
+	rob.fermerClapet = fermerClapet;
 
 
 	scene.add(rob);
@@ -334,15 +335,13 @@ function verifCibleAtteignable(pos){
 	this.updatePoints();
 	var LIMITE = 0.4;
 	var a;
-	console.log("point0 : ",this.points[0]);
-	console.log("point1 : ",this.points[1]);
-	console.log("pos : ",pos);
+	//console.log("point0 : ",this.points[0]);
+	//console.log("point1 : ",this.points[1]);
+	//console.log("pos : ",pos);
 	var d = dist(this.points[0],pos)+dist(this.points[1],pos);
-	console.log("distance : ",d);
+	//console.log("distance : ",d);
 	if(d<LIMITE){
-		a = angle(getVecteur(this.points[1],this.points[0]),getVecteur(this.points[0],pos));
-		console.log("angle = ",a);
-		if(a>=0)
+		if(angle(getVecteur(this.points[0],this.points[1]),getVecteur(this.points[0],pos))>=0)
 			return true;
 	}
 	return false;
@@ -431,4 +430,11 @@ function prendrePopcorn(distri){
 		return true;
 	}else
 		return false;
+}
+
+function fermerClapet(clapet){
+	if(clapet.etat==="ouvert" && this.verifCibleAtteignable(clapet.position)){
+		console.log("Fermeutre clapet");
+		clapet.enFermeture = true;
+	}
 }

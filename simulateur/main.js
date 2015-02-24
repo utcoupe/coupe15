@@ -82,7 +82,7 @@ var tabClapets = initClapets();
 var fermeture = false;
 var vidage = false;
 
-window.addEventListener('keydown', function(event) {
+/*window.addEventListener('keydown', function(event) {
     // en fonction de la touche on ferme un certain clapet
     // on met fermeture a true pour verfifer chaque clapet 1 fois
     // tant qu'un clapet a bouge on continue
@@ -97,7 +97,7 @@ window.addEventListener('keydown', function(event) {
         	vidage = true;
         }
     }
-});
+});*/
 
 var tabDistributeurs = [];
 for(var i=0;i<4;i++) {
@@ -132,6 +132,10 @@ initAmpoules(tabAmpoules);
 
 window.addEventListener("keydown",function(event){
 	switch(event.which){
+		case 97:
+			fermeture = true;
+			robot4.fermerClapet(tabClapets[3]);
+			break;
 		case 86: 
 			robot4.avancer(0.01);
 			break;
@@ -192,7 +196,7 @@ function render(){
     if(fermeture)
         for(var i=0;i<=5;i++)
             if (tabClapets[i].enFermeture) {
-                fermerClapet(tabClapets[i]);
+                tabClapets[i].fermer();
                 fermeture = true;
 
 

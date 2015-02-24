@@ -52,6 +52,11 @@ function creerClapet(p,num){
     clapet.rotation.z = w;
     clapet.pivot = C;
     clapet.enFermeture = false;
+    clapet.etat = "ouvert";
+
+    clapet.fermer = fermer
+
+
     return clapet;
 }
 
@@ -73,24 +78,27 @@ Position de gauche a droite :
 
 */
 
-function fermerClapet(clapet){
+function fermer(){
 
-    if(clapet.position.y-clapet.pivot.y>0.0155){
+    if(this.position.y-this.pivot.y>0.0155){
 
-        var p = clapet.position;
-        var C = clapet.pivot;
+        var p = this.position;
+        var C = this.pivot;
         var L = Math.sqrt(0.08*0.08+0.015*0.015);
         var w;
 
-        if(clapet.cote==="droite"){
-            w =  clapet.rotation.z+0.03;
-            clapet.position.set(C.x+L*Math.cos(Math.PI+w-0.1853), C.y+L*Math.sin(Math.PI+w-0.1853), p.z);
-            clapet.rotation.z = w;
+        if(this.cote==="droite"){
+            w =  this.rotation.z+0.03;
+            this.position.set(C.x+L*Math.cos(Math.PI+w-0.1853), C.y+L*Math.sin(Math.PI+w-0.1853), p.z);
+            this.rotation.z = w;
         }else{
-            w = clapet.rotation.z-0.03;
-            clapet.position.set(C.x+L*Math.cos(w+0.1853), C.y+L*Math.sin(w+0.1853), p.z);
-            clapet.rotation.z = w;
+            w = this.rotation.z-0.03;
+            this.position.set(C.x+L*Math.cos(w+0.1853), C.y+L*Math.sin(w+0.1853), p.z);
+            this.rotation.z = w;
         }
     }else
-        clapet.enFermeture = false;
+    {
+        this.enFermeture = false;
+        this.etat = "ferme";
+    }
 }
