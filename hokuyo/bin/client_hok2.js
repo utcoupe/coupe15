@@ -8,7 +8,8 @@
 
 	var net = require('net'); // UNIX socket
 	var util = require("util"); // var_dump like functions
-	var spawn = require('child_process').spawn;
+	var child_process = require('child_process');
+	var spawn = child_process.spawn;
 
 	// var server = "192.168.0.0/client/client"; // server adress
 
@@ -22,15 +23,17 @@
 			var init_wizard = 'no_init_wizard'; // idem
 			var nbr_hok = '4';
 
-			// execute C program
+			// Execute C program
 			var command = "./hokuyo";
-			var args = [color, init_wizard, '[path_sock]', nbr_hok];
+			var args = [color, init_wizard, '/tmp/pipe', nbr_hok];
 			// var options = // default : { cwd: undefined, env: process.env};
 			console.log('Launching : ' + command + ' ' + args);
 			var child = spawn(command, args);
 
 			child.stdout.on('data', function(data) {
 			    console.log('stdout: ' + data);
+			    var ext = data.toString().substring(1,5);
+				console.log('test : ' + ext);
 			});
 
 			child.stderr.on('data', function(data) {
@@ -38,6 +41,20 @@
 			});
 			
 			child.on('close', function(code) {
-			    console.log('closing code: ' + code);
+			    console.log('Child closed with code: ' + code);
 			});
-)}
+
+			// Exit handlers
+			function quitC(){
+				child.kill('SIGINT');
+			}
+
+			// process.stdin.resume();//so the program will not close instantly -> prevent the node script from closing --'
+
+			//do something when app is closing
+			process.on('exit', quitC);
+			//catches ctrl+c event
+			process.on('SIGINT', quitC);
+			//catches uncaught exceptions
+			process.on('uncaughtException', quitC);
+})();

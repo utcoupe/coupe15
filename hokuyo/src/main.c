@@ -19,7 +19,7 @@ void frame(int nb_robots_to_find);
 static int use_protocol = 0, symetry = 0;
 static long timeStart = 0;
 static Hok_t hok1, hok2;
-static char* path = 0;
+static FILE* logfile;
 
 void exit_handler() {
 	int status;
@@ -29,24 +29,17 @@ void exit_handler() {
 	if (hok2.urg != 0)
 		urg_disconnect(hok2.urg);
 
-	if (use_protocol = 1){
-		printf("\n%sClosing socket, please wait...\n", PREFIX);
-		close_protocol();
+	if (logfile != NULL){
+		printf("\n%sClosing log file, please wait...\n", PREFIX);
+		fclose(logfile);
 	}
-
 
 	printf("%sWaiting for nodeJS son to quit...\n", PREFIX);
 	wait(&status);
 
-	int ret = remove(path);
-	if(ret == 0)
-		printf("%sPipe deleted\n", PREFIX);
-	else 
-		printf("%s Warning: unable to delete the pipe\n", PREFIX);
-
 	// XXX on ne free rien ? genre nos hok et tout ?
 	printf("%sExitting\n", PREFIX);
-	kill(getppid(), SIGUSR1); //Erreur envoyee au pere
+	// kill(getppid(), SIGUSR1); //Erreur envoyee au pere
 }
 
 static void catch_SIGINT(int signal){
@@ -54,33 +47,34 @@ static void catch_SIGINT(int signal){
 }
 
 int main(int argc, char **argv){
+	// Disable buffering on stdout
+	setvbuf(stdout, NULL, _IOLBF, 0);
+
 	int calib = 1, nb_robots_to_find = 4;
 	hok1.urg = 0;
 	hok2.urg = 0;
 
+	// Open log file
+	logfile = fopen("/home/mewen/hokuyo.log", "a+");
+	if (logfile == NULL) {
+		fprintf(stderr, "Can't open log file\n");
+		exit(EXIT_FAILURE);
+	}
+
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [path_sock] [nbr_hok]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [nbr_hok]\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (signal(SIGINT, catch_SIGINT) == SIG_ERR) {
-		  fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
+		fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
 		exit(EXIT_FAILURE);
 	 }
-	
-	if (argc >= 4) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (=debug, inutile pour le moment), soit on communique
-		path = argv[3];
-		if (strcmp(path, "nocalib") == 0) {
-			calib = 0;
-		} else {
-			use_protocol = 1;
-		}
-	}
 
-	if (argc >= 5) {
-		nb_robots_to_find = atoi(argv[4]);
+	if (argc >= 4) {
+		nb_robots_to_find = atoi(argv[3]);
 	} else {
 		nb_robots_to_find = MAX_ROBOTS;
 	}
@@ -107,11 +101,12 @@ int main(int argc, char **argv){
 	initSDL();
 	#endif
 
-	if (use_protocol) {
-		init_protocol(path); // Attente de l'ordre de départ du match
-	}
+	// if (use_protocol) {
+	// 	 init_protocol(path); // Attente de l'ordre de départ du match
+	// }
 
 	printf("%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);
+	fflush(stdout);
 	timeStart = timeMillis();
 	long time_last_try = 0;
 	while(1){
