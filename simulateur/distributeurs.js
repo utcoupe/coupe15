@@ -31,7 +31,6 @@ function creerDistributeur(n) {
         for(var i=1;i<=5;i++)
       		distri.remplir();
    		
-      	console.log("disitrbuteur : ",distri);
         return distri;
     }
 }

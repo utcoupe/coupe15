@@ -70,6 +70,13 @@ function creerRobotPrincipal(cote){
 	robot.prendrePopcorn = prendrePopcorn;
 	robot.fermerClapet = fermerClapet;
 
+	robot.enDeplacement = false;
+	robot.aParcourir = {valeur : 0,sens : "avant"};
+	robot.enRotation = false;
+	robot.aTourner = {valeur:0,sens:'gauche'};
+	robot.vitesseDeplacement = 0.01;
+	robot.vitesseRotation = 1;
+
 
 
 	robot.updatePoints();
@@ -133,6 +140,15 @@ function creerRobotSecondaire(cote){
 	rob.fermerClapet = fermerClapet;
 
 
+	rob.enDeplacement = false;
+	rob.aParcourir = {valeur : 0,sens : "avant"};
+	rob.enRotation = false;
+	rob.aTourner = {valeur:0,sens:'gauche'};
+	rob.vitesseDeplacement = 0.01;
+	rob.vitesseRotation = 1;
+
+
+
 	scene.add(rob);
 
 	rob.updatePoints();
@@ -142,28 +158,40 @@ function creerRobotSecondaire(cote){
 
 function avancer(d){
 	this.translateOnAxis(this.direction,d);
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.translateOnAxis(this.direction,-d);
+		return false;
+	}
+	return true;
 }
 
 function reculer(d){
 	this.translateOnAxis(this.direction,-d);
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.translateOnAxis(this.direction,d);
+		return false;
+	}
+	return true;
 }
 
 function tournerDroite(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y -= rad;
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.rotation.y += rad;
+		return false;
+	}
+	return true;
 }
 
 function tournerGauche(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y += rad;
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.rotation.y -= rad;
+		return false;
+	}
+	return true;
 }
 
 function updatePoints(){
@@ -325,9 +353,11 @@ function prendreObjet(objet){
 		objScene.position.set(0,this.objetsTenus.dessus+decalage,0);//this.hauteur + this.objetsTenus.dessus,0);
 		this.objetsTenus.dessus += objScene.hauteur + 0.01;
 		this.objetsTenus.nombre++;
+		return true;
 	}else{
 		console.log("CIBLE NON ATTEIGNABLE !!!!!");
 	}
+	return false;
 	
 }
 

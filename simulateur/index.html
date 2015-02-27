@@ -6,12 +6,12 @@
         <style type = "text/css">
             #container{
                 position: absolute;
-                top :0;
+                top : 50;
                 left :0;
                 right :0;
                 bottom :0;
                 z-index :5;
-                height: 100%;
+                height: 75%;
             }
             body{
                 margin: 0;
@@ -29,6 +29,39 @@
       <!--  <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>-->
 
         <div id="container"></div>
+
+        <h1> Controles </h1>
+
+        <form>
+            <p>
+                <label>Robot</label> : 
+                <select id="selectRobot">
+                    <option value="1">Robot principal gauche</option>
+                    <option value="2">Robot secondaire gauche</option>
+                    <option value="3">Robot principal droite</option>
+                    <option value="4">Robot secondaire droite</option>
+                </select>
+            </p>
+
+            <p>
+                <label>Action</label> : 
+                <select id="selectAction" name="selectAction" size="1">
+                    <option value="avancer">Avancer</option>
+                    <option value="reculer">Reculer</option>
+                    <option value="tournerGauche">Tourner a gauche</option>
+                    <option value="tournerDroite">Tourner à droite</option>
+                    <option value="prendrePopcorn">Prendre du popcorn</option>
+                    <option value="prendreObjet">Prendre un objet</option>
+                    <option value="deposerObjet">Deposer un objet</option>
+                </select>
+            </p>
+
+            <p>
+                <input type="button" value="Envoyer" onClick="commande()">
+            </p>
+            
+        </form>
+
         <script src="js/three.min.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/ColladaLoader.js"></script>

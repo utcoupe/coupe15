@@ -3,7 +3,7 @@
 function creerGobelet(tab,x,y,z){
     loader.load("3d/gobelet.dae",function(collada){
         var dae = collada.scene;
-        console.log("scene : ",collada);
+        //console.log("scene : ",collada);
         dae.hauteur = 0.150;
         dae.type="gobelet";
         dae.position.set(x,y,z);

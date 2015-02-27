@@ -1,7 +1,7 @@
 //permet de redimensionner la fenetre
 window.addEventListener('resize', function() {
-    var WIDTH = window.innerWidth,
-        HEIGHT = window.innerHeight;
+    var WIDTH = window.innerWidth*1,
+        HEIGHT = window.innerHeight*0.75;
     renderer.setSize(WIDTH, HEIGHT);
     camera.aspect = WIDTH / HEIGHT;
     camera.updateProjectionMatrix();
@@ -13,7 +13,7 @@ var scene= new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer({antialias:true});
 
-renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setSize(window.innerWidth,window.innerHeight*0.75);
 renderer.setClearColor(0xff8c00,0.5);
 container.appendChild(renderer.domElement);
 
@@ -137,16 +137,28 @@ window.addEventListener("keydown",function(event){
 			robot4.fermerClapet(tabClapets[3]);
 			break;
 		case 86: 
-			robot4.avancer(0.01);
+			//robot4.avancer(0.01);
+			robot4.enDeplacement = true;
+			robot4.aParcourir.valeur = 0.1;
+			robot4.aParcourir.sens = "avant";
 			break;
 		case 82:
-			robot4.reculer(0.01);
+			//robot4.reculer(0.01);
+			robot4.enDeplacement = true;
+			robot4.aParcourir.valeur = 0.1;
+			robot4.aParcourir.sens = "arriere";
 			break;
 		case 71:
-			robot4.tournerGauche(10);
+			//robot4.tournerGauche(10);
+			robot4.enRotation = true;
+			robot4.aTourner.valeur = 45;
+			robot4.aTourner.sens = "gauche";
 			break;
 		case 72:
-			robot4.tournerDroite(10);
+			//robot4.tournerDroite(10);
+			robot4.enRotation = true;
+			robot4.aTourner.valeur = 45;
+			robot4.aTourner.sens = "droite";
 			break;
 		case 74:
 			//robot4.prendreObjet(tabGobelets[1]);
@@ -183,7 +195,7 @@ var robot3 = creerRobotPrincipal("droit");
 var robot4 = creerRobotSecondaire("droit");
 
 var tabRobots = [robot1,robot2,robot3,robot4];
-
+var rob;
 //**************************************
 
 
@@ -198,8 +210,6 @@ function render(){
             if (tabClapets[i].enFermeture) {
                 tabClapets[i].fermer();
                 fermeture = true;
-
-
             }
 
     if(vidage){
@@ -209,10 +219,135 @@ function render(){
                 vidage = true;
             }
     }
+
+
+
+    for(var r=0;r<4;r++){
+    	rob = tabRobots[r];
+	    if(rob.enDeplacement && rob.aParcourir.valeur > 0){
+	    	if(rob.aParcourir.sens === "avant"){ //avancer
+	    	    if(rob.avancer(rob.vitesseDeplacement))
+	    			rob.aParcourir.valeur -= rob.vitesseDeplacement;
+	    		else{   //collision
+	    			console.log("Robot : ",rob.nom," collision");
+	    			rob.aParcourir.valeur = 0;
+	    			rob.enDeplacement = false;
+	    		}
+	    	}else if(rob.aParcourir.sens === "arriere"){  //reculer
+	    		if(rob.reculer(rob.vitesseDeplacement))
+	    			rob.aParcourir.valeur -= rob.vitesseDeplacement;
+	    		else{   //collision
+	    			console.log("Robot : ",rob.nom," collision");
+	    			rob.aParcourir.valeur = 0;
+	    			rob.enDeplacement = false;
+	    		}
+	    	}
+	    }else{
+	    	rob.enDeplacement = false;
+	    	rob.aParcourir.valeur = 0;
+	    }
+
+
+	    if(rob.enRotation && rob.aTourner.valeur > 0){
+	    	if(rob.aTourner.sens === "gauche"){
+	    		if(rob.tournerGauche(rob.vitesseRotation)){
+	    			rob.aTourner.valeur -= rob.vitesseRotation;
+	    		}else{
+	    			console.log("Robot : ",rob.nom," collision");
+	    			rob.aTourner.valeur = 0;
+	    			rob.enRotation = false;
+	    		}
+	    	}else{
+	    		if(rob.tournerDroite(rob.vitesseRotation)){
+	    			rob.aTourner.valeur -= rob.vitesseRotation;
+	    		}else{
+	       			console.log("Robot : ",rob.nom," collision");
+	    			rob.aTourner.valeur = 0;
+	    			rob.enRotation = false;
+	    			}
+	    	}
+	    }else{
+	    	rob.enRotation = false;
+	    	rob.aTourner.valeur = 0;
+	    }
+	}
+
+
+
     renderer.render(scene,camera);
 
     controls.update();
 }
 
 render();
+
+
+
+function commande(){
+	var robot = tabRobots[document.getElementById('selectRobot').value-1];
+	var action = document.getElementById('selectAction').value;
+	//console.log("robot = ",robot);
+	console.log("action = ",action);
+
+
+	switch(action){
+		case "avancer": 
+			//robot4.avancer(0.01);
+			robot.enDeplacement = true;
+			robot.aParcourir.valeur = 0.1;
+			robot.aParcourir.sens = "avant";
+			break;
+		case "reculer":
+			//robot4.reculer(0.01);
+			robot.enDeplacement = true;
+			robot.aParcourir.valeur = 0.1;
+			robot.aParcourir.sens = "arriere";
+			break;
+		case "tournerGauche":
+			//robot4.tournerGauche(10);
+			robot.enRotation = true;
+			robot.aTourner.valeur = 45;
+			robot.aTourner.sens = "gauche";
+			break;
+		case "tournerDroite":
+			//robot4.tournerDroite(10);
+			robot.enRotation = true;
+			robot.aTourner.valeur = 45;
+			robot.aTourner.sens = "droite";
+			break;
+		case "prendrePopcorn":
+			for(var d=0;d<4;d++)
+				if(robot.verifCibleAtteignable({x:tabDistributeurs[d].x,z:tabDistributeurs[d].z}))
+				{
+					robot.prendrePopcorn(tabDistributeurs[d]);
+					vidage = true;
+					tabDistributeurs[d].enVidage = true;
+				}
+			break;
+		case "prendreObjet":
+			var pris = false;
+			for(var p=0;p<8 && !pris;p++)
+				if(robot.prendreObjet(tabPiedsJaunes[p]))
+					pris = true;
+			for(var p=0;p<8 && !pris;p++)
+				if(robot.prendreObjet(tabPiedsVerts[p]))
+					pris = true;
+			for(var p=0;p<5 && !pris;p++)
+				if(robot.prendreObjet(tabGobelets[p]))
+					pris = true;
+			break;
+		case "deposerObjet":
+			robot.deposerObjet(0);
+			break;
+	}
+
+}
+
+/* A ajouter 
+
+- gerer les ampoules
+- gerer la construction d'objets
+
+
+*/
 
