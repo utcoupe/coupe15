@@ -41,9 +41,9 @@ module.exports = (function () {
 			// logger.info('[Order to '+data.to+'] '+data.text);
 			if(!!this.callbacks.order)
 				if (!!data.name)
-					logger.error("Order has no name ! : " + order);
+					this.callbacks.order(data.from, data.name, data.params || {});
 				else
-					this.callbacks.order(data.name, data.params || {});
+					logger.error("Order has no name ! : " + data);
 		}.bind(this));
 
 		// If after 500ms the client isn't connected, throw "server not found" error

@@ -34,6 +34,7 @@ module.exports = (function () {
 			client.on('disconnect', function() {
 				if(this.network[client.type][client.id] !== undefined) {
 					delete this.network[client.type][client.id];
+					this.sendNetwork();
 				}
 				logger.info(client.type+" is disconnected!");
 			}.bind(this));
@@ -56,6 +57,7 @@ module.exports = (function () {
 				// console.log(this.network);
 				client.join(client.type);
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
+				this.sendNetwork();
 			}.bind(this));
 
 			// When the client send an order
@@ -83,6 +85,18 @@ module.exports = (function () {
 		this.server.listen(this.server_port);
 		logger.info("Server started at "+this.ip_port);
 		logger.info("Webclient: "+this.webclient_url);
+	}
+
+	Server.prototype.sendNetwork = function(){
+		// logger.info("Message sent to webclient !");
+		this.server.to('webclient').emit('order', {
+			to: 'webclient',
+			name: 'reseau',
+			params: {
+				network: this.network
+			},
+			from: 'server'
+			});
 	}
 
 	return Server;

@@ -11,17 +11,17 @@
 	var util = require("util"); // var_dump like functions
 	var child_process = require('child_process');
 	var child;
-	var socket_client = require('socket_client.class.js');
+	var SocketClient = require('client.class.js');
 
 	var ourPositions = {};
 
 	var server = "http://172.25.7.186:3128"; // server adress
-	var client = new socket_client.SocketClient({
+	var client = new SocketClient({
 		server_ip: server,
 		type: "hokuyo"
 	});
 
-	socket_client.order(function(name, params){
+	client.order(function(from, name, params){
 		switch (name){
 			case "start":
 				if(!!params.color && !!params.nbrobots)
@@ -62,18 +62,18 @@
 			logger.info(dots);
 
 			// Send all robots
-			socket_client.send("IA", "position_tous_robots", {dots, dots});
+			client.send("IA", "position_tous_robots", {dots, dots});
 		}
 
 		function parseError(string) { // XXX TODO : report errors in C
 			switch (string.substring(0,1)){
 				case "1":
 					// Send error : one Hokuyo is missing
-					socket_client.send("IA", "nb_hokuyo", {nb: 1});
+					client.send("IA", "nb_hokuyo", {nb: 1});
 					break;
 				case "2":
 					// Send error : 2 Hokuyos are missing
-					socket_client.send("IA", "nb_hokuyo", {nb: 0});
+					client.send("IA", "nb_hokuyo", {nb: 0});
 					break;
 				default:
 					logger.info("Error not understood : " + string);
@@ -91,7 +91,7 @@
 					case "HI:)":
 						// XXX send "C started" to server
 						logger.info('C Hokuyo software says "Hi !" :)');
-						// socket_client.send("IA", "nb_hokuyo", {nb: 2});
+						// client.send("IA", "nb_hokuyo", {nb: 2});
 						break;
 					case "DATA":
 						parseRobots(inputAr[i].substring(6));

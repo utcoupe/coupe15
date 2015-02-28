@@ -1,10 +1,10 @@
-module.exports = (function () {
+SocketWebclient = (function () {
 	"use strict";
 
 	function SocketWebclient(server_host) {
 		this.server_host = server_host || (!!window.location.host?window.location.host:'localhost')+':3128';
 		this.socket = null;
-		this.callbacks = {}
+		this.callbacks = {};
 
 		if(io === undefined) {
 			this.errorSocketIoNotFound();
@@ -34,10 +34,10 @@ module.exports = (function () {
 				// console.log('[Order to '+data.to+'] '+ data.text);
 				if(!!this.callbacks.order)
 					if (!!data.name)
-						logger.error("Order has no name ! : " + order);
+						this.callbacks.order(data.from, data.name, data.params || {});
 					else
-						this.callbacks.order(data.name, data.params || {});
-			});
+						console.log("Order has no name ! : " + data);
+			}.bind(this));
 
 			setTimeout(function() {
 				if(this.socket.disconnected)
@@ -60,19 +60,19 @@ module.exports = (function () {
 		}
 	};
 
-	SocketClient.prototype.connect = function (callback) {
+	SocketWebclient.prototype.connect = function (callback) {
 		this.callbacks.connect = callback;
 	};
 
-	SocketClient.prototype.order = function (callback) {
+	SocketWebclient.prototype.order = function (callback) {
 		this.callbacks.order = callback;
 	};
-	SocketClient.prototype.send = function (to, name, params) {
+	SocketWebclient.prototype.send = function (to, name, params) {
 		this.client.emit('order', {
 			to: to,
 			name: name,
 			params: params,
-			from: this.type;
+			from: this.type
 		});
 	};
 

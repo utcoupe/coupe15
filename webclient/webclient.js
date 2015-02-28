@@ -24,3 +24,5 @@ angular.module('app').controller('MenuCtrl', ['$scope', function($scope) {
 angular.module('app').controller('IndexCtrl', ['$scope', function($scope) {
 	
 }]);
+
+var client = new SocketWebclient();
