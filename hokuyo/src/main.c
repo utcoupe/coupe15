@@ -63,7 +63,7 @@ int main(int argc, char **argv){
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [nbr_hok]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [nbr_robots]\n");
 		exit(EXIT_FAILURE);
 	}
 

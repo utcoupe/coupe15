@@ -31,3 +31,8 @@ void pushResults(Cluster_t *coords, int nbr, long timestamp) {
     printf("%s\n", message);
     fflush(stdin);
 }
+void pushError(char error){
+    char message[7];
+    printf("[WARN]%c\n", error);
+    fflush(stdin);
+}
