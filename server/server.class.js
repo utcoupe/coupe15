@@ -30,13 +30,12 @@ module.exports = (function () {
 
 		// When the client is connected
 		this.server.on('connection', function (client) {
-			logger.info("User with id "+client.id+" is connected!");
 			// When the client is disconnected
 			client.on('disconnect', function() {
 				if(this.network[client.type][client.id] !== undefined) {
 					delete this.network[client.type][client.id];
 				}
-				logger.info("User with id "+client.id+" is disconnected!");
+				logger.info(client.type+" is disconnected!");
 			}.bind(this));
 
 			// When the client send his type
@@ -51,9 +50,10 @@ module.exports = (function () {
 				}
 				// The type is valid
 				client.type = data.type;
+				logger.info(client.type+" is connected!");
 				data.options.ip = client.handshake.address;
 				this.network[client.type][client.id] = data.options;
-				console.log(this.network);
+				// console.log(this.network);
 				client.join(client.type);
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 			}.bind(this));

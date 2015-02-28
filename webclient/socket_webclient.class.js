@@ -1,10 +1,10 @@
-var coupe15 = coupe15 || {};
-(function () {
+module.exports = (function () {
 	"use strict";
 
 	function SocketWebclient(server_host) {
 		this.server_host = server_host || (!!window.location.host?window.location.host:'localhost')+':3128';
 		this.socket = null;
+		this.callbacks = {}
 
 		if(io === undefined) {
 			this.errorSocketIoNotFound();
@@ -19,6 +19,8 @@ var coupe15 = coupe15 || {};
 						type: this.getDeviceType()
 					}
 				});
+				if(!!this.callbacks.connect)
+					this.callbacks.connect();
 				// this.socket.emit('order', {to:'webclient',text:'Hello!'});
 			}.bind(this));
 			this.socket.on('disconnect', function(){
@@ -29,7 +31,12 @@ var coupe15 = coupe15 || {};
 				console.log('[Server log] '+data);
 			});
 			this.socket.on('order', function(data){
-				console.log('[Order to '+data.to+'] '+ data.text);
+				// console.log('[Order to '+data.to+'] '+ data.text);
+				if(!!this.callbacks.order)
+					if (!!data.name)
+						logger.error("Order has no name ! : " + order);
+					else
+						this.callbacks.order(data.name, data.params || {});
 			});
 
 			setTimeout(function() {
@@ -53,6 +60,22 @@ var coupe15 = coupe15 || {};
 		}
 	};
 
+	SocketClient.prototype.connect = function (callback) {
+		this.callbacks.connect = callback;
+	};
+
+	SocketClient.prototype.order = function (callback) {
+		this.callbacks.order = callback;
+	};
+	SocketClient.prototype.send = function (to, name, params) {
+		this.client.emit('order', {
+			to: to,
+			name: name,
+			params: params,
+			from: this.type;
+		});
+	};
+
 	// Error functions
 	SocketWebclient.prototype.error = function (msg, reload) {
 		$('#webclient').html('<p class="error" ><strong>Error</strong>: '+msg+'</p>');
@@ -67,7 +90,5 @@ var coupe15 = coupe15 || {};
 		this.error('socket.io.js not found.<br />Please make sure you are in webclient/ folder.', false);
 	};
 
-	coupe15.SocketWebclient = SocketWebclient;
+	return SocketWebclient;
 })();
-
-var socket = new coupe15.SocketWebclient();
