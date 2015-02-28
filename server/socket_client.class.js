@@ -6,6 +6,7 @@ module.exports = (function () {
 	function SocketClient(server_ip) {
 		this.server_ip = server_ip || '127.0.0.1:3128';
 		this.client = require('socket.io-client')('http://'+this.server_ip);
+		this.callbacks = {};
 
 		// When the client is connected to the server
 		this.client.on('connect', function(){
@@ -15,6 +16,8 @@ module.exports = (function () {
 					name: 'Client'
 				}
 			});
+			if(!!this.callbacks.connect)
+				this.callbacks.connect();
 			// this.client.emit('order', {to:'client2',text:'Hello!'});
 		}.bind(this));
 		// When the client is disconnected to the server
@@ -37,6 +40,10 @@ module.exports = (function () {
 				this.errorServerNotFound();
 		}.bind(this), 500);
 	}
+
+	SocketClient.prototype.connect = function (callback) {
+		this.callbacks.connect = callback;
+	};
 
 	// Error functions
 	SocketClient.prototype.throwError = function (msg) {
