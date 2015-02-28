@@ -466,5 +466,7 @@ function fermerClapet(clapet){
 	if(clapet.etat==="ouvert" && this.verifCibleAtteignable(clapet.position)){
 		console.log("Fermeutre clapet");
 		clapet.enFermeture = true;
+		return true;
 	}
+	return false;
 }

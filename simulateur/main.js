@@ -76,28 +76,11 @@ loader.load('3d/plateau_mieux.dae',function(collada){
 
 
 
-
-//tester ici **********************************
 var tabClapets = initClapets();
 var fermeture = false;
 var vidage = false;
 
-/*window.addEventListener('keydown', function(event) {
-    // en fonction de la touche on ferme un certain clapet
-    // on met fermeture a true pour verfifer chaque clapet 1 fois
-    // tant qu'un clapet a bouge on continue
-    // si aucun clapet ne bouge fermeture est remis a false
-    var k = event.which;
-    if(k>=97 && k<=102) {
-        tabClapets[k - 97].enFermeture = true;
-        fermeture = true;
-    }else if(k>=65 && k<=68 && !tabDistributeurs[k-65].enVidage){
-       	if(robot4.prendrePopcorn(tabDistributeurs[k-65])){
-        	tabDistributeurs[k - 65].enVidage = true;
-        	vidage = true;
-        }
-    }
-});*/
+
 
 var tabDistributeurs = [];
 for(var i=0;i<4;i++) {
@@ -107,27 +90,18 @@ for(var i=0;i<4;i++) {
 
 
 
-
-//var pied = creerPied("jaune",0,0.01,0);
 var tabPiedsJaunes = [];
 var tabPiedsVerts = [];
 
 initPieds(tabPiedsJaunes,tabPiedsVerts);
 
-var tabGobelets = [];
-//creerGobelet(tabGobelets,0,0.01,0);
-initGobelets(tabGobelets);
-//attention !!!!
-// tab est mis a jour  la fin seulement
+var tabGobelets = [];initGobelets(tabGobelets);
+
 
 var tabAmpoules = [];
 initAmpoules(tabAmpoules);
 
 
-//robot1 : grand
-//robot2: petit
-//robot3 : grand ennemi
-//robot4: petit ennemi
 
 
 window.addEventListener("keydown",function(event){
@@ -137,51 +111,41 @@ window.addEventListener("keydown",function(event){
 			robot4.fermerClapet(tabClapets[3]);
 			break;
 		case 86: 
-			//robot4.avancer(0.01);
 			robot4.enDeplacement = true;
 			robot4.aParcourir.valeur = 0.1;
 			robot4.aParcourir.sens = "avant";
 			break;
 		case 82:
-			//robot4.reculer(0.01);
 			robot4.enDeplacement = true;
 			robot4.aParcourir.valeur = 0.1;
 			robot4.aParcourir.sens = "arriere";
 			break;
 		case 71:
-			//robot4.tournerGauche(10);
 			robot4.enRotation = true;
 			robot4.aTourner.valeur = 45;
 			robot4.aTourner.sens = "gauche";
 			break;
 		case 72:
-			//robot4.tournerDroite(10);
 			robot4.enRotation = true;
 			robot4.aTourner.valeur = 45;
 			robot4.aTourner.sens = "droite";
 			break;
 		case 74:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabPiedsVerts[1]);
 			break;
 		case 75:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabPiedsVerts[2]);
 			break;
 		case 76:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabGobelets[2]);
 			break;
 		case 77:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabPiedsJaunes[1]);
 			break;
 		case 78:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.deposerObjet(0);
 			break;
 		case 79:
-			//robot4.prendreObjet(tabGobelets[1]);
 			robot4.prendreObjet(tabAmpoules[2]);
 			break;		
 	}
@@ -283,34 +247,43 @@ render();
 
 
 
-function commande(){
-	var robot = tabRobots[document.getElementById('selectRobot').value-1];
-	var action = document.getElementById('selectAction').value;
+function commande(action){
+	
+
+	var robot;
+
+	for(var i=0;i<4;i++)
+	{
+		if(document.formulaire.selectRobot[i].checked)
+			robot = document.formulaire.selectRobot[i].value;
+	}
+	console.log("robot : ",robot);
+	robot = tabRobots[robot-1];
+
+	if(!action)
+		action = document.getElementById('selectAction').value;
+
 	//console.log("robot = ",robot);
-	console.log("action = ",action);
+	//console.log("action = ",action);
 
 
 	switch(action){
 		case "avancer": 
-			//robot4.avancer(0.01);
 			robot.enDeplacement = true;
 			robot.aParcourir.valeur = 0.1;
 			robot.aParcourir.sens = "avant";
 			break;
 		case "reculer":
-			//robot4.reculer(0.01);
 			robot.enDeplacement = true;
 			robot.aParcourir.valeur = 0.1;
 			robot.aParcourir.sens = "arriere";
 			break;
 		case "tournerGauche":
-			//robot4.tournerGauche(10);
 			robot.enRotation = true;
 			robot.aTourner.valeur = 45;
 			robot.aTourner.sens = "gauche";
 			break;
 		case "tournerDroite":
-			//robot4.tournerDroite(10);
 			robot.enRotation = true;
 			robot.aTourner.valeur = 45;
 			robot.aTourner.sens = "droite";
@@ -335,19 +308,21 @@ function commande(){
 			for(var p=0;p<5 && !pris;p++)
 				if(robot.prendreObjet(tabGobelets[p]))
 					pris = true;
+			for(var a=0;a<4 && !pris;a++)
+				if(robot.prendreObjet(tabAmpoules[a]));
+					pris = true;
 			break;
 		case "deposerObjet":
 			robot.deposerObjet(0);
+			break;
+		case "fermerClapet":
+			var ferme = false;
+			for(var c=0;c<6 && !ferme;c++)
+				if(robot.fermerClapet(tabClapets[c]))
+					ferme = true;
 			break;
 	}
 
 }
 
-/* A ajouter 
-
-- gerer les ampoules
-- gerer la construction d'objets
-
-
-*/
 
