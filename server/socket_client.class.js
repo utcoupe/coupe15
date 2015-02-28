@@ -1,5 +1,4 @@
-var coupe15 = coupe15 || {};
-(function () {
+module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Client');
@@ -50,7 +49,5 @@ var coupe15 = coupe15 || {};
 		this.throwError('Server timed out, please make sure the server is still running.');
 	};
 
-	coupe15.SocketClient = SocketClient;
+	return SocketClient;
 })();
-
-var client = new coupe15.SocketClient();
