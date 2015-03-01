@@ -3,7 +3,7 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', function($scope)
 	$(document).on("click", "#rc_hok_start", function(e) {
 		client.send("hokuyo", "start", {
 			"color": "green",
-			"nbrobots": 4});
+			"nbrobots": 1});
 		console.log("Message `start` sent");
 	});
 

@@ -52,14 +52,19 @@
 
 		// Functions
 		function parseRobots(string) {
-			var dots = string.split("#");
-			for (var i = 0; i <= dots.length - 1; i++) {
-				dots[i] = dots[i].split(",");
-				dots[i][0] = parseInt(dots[i][0]);
-				dots[i][1] = parseInt(dots[i][1]);
-			};
-			logger.info('[J-HOK] Robots');
-			logger.info(dots);
+			var dots = "";
+			if(!!string){
+				dots = string.split("#");
+				for (var i = 0; i <= dots.length - 1; i++) {
+					dots[i] = dots[i].split(",");
+					dots[i][0] = dots[i][0];
+					dots[i][1] = dots[i][1];
+				};
+				logger.info('[J-HOK] Robots');
+				logger.info(dots);
+			} else {
+				logger.info('[J-HOK] No robot detected !');
+			}
 
 			// Send all robots
 			client.send("IA", "position_tous_robots", {dots: dots});

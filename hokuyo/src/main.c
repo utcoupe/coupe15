@@ -191,21 +191,21 @@ void frame(int nb_robots_to_find){
 			pushResults(robots, nRobots, timestamp);
 		// }
 		// else{
-		// 	fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
-		// 	for(int i=0; i<nRobots2; i++){
-		// 		fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
-		// 	}
-		// 	fprintf(logfile, "\n");
-		// 	fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
-		// 	for(int i=0; i<nRobots1; i++){
-		// 		fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
-		// 	}
-		// 	fprintf(logfile, "\n");
-		// 	fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
-		// 	for(int i=0; i<nRobots; i++){
-		// 		fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
-		// 	}
-		// 	fprintf(logfile, "\n");
+			fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
+			for(int i=0; i<nRobots2; i++){
+				fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
+			}
+			fprintf(logfile, "\n");
+			fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
+			for(int i=0; i<nRobots1; i++){
+				fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
+			}
+			fprintf(logfile, "\n");
+			fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
+			for(int i=0; i<nRobots; i++){
+				fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
+			}
+			fprintf(logfile, "\n");
 		// }
 	} else {
 		sleep(1);
