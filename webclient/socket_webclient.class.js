@@ -5,6 +5,7 @@ SocketWebclient = (function () {
 		this.server_host = server_host || (!!window.location.host?window.location.host:'localhost')+':3128';
 		this.socket = null;
 		this.callbacks = {};
+		this.type = this.getDeviceType();
 
 		if(io === undefined) {
 			this.errorSocketIoNotFound();
@@ -16,7 +17,7 @@ SocketWebclient = (function () {
 					type: 'webclient',
 					options: {
 						name: 'Webclient',
-						type: this.getDeviceType()
+						type: this.type
 					}
 				});
 				if(!!this.callbacks.connect)
@@ -67,8 +68,9 @@ SocketWebclient = (function () {
 	SocketWebclient.prototype.order = function (callback) {
 		this.callbacks.order = callback;
 	};
+
 	SocketWebclient.prototype.send = function (to, name, params) {
-		this.client.emit('order', {
+		this.socket.emit('order', {
 			to: to,
 			name: name,
 			params: params,

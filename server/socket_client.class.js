@@ -65,7 +65,7 @@ module.exports = (function () {
 			to: to,
 			name: name,
 			params: params,
-			from: this.type;
+			from: this.type
 		});
 	};
 

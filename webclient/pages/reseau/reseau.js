@@ -91,6 +91,7 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 
 	    // Update content size
 	    $("#page").height(0.95*($( window ).height() - $("#page").offset().top));
+	    // console.log(status);
 
 	    if (!!status && !!status.server){
 	        // Adds divs
@@ -110,14 +111,22 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 
 	        for(i in status.webclient) {
 	            client = status.webclient[i];
-	            // console.log(i);
 	            addDiv("2B1", i, client.type, "", client.name, client.ip);
 	        }
 
+	        for(i in status.hokuyo) {
+	            client = status.hokuyo[i];
+	            addDiv("2B3", i, "robot", "hokuyo", "Hokuyo", client.ip);
+	        }
 
-	        for(i in status.client) {
-	            client = status.client[i];
-	            addDiv("2B3", i, "robot", "", client.name, client.ip);
+	        for(i in status.gr) {
+	            client = status.gr[i];
+	            addDiv("2B3", i, "robot", "gr", "Oscar (GR)", client.ip);
+	        }
+
+	        for(i in status.pr) {
+	            client = status.pr[i];
+	            addDiv("2B3", i, "robot", "pr", "Cesar (PR)", client.ip);
 	        }
 
 
@@ -150,9 +159,8 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 		var div2OffsetTop = $("#"+div2Id).offset().top - $("#"+div2Id).parent().offset().top;
 	    var middleDiv1 =  div1OffsetTop + parseFloat($("#"+div1Id).parent().css("margin-top")) + $("#"+div1Id).outerHeight()/2;
 	    var middleDiv2 = div2OffsetTop + parseFloat($("#"+div2Id).parent().css("margin-top")) + $("#"+div2Id).outerHeight()/2;
-	    console.log("Milieu div " + $("#"+div1Id).offset().top + "-" + $("#"+div1Id).parent().offset().top + "=" + div1OffsetTop + "+ moitié:" + $("#"+div1Id).outerHeight() + "=" + middleDiv1);
 	    var widthCol = $("#"+colId).width();
-	    document.getElementById(colId).innerHTML += "<path d='M0," + middleDiv1 + " L" + widthCol + "," + middleDiv2 + "' class='link'/>";   
+	    document.getElementById(colId).innerHTML += "\n<path d='M0," + middleDiv1 + " L" + widthCol + "," + middleDiv2 + "' class='link'/>";   
 	}
 
 	function linkDivsArc (div1Id, div2Id, colId) {
@@ -232,7 +240,7 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 	/* --------- "Main" ------------- */
 	var status = {};
 
-	updateLayout(defaultStatus);
+	updateLayout(status);
 	// addServerEvents();
 
 

@@ -25,7 +25,9 @@ module.exports = (function () {
 			webclient: {},
 			ia: {},
 			simulator: {},
-			client: {}
+			hokuyo: {},
+			pr: {},
+			gr: {}
 		};
 
 		// When the client is connected
