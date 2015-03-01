@@ -116,7 +116,7 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 
 	        for(i in status.hokuyo) {
 	            client = status.hokuyo[i];
-	            addDiv("2B3", i, "robot", "hokuyo", "Hokuyo", client.ip);
+	            addDiv("2B3", i, "hok", "hokuyo", "Hokuyo", client.ip);
 	        }
 
 	        for(i in status.gr) {

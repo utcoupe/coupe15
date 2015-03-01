@@ -83,6 +83,11 @@ div.transparent{
 	background-position: 5% 50%;
 }
 
+.devicehok {
+	background: url('./img/radar8.png') no-repeat;
+	background-position: 5% 50%;
+}
+
 .devicetablet {
 	background: url('./img/tablet82.png') no-repeat;
 	background-size: 25%;
