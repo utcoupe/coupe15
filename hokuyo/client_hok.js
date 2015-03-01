@@ -62,7 +62,7 @@
 			logger.info(dots);
 
 			// Send all robots
-			client.send("IA", "position_tous_robots", {dots, dots});
+			client.send("IA", "position_tous_robots", {dots: dots});
 		}
 
 		function parseError(string) { // XXX TODO : report errors in C
