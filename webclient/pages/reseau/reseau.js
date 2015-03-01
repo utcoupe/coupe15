@@ -75,20 +75,22 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 
 	function centerBlocs () {
 	    // Centers divs "toBeCentered" verticaly
+
 	    var blocstoBeCentered = document.querySelectorAll(".toBeCentered");
 
 	    for(var i=0; i < blocstoBeCentered.length; i++) {
 	        var current = blocstoBeCentered[i];
-	        var currentSize = window.getComputedStyle(document.getElementById(current.id)).height.replace("px", "");
-	        var parentSize = window.getComputedStyle(document.getElementById(current.parentElement.id)).height.replace("px", "");
-	        current.style.marginTop = (parentSize - currentSize) / 2;
+	        var currentSize = $("#"+current.id).height();
+	        var parentSize =$("#"+current.id).parent().height();
+	        $("#"+current.id).css({ "margin-top": ((parentSize - currentSize) / 2)+"px" });
 	    }
 	}
 
 	function updateLayout (status) {
 	    clearColumns();
 
-
+	    // Update content size
+	    $("#page").height(0.95*($( window ).height() - $("#page").offset().top));
 
 	    if (!!status && !!status.server){
 	        // Adds divs
@@ -144,9 +146,12 @@ angular.module('app').controller('ReseauCtrl', ['$scope', function($scope) {
 	/* --------- Links ------------- */
 
 	function linkDivs (div1Id, div2Id, colId) {
-	    var middleDiv1 = document.getElementById(div1Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div1Id)).marginTop) + window.getComputedStyle(document.getElementById(div1Id)).height.replace("px", "")/2;
-	    var middleDiv2 = document.getElementById(div2Id).offsetTop + parseFloat(window.getComputedStyle(document.getElementById(div2Id)).marginTop) + window.getComputedStyle(document.getElementById(div2Id)).height.replace("px", "")/2;
-	    var widthCol = window.getComputedStyle(document.getElementById(colId)).width.replace("px", "");
+		var div1OffsetTop = $("#"+div1Id).offset().top - $("#"+div1Id).parent().offset().top;
+		var div2OffsetTop = $("#"+div2Id).offset().top - $("#"+div2Id).parent().offset().top;
+	    var middleDiv1 =  div1OffsetTop + parseFloat($("#"+div1Id).parent().css("margin-top")) + $("#"+div1Id).outerHeight()/2;
+	    var middleDiv2 = div2OffsetTop + parseFloat($("#"+div2Id).parent().css("margin-top")) + $("#"+div2Id).outerHeight()/2;
+	    console.log("Milieu div " + $("#"+div1Id).offset().top + "-" + $("#"+div1Id).parent().offset().top + "=" + div1OffsetTop + "+ moitié:" + $("#"+div1Id).outerHeight() + "=" + middleDiv1);
+	    var widthCol = $("#"+colId).width();
 	    document.getElementById(colId).innerHTML += "<path d='M0," + middleDiv1 + " L" + widthCol + "," + middleDiv2 + "' class='link'/>";   
 	}
 
