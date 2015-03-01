@@ -111,7 +111,7 @@
 		}
 
 		// Execute C program
-		var command = "./hokuyo";
+		var command = "./bin/hokuyo";
 		var init_wizard = 'no_init_wizard'; // idem
 		var nbr_hok = '4';
 		var args = [color, init_wizard, nbrobots];
