@@ -34,8 +34,11 @@ SocketWebclient = (function () {
 			this.socket.on('order', function(data){
 				// console.log('[Order to '+data.to+'] '+ data.text);
 				if(!!this.callbacks.order)
-					if (!!data.name)
+					if (!!data.name){
+						console.log("Order " + data.name + " from " + data.from + "with params :");
+						console.log(data.params);
 						this.callbacks.order(data.from, data.name, data.params || {});
+					}
 					else
 						console.log("Order has no name ! : " + data);
 			}.bind(this));
