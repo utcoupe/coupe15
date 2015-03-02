@@ -130,6 +130,7 @@ void frame(int nb_robots_to_find){
 	int nPts1 = 0, nPts2 = 0, nRobots1 = 0, nRobots2 = 0, nRobots;
 
 	if (hok1.isWorking && hok2.isWorking) {
+		pushInfo('2');
 		fprintf(logfile, "Both hokuyos working\n");
 		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
 		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
@@ -139,6 +140,7 @@ void frame(int nb_robots_to_find){
 			hok2.zone = temp;
 		}
 	} else { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
+		pushInfo('1');
 		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
 	}
 
@@ -191,23 +193,24 @@ void frame(int nb_robots_to_find){
 			pushResults(robots, nRobots, timestamp);
 		// }
 		// else{
-			fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
-			for(int i=0; i<nRobots2; i++){
-				fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
-			}
-			fprintf(logfile, "\n");
-			fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
-			for(int i=0; i<nRobots1; i++){
-				fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
-			}
-			fprintf(logfile, "\n");
-			fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
-			for(int i=0; i<nRobots; i++){
-				fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
-			}
-			fprintf(logfile, "\n");
+			// fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
+			// for(int i=0; i<nRobots2; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
+			// fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
+			// for(int i=0; i<nRobots1; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
+			// fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
+			// for(int i=0; i<nRobots; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
 		// }
 	} else {
+		pushInfo('0');
 		sleep(1);
 	}
 	lastTime = timestamp;

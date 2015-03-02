@@ -6,13 +6,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+// More information about communication in ../orders.json
+
 void sayHello();
 void pushResults(Cluster_t *coords, int nbr, long timestamp);
-void pushError(char error);
-
-/* ERROR CODES :
-	1 : one Hokuyo missing
-	2 : no Hokuyo connected
-*/
+void pushInfo(char info);
 
 #endif

@@ -59,7 +59,8 @@ Datas (string lines on stdout) from the C to the nodeJS :
 	"[DATA]12,345#233,544#1223,43#234,0\n"
 		Robots x,y separed with #
 
-	"[WARN]%c\n"
-		%c is the character error code :
+	"[INFO]%c\n"
+		%c is the character of the info code :
+			"2" : everything is ok !
 			"1" : one hokuyo missing
-			"2" : two hokuyos missing (Error : blind)
+			"0" : two hokuyos missing (Error : blind)

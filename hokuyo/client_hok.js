@@ -70,15 +70,19 @@
 			client.send("IA", "position_tous_robots", {dots: dots});
 		}
 
-		function parseError(string) { // XXX TODO : report errors in C
+		function parseInfo(string) { // XXX TODO : report errors in C
 			switch (string.substring(0,1)){
+				case "0":
+					// Send error : no Hokuyo working
+					client.send("IA", "nb_hokuyo", {nb: 0});
+					break;
 				case "1":
-					// Send error : one Hokuyo is missing
+					// Send warning : one Hokuyo is missing
 					client.send("IA", "nb_hokuyo", {nb: 1});
 					break;
 				case "2":
-					// Send error : 2 Hokuyos are missing
-					client.send("IA", "nb_hokuyo", {nb: 0});
+					// Send message : Hokuyos are ok
+					client.send("IA", "nb_hokuyo", {nb: 2});
 					break;
 				default:
 					logger.info("Error not understood : " + string);
@@ -102,7 +106,7 @@
 							parseRobots(inputAr[i].substring(6));
 							break;
 						case "WARN":
-							parseError(inputAr[i].substring(6));
+							parseInfo(inputAr[i].substring(6));
 							break;
 						default:
 							logger.info("Data "+ inputAr[i].substring(1,5) + "not understood at line " + i + " : " + inputAr[i]);
