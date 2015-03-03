@@ -1,8 +1,8 @@
 SocketWebclient = (function () {
 	"use strict";
 
-	function SocketWebclient(server_host) {
-		this.server_host = server_host || (!!window.location.host?window.location.host:'localhost')+':3128';
+	function SocketWebclient() {
+		this.server_host = window.location.host+':3128';
 		this.socket = null;
 		this.callbacks = {};
 		this.type = this.getDeviceType();
@@ -33,14 +33,17 @@ SocketWebclient = (function () {
 			});
 			this.socket.on('order', function(data){
 				// console.log('[Order to '+data.to+'] '+ data.text);
-				if(!!this.callbacks.order)
+				if(!!this.callbacks.orders) {
 					if (!!data.name){
 						console.log("Order " + data.name + " from " + data.from + "with params :");
 						console.log(data.params);
-						this.callbacks.order(data.from, data.name, data.params || {});
+						for(var i in this.callbacks.orders) {
+							this.callbacks.orders[i](data.from, data.name, data.params || {}, data.to);
+						}
 					}
 					else
 						console.log("Order has no name ! : " + data);
+				}
 			}.bind(this));
 
 			setTimeout(function() {
@@ -69,7 +72,9 @@ SocketWebclient = (function () {
 	};
 
 	SocketWebclient.prototype.order = function (callback) {
-		this.callbacks.order = callback;
+		if(!this.callbacks.orders)
+			this.callbacks.orders = [];
+		this.callbacks.orders.push(callback);
 	};
 
 	SocketWebclient.prototype.send = function (to, name, params) {

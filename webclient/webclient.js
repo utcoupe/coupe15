@@ -13,8 +13,8 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', function($scope) {
-	
+angular.module('app').controller('AppCtrl', ['$scope', 'Logger', function($scope, Logger) {
+	Logger.init();
 }]);
 
 angular.module('app').controller('MenuCtrl', ['$scope', function($scope) {
@@ -25,4 +25,4 @@ angular.module('app').controller('IndexCtrl', ['$scope', function($scope) {
 	
 }]);
 
-var client = new SocketWebclient();
+angular.module('app').service('Client', SocketWebclient);
