@@ -14,7 +14,8 @@ var scene= new THREE.Scene();
 var renderer = new THREE.WebGLRenderer({antialias:true});
 
 renderer.setSize(window.innerWidth,window.innerHeight*0.75);
-renderer.setClearColor(0xff8c00,0.5);
+renderer.setClearColor(0x272525,0.5);
+//renderer.setClearColor(0xff8c00,0.5);
 container.appendChild(renderer.domElement);
 
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
@@ -248,10 +249,7 @@ render();
 
 
 function commande(action){
-	
-
 	var robot;
-
 	for(var i=0;i<4;i++)
 	{
 		if(document.formulaire.selectRobot[i].checked)
@@ -318,8 +316,10 @@ function commande(action){
 		case "fermerClapet":
 			var ferme = false;
 			for(var c=0;c<6 && !ferme;c++)
-				if(robot.fermerClapet(tabClapets[c]))
+				if(robot.fermerClapet(tabClapets[c])){
+
 					ferme = true;
+				}
 			break;
 	}
 

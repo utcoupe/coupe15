@@ -274,7 +274,6 @@ function verifCollisionObjets(){
 			tabGobelets[i].scene.ok = false;
 			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
 			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0,b:0}; 
-	
 			console.log("collision GOBELETS - ROBOT !!!");
 		}
 	}
@@ -365,11 +364,7 @@ function verifCibleAtteignable(pos){
 	this.updatePoints();
 	var LIMITE = 0.4;
 	var a;
-	//console.log("point0 : ",this.points[0]);
-	//console.log("point1 : ",this.points[1]);
-	//console.log("pos : ",pos);
 	var d = dist(this.points[0],pos)+dist(this.points[1],pos);
-	//console.log("distance : ",d);
 	if(d<LIMITE){
 		if(angle(getVecteur(this.points[0],this.points[1]),getVecteur(this.points[0],pos))>=0)
 			return true;
@@ -420,6 +415,7 @@ function deposerObjet(num){
 
 		var objScene;
 		var decalage;
+		var objetDae = this.objetsTenus[num];
 		if(this.objetsTenus[num].scene){	 	 	 	 //si objet charge avec collada
 			objScene = this.objetsTenus[num].scene;
 			decalage = 0;
@@ -443,10 +439,35 @@ function deposerObjet(num){
 			}
 			this.objetsTenus.dessus -= objScene.hauteur;
 
+
+			console.log("objet depose : ",objScene);
+
+			//quand un objet est depose par un robot
+			//on change sa couleur pour indiquer qu'il n'est 
+			//plus a sa place initiale
+
+			if(objScene.type==="gobelet")
+			{
+				objetDae.dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
+				objetDae.dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0.5,b:0}; 
+			}else if(objScene.type==="piedvert")
+			{
+				console.log("piedvert",objetDae);
+				objetDae.dae.effects["vertPied-effect"].shader.material.color = {r:0,g:0.2,b:0};
+			}else if(objScene.type==="piedjaune")
+			{
+				console.log("piedjaune",objetDae);
+				objetDae.dae.effects["Material-effect"].shader.material.color = {r:0.2,g:0.2,b:0};
+			}
+
+
+
 			scene.add(objScene);
 			objScene.position.set(cible.x,cible.y,cible.z);
 			this.objetsTenus.splice(num,1);
 			this.objetsTenus.nombre--;
+
+
 		}
 		console.log("this.objetsTenus : ",this.objetsTenus);
 	}
@@ -466,6 +487,7 @@ function fermerClapet(clapet){
 	if(clapet.etat==="ouvert" && this.verifCibleAtteignable(clapet.position)){
 		console.log("Fermeutre clapet");
 		clapet.enFermeture = true;
+		fermeture = true;
 		return true;
 	}
 	return false;
