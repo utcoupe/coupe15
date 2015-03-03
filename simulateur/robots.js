@@ -62,9 +62,20 @@ function creerRobotPrincipal(cote){
     robot.verifCollisionRobots = verifCollisionRobots;
 
     robot.prendreObjet = prendreObjet;
+    robot.deposerObjet = deposerObjet;
     robot.verifCibleAtteignable = verifCibleAtteignable;
 	robot.objetsTenus = [];
 	robot.objetsTenus.dessus = robot.hauteur/2 + 0.02;
+	robot.objetsTenus.nombre = 0;
+	robot.prendrePopcorn = prendrePopcorn;
+	robot.fermerClapet = fermerClapet;
+
+	robot.enDeplacement = false;
+	robot.aParcourir = {valeur : 0,sens : "avant"};
+	robot.enRotation = false;
+	robot.aTourner = {valeur:0,sens:'gauche'};
+	robot.vitesseDeplacement = 0.01;
+	robot.vitesseRotation = 1;
 
 
 
@@ -120,9 +131,21 @@ function creerRobotSecondaire(cote){
     rob.verifCollisionRobots = verifCollisionRobots;
 
     rob.prendreObjet = prendreObjet;
+    rob.deposerObjet = deposerObjet;
     rob.verifCibleAtteignable = verifCibleAtteignable;
     rob.objetsTenus = [];
     rob.objetsTenus.dessus = rob.hauteur/2 + 0.02;;
+	rob.objetsTenus.nombre = 0;
+	rob.prendrePopcorn = prendrePopcorn;
+	rob.fermerClapet = fermerClapet;
+
+
+	rob.enDeplacement = false;
+	rob.aParcourir = {valeur : 0,sens : "avant"};
+	rob.enRotation = false;
+	rob.aTourner = {valeur:0,sens:'gauche'};
+	rob.vitesseDeplacement = 0.01;
+	rob.vitesseRotation = 1;
 
 
 
@@ -135,28 +158,40 @@ function creerRobotSecondaire(cote){
 
 function avancer(d){
 	this.translateOnAxis(this.direction,d);
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.translateOnAxis(this.direction,-d);
+		return false;
+	}
+	return true;
 }
 
 function reculer(d){
 	this.translateOnAxis(this.direction,-d);
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.translateOnAxis(this.direction,d);
+		return false;
+	}
+	return true;
 }
 
 function tournerDroite(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y -= rad;
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.rotation.y += rad;
+		return false;
+	}
+	return true;
 }
 
 function tournerGauche(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y += rad;
-	if(!this.verifPosition())
+	if(!this.verifPosition()){
 		this.rotation.y -= rad;
+		return false;
+	}
+	return true;
 }
 
 function updatePoints(){
@@ -239,7 +274,6 @@ function verifCollisionObjets(){
 			tabGobelets[i].scene.ok = false;
 			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
 			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0,b:0}; 
-	
 			console.log("collision GOBELETS - ROBOT !!!");
 		}
 	}
@@ -299,10 +333,13 @@ function prendreObjet(objet){
 
 	//quand on robot tient un objet on l'affiche au-dessus
 	var objScene;
+	var decalage;	 //quand l'objet est cree avec threejs son centre est au milieu
 	if(objet.scene){	 	 	 	 //si objet charge avec collada
 		objScene = objet.scene;
+		decalage = 0;
 	}else{ 		 	 	 	 	 //si simple objet
 		objScene = objet;
+		decalage = objet.hauteur/2;
 	}
 	//console.log("objet  :",objet);
 	//console.log("objscene : ",objScene);
@@ -312,21 +349,14 @@ function prendreObjet(objet){
 		objScene.ok = false;
 		scene.remove(objScene);
 		this.add(objScene);
-		console.log("hatueur = ",this.position.y+this.hauteur/2 + this.objetsTenus.dessus + objScene.hauteur/2);
-		console.log("this.position.y = ",this.position.y);
-		console.log("this.hauteur/2 = ",this.hauteur/2);
-		console.log("this.objetsTenus.dessus  = ",this.objetsTenus.dessus );
-		console.log("objScene.hauteur/2 = ",objScene.hauteur/2);
-
-		var y = this.objetsTenus.dessus;
-		/*if(objScene.type==="pied")
-			y += objScene.hauteur /2 ;*/
-
-
-		objScene.position.set(0,y,0);//this.hauteur + this.objetsTenus.dessus,0);
+		objScene.position.set(0,this.objetsTenus.dessus+decalage,0);//this.hauteur + this.objetsTenus.dessus,0);
 		this.objetsTenus.dessus += objScene.hauteur + 0.01;
-	}else
+		this.objetsTenus.nombre++;
+		return true;
+	}else{
 		console.log("CIBLE NON ATTEIGNABLE !!!!!");
+	}
+	return false;
 	
 }
 
@@ -334,15 +364,9 @@ function verifCibleAtteignable(pos){
 	this.updatePoints();
 	var LIMITE = 0.4;
 	var a;
-	console.log("point0 : ",this.points[0]);
-	console.log("point1 : ",this.points[1]);
-	console.log("pos : ",pos);
 	var d = dist(this.points[0],pos)+dist(this.points[1],pos);
-	console.log("distance : ",d);
 	if(d<LIMITE){
-		a = angle(getVecteur(this.points[1],this.points[0]),getVecteur(this.points[0],pos));
-		console.log("angle = ",a);
-		if(a>=0)
+		if(angle(getVecteur(this.points[0],this.points[1]),getVecteur(this.points[0],pos))>=0)
 			return true;
 	}
 	return false;
@@ -379,4 +403,92 @@ function echangerPoints(tab,a,b){
 	tab[a].z = tab[b].z;
 	tab[b].x = xa;
 	tab[b].z = za;
+}
+
+
+
+function deposerObjet(num){
+	if(num>=0 && num<this.objetsTenus.nombre){
+
+		console.log("this.objetsTenus : ",this.objetsTenus);
+
+
+		var objScene;
+		var decalage;
+		var objetDae = this.objetsTenus[num];
+		if(this.objetsTenus[num].scene){	 	 	 	 //si objet charge avec collada
+			objScene = this.objetsTenus[num].scene;
+			decalage = 0;
+		}		else{ 		 	 	 	 	 //si simple objet
+			objScene = this.objetsTenus[num];
+			decalage = objScene.hauteur/2;
+		}
+		
+		var v1 = getVecteur(this.position,this.points[0]);
+		var v2 = getVecteur(this.position,this.points[1]);
+		var cible = {x:this.position.x+v1.x+v2.x,y:0.01+decalage,z : this.position.z+v1.z+v2.z};
+
+		if(verifPoint(cible)){
+			this.remove(objScene);
+
+			for(var i=num;i<this.objetsTenus.nombre;i++){
+				if(this.objetsTenus[i].scene)
+					this.objetsTenus[i].scene.position.y -= objScene.hauteur;    // ATTENTION à ce qui est dans le tableau this.objtenus ? 
+				else
+					this.objetsTenus[i].position.y -= objScene.hauteur; 
+			}
+			this.objetsTenus.dessus -= objScene.hauteur;
+
+
+			console.log("objet depose : ",objScene);
+
+			//quand un objet est depose par un robot
+			//on change sa couleur pour indiquer qu'il n'est 
+			//plus a sa place initiale
+
+			if(objScene.type==="gobelet")
+			{
+				objetDae.dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
+				objetDae.dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0.5,b:0}; 
+			}else if(objScene.type==="piedvert")
+			{
+				console.log("piedvert",objetDae);
+				objetDae.dae.effects["vertPied-effect"].shader.material.color = {r:0,g:0.2,b:0};
+			}else if(objScene.type==="piedjaune")
+			{
+				console.log("piedjaune",objetDae);
+				objetDae.dae.effects["Material-effect"].shader.material.color = {r:0.2,g:0.2,b:0};
+			}
+
+
+
+			scene.add(objScene);
+			objScene.position.set(cible.x,cible.y,cible.z);
+			this.objetsTenus.splice(num,1);
+			this.objetsTenus.nombre--;
+
+
+		}
+		console.log("this.objetsTenus : ",this.objetsTenus);
+	}
+}
+
+
+function prendrePopcorn(distri){
+	if(distri.tailleReservoir>0 && this.verifCibleAtteignable({x:distri.x,z:distri.z})){
+		var pop = distri.vider();
+		this.prendreObjet(pop);
+		return true;
+	}else
+		return false;
+}
+
+function fermerClapet(clapet){
+	if(clapet.etat==="ouvert" && this.verifCibleAtteignable(clapet.position)){
+		console.log("Fermeutre clapet");
+		clapet.enFermeture = true;
+		fermeture = true;
+		return true;
+	}
+	return false;
 }

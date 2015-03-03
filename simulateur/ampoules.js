@@ -5,6 +5,8 @@ function creerAmpoule(pos){
     var mat = new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSide});
     var ampoule = new THREE.Mesh(geo,mat);
     ampoule.position.set(pos.x,pos.y,pos.z);
+    ampoule.ok = true;
+    ampoule.hauteur = 0.065;
     scene.add(ampoule);
     return ampoule;
 }

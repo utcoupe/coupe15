@@ -6,12 +6,12 @@
         <style type = "text/css">
             #container{
                 position: absolute;
-                top :0;
+                top : 50;
                 left :0;
                 right :0;
                 bottom :0;
                 z-index :5;
-                height: 100%;
+                height: 75%;
             }
             body{
                 margin: 0;
@@ -29,6 +29,39 @@
       <!--  <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>-->
 
         <div id="container"></div>
+
+        <form name="formulaire">
+            <p>   
+                <input type="radio" id="selectRobot" name="selectRobot" value="1" style="width:25px;height:25px">Robot principale gauche
+                <input type="radio" name="selectRobot" id="selectRobot" value="2" style="width:25px;height:25px">Robot secondaire gauche
+                <input type="radio" name="selectRobot" id="selectRobot" value="4" style="width:25px;height:25px">Robot secondaire droite
+                <input type="radio" name="selectRobot" id="selectRobot" value="3" style="width:25px;height:25px">Robot principale droite
+            </p>
+
+            <p>
+                <table>
+                <tr>
+                    <td></td>
+                    <td><input type="button" value="Avancer" onClick="commande('avancer')"></td>
+                    <td></td>
+                    <td>     </td>
+                    <td></td>
+                    <td><input type="button" value="Prendre" onClick="commande('prendreObjet')"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> <input type="button" value="Gauche" onClick="commande('tournerGauche')"></td>
+                    <td> <input type="button" value="Reculer" onClick="commande('reculer')"></td>
+                    <td> <input type="button" value="Droite" onClick="commande('tournerDroite')"></td>
+                    <td>     ..............   </td>
+                    <td> <input type="button" value="Popcorn" onClick="commande('prendrePopcorn')"> </td>
+                    <td> <input type="button" value="Deposer" onClick="commande('deposerObjet')"></td>
+                    <td> <input type="button" value="Fermer" onClick="commande('fermerClapet')"></td>
+                </tr>
+                </table>
+            </p>
+        </form>
+
         <script src="js/three.min.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/ColladaLoader.js"></script>
