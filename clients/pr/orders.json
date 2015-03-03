@@ -1,0 +1,10 @@
+These are the different orders exchanged between the PR client and the AI.
+
+	{
+		"to": "pr",
+		"name": "servo_goto",
+		"params": {
+			"servo": 00,
+			"position": 0->1
+		}
+	}

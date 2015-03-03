@@ -1,24 +1,22 @@
 body{
 	margin: 0px;
-	font-family: 'Ubuntu', sans-serif;
 	display: block;
 }
 
 #page{
-	width: 97%;
 	margin: auto;
 }
 
 .rects{
 	width: 20%;
-	height: 80%;
+	height: 100%;
 	text-align: center;
 	float: left;
 }
 
 .arrows{
 	width: 6.65%;
-	height: 80%;
+	height: 100%;
 	float: left;
 }
 
@@ -36,17 +34,6 @@ body{
 
 .toBeCentered {
 	max-height: 100%;
-}
-
-textarea {
-	width: 90%;
-	height: 19%;
-}
-
-#updateGetClients {
-	vertical-align: top;
-	width: 9%;
-	height: 19%;
 }
 
 div.green{
@@ -96,6 +83,11 @@ div.transparent{
 	background-position: 5% 50%;
 }
 
+.devicehok {
+	background: url('./img/radar8.png') no-repeat;
+	background-position: 5% 50%;
+}
+
 .devicetablet {
 	background: url('./img/tablet82.png') no-repeat;
 	background-size: 25%;
@@ -107,7 +99,7 @@ h3 {
 	margin-top: 0px;
 }
 
-.link {
+path {
 	stroke:lightblue;
 	stroke-width: 1.25px;
 	fill: none;

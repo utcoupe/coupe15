@@ -52,6 +52,4 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 */
 int isIn(int e, int *tab, int tab_size);
 
-char* parse2JSON(Cluster_t *coords, int nbr);
-
 #endif

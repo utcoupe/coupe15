@@ -4,3 +4,9 @@ build/
 __pycache__/
 node_modules/
 *.sublime*
+hokuyo/bin/hokuyo
+CMakeCache*
+CMakeFiles*
+cmake_install*
+Makefile
+hokuyo/socket_client.class.js

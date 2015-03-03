@@ -1,23 +1,31 @@
-var coupe15 = coupe15 || {};
-(function () {
+module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Client');
 
-	function SocketClient(server_ip) {
-		this.server_ip = server_ip || '127.0.0.1:3128';
+	function SocketClient(params) {
+		this.server_ip = params.server_ip || '127.0.0.1:3128';
 		this.client = require('socket.io-client')('http://'+this.server_ip);
+		this.callbacks = {};
+
+		if(!!params.type)
+			this.type = params.type;
+		else
+			logger.error("Missing client type.");
 
 		// When the client is connected to the server
 		this.client.on('connect', function(){
 			this.client.emit('type', {
-				type: 'client',
+				type: this.type,
 				options: {
-					name: 'Client'
+					name: this.type
 				}
 			});
+			if(!!this.callbacks.connect)
+				this.callbacks.connect();
 			// this.client.emit('order', {to:'client2',text:'Hello!'});
 		}.bind(this));
+
 		// When the client is disconnected to the server
 		this.client.on('disconnect', function(){
 			this.errorServerTimeout();
@@ -27,9 +35,15 @@ var coupe15 = coupe15 || {};
 		this.client.on('log', function(data){
 			logger.info('[Server log] '+data);
 		}.bind(this));
+
 		// When the client receive order from the server
 		this.client.on('order', function(data){
-			logger.info('[Order to '+data.to+'] '+data.text);
+			// logger.info('[Order to '+data.to+'] '+data.text);
+			if(!!this.callbacks.order)
+				if (!!data.name)
+					this.callbacks.order(data.from, data.name, data.params || {});
+				else
+					logger.error("Order has no name ! : " + data);
 		}.bind(this));
 
 		// If after 500ms the client isn't connected, throw "server not found" error
@@ -38,6 +52,22 @@ var coupe15 = coupe15 || {};
 				this.errorServerNotFound();
 		}.bind(this), 500);
 	}
+
+	SocketClient.prototype.connect = function (callback) {
+		this.callbacks.connect = callback;
+	};
+
+	SocketClient.prototype.order = function (callback) {
+		this.callbacks.order = callback;
+	};
+	SocketClient.prototype.send = function (to, name, params) {
+		this.client.emit('order', {
+			to: to,
+			name: name,
+			params: params,
+			from: this.type
+		});
+	};
 
 	// Error functions
 	SocketClient.prototype.throwError = function (msg) {
@@ -50,7 +80,5 @@ var coupe15 = coupe15 || {};
 		this.throwError('Server timed out, please make sure the server is still running.');
 	};
 
-	coupe15.SocketClient = SocketClient;
+	return SocketClient;
 })();
-
-var client = new coupe15.SocketClient();

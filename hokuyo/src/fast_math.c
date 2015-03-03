@@ -5,6 +5,8 @@
 #include "fast_math.h"
 #include "hokuyo_config.h"
 
+extern FILE* logfile;
+
 
 static inline int max(int a,int b){ return (a>b) ? a : b ; }
 static inline int min(int a,int b){ return (a<b) ? a : b ; }
@@ -35,15 +37,15 @@ initFastmath(int n, double *angles, double headingError)
 	r.cos = malloc(sizeof(double) * n);
 	r.sin = malloc(sizeof(double) * n);
 	if(r.cos == NULL || r.sin == NULL) {
-		printf("\n%sFatal error in mallocs > initFastmath...\n", PREFIX);
+		fprintf(stderr, "\n%sFatal error in mallocs > initFastmath...\n", PREFIX);
 		exit(EXIT_FAILURE);
 	}
 
-	//printf("Should print anles from -90 to 0\n");
+	//fprintf(logfile, "Should print anles from -90 to 0\n");
 	for(int i=0; i<n; i++){
 		r.cos[i] = cos(angles[i]);
 		r.sin[i] = sin(angles[i]);
-		//printf("%f\tx:%f\ty:%f\n", angles[i]*180/PI, r.cos[i], r.sin[i]);
+		//fprintf(logfile, "%f\tx:%f\ty:%f\n", angles[i]*180/PI, r.cos[i], r.sin[i]);
 	}
 
 	return r;
@@ -65,7 +67,7 @@ freeFastmath(struct fastmathTrigo s)
 double
 fastCos(struct fastmathTrigo f, int index)
 {
-	//printf("asked fastCos(%i)=%lf\n", index, f.cos[index]);
+	//fprintf(logfile, "asked fastCos(%i)=%lf\n", index, f.cos[index]);
 	return f.cos[index];
 }
 

@@ -19,27 +19,24 @@ void frame(int nb_robots_to_find);
 static int use_protocol = 0, symetry = 0;
 static long timeStart = 0;
 static Hok_t hok1, hok2;
+FILE* logfile;
 
 void exit_handler() {
 	int status;
-	printf("\n%sClosing lidar(s), please wait...\n", PREFIX);
+	fprintf(logfile, "\n%sClosing lidar(s), please wait...\n", PREFIX);
 	if (hok1.urg != 0)
 		urg_disconnect(hok1.urg);
 	if (hok2.urg != 0)
 		urg_disconnect(hok2.urg);
 
-	if (use_protocol = 1){
-		printf("\n%sClosing socket, please wait...\n", PREFIX);
-		close_protocol();
-	}
-
-
-	printf("%sWaiting for nodeJS son to quit...\n", PREFIX);
-	wait(&status);
-
 	// XXX on ne free rien ? genre nos hok et tout ?
-	printf("%sExitting\n", PREFIX);
-	kill(getppid(), SIGUSR1); //Erreur envoyee au pere
+
+	fflush(logfile);
+	if (logfile != NULL){
+		fprintf(logfile, "\n%sClosing log file and exiting, please wait...\n", PREFIX);
+		fclose(logfile);
+	}
+	// kill(getppid(), SIGUSR1); //Erreur envoyee au pere
 }
 
 static void catch_SIGINT(int signal){
@@ -47,34 +44,36 @@ static void catch_SIGINT(int signal){
 }
 
 int main(int argc, char **argv){
+	// Disable buffering on stdout
+	setvbuf(stdout, NULL, _IOLBF, 0);
+
 	int calib = 1, nb_robots_to_find = 4;
-	char *path = 0;
 	hok1.urg = 0;
 	hok2.urg = 0;
+
+	// Open log file
+	logfile = fopen("/home/mewen/hokuyo.log", "a+");
+	if (logfile == NULL) {
+		fprintf(stderr, "Can't open log file\n");
+		exit(EXIT_FAILURE);
+	}
+	fprintf(logfile, "\n\n===== Starting Hokuyo =====\n");
+	sayHello();
 
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [path_sock] [nbr_hok]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [nbr_robots]\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (signal(SIGINT, catch_SIGINT) == SIG_ERR) {
-        fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
+		fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
 		exit(EXIT_FAILURE);
-    }
-	
-	if (argc >= 4) { // XXX à améliorer (voir l. 79 aussi) : soit on calibre (=debug, inutile pour le moment), soit on communique
-		path = argv[3];
-		if (strcmp(path, "nocalib") == 0) {
-			calib = 0;
-		} else {
-			use_protocol = 1;
-		}
-	}
+	 }
 
-	if (argc >= 5) {
-		nb_robots_to_find = atoi(argv[4]);
+	if (argc >= 4) {
+		nb_robots_to_find = atoi(argv[3]);
 	} else {
 		nb_robots_to_find = MAX_ROBOTS;
 	}
@@ -101,17 +100,18 @@ int main(int argc, char **argv){
 	initSDL();
 	#endif
 
-	if (use_protocol) {
-		init_protocol(path); // Attente de l'ordre de départ du match
-	}
+	// if (use_protocol) {
+	// 	 init_protocol(path); // Attente de l'ordre de départ du match
+	// }
 
-	printf("%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);
+	fprintf(logfile, "%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);
+	fflush(stdout);
 	timeStart = timeMillis();
 	long time_last_try = 0;
 	while(1){
 		long now = timeMillis();
 		if (now - time_last_try > TIMEOUT) {
-			printf("%sChecking hokuyos\n", PREFIX);
+			fprintf(logfile, "%sChecking hokuyos\n", PREFIX);
 			checkAndConnect(&hok1);
 			checkAndConnect(&hok2);
 			time_last_try = now;
@@ -130,7 +130,8 @@ void frame(int nb_robots_to_find){
 	int nPts1 = 0, nPts2 = 0, nRobots1 = 0, nRobots2 = 0, nRobots;
 
 	if (hok1.isWorking && hok2.isWorking) {
-		printf("Both hokuyos working\n");
+		pushInfo('2');
+		fprintf(logfile, "Both hokuyos working\n");
 		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
 		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
 		if (symetry) {
@@ -139,6 +140,7 @@ void frame(int nb_robots_to_find){
 			hok2.zone = temp;
 		}
 	} else { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
+		pushInfo('1');
 		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
 	}
 
@@ -160,19 +162,19 @@ void frame(int nb_robots_to_find){
 
 
 		timestamp = timeMillis() - timeStart;
-		//printf("%sDuration : %ld\n", PREFIX,timeMillis() - start_t);
-		//printf("%sGot %d and %d points\n", PREFIX, nPts1, nPts2);
+		//fprintf(logfile, "%sDuration : %ld\n", PREFIX,timeMillis() - start_t);
+		//fprintf(logfile, "%sGot %d and %d points\n", PREFIX, nPts1, nPts2);
 
 		nRobots1 = getClustersFromPts(pts1, nPts1, robots1);
 		nRobots2 = getClustersFromPts(pts2, nPts2, robots2);
 
-		//printf("%sCalculated %d and %d clusters\n", PREFIX, nRobots1, nRobots2);
+		//fprintf(logfile, "%sCalculated %d and %d clusters\n", PREFIX, nRobots1, nRobots2);
 
 		nRobots1 = sortAndSelectRobots(nRobots1, robots1, nb_robots_to_find);
 		nRobots2 = sortAndSelectRobots(nRobots2, robots2, nb_robots_to_find);
 
 		nRobots = mergeRobots(robots1, nRobots1, robots2, nRobots2, robots, nb_robots_to_find);
-		//printf("%sGot %d robots\n", PREFIX, nRobots);
+		//fprintf(logfile, "%sGot %d robots\n", PREFIX, nRobots);
 		
 		#ifdef SDL
 		struct color l1Color = {255, 0, 0}, l2Color = {0, 0, 255}, lColor = {255, 0, 255};
@@ -187,27 +189,28 @@ void frame(int nb_robots_to_find){
 		waitScreen();
 		#endif
 
-		if (use_protocol){
+		// if (use_protocol){
 			pushResults(robots, nRobots, timestamp);
-		}
-		else{
-			printf("%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
-			for(int i=0; i<nRobots2; i++){
-				printf(";;%i:%i", robots2[i].center.x, robots2[i].center.y);
-			}
-			printf("\n");
-			printf("%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
-			for(int i=0; i<nRobots1; i++){
-				printf(";;%i:%i", robots1[i].center.x, robots1[i].center.y);
-			}
-			printf("\n");
-			printf("%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
-			for(int i=0; i<nRobots; i++){
-				printf(";;%i:%i", robots[i].center.x, robots[i].center.y);
-			}
-			printf("\n");
-		}
+		// }
+		// else{
+			// fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
+			// for(int i=0; i<nRobots2; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
+			// fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
+			// for(int i=0; i<nRobots1; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
+			// fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
+			// for(int i=0; i<nRobots; i++){
+			// 	fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
+			// }
+			// fprintf(logfile, "\n");
+		// }
 	} else {
+		pushInfo('0');
 		sleep(1);
 	}
 	lastTime = timestamp;

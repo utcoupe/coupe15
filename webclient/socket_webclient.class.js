@@ -1,10 +1,11 @@
-var coupe15 = coupe15 || {};
-(function () {
+SocketWebclient = (function () {
 	"use strict";
 
 	function SocketWebclient(server_host) {
 		this.server_host = server_host || (!!window.location.host?window.location.host:'localhost')+':3128';
 		this.socket = null;
+		this.callbacks = {};
+		this.type = this.getDeviceType();
 
 		if(io === undefined) {
 			this.errorSocketIoNotFound();
@@ -16,9 +17,11 @@ var coupe15 = coupe15 || {};
 					type: 'webclient',
 					options: {
 						name: 'Webclient',
-						type: this.getDeviceType()
+						type: this.type
 					}
 				});
+				if(!!this.callbacks.connect)
+					this.callbacks.connect();
 				// this.socket.emit('order', {to:'webclient',text:'Hello!'});
 			}.bind(this));
 			this.socket.on('disconnect', function(){
@@ -29,8 +32,16 @@ var coupe15 = coupe15 || {};
 				console.log('[Server log] '+data);
 			});
 			this.socket.on('order', function(data){
-				console.log('[Order to '+data.to+'] '+ data.text);
-			});
+				// console.log('[Order to '+data.to+'] '+ data.text);
+				if(!!this.callbacks.order)
+					if (!!data.name){
+						console.log("Order " + data.name + " from " + data.from + "with params :");
+						console.log(data.params);
+						this.callbacks.order(data.from, data.name, data.params || {});
+					}
+					else
+						console.log("Order has no name ! : " + data);
+			}.bind(this));
 
 			setTimeout(function() {
 				if(this.socket.disconnected)
@@ -53,6 +64,23 @@ var coupe15 = coupe15 || {};
 		}
 	};
 
+	SocketWebclient.prototype.connect = function (callback) {
+		this.callbacks.connect = callback;
+	};
+
+	SocketWebclient.prototype.order = function (callback) {
+		this.callbacks.order = callback;
+	};
+
+	SocketWebclient.prototype.send = function (to, name, params) {
+		this.socket.emit('order', {
+			to: to,
+			name: name,
+			params: params,
+			from: this.type
+		});
+	};
+
 	// Error functions
 	SocketWebclient.prototype.error = function (msg, reload) {
 		$('#webclient').html('<p class="error" ><strong>Error</strong>: '+msg+'</p>');
@@ -67,7 +95,5 @@ var coupe15 = coupe15 || {};
 		this.error('socket.io.js not found.<br />Please make sure you are in webclient/ folder.', false);
 	};
 
-	coupe15.SocketWebclient = SocketWebclient;
+	return SocketWebclient;
 })();
-
-var socket = new coupe15.SocketWebclient();

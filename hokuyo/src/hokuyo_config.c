@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <unistd.h> // pour sleep() uniquement
 
+extern FILE* logfile;
+
 
 Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt) {
 	int error, i;
@@ -29,39 +31,39 @@ Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max,
 void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 	Angles_t errors;
 
-	printf("%sLaunching initWizard...\n", PREFIX);
+	fprintf(logfile, "%sLaunching initWizard...\n", PREFIX);
 
 	// Début de l'initialisation du premier Hokuyo
-	printf("%sPut the 1st hokuyo on the platform which is in front of the public,\n", PREFIX);
+	fprintf(logfile, "%sPut the 1st hokuyo on the platform which is in front of the public,\n", PREFIX);
 	if (symetry == 0) // On est vert
-		printf("%son the left-hand side.\n", PREFIX);
+		fprintf(logfile, "%son the left-hand side.\n", PREFIX);
 	else
-		printf("%son the right-hand side.\n", PREFIX);
-	printf("%sIt must look to the other side.\n", PREFIX);
-	printf("%sOnce done, please plug it into the Rasp (press any key to continue)\n", PREFIX);
+		fprintf(logfile, "%son the right-hand side.\n", PREFIX);
+	fprintf(logfile, "%sIt must look to the other side.\n", PREFIX);
+	fprintf(logfile, "%sOnce done, please plug it into the Rasp (press any key to continue)\n", PREFIX);
 	getchar(); // en attendant un ENTER
 	// boucle de vérification qu'il est branché
 	while (!hok1->isWorking) {
 		checkAndConnect(hok1);
 		sleep(1);
 	}
-	printf("%sOk, first hokuyo detected !\n", PREFIX);
+	fprintf(logfile, "%sOk, first hokuyo detected !\n", PREFIX);
 
-	printf("%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
+	fprintf(logfile, "%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
 	getchar(); // en attendant un ENTER
 	// boucle de vérification de l'assiette
 	do{
 		if (hok1->isWorking){
 			errors = frameWizard (hok1, 4, symetry);
 
-			printf("%f %f\n", errors.pitch, errors.heading);
+			fprintf(logfile, "%f %f\n", errors.pitch, errors.heading);
 
 			if ((errors.pitch == -1.) && (errors.heading == -1.)){
-				printf("%sHokuyo disconnected\n", PREFIX);
+				fprintf(logfile, "%sHokuyo disconnected\n", PREFIX);
 				continue;
 			} else {
 				if ((errors.pitch == -2.) && (errors.heading == -2.))
-					printf("%sCan't see the cone\n", PREFIX);
+					fprintf(logfile, "%sCan't see the cone\n", PREFIX);
 			}
 		} else {
 			checkAndConnect(hok1);
@@ -71,44 +73,44 @@ void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 	// une fois l'erreur suffisement petite
 	// prendre l'erreur ce cap
 	hok1->error = errors.heading;
-	printf("%sHeading error is %f grad = %f°\n", PREFIX, hok1->error, (hok1->error*180)/M_PI);
-	printf("%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
-	printf("%sOk, let's say that's good\n", PREFIX);
-	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
+	fprintf(logfile, "%sHeading error is %f grad = %f°\n", PREFIX, hok1->error, (hok1->error*180)/M_PI);
+	fprintf(logfile, "%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
+	fprintf(logfile, "%sOk, let's say that's good\n", PREFIX);
+	fprintf(logfile, "%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
 	getchar();
 
 
 	// Début de l'initialisation du second Hokuyo
-	printf("%sPut the 2nd hokuyo on the platform which on the side of the area,\n", PREFIX);
+	fprintf(logfile, "%sPut the 2nd hokuyo on the platform which on the side of the area,\n", PREFIX);
 	if (symetry == 0) // On est vert
-		printf("%son the right-hand side.\n", PREFIX);
+		fprintf(logfile, "%son the right-hand side.\n", PREFIX);
 	else
-		printf("%son the left-hand side.\n", PREFIX);
-	printf("%sIt must look to the other side.\n", PREFIX);
-	printf("%sOnce done, please plug it into the Rasp (press any key to continue)\n", PREFIX);
+		fprintf(logfile, "%son the left-hand side.\n", PREFIX);
+	fprintf(logfile, "%sIt must look to the other side.\n", PREFIX);
+	fprintf(logfile, "%sOnce done, please plug it into the Rasp (press any key to continue)\n", PREFIX);
 	getchar(); // en attendant un ENTER
 	// boucle de vérification qu'il est branché
 	while (!hok2->isWorking) {
 		checkAndConnect(hok2);
 		sleep(1);
 	}
-	printf("%sOk, 2nd hokuyo detected !\n", PREFIX);
+	fprintf(logfile, "%sOk, 2nd hokuyo detected !\n", PREFIX);
 
-	printf("%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
+	fprintf(logfile, "%sPut the mark on the nearest corner of the stairs. (press any key to continue)\n", PREFIX);
 	getchar(); // en attendant un ENTER
 	// boucle de vérification de l'assiette
 	do{
 		if (hok2->isWorking){
 			errors = frameWizard (hok2, 3, symetry);
 
-			printf("%f %f\n", errors.pitch, errors.heading);
+			fprintf(logfile, "%f %f\n", errors.pitch, errors.heading);
 
 			if ((errors.pitch == -1.) && (errors.heading == -1.)){
-				printf("%sHokuyo disconnected\n", PREFIX);
+				fprintf(logfile, "%sHokuyo disconnected\n", PREFIX);
 				continue;
 			} else {
 				if ((errors.pitch == -2.) && (errors.heading == -2.))
-					printf("%sCan't see the cone\n", PREFIX);
+					fprintf(logfile, "%sCan't see the cone\n", PREFIX);
 			}
 		} else {
 			checkAndConnect(hok2);
@@ -118,22 +120,22 @@ void initWizard (Hok_t *hok1, Hok_t *hok2, int symetry){
 	// une fois l'erreur suffisement petite
 	// prendre l'erreur ce cap
 	hok2->error = errors.heading;
-	printf("%sHeading error is %f grad = %f°\n", PREFIX, hok2->error, (hok2->error*180)/M_PI);
-	printf("%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
-	printf("%sOk, let's say that's good\n", PREFIX);
-	printf("%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
+	fprintf(logfile, "%sHeading error is %f grad = %f°\n", PREFIX, hok2->error, (hok2->error*180)/M_PI);
+	fprintf(logfile, "%sPitch error is %f grad = %f°\n", PREFIX, errors.pitch, (errors.pitch*180)/M_PI);
+	fprintf(logfile, "%sOk, let's say that's good\n", PREFIX);
+	fprintf(logfile, "%sThis hokuyo has been correctly configured (press any key to continue)\n", PREFIX);
 	getchar();
 
-	printf("%sWaiting for the match to start...\n", PREFIX);
+	fprintf(logfile, "%sWaiting for the match to start...\n", PREFIX);
 }
 
 
 void checkAndConnect(Hok_t *hok) {
 	if (!hok->isWorking) {
-		printf("%sHokuyo not connected, trying to connect to %s\n", PREFIX, hok->path);
+		fprintf(logfile, "%sHokuyo not connected, trying to connect to %s\n", PREFIX, hok->path);
 		int error = urg_connect(hok->urg, hok->path, 115200);
 		if (error < 0) {
-			printf("%sCan't connect to hokuyo : %s\n", PREFIX, urg_error(hok->urg));
+			fprintf(logfile, "%sCan't connect to hokuyo : %s\n", PREFIX, urg_error(hok->urg));
 			hok->isWorking = 0;
 		} else {
 			hok->imin = urg_rad2index(hok->urg, hok->cone_min);
@@ -142,12 +144,12 @@ void checkAndConnect(Hok_t *hok) {
 			urg_setCaptureTimes(hok->urg, UrgInfinityTimes);
 			error = urg_requestData(hok->urg, URG_MD, hok->imin, hok->imax);
 			if (error < 0) {
-				printf("%sCan't connect to hokuyo\n", PREFIX);
+				fprintf(logfile, "%sCan't connect to hokuyo\n", PREFIX);
 				hok->isWorking = 0;
 			} else {
-				printf("%sHokuyo connected\n", PREFIX);
+				fprintf(logfile, "%sHokuyo connected\n", PREFIX);
 				hok->isWorking = 1;
-				printf("%sRequesting data on indexes %d to %d from %s OK\n", PREFIX, hok->imin, hok->imax, hok->path);
+				fprintf(logfile, "%sRequesting data on indexes %d to %d from %s OK\n", PREFIX, hok->imin, hok->imax, hok->path);
 
 				hok->nb_data = urg_dataMax(hok->urg);
 				double *angles = malloc(hok->nb_data * sizeof(double));
@@ -158,7 +160,7 @@ void checkAndConnect(Hok_t *hok) {
 				hok->fm = initFastmath(hok->nb_data, angles, hok->error);
 				free(angles);
 				
-				printf("%sCalculted sin/cos data for %s\n", PREFIX, hok->path);
+				fprintf(logfile, "%sCalculted sin/cos data for %s\n", PREFIX, hok->path);
 			}
 		}
 	}
