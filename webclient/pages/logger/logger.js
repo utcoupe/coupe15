@@ -5,7 +5,6 @@ angular.module('app').controller('LoggerCtrl', ['$scope', 'Logger', '$interval',
 
 angular.module('app').service('Logger', ['Client', function(Client) {
 	this.orders = [];
-	this.deffered = $q.defer();
 	this.init = function () {
 		Client.order(function (from, name, data, to) {
 			this.orders.unshift({
@@ -16,7 +15,8 @@ angular.module('app').service('Logger', ['Client', function(Client) {
 			});
 		if(this.orders.length > 2000)
 			this.orders.pop();
-		this.callback();
+		if (!!this.callback)
+			this.callback();
 		}.bind(this));
 	};
 	this.onOrder = function (callback) {

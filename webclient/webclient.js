@@ -13,8 +13,9 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'Logger', function($scope, Logger) {
+angular.module('app').controller('AppCtrl', ['$scope', 'Logger', 'Reseau', function($scope, Logger, Reseau) {
 	Logger.init();
+	Reseau.init();
 }]);
 
 angular.module('app').controller('MenuCtrl', ['$scope', function($scope) {
