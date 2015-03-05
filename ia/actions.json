@@ -1,0 +1,70 @@
+{
+	"actions":[
+		{
+			"type": "plot",
+			"owner": "pr",
+			"name": "empiler1.1",
+			"color": "green",
+			"object": "plot__blcorner1",
+			"startpoints": [{
+				"x": 120,
+				"y": 200,
+				"a": 50
+			}],
+			"priority": 1,
+			"duration": 4000,
+			"orders":[{
+				"name": "pile_up_red",
+				"params": {}
+				}],
+			"kill": "empiler1.2"
+		},
+		{
+			"type": "plot",
+			"owner": "pr",
+			"name": "empiler1.2",
+			"color": "green",
+			"object": "plot__blcorner1",
+			"startpoints": [{
+				"x": 120,
+				"y": 200,
+				"a": 230
+			}],
+			"priority": 1,
+			"duration": 4000,
+			"orders":[{
+				"name": "pile_up_blue",
+				"params": {}
+				}],
+			"kill": "empiler1.1"
+		},
+		{
+			"type": "clap",
+			"owner": "pr",
+			"name": "fermer1",
+			"color": "green",
+			"object": "clap__lside",
+			"startpoints": [{
+				"x": 240,
+				"y": 560,
+				"a": 0
+			}],
+			"priority": 1,
+			"duration": 2000,
+			"orders":[{
+				"name": "open_arm",
+				"params": {}
+				},
+				{
+				"name": "move",
+				"params": {
+					"to": {
+						"x": 400,
+						"y": 560
+					}
+				}
+				}],
+			"kill": null
+		}	
+	]
+}
