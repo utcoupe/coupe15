@@ -4,10 +4,18 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.pr');
 
 	function Pr() {
-		this.var = ;
+		this.pos;
+		this.pos.x;
+		this.pos.y;
+		this.pos.a;
+		this.size.l;
+		this.size.L;
+		this.size.d;
+		this.current_action;
+		this.path;
 	}
 
-	Pr.prototype.foo = function () {
+	Pr.prototype.onColision = function () {
 	};
 	
 	return Pr;

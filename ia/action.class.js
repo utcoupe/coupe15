@@ -4,7 +4,11 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.action');
 
 	function Action() {
-		this.var = ;
+		this.object_type;
+		this.start_point; // x, y, a
+		this.priority;
+		this.duration;
+		this.orders;
 	}
 
 	Action.prototype.foo = function () {

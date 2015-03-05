@@ -4,10 +4,15 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.actions');
 
 	function Actions() {
-		this.var = ;
+		this.done = [];
+		this.todo = [];
+		this.inprogess = [];
 	}
 
-	Actions.prototype.foo = function () {
+	Actions.prototype.createAction = function () {
+	};
+
+	Actions.prototype.init = function () {
 	};
 	
 	return Actions;
