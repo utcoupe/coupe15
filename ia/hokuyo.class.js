@@ -8,10 +8,10 @@ module.exports = (function () {
 		// this.PR = ??;
 		// this.GR = ??;
 
-		if (!!params.nb_robots)
-			this.nb_robots = params.nb_robots;
+		if (!!params.nb_erobots)
+			this.nb_robots = params.nb_erobots;
 		else
-			logger.error("How many robots is there ?");
+			logger.error("Number of ennemy robots ?");
 	}
 
 	Hokuyo.prototype.deleteOurRobots = function (dots) {
