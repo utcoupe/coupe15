@@ -1,7 +1,7 @@
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('IA');
+	var logger = log4js.getLogger('ia.hokuyo');
 
 	function Hokuyo(params) {
 		this.nb_hokuyo = 0;
@@ -21,15 +21,15 @@ module.exports = (function () {
 	Hokuyo.prototype.updateNumberOfRObots = function (nb) {
 		switch (nb){
 			case 0:
-				Hokuyo.nb_hokuyo = 0;
+				this.nb_hokuyo = 0;
 				// XXX TODO: Fatal error ! throw stopEverything !
 				break;
 			case 1:
-				Hokuyo.nb_hokuyo = 1;
+				this.nb_hokuyo = 1;
 				// XXX TODO : bigger security zone ? throw startAgain ?
 				break;
 			case 2:
-				Hokuyo.nb_hokuyo = 2;
+				this.nb_hokuyo = 2;
 				break;
 			default:
 				logger.info("Invalid number of robots received :" + nb);
@@ -39,14 +39,21 @@ module.exports = (function () {
 	Hokuyo.prototype.inputMessageHandler = function (data) {
 		switch (data.name){
 			case "position_tous_robots":
-				Hokuyo.deleteOurRobots(data.params.dots);
+				this.deleteOurRobots(data.params.dots);
 				break;
 			case "nb_hokuyo":
-				Hokuyo.updateNumberOfRObots(data.params.nb);
+				this.updateNumberOfRObots(data.params.nb);
 				break;
 			default:
 				logger.warn("Message name " + data.name + " not understood");
 		}
+	};
+
+	Hokuyo.prototype.isOk = function () {
+		if (this.nb_hokuyo == 0)
+			return false;
+		else
+			return true;
 	};
 
 	return Hokuyo;
