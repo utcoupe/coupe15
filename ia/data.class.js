@@ -4,7 +4,11 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.data');
 
 	function Data() {
-		this.var = ;
+		this.claps;
+		this.cylindres;
+		this.erobots;
+		this.gobelets;
+		this.chargeurs;
 	}
 
 	Data.prototype.foo = function () {

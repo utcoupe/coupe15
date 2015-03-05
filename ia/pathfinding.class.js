@@ -4,7 +4,6 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.pathfinding');
 
 	function Pathfinding() {
-		this.var = ;
 	}
 
 	Pathfinding.prototype.foo = function () {

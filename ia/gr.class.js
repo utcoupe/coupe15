@@ -4,7 +4,9 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.gr');
 
 	function Gr() {
-		this.var = ;
+		this.tapis_status;
+		this.orders;
+		this.path;
 	}
 
 	Gr.prototype.foo = function () {

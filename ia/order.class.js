@@ -4,10 +4,14 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.order');
 
 	function Order() {
-		this.var = ;
+		this.name;
+		this.from;
+		this.to;
+		this.params;
 	}
 
-	Order.prototype.foo = function () {
+	Order.prototype.send = function () {
+		// Sends an order to be executed
 	};
 	
 	return Order;

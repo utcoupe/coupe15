@@ -4,7 +4,10 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.erobot');
 
 	function Erobot() {
-		this.var = ;
+		this.pos;
+		this.pos.x;
+		this.pos.y;
+		this.diametre;
 	}
 
 	Erobot.prototype.foo = function () {
