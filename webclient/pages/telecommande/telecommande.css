@@ -4,7 +4,14 @@ input[type="range"]{
 	vertical-align: middle;
 }
 
+input[type="number"]{
+	width: 30%;
+	display: inline;
+	vertical-align: middle;
+}
+
 hr{
 	width: 50%;
 	color: gray;
+	margin-left: 0px;
 }

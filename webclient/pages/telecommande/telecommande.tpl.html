@@ -21,7 +21,7 @@
 	 <button type="button" class="btn" id="rc_hok_stop">stop</button>
 
 	<h2>PR</h2>
-	Moteur :
+	Numéro servo :
 	<select id="rc_pr_numservo">
 		<option value="0" default>0</option>
 		<option value="1" default>1</option>
@@ -29,10 +29,10 @@
 		<option value="3">3</option>
 		<option value="4">4</option> -->
 	</select> <br>
-	Position :
+	Position servo : 
 	<input type="range" id="rc_pr_pos" min="0" max="1" step="0.0009765" value="{{rc_pr_pos_value}}" ng-model="rc_pr_pos_value" ng-change="updatePosValue(rc_pr_pos_value)">
-	{{ rc_pr_pos_value }} <br>
-	<hr>
+	{{ rc_pr_pos_value }} <br><br>
+	
 	<table class="table" style="width: auto;">
 		<tr>
 			<td>
@@ -58,14 +58,35 @@
 		</tr>
 		<tr>
 			<td>
-				
+				Action personnalisée
 			</td>
 			<td>
-				<button type="button" class="btn" id="rc_pr_close" ng-click="prServoClose(rc_pr_servo1_min, rc_pr_servo2_min)">Fermer</button>
+				<button type="button" class="btn" id="rc_pr_close" ng-click="prServoClose1(rc_pr_servo1_min, rc_pr_servo2_min)">Fermer</button>
 			</td>
 			<td>
-				<button type="button" class="btn" id="rc_pr_open" ng-click="prServoOpen(rc_pr_servo1_max, rc_pr_servo2_max)">Ouvrir</button>
+				<button type="button" class="btn" id="rc_pr_open" ng-click="prServoOpen1(rc_pr_servo1_max, rc_pr_servo2_max)">Ouvrir</button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Action standard
+			</td>
+			<td>
+				<button type="button" class="btn" id="rc_pr_close" ng-click="prServoClose2()">Fermer</button>
+			</td>
+			<td>
+				<button type="button" class="btn" id="rc_pr_open" ng-click="prServoOpen2()">Ouvrir</button>
 			</td>
 		</tr>
 	</table>
+	<hr>
+
+	Position AX-12 : <input type="number" min="0" max="1023" step="5" class="form-control" id="rc_pr_AX12_pos" value="{{rc_pr_AX12_pos}}" ng-model="rc_pr_AX12_pos" ng-change="updateAX12PosValue(rc_pr_AX12_pos)">
+	<button type="button" class="btn" id="rc_pr_AX12_close" ng-click="prAX12Close()">Fermer</button>
+	<button type="button" class="btn" id="rc_pr_AX12_open" ng-click="prAX12Open()">Ouvrir</button>
+	<hr>
+	Position pas-à-pas : <input type="number" step="10" class="form-control" id="rc_pr_steppers_move" value="{{rc_pr_steppers_move}}" ng-model="rc_pr_steppers_move" ng-change="updateSteppersMoveValue(rc_pr_steppers_move)">
+	<button type="button" class="btn" id="rc_pr_steppers_set_bottom" ng-click="prSteppersSetBottom()">Définir la position basse</button>
+	<button type="button" class="btn" id="rc_pr_steppers_toogle" ng-click="prSteppersToogle()">Changer de position</button>
+	<br><br>
 </div>
