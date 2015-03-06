@@ -1,0 +1,310 @@
+{
+	"balle":{
+		"gauche":{
+			"diametre": 100,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":1250,
+				"y":1950
+			}
+		},
+		"droite":{
+			"diametre": 100,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":1750,
+				"y":1950
+			}
+		}
+	},
+	"chargeur":{
+		"1":{
+			"diametre": 70,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":300,
+				"y":35
+			}
+		},
+		"2":{
+			"diametre": 70,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":600,
+				"y":35
+			}
+		},
+		"3":{
+			"diametre": 70,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":2400,
+				"y":35
+			}
+		},
+		"4":{
+			"diametre": 70,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":2700,
+				"y":35
+			}
+		}
+	},
+	"clap":{
+		"1":{
+			"diametre": 0,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":320,
+				"y":2000
+			}
+		},
+		"2":{
+			"diametre": 0,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":620,
+				"y":2000
+			}
+		},
+		"3":{
+			"diametre": 0,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":920,
+				"y":2000
+			}
+		},
+		"4":{
+			"diametre": 0,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":2080,
+				"y":2000
+			}
+		},
+		"5":{
+			"diametre": 0,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":2380,
+				"y":2000
+			}
+		},
+		"6":{
+			"diametre": 0,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":2680,
+				"y":35
+			}
+		}
+
+	},
+	"cylindre":{
+		"front_left1":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":90,
+				"y":1750
+			}
+		},
+		"front_left2":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":90,
+				"y":1850
+			}
+		},
+		"middle_left1":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":870,
+				"y":1355
+			}
+		},
+		"middle_left2":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":1300,
+				"y":1400
+			}
+		},
+		"middle_left3":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":1100,
+				"y":1770
+			}
+		},
+		"rear_left":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":90,
+				"y":200
+			}
+		},
+		"stairs_left1":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":850,
+				"y":100
+			}
+		},
+		"stairs_left2":{
+			"diametre": 60,
+			"color": "yellow",
+			"status": "initial",
+			"pos": {
+				"x":850,
+				"y":200
+			}
+		},
+		"front_right1":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":1910,
+				"y":1750
+			}
+		},
+		"front_left2":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":1910,
+				"y":1850
+			}
+		},
+		"middle_left1":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":2130,
+				"y":1355
+			}
+		},
+		"middle_left2":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":1700,
+				"y":1400
+			}
+		},
+		"middle_left3":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":1900,
+				"y":1770
+			}
+		},
+		"rear_left":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":1910,
+				"y":200
+			}
+		},
+		"stairs_left1":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":2150,
+				"y":100
+			}
+		},
+		"stairs_left2":{
+			"diametre": 60,
+			"color": "green",
+			"status": "initial",
+			"pos": {
+				"x":2150,
+				"y":200
+			}
+		}
+	},
+	"gobelet":{
+		"front_left":{
+			"diametre": 95,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":250,
+				"y":1750
+			}
+		},
+		"middle_left":{
+			"diametre": 95,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":910,
+				"y":830
+			}
+		},
+		"middle":{
+			"diametre": 95,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":1500,
+				"y":1650
+			}
+		},
+		"middle_right":{
+			"diametre": 95,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":2090,
+				"y":830
+			}
+		},
+		"front_right":{
+			"diametre": 95,
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":2750,
+				"y":1750
+			}
+		}
+	}
+}

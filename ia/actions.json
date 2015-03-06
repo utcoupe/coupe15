@@ -5,7 +5,7 @@
 			"owner": "pr",
 			"name": "empiler1.1",
 			"color": "green",
-			"object": "plot__blcorner1",
+			"object": "cylindre__front_left1",
 			"startpoints": [{
 				"x": 120,
 				"y": 200,
@@ -24,7 +24,7 @@
 			"owner": "pr",
 			"name": "empiler1.2",
 			"color": "green",
-			"object": "plot__blcorner1",
+			"object": "cylindre__front_left1",
 			"startpoints": [{
 				"x": 120,
 				"y": 200,
@@ -43,7 +43,7 @@
 			"owner": "pr",
 			"name": "fermer1",
 			"color": "green",
-			"object": "clap__lside",
+			"object": "clap__2",
 			"startpoints": [{
 				"x": 240,
 				"y": 560,

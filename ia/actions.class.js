@@ -8,18 +8,20 @@ module.exports = (function () {
 		this.done = [];
 		this.todo = [];
 		this.inprogess = [];
+
+		this.todo = this.importActions();
 	}
 
-	Actions.prototype.import = function () {
+	Actions.prototype.importActions = function () {
+		var ret = require('./actions.json');
+		// Link "object" with exiting thing in the Data class XXX
+		return ret.actions;
 	};
 
 	Actions.prototype.do = function (action) { // XXX comment passer l'action en paramètres ? penser à passer l'IA
 		// Change action to state "in progress"
 		// Do action
 		// Change action and its "to be killed" actions to state done
-	};
-
-	Actions.prototype.init = function () {
 	};
 	
 	return Actions;
