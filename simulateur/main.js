@@ -325,4 +325,20 @@ function commande(action){
 
 }
 
+function exportChildrenToObject(children) {
+	var new_object = [], child, child2;
+	for(var i in children) {
+		child = children[i];
+		child2 = {};
+		child2.position = child.position;
+		child2.rotation = child.rotation;
+		child2.scale = child.scale;
+		// child2.children = exportChildrenToObject(child.children);
+		new_object.push(child2);
+	}
 
+	return new_object;
+}
+function sceneToJson(scene) {
+	return JSON.stringify(exportChildrenToObject(scene.children));
+}
