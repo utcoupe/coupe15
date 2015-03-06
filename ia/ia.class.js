@@ -5,24 +5,22 @@ module.exports = (function () {
 
 	function Ia(color, nb_erobots) {
 		if(!color) {
-			logger.fatal('Please give a color to ia');
+			logger.error('Please give a color to ia');
 		}
 		if(!nb_erobots) {
-			logger.fatal('Please give the number of ennemis robots');
+			logger.error('Please give the number of ennemis robots');
 		}
 		this.color = color;
 		this.nb_erobots = nb_erobots;
 
-		this.client = new (require('./socket_client.class.js'))({
-			type: 'ia'
-		});
-		this.pathfinding = new (require('./pathfinding.class.js'))();
-		this.data = new (require('./data.class.js'))();
-		this.gr = new (require('./gr.class.js'))();
-		this.pr = new (require('./pr.class.js'))();
-		this.hokuyo = new (require('./hokuyo.class.js'))({
-			nb_erobots: 1, // TODO param programme
+		this.client = new (require('./socket_client.class.js'))({type: 'ia'});
+		this.pathfinding = new (require('./pathfinding.class.js'))(this);
+		this.data = new (require('./data.class.js'))(this);
+		this.gr = new (require('./gr.class.js'))(this);
+		this.pr = new (require('./pr.class.js'))(this);
+		this.hokuyo = new (require('./hokuyo.class.js'))(this, {
 			color: this.color,
+			nb_erobots: this.nb_erobots
 		});
 
 	}

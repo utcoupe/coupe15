@@ -7,7 +7,8 @@ module.exports = (function () {
 
 	}
 
-	Pathfinding.prototype.foo = function () {
+	Pathfinding.prototype.getPath = function (start, end) {
+		var new_path = new Path([end]);
 	};
 	
 	return Pathfinding;

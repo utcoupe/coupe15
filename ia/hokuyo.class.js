@@ -3,7 +3,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.hokuyo');
 
-	function Hokuyo(params) {
+	function Hokuyo(ia, params) {
 		params = params || {};
 		this.nb_hokuyo = 0;
 		// this.PR = ??;
