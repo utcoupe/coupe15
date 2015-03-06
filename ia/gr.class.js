@@ -3,13 +3,15 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.gr');
 
-	function Gr() {
-		this.tapis_status;
-		this.orders;
-		this.path;
+	function Gr(ia) {
+		this.ia = ia;
+		this.tapis_status = null;
+		this.orders = null;
+		this.path = null;
 	}
 
-	Gr.prototype.foo = function () {
+	Pr.prototype.onColision = function () {
+		logger.warn("Collision du gros robot");
 	};
 	
 	return Gr;

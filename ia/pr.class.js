@@ -3,19 +3,24 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.pr');
 
-	function Pr() {
-		this.pos;
-		this.pos.x;
-		this.pos.y;
-		this.pos.a;
-		this.size.l;
-		this.size.L;
-		this.size.d;
-		this.current_action;
-		this.path;
+	function Pr(ia) {
+		this.ia = ia;
+		this.pos = {
+			x: 0,
+			y: 0,
+			a: 0
+		};
+		this.size = {
+			l: 0,
+			L: 0,
+			d: 0
+		};
+		this.current_action = null;
+		this.path = null;
 	}
 
 	Pr.prototype.onColision = function () {
+		logger.warn("Collision du petit robot");
 	};
 	
 	return Pr;
