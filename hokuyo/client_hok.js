@@ -1,3 +1,4 @@
+// TODO : penser à inverser l'axe des y !!!
 (function (){
 	"use strict";
 
@@ -11,8 +12,6 @@
 	var child_process = require('child_process');
 	var child;
 	var SocketClient = require('../server/socket_client.class.js');
-
-	var ourPositions = {};
 
 	var server = ""; // server adress
 	var client = new SocketClient({
@@ -45,8 +44,8 @@
 		// Exit handlers
 		//do something when app is closing
 		process.on('exit', quitC);
-		//catches ctrl+c event
-		// process.on('SIGINT', quitC);
+		// catches ctrl+c event
+		process.on('SIGINT', quitC);
 		//catches uncaught exceptions
 		process.on('uncaughtException', quitC);
 
@@ -67,10 +66,10 @@
 			}
 
 			// Send all robots
-			client.send("IA", "position_tous_robots", {dots: dots});
+			client.send("ia", "position_tous_robots", {dots: dots});
 		}
 
-		function parseInfo(string) { // XXX TODO : report errors in C
+		function parseInfo(string) {
 			switch (string.substring(0,1)){
 				case "0":
 					// Send error : no Hokuyo working
@@ -116,6 +115,7 @@
 		}
 
 		function quitC(){
+			logger.info("Closing child")
 			child.kill('SIGINT');
 		}
 

@@ -35,8 +35,8 @@ SocketWebclient = (function () {
 				// console.log('[Order to '+data.to+'] '+ data.text);
 				if(!!this.callbacks.orders) {
 					if (!!data.name){
-						console.log("Order " + data.name + " from " + data.from + "with params :");
-						console.log(data.params);
+						// console.log("Order " + data.name + " from " + data.from + "with params :");
+						// console.log(data.params);
 						for(var i in this.callbacks.orders) {
 							this.callbacks.orders[i](data.from, data.name, data.params || {}, data.to);
 						}
