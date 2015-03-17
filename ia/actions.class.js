@@ -13,13 +13,20 @@ module.exports = (function () {
 	}
 
 	Actions.prototype.importActions = function () {
-		var ret = require('./actions.json');
+		var req = require('./actions.json');
+		var actions = req.actions;
+
 		// Link "object" with exiting thing in the Data class XXX
+		for (var i = 0; i < actions.length; i++) {
+			actions[i].object = data.getObjectRef(actions[i].objectname);
+		};
+
 		// Bind do function to each object ?
-		return ret.actions;
+
+		return actions;
 	};
 
-	Actions.prototype.do = function (action) { // XXX comment passer l'action en paramètres ? penser à passer l'IA
+	Actions.prototype.do = function (action) { // XXX comment passer l'action en paramètres ?
 		// Change action to state "in progress"
 		this.inprogress.push(this.todo[action]);
 		delete this.todo[action];
@@ -30,6 +37,7 @@ module.exports = (function () {
 		else {
 			this.ia.client.send(this.owner, "orders_array", {orders: this.orders});
 		}
+
 		// Change action and its "to be killed" actions to state done
 		this.done.push(this.todo[action]);
 		delete this.inprogress[action];

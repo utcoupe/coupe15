@@ -220,10 +220,10 @@
 
 
 	// Order switch
-		client.order(function(from, name, params){
-			// Order handler
+		function orderHandler (from, name, params) {
 			// logger.info("Just received an order `" + name + "` from " + from + " with params :");
 			// logger.info(params);
+
 			switch (name){
 				case "servo_goto":
 					// logger.info(!!params.servo && !!params.position);
@@ -246,7 +246,6 @@
 				case "AX12_open":
 					AX12_open();
 					break;
-
 				case "steppers_move":
 					stepper_do(params.move, params.direction);
 					break;
@@ -256,8 +255,18 @@
 				case "steppers_set_bottom":
 					stepper_setBottom();
 					break;
+				case "orders_array":
+					ordersArrayHandler(params.orders);
+					break;
 				default:
 					logger.warn("Order name " + name + " " + from + " not understood");
 			}
-		});
+		}
+
+		function ordersArrayHandler(array){
+			for (var i = 0; i < array.length; i++)
+				orderHandler("pr", array[i].name, array[i].params);
+		}
+
+		client.order(orderHandler(from, name, params));
 })();
