@@ -27,19 +27,19 @@
 			
 			// Pas à pas
 				this.stepper[0] = new five.Stepper({
-					type: five.Stepper.TYPE.DRIVER,
+					type: five.Stepper.TYPE.FOUR_WIRE,
 					stepsPerRev: 200,
-					pins: [11, 12]
+					pins: [ 6, 9, 10, 11 ]
 				})
 
-				this.stepper[1] = new five.Stepper({
-					type: five.Stepper.TYPE.DRIVER,
-					stepsPerRev: 200,
-					pins: [9, 10]
-				})
+				// this.stepper[1] = new five.Stepper({
+				// 	type: five.Stepper.TYPE.DRIVER,
+				// 	stepsPerRev: 200,
+				// 	pins: [9, 10]
+				// })
 
 				this.stepper[0].rpm(120).cw(); // change rien
-				this.stepper[1].rpm(120).ccw();
+				// this.stepper[1].rpm(120).ccw();
 
 			// // Servo
 				// this.servo[0] = new five.Servo({
@@ -86,14 +86,14 @@
 				if (boardReady) {
 					if (direction == "clockwise"){
 						logger.info("Moving "+move+" clockwise");
-						board.stepper[0].rpm(60).cw().step(600, function(){}); // left
-						board.stepper[1].rpm(60).cw().step(600, function(){}); // right
+						board.stepper[0].rpm(120).cw().step(move, function(){}); // left
+						// board.stepper[1].rpm(60).cw().step(600, function(){}); // right
 					} else {
 						logger.info("Moving "+move+" counterclockwise");
 						// board.stepper[0].rpm(120).cw(); // change rien
 						// board.stepper[1].rpm(120).cw();
-						board.stepper[0].rpm(600).ccw().step(600, function(){}); // left
-						board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
+						board.stepper[0].rpm(120).ccw().step(move, function(){}); // left
+						// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
 					}
 				}
 			};
@@ -268,5 +268,5 @@
 				orderHandler("pr", array[i].name, array[i].params);
 		}
 
-		client.order(orderHandler(from, name, params));
+		client.order(orderHandler);
 })();

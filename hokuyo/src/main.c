@@ -52,7 +52,7 @@ int main(int argc, char **argv){
 	hok2.urg = 0;
 
 	// Open log file
-	logfile = fopen("/home/mewen/hokuyo.log", "a+");
+	logfile = fopen("/tmp/hokuyo.log", "a+");
 	if (logfile == NULL) {
 		fprintf(stderr, "Can't open log file\n");
 		exit(EXIT_FAILURE);

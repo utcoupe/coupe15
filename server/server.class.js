@@ -76,6 +76,7 @@ module.exports = (function () {
 					logger.warn("The order recipient `"+data.to+"` doesn't exist.");
 				}
 				// The order is valid
+				// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
 				this.server
 					.to('webclient')
 					.to('simulator')

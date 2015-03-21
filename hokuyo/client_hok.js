@@ -1,4 +1,6 @@
 // TODO : penser à inverser l'axe des y !!!
+// 		  message/objet erreur ou pas ?
+// 		  changer command
 (function (){
 	"use strict";
 
@@ -19,6 +21,7 @@
 		type: "hokuyo"
 	});
 
+
 	client.order(function(from, name, params){
 		logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		logger.info(params);
@@ -28,18 +31,27 @@
 					start(params.color, params.nbrobots);
 				break;
 			case "stop":
-				if(!!child)
-					quitC();
+				quitC();
 				break;
 			default:
 				logger.warn("Name not understood : " + data);
 		}
 	});
 
+	function quitC(){
+		if(!!child){
+			logger.info("Closing child "+child.pid);
+			child.kill('SIGINT');
+			child = null;
+		} else 
+			logger.info("Can't close child : never born :P");
+	}
+
 	function start(color, nbrobots){
 		// We just an order to start, with the flavour :P (color, number of robots)
-		if(!!child)
-			quitC();
+
+		// If there's a child, kill it
+		quitC();
 
 		// Exit handlers
 		//do something when app is closing
@@ -73,15 +85,15 @@
 			switch (string.substring(0,1)){
 				case "0":
 					// Send error : no Hokuyo working
-					client.send("IA", "nb_hokuyo", {nb: 0});
+					client.send("ia", "nb_hokuyo", {nb: 0});
 					break;
 				case "1":
 					// Send warning : one Hokuyo is missing
-					client.send("IA", "nb_hokuyo", {nb: 1});
+					client.send("ia", "nb_hokuyo", {nb: 1});
 					break;
 				case "2":
 					// Send message : Hokuyos are ok
-					client.send("IA", "nb_hokuyo", {nb: 2});
+					client.send("ia", "nb_hokuyo", {nb: 2});
 					break;
 				default:
 					logger.info("Error not understood : " + string);
@@ -102,25 +114,26 @@
 							// client.send("IA", "nb_hokuyo", {nb: 2});
 							break;
 						case "DATA":
+							logger.info('C Hokuyo software sends datas');
 							parseRobots(inputAr[i].substring(6));
 							break;
+						case "INFO":
+							logger.info('C Hokuyo software sends a info');
+							parseInfo(inputAr[i].substring(6));
+							break;
 						case "WARN":
+							logger.info('C Hokuyo software sends a warning');
 							parseInfo(inputAr[i].substring(6));
 							break;
 						default:
-							logger.info("Data "+ inputAr[i].substring(1,5) + "not understood at line " + i + " : " + inputAr[i]);
+							logger.info("Data "+ inputAr[i].substring(1,5) + " not understood at line " + i + " : " + inputAr[i]);
 					}
 				}
 			};
 		}
 
-		function quitC(){
-			logger.info("Closing child")
-			child.kill('SIGINT');
-		}
-
 		// Execute C program
-		var command = "./bin/hokuyo";
+		var command = "/home/mewen/Bureau/UTCoupe/coupe15/hokuyo/bin/hokuyo";
 		var args = [color, 'no_init_wizard', nbrobots];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
@@ -132,7 +145,7 @@
 		});
 
 		child.stderr.on('data', function(data) {
-			logger.error(data);
+			logger.error(data.toString());
 		});
 		
 		child.on('close', function(code) {
