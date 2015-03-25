@@ -1,3 +1,9 @@
+
+RAYON_ENNEMIS_PETITS = 0.0875;
+RAYON_ENNEMIS_GRANDS = 0.15;
+
+
+
 //permet de redimensionner la fenetre
 window.addEventListener('resize', function() {
     var WIDTH = window.innerWidth*1,
@@ -57,20 +63,27 @@ scene.add(directionLight4);
 var axisHelper = new THREE.AxisHelper( 5 ); scene.add( axisHelper );
 
 //charge le plateau
+var plateau;
+
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
 loader.load('3d/plateau_mieux.dae',function(collada){
+
+	console.log("CHARGEMENT PLATEAU !::::::::::::--->   ",collada);
+
     var dae = collada.scene;
     var skin = collada.skins[0];
-    var plateau = dae;
+    
     //rendre les cylindres transparents
+
     collada.dae.effects["transparent_003-effect"].shader.material.opacity = 0.2;
     collada.dae.effects["transparent_003-effect"].shader.material.transparent = true;
-
+    plateau = collada;
     dae.position.set(0,0,0);
     dae.scale.set(1,1,1);
     scene.add(dae);
 })
+
 
 
 
@@ -169,6 +182,7 @@ var rob;
 
 function render(){
 
+
     requestAnimationFrame(render);
     if(fermeture)
         for(var i=0;i<=5;i++)
@@ -248,6 +262,7 @@ render();
 
 
 
+
 function commande(action){
 	var robot;
 	for(var i=0;i<4;i++)
@@ -317,10 +332,12 @@ function commande(action){
 			var ferme = false;
 			for(var c=0;c<6 && !ferme;c++)
 				if(robot.fermerClapet(tabClapets[c])){
-
 					ferme = true;
 				}
 			break;
+
+		case "deroulerTapis":
+			robot.deroulerTapis();
 	}
 
 }
@@ -342,3 +359,43 @@ function exportChildrenToObject(children) {
 function sceneToJson(scene) {
 	return JSON.stringify(exportChildrenToObject(scene.children));
 }
+
+
+console.log(scene.children);
+
+
+
+
+/*
+
+
+function export(){
+
+	console.log("EXPORT : " + scene);
+
+
+
+
+}
+*/
+
+
+
+/* 
+
+
+
+faire un simulateur uniquement pour l'affichage 
+- gerer les groupes d'objets
+- un devant un derriere
+
+
+
+
+
+
+*/
+
+
+
+
