@@ -14,43 +14,43 @@ extern Control control;
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
 	switch(ordre){
 	case GET_CODER:
-		*ret_size = sprintf(ret, "%li;%li\n", control.getLenc()->getTicks(), control.getRenc()->getTicks());
+		*ret_size = sprintf(ret, "%li;%li", control.getLenc()->getTicks(), control.getRenc()->getTicks());
 		break;
 	case GOTO: {
 		int x, y;
-		sscanf(argv, "%i;%i\n", &x, &y);
+		sscanf(argv, "%i;%i", &x, &y);
 		control.pushGoal(id, TYPE_POS, x, y, 0);
 		}
 		break;
 	case GOTOA: {
 		int x, y;
 		float a;
-		sscanf(argv, "%i;%i;%f\n", &x, &y, &a);
+		sscanf(argv, "%i;%i;%f", &x, &y, &a);
 		control.pushGoal(id, TYPE_POS, x, y, 0);
 		control.pushGoal(id, TYPE_ANG, a, 0, 0);
 		}
 		break;
 	case ROT: {
 		float a;
-		sscanf(argv, "%f\n", &a);
+		sscanf(argv, "%f", &a);
 		control.pushGoal(id, TYPE_ANG, a, 0, 0);
 		}
 		break;
 	case PWM:{
 		int l, r, t;
-		sscanf(argv, "%i;%i;%i\n", &l, &r, &t);
+		sscanf(argv, "%i;%i;%i", &l, &r, &t);
 		control.pushGoal(id, TYPE_PWM, l, r, t);
 		}
 		break;
 	case PIDA:{
 		float p, i, d;
-		sscanf(argv, "%f;%f;%f\n", &p, &i, &d);
+		sscanf(argv, "%f;%f;%f", &p, &i, &d);
 		control.setPID_angle(p, i, d);
 		}
 		break;
 	case PIDD: {
 		float p, i, d;
-		sscanf(argv, "%f;%f;%f\n", &p, &i, &d);
+		sscanf(argv, "%f;%f;%f", &p, &i, &d);
 		control.setPID_distance(p, i, d);
 		}
 		break;
@@ -69,7 +69,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 	case SET_POS:{
 		pos pos;
-		sscanf(argv, "%li;%li;%f\n", &(pos.x), &(pos.y), &(pos.angle));
+		sscanf(argv, "%li;%li;%f", &(pos.x), &(pos.y), &(pos.angle));
 		control.pushPos(pos);
 		}
 		break;
@@ -77,29 +77,29 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		pos pos = control.getPos();
 		int x = pos.x, y = pos.y;
 		float a = pos.angle;
-		*ret_size = sprintf(ret, "%i;%i;%f\n", x, y, (double)a);
+		*ret_size = sprintf(ret, "%i;%i;%f", x, y, (double)a);
 		}
 		break;
 	case GET_POS_ID:{
 		pos pos = control.getPos();
 		int x = pos.x, y = pos.y;
 		float a = pos.angle;
-		*ret_size = sprintf(ret, "%i;%i;%f;%i\n", x, y, (double)a, control.getLastFinishedId());
+		*ret_size = sprintf(ret, "%i;%i;%f;%i", x, y, (double)a, control.getLastFinishedId());
 		break;
 		}
 	case ACCMAX:{
 		float a, r;
-		sscanf(argv, "%f;%f\n", &a, &r);
+		sscanf(argv, "%f;%f", &a, &r);
 		control.setMaxAcc(a);
 		control.setMaxRotSpdRatio(r);
 		}
 		break;
 	case GET_LAST_ID: {
-		*ret_size = sprintf(ret, "%i\n", control.getLastFinishedId());
+		*ret_size = sprintf(ret, "%i", control.getLastFinishedId());
 		break;
 		}
 	case IS_BLOCKED:
-		*ret_size = sprintf(ret, "%i\n", control.isBlocked());
+		*ret_size = sprintf(ret, "%i", control.isBlocked());
 		break;
 	case PAUSE: 
 		control.pause();
@@ -120,8 +120,6 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		//Coder ici la formation des données de retour
 
 		break;*/
-	case PINGPING_AUTO:
-		break;
 	default:
 		return -1;//commande inconnue
 	}
