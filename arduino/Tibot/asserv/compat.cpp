@@ -15,10 +15,12 @@ void initPins(){
 	pinMode(PIN_ENC_RIGHT_A,INPUT_PULLUP);
 	pinMode(PIN_ENC_RIGHT_B,INPUT_PULLUP);
 
+	pinMode(LED_DEBUG, OUTPUT);
 	pinMode(LED_MAINLOOP, OUTPUT);
 	pinMode(LED_BLOCKED, OUTPUT) ;
-	digitalWrite(LED_MAINLOOP, HIGH); //HIGH = eteinte
-	digitalWrite(LED_BLOCKED, HIGH); //HIGH = eteinte
+	digitalWrite(LED_DEBUG, LOW); //LOW = eteinte
+	digitalWrite(LED_MAINLOOP, LOW); //LOW = eteinte
+	digitalWrite(LED_BLOCKED, LOW); //LOW = eteinte
 	//Definition des interruptions arduino en fonction du type d'évaluation
 #if ENCODER_EVAL == 4
 	attachInterrupt(INTERRUPT_ENC_LEFT_A,interruptLeftA,CHANGE);
@@ -78,9 +80,9 @@ void interruptRight0{
 #endif
 
 void serial_send(char data) { //Envoi d'un octet en serial, dépend de la plateforme
-	Serial2.write(data);
+	Serial.write(data);
 }
 
 char generic_serial_read(){
-	return Serial2.read();
+	return Serial.read();
 }

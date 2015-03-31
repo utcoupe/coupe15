@@ -5,6 +5,7 @@
 // 'ordre;id;arg1;arg2;argn' 	//
 //  For example :
 // 'GOTO;3;120;1789' 		//
+// 'GET_CODER;0;'
 // issues the order GOTO with 	//
 // ID 3 to X=120 and Y = 1789 	//
 //
@@ -29,7 +30,9 @@
 #define	PAUSE 'q' 		// no args, pauses control
 #define	RESUME 'r' 		// no args, resumes control
 #define RESET_ID 's' 		// no args, reset last finished id to 0
+#define PING 'z' 		// no args, switch led state
 
+#define FAILED_MSG "FAILED\n"
 #define MAX_COMMAND_LEN 60
 #define MAX_ID_LEN 10
 #define ID_START_INDEX 2

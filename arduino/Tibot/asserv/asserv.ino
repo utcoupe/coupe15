@@ -19,10 +19,10 @@ Control control;
 
 #define MAX_READ 64 
 void setup(){
-	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
+	//TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
 	initPins();
-	SERIAL_MAIN.begin(115200, SERIAL_8O1);
+	SERIAL_MAIN.begin(115200, SERIAL_8N1);
 }
 
 void loop(){

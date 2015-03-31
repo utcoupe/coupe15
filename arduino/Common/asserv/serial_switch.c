@@ -12,7 +12,13 @@ extern Control control;
 
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
+	*ret_size = 0;
 	switch(ordre){
+	case PING:
+		digitalWrite(LED_DEBUG, HIGH);
+		delay(1);
+		digitalWrite(LED_DEBUG, LOW);
+		break;
 	case GET_CODER:
 		*ret_size = sprintf(ret, "%li;%li", control.getLenc()->getTicks(), control.getRenc()->getTicks());
 		break;

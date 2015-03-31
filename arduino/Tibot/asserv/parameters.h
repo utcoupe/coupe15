@@ -94,10 +94,11 @@
 #define MIN_DIST_BLOCKED 3
 
 //PIN LED
-#define LED_MAINLOOP 22
+#define LED_MAINLOOP 14
 #define LED_BLOCKED 23
+#define LED_DEBUG 13
 
-#define SERIAL_MAIN Serial2
+#define SERIAL_MAIN Serial
 
 /*****************************************
  *            PRIVATE                    *

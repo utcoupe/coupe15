@@ -96,9 +96,10 @@
 //PIN LED
 #define LED_MAINLOOP 22
 #define LED_BLOCKED 23
+#define LED_DEBUG 13
 
 //DEFINES ARDUINO
-#define SERIAL_MAIN Serial2
+#define SERIAL_MAIN Serial
 
 #define PIN_ENC_RIGHT_A 21
 #define PIN_ENC_RIGHT_B 20

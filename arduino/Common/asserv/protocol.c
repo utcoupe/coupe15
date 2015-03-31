@@ -20,17 +20,20 @@ void clean_current_command(char *buffer, int* end_of_cmd) {
 int executeCmd(char data) {
 	static char current_command[MAX_COMMAND_LEN];
 	static int index = 0;
+	if (data == '\r') data = '\n';
 	current_command[index++] = data;
 	if (data == '\n') {
 		// end of current command
 		char order = current_command[0];
 		char response[MAX_RESPONSE_LEN];
 		int id, end_of_id, response_size;
+		current_command[index] = '\0';
 		end_of_id = ID_START_INDEX; // start after first ';'
 		while (current_command[end_of_id] != ';') {
 			end_of_id++;
 			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
 				clean_current_command(current_command, &index);
+				Serial.print(FAILED_MSG);
 				return -1;
 			}
 		}
