@@ -1,0 +1,1 @@
+../../Common/asserv/goals.h

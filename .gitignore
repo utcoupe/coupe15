@@ -1,6 +1,7 @@
 *.elf
 *.hex
 build/
+.sconsign.dblite
 __pycache__/
 node_modules/
 *.sublime*

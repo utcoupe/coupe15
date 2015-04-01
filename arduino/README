@@ -1,0 +1,12 @@
+compiler :
+dans un dossier source : "scons"
+dans ce dossier : "./scons.bash"
+
+flasher :
+dans un dossier source : "[sudo] scons upload"
+
+dépendances :
+python2.7
+python2.7 module serial
+avrdude
+avr-gcc
