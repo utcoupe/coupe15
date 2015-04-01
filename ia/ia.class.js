@@ -4,6 +4,8 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.ia');
 
 	function Ia(color, nb_erobots) {
+		logger.info("Launching a "+color+" AI with "+nb_erobots+" ennemies.");
+		
 		if(!color) {
 			logger.error('Please give a color to ia');
 		}
@@ -16,6 +18,7 @@ module.exports = (function () {
 		this.client = new (require('./socket_client.class.js'))({type: 'ia'});
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		this.data = new (require('./data.class.js'))(this);
+		this.actions = new (require('./actions.class.js'))(this, this.data);
 		this.gr = new (require('./gr.class.js'))(this);
 		this.pr = new (require('./pr.class.js'))(this);
 		this.hokuyo = new (require('./hokuyo.class.js'))(this, {
@@ -23,10 +26,16 @@ module.exports = (function () {
 			nb_erobots: this.nb_erobots
 		});
 
+
+
 	}
 
 	Ia.prototype.start = function() {
 		logger.info(this.hokuyo);
+	};
+
+	Ia.prototype.run = function() {
+		logger.info(this.actions.do("empiler1.1"));
 	};
 
 	return Ia;

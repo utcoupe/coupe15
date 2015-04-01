@@ -10,7 +10,7 @@ module.exports = (function () {
 		this.path = null;
 	}
 
-	Pr.prototype.onColision = function () {
+	Gr.prototype.onColision = function () {
 		logger.warn("Collision du gros robot");
 	};
 	

@@ -7,7 +7,7 @@ module.exports = (function () {
 		this.ia = ia;
 		this.done = {};
 		this.todo = {};
-		this.inprogess = {};
+		this.inprogress = {};
 		this.errors = []
 
 		this.todo = this.importActions(data);
@@ -22,7 +22,7 @@ module.exports = (function () {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
 			if (actions[i].object == null)
 				this.errors.push({
-					date:,
+					date: Date.now(),
 					function: "importActions",
 					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
 		})
@@ -33,13 +33,15 @@ module.exports = (function () {
 	Actions.prototype.do = function (action_name) {
 		// On passe l'action en paramètre, donc : actions.do("empiler1.1");
 
+		// XXX If action doesn't exist :
+
 		// Change action to state "in progress"
 		this.inprogress[action_name] = this.todo[action_name];
 		delete this.todo[action_name];
 
 		// Do action
-		act = this.inprogress[action_name];
-		if (act.orders.lenght == 1)
+		var act = this.inprogress[action_name];
+		if (act.orders.length == 1)
 			this.ia.client.send(act.owner, act.orders[0].name, act.orders[0].params);
 		else {
 			this.ia.client.send(act.owner, "orders_array", {orders: act.orders});
@@ -51,10 +53,10 @@ module.exports = (function () {
 	};
 
 	Actions.prototype.isOk = function () { // XXX
-		if (errors.length != 0)
+		if (errors.length != 0){
 			logger.warn(this.errors);
 			return false;
-		else
+		} else 
 			return true;
 	};
 	
