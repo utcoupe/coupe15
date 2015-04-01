@@ -29,7 +29,7 @@
 				this.stepper[0] = new five.Stepper({
 					type: five.Stepper.TYPE.FOUR_WIRE,
 					stepsPerRev: 200,
-					pins: [ 6, 9, 10, 11 ]
+					pins: [ 8, 9, 10, 11 ]
 				})
 
 				// this.stepper[1] = new five.Stepper({
@@ -49,7 +49,7 @@
 				// 	pin: 11,
 				// 	isInverted: true
 				// });
-				// // logger.info(this.servo);
+				// logger.info(this.servo);
 
 
 		});
@@ -58,7 +58,7 @@
 			logger.error(e);
 		});
 
-		// // Servo
+		// Servo
 			// function servo_goto(servo, position){
 			// 	if (boardReady) {
 			// 		// logger.info("Servo " + servo + " moved to " + position*180 + " :)");
@@ -68,15 +68,15 @@
 
 			// function servo_close(){
 			// 	if (boardReady) {
-			// 		board.servo[0].to(53);
-			// 		board.servo[1].to(53);
+			// 		board.servo[0].to(65);
+			// 		board.servo[1].to(86);
 			// 	}
 			// };
 
 			// function servo_open(){
 			// 	if (boardReady) {
-			// 		board.servo[0].to(90);
-			// 		board.servo[1].to(90);
+			// 		board.servo[0].to(112);
+			// 		board.servo[1].to(135);
 			// 	}
 			// };
 

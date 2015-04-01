@@ -3,7 +3,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.data');
 
-	function Data() {
+	function Data(ia) {
 		this.balle = [];
 		this.chargeur = [];
 		this.clap = [];
