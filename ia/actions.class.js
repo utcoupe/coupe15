@@ -8,6 +8,7 @@ module.exports = (function () {
 		this.done = {};
 		this.todo = {};
 		this.inprogess = {};
+		this.errors = []
 
 		this.todo = this.importActions(data);
 	}
@@ -19,6 +20,11 @@ module.exports = (function () {
 		// Link "object" with exiting thing in the Data class
 		Object.keys(actions).forEach(function(i) {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
+			if (actions[i].object == null)
+				this.errors.push({
+					date:,
+					function: "importActions",
+					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
 		})
 
 		return actions;
@@ -32,15 +38,24 @@ module.exports = (function () {
 		delete this.todo[action_name];
 
 		// Do action
-		if (this.inprogress[action_name].orders.lenght == 1)
-			this.ia.client.send(this.owner, this.orders[0].name, this.orders[0].params);
+		act = this.inprogress[action_name];
+		if (act.orders.lenght == 1)
+			this.ia.client.send(act.owner, act.orders[0].name, act.orders[0].params);
 		else {
-			this.ia.client.send(this.owner, "orders_array", {orders: this.orders});
+			this.ia.client.send(act.owner, "orders_array", {orders: act.orders});
 		}
 
 		// Change action and its "to be killed" actions to state done
 		this.done[action_name] = this.todo[action_name];
 		delete this.inprogress[action_name];
+	};
+
+	Actions.prototype.isOk = function () { // XXX
+		if (errors.length != 0)
+			logger.warn(this.errors);
+			return false;
+		else
+			return true;
 	};
 	
 	return Actions;
