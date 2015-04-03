@@ -26,6 +26,7 @@ function afficherGR(x,y,z,yrot,coul){
     robot.position.set(x,y,z);
     robot.rotation.y = yrot;
     scene.add(robot);
+    GR = robot;
 }
 
 
@@ -45,15 +46,14 @@ function afficherPR(x,y,z,yrot,coul){
     robot.position.set(x,y,z);
     robot.rotation.y = yrot;
     scene.add(robot);
-
-
+    PR = robot;
 }
 
-function afficherGE(x,y,z,yrot,coul){
+function afficherGE(x,y,z,coul){
 
 	var geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_GRANDS,RAYON_ENNEMIS_GRANDS,0.35,25);
 	var boxMat = [
-				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
@@ -62,15 +62,16 @@ function afficherGE(x,y,z,yrot,coul){
 	var mat = new THREE.MeshFaceMaterial( boxMat );
     var robot = new THREE.Mesh(geo,mat);
     robot.position.set(x,y,z);
-    robot.rotation.y = yrot;
+    
     scene.add(robot);
+    GE = robot;
 }
 
-function afficherPE(x,y,z,yrot,coul){
+function afficherPE(x,y,z,coul){
 
 	var geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_PETITS,RAYON_ENNEMIS_PETITS,0.35,25);
 	var boxMat = [
-				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
@@ -79,7 +80,8 @@ function afficherPE(x,y,z,yrot,coul){
 	var mat = new THREE.MeshFaceMaterial( boxMat );
     var robot = new THREE.Mesh(geo,mat);
     robot.position.set(x,y,z);
-    robot.rotation.y = yrot;
+    
     scene.add(robot);
+    PE = robot;
 }
 

@@ -26,7 +26,7 @@ function initGobelets(tab){
                        {x:0,z: 0.650},
                        {x:0.590,z: -0.170},
                        {x:1.250,z: 0.750}];
-    var positionY = 0.02;
+    var positionY = 0.01;
     for(var i=0;i<5;i++)
         creerGobelet(tab,posGobelets[i].x,positionY,posGobelets[i].z);
 }
@@ -38,6 +38,9 @@ function ajouterPopcorn(gob){
         {x:-0.01, y:0.055, z:0.01},
         {x:0, y:0.085, z:-0.015},
         {x:0.012, y:0.105, z:0.016},
+
+
+
         {x:-0.021, y:0.117, z:-0.005},
         {x:0.0125, y:0.13, z:-0.02},
         {x:0.02, y:0.144 , z:0.017},

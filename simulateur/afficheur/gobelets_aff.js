@@ -16,10 +16,12 @@ function afficherGobelet(x,y,z,coul){
         dae.position.set(x,y,z);
         collada.dae.effects["Material_002-effect"].shader.material.opacity = 0.65;
         collada.dae.effects["Material_002-effect"].shader.material.transparent = true;
-        //collada.dae.effects["Material_002-effect"].shader.material.color = {coul.r:1,coul.g:0,coul.b:0}; 
+        var color = new THREE.Color(coul);
+        collada.dae.effects["Material_002-effect"].shader.material.color.set(color);
 
         dae.scale.set(1,1,1);
         scene.add(dae);
+        gobelets.push(collada);
     });
 }
 
@@ -27,15 +29,17 @@ function afficherGobelet(x,y,z,coul){
 /*afficher les popcorn*/
 
 
-function afficherPopcorn(x,y,z)
+function afficherPopcorn(x,y,z,coul)
 {
     /*  Entrees :
             x, y, z
     */
     var geo = new THREE.SphereGeometry(0.02,60,60);
-    var mat = new THREE.MeshLambertMaterial({color:'white',side:THREE.DoubleSide});
-    var popcorn = sphere.position.set(x,y,z);
+    var mat = new THREE.MeshLambertMaterial({color:coul,side:THREE.DoubleSide});
+    var popcorn = new THREE.Mesh(geo,mat);
+    popcorn.position.set(x,y,z);
     scene.add(popcorn);
+    popcorns.push(popcorn);
 }
 
 

@@ -6,10 +6,11 @@ function afficherClapet(x,y,z,zrot,coul)
     */
     var geo = new THREE.BoxGeometry(0.16,0.03,0.03);
  	var mat =  new THREE.MeshLambertMaterial({color:coul,side:THREE.DoubleSide});
- 	var clapet = new Mesh(geo,mat);
+ 	var clapet = new THREE.Mesh(geo,mat);
  	clapet.position.set(x,y,z);
  	clapet.rotation.z = zrot;
  	scene.add(clapet);
+    clapets.push(clapet);
 }
 
 

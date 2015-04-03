@@ -13,5 +13,6 @@ function afficherAmpoule(x,y,z,coul)
     var ampoule = new THREE.Mesh(geo,mat);
     ampoule.position.set(x,y,z);
     scene.add(ampoule);
+    ampoules.push(ampoule);
 }
 
