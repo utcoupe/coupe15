@@ -3,7 +3,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.data');
 
-	function Data() {
+	function Data(ia) {
 		this.balle = [];
 		this.chargeur = [];
 		this.clap = [];
@@ -50,13 +50,21 @@ module.exports = (function () {
 		// Permet d'avoir une référence vers l'objet dans une action
 
 		var actName = name.split("__");
-		if (actName.length != 2)
+		if (actName.length != 2){
 			logger.warn("Le nom '"+name+"' n'est pas un nom d'objet correct.");
+			return null;
+		}
 
-		if (!this[actName[0]][actName[1]])
+		if (!this[actName[0]][actName[1]]){
 			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
+			return null;
+		}
 
 		return this[actName[0]][actName[1]];
+	};
+
+	Data.prototype.isOk = function () { // XXX
+		return true;
 	};
 	
 	return Data;

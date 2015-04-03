@@ -1,6 +1,7 @@
 *.elf
 *.hex
 build/
+.sconsign.dblite
 __pycache__/
 node_modules/
 *.sublime*
@@ -10,3 +11,4 @@ CMakeFiles*
 cmake_install*
 Makefile
 hokuyo/socket_client.class.js
+test.js

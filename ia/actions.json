@@ -1,9 +1,8 @@
 {
-	"actions":[
-		{
+	"actions":{
+		"empiler1.1": {
 			"type": "plot",
 			"owner": "pr",
-			"name": "empiler1.1",
 			"color": "green",
 			"objectname": "cylindre__front_left1",
 			"startpoints": [{
@@ -19,10 +18,9 @@
 				}],
 			"kill": "empiler1.2"
 		},
-		{
+		"empiler1.2": {
 			"type": "plot",
 			"owner": "pr",
-			"name": "empiler1.2",
 			"color": "green",
 			"objectname": "cylindre__front_left1",
 			"startpoints": [{
@@ -38,10 +36,9 @@
 				}],
 			"kill": "empiler1.1"
 		},
-		{
+		"fermer1": {
 			"type": "clap",
 			"owner": "pr",
-			"name": "fermer1",
 			"color": "green",
 			"objectname": "clap__2",
 			"startpoints": [{
@@ -66,5 +63,5 @@
 				}],
 			"kill": null
 		}	
-	]
+	}
 }
