@@ -1,6 +1,7 @@
-// TODO : penser à inverser l'axe des y !!!
+// TODO :
 // 		  message/objet erreur ou pas ?
 // 		  changer command
+
 (function (){
 	"use strict";
 
@@ -63,14 +64,14 @@
 
 		// Functions
 		function parseRobots(string) {
-			var dots = "";
+			var dots = [];
 			if(!!string){
-				dots = string.split("#");
-				for (var i = 0; i <= dots.length - 1; i++) {
-					dots[i] = dots[i].split(",");
-					dots[i][0] = dots[i][0];
-					dots[i][1] = dots[i][1];
-				};
+				var temp = string.split("#");
+				for (var i = 0; i <= temp.length - 1; i++) {
+					temp[i] = temp[i].split(",");
+					dots[i].x = parseInt(temp[i][0]);
+					dots[i].y = 2000-parseInt(temp[i][1]); // Conversion repère math en repère bitmap
+				}
 				logger.info('[J-HOK] Robots');
 				logger.info(dots);
 			} else {
