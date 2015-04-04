@@ -3,7 +3,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.data');
 
-	function Data(ia) {
+	function Data(ia, nb_erobots) {
 		this.balle = [];
 		this.chargeur = [];
 		this.clap = [];
@@ -13,23 +13,36 @@ module.exports = (function () {
 
 		this.importObjects();
 		
-		this.erobot = {
-			epr: {
+		this.erobot = [{ // big robot on position 0
+				name: "gr",
 				pos:{
 					x:0,
 					y:0,
 				},
-				d:20, // XXX quelle unité, comment la modifier ?
+				speed:{ // in mm/sec
+					x:0,
+					y:0,
+				},
+				lastUpdate: 0, // time in ms from the beining of the match
+				d:200, // en mm, penser à la modifier !!
 				status: "lost"
-			},
-			egr: {
+			}];
+
+		if (this.nb_erobots == 2) {
+			this.erobot.push({ // small robot on position 1
+				name: "pr"
 				pos:{
 					x:0,
 					y:0,
 				},
-				d:20, // XXX quelle unité, comment la modifier ?
+				speed:{
+					x:0,
+					y:0,
+				},
+				lastUpdate: 0,
+				d:200, // en mm, penser à la modifier !!
 				status: "lost"
-			}
+			});
 		}
 	}
 

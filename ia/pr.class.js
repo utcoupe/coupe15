@@ -5,9 +5,9 @@ module.exports = (function () {
 
 	function Pr(ia) {
 		this.ia = ia;
-		this.pos = {
-			x: 0,
-			y: 0,
+		this.pos = { // if we are yellow, default, left side of the table
+			x: 500,
+			y: 1000,
 			a: 0
 		};
 		this.size = {
@@ -17,6 +17,11 @@ module.exports = (function () {
 		};
 		this.current_action = null;
 		this.path = null;
+
+		if (color == "green"){
+			this.pos.x = 3000 - this.pos.x;
+			this.pos.a = 180;
+		}
 	}
 
 	Pr.prototype.onColision = function () {

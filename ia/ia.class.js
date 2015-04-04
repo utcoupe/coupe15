@@ -20,11 +20,11 @@ module.exports = (function () {
 
 		this.client = new (require('./socket_client.class.js'))({type: 'ia'});
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
-		this.data = new (require('./data.class.js'))(this);
+		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
 		this.actions = new (require('./actions.class.js'))(this, this.data, this.color);
-		this.gr = new (require('./gr.class.js'))(this);
-		this.pr = new (require('./pr.class.js'))(this);
-		this.hokuyo = new (require('./hokuyo.class.js'))(this, this.gr, this.pr, {
+		this.gr = new (require('./gr.class.js'))(this, this.color);
+		this.pr = new (require('./pr.class.js'))(this, this.color);
+		this.hokuyo = new (require('./hokuyo.class.js'))(this, this.gr, this.pr, this.data, {
 			color: this.color,
 			nb_erobots: this.nb_erobots,
 			we_have_hats: this.we_have_hats
