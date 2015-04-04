@@ -3,12 +3,15 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.actions');
 
-	function Actions(ia, data) {
+	function Actions(ia, data, color) {
 		this.ia = ia;
+		this.color = color;
+
 		this.done = {};
 		this.todo = {};
 		this.inprogress = {};
-		this.errors = []
+		this.killed = {};
+		this.errors = [];
 
 		this.todo = this.importActions(data);
 	}
@@ -20,20 +23,22 @@ module.exports = (function () {
 		// Link "object" with exiting thing in the Data class
 		Object.keys(actions).forEach(function(i) {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
-			if (actions[i].object == null)
+			if (actions[i].object === null)
 				this.errors.push({
 					date: Date.now(),
 					function: "importActions",
 					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
-		})
+		});
 
 		return actions;
 	};
 
 	Actions.prototype.do = function (action_name) {
-		// On passe l'action en paramètre, donc : actions.do("empiler1.1");
+		// Call the function passing the action name as parameter, for eg.    actions.do("empiler1.1");
 
-		// XXX If action doesn't exist :
+		// If action doesn't exist
+		if (!this.exists(action_name))
+			return;
 
 		// Change action to state "in progress"
 		this.inprogress[action_name] = this.todo[action_name];
@@ -41,15 +46,106 @@ module.exports = (function () {
 
 		// Do action
 		var act = this.inprogress[action_name];
-		if (act.orders.length == 1)
-			this.ia.client.send(act.owner, act.orders[0].name, act.orders[0].params);
-		else {
-			this.ia.client.send(act.owner, "orders_array", {orders: act.orders});
-		}
+		act.orders.forEach(function (order, index, array){
+			this.ia.client.send(act.owner, order.name, order.params);
+		});
 
 		// Change action and its "to be killed" actions to state done
 		this.done[action_name] = this.todo[action_name];
 		delete this.inprogress[action_name];
+		this.kill(this.done[action_name].kill);
+	};
+
+	Actions.prototype.kill = function (action_name){
+		// If action doesn't exist
+		if (this.exists(action_name)){
+			this.done[action_name] = this.todo[action_name];
+			delete this.inprogress[action_name];
+		}
+	};
+
+	Actions.prototype.exists = function (action_name){
+		if (!this.todo[action_name]){
+			if (!this.killed[action_name] && !this.done[action_name] && !this.done[action_name])
+				logger.warn("Action named '"+"' doesn't exist");
+			else
+				logger.warn("Action named '"+"' already killed in progress or done !");
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	Actions.prototype.getNearestAction = function (pos, color){
+		var action_name = "";
+		// Begin with first possible action
+		Object.keys(this.todo).forEach(function(a_n) {
+			if ((action_name === "") && (this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none"))
+				action_name = a_n;
+		});
+
+		// Find if there's a nearer one
+		if (!!action_name) {
+			var action_dist = getActionDistance(pos, action_name);
+
+			Object.keys(this.todo).forEach(function(a_n) {
+				var temp_dist = getActionDistance(pos,a_n);
+
+				if ((isCloser(temp_dist, action_dist)) && // closer
+					(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none")){// suitable for us
+					action_name = a_n;
+					action_dist = temp_dist;
+				}
+			});
+		}
+
+		return action_name;
+	};
+
+	Actions.prototype.isCloser = function (dist1, dist2){
+		// Returns true if dist1 is smaller than dist2
+		// i.e. object 1 is closer than object 2
+
+		if(dist1.d < dist2.d){
+			return true;
+		} else {
+			if ((dist1.d == dist2.d) && (dist1.a < dist2.a))
+				return true;
+			else
+				return false;
+		}
+	};
+
+	Actions.prototype.getActionDistance = function (pos, action_name){
+		if (this.exists(action_name)){
+			start_pts = this.todo[action_name].startpoints;
+
+			var dist = {
+					d: sqrt(3000^2 + 2000^2),
+					delta_a: 181,
+					start_point: -1
+				};
+
+			if (!start_pts.length) 
+				logger.warn("No startpoint for object "+action_name);
+
+			for (var i = 0; i < start_pts.length; i++) {
+				var temp = {
+					d: sqrt((pos.x - start_pts[i].x)^2 + (pos.y - start_pts[i].y)^2),
+					a: abs(pos.a - start_pts[i].a)
+				};
+
+				if (isCloser(tempDist, dist)){
+					dist.d = tempDist.d;
+					dist.delta_a = tempDist.a;
+					dist.start_point = i;
+				}
+			}
+
+			return dist;
+		} else {
+			return null;
+		}
 	};
 
 	Actions.prototype.isOk = function () { // XXX

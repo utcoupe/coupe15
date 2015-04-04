@@ -3,7 +3,6 @@
 		"empiler1.1": {
 			"type": "plot",
 			"owner": "pr",
-			"color": "green",
 			"objectname": "cylindre__front_left1",
 			"startpoints": [{
 				"x": 120,
@@ -21,7 +20,6 @@
 		"empiler1.2": {
 			"type": "plot",
 			"owner": "pr",
-			"color": "green",
 			"objectname": "cylindre__front_left1",
 			"startpoints": [{
 				"x": 120,
@@ -39,7 +37,6 @@
 		"fermer1": {
 			"type": "clap",
 			"owner": "pr",
-			"color": "green",
 			"objectname": "clap__2",
 			"startpoints": [{
 				"x": 240,

@@ -6,7 +6,7 @@
 	var logger = log4js.getLogger('ia.ia');
 
 
-	var ia = new (require('./ia.class.js'))(process.argv[2] || null, process.argv[3] || null);
+	var ia = new (require('./ia.class.js'))(process.argv[2] || null, process.argv[3] || null, process.argv[4] || null);
 	ia.start();
 	ia.run();
 })();

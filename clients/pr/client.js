@@ -30,7 +30,7 @@
 					type: five.Stepper.TYPE.FOUR_WIRE,
 					stepsPerRev: 200,
 					pins: [ 8, 9, 10, 11 ]
-				})
+				});
 
 				// this.stepper[1] = new five.Stepper({
 				// 	type: five.Stepper.TYPE.DRIVER,
@@ -96,11 +96,11 @@
 						// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
 					}
 				}
-			};
+			}
 
 			function stepper_setBottom(){
 				board.stepperIs = "down";
-			};
+			}
 
 			function stepper_toogle(){
 				if (boardReady) {
@@ -111,10 +111,10 @@
 						if (board.stepperIs == "down") {
 							stepper_do(250, "counterclockwise");
 							board.stepperIs = "up";
-						};
+						}
 					}
 				}
-			};
+			}
 
 	// AX-12
 		// var MotorSystem = require("dynanode");
@@ -263,10 +263,10 @@
 			}
 		}
 
-		function ordersArrayHandler(array){
-			for (var i = 0; i < array.length; i++)
-				orderHandler("pr", array[i].name, array[i].params);
-		}
+		// function ordersArrayHandler(array){
+		// 	for (var i = 0; i < array.length; i++)
+		// 		orderHandler("pr", array[i].name, array[i].params);
+		// }
 
-		client.order(orderHandler);
+		// client.order(orderHandler);
 })();
