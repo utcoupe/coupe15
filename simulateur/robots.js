@@ -16,22 +16,40 @@ z: 0.35
 
 
 function creerRobotPrincipal(cote){
-	var posx = {"gauche":-1.5+0.125+0.07,"droit":1.5-0.125-0.07};
-    var geo = new THREE.BoxGeometry(0.25,0.35,0.35);
-    var boxMat = [
-		new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'grey',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'grey',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'grey',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'grey',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'grey',side:THREE.doubleSided})];
 
-	if(cote=="droit"){
-		var temp = boxMat[4];
-		boxMat[4] = boxMat[0];
-		boxMat[0] = temp;
-		boxMat.reverse();
+
+	var posx = {"gauche":-1.5+0.125+0.07,"droit":1.5-0.125-0.07};
+	
+	var geo;
+
+	if(cote==="droit"){
+		geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_GRANDS,RAYON_ENNEMIS_GRANDS,0.35,25);
 	}
+	else{
+		geo = new THREE.BoxGeometry(0.25,0.35,0.35);
+	}
+
+
+    var boxMat;
+    if(cote==="gauche"){
+    	boxMat = [
+				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided})];
+    }else{
+
+    	boxMat = [
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided})];
+    }
+
 	var mat = new THREE.MeshFaceMaterial( boxMat );
     var robot = new THREE.Mesh(geo,mat);
 
@@ -46,6 +64,7 @@ function creerRobotPrincipal(cote){
     robot.longueur = 0.350;
     robot.hauteur = 0.350;
   	robot.diago = Math.sqrt(0.25*0.25+0.35*0.35);
+  	robot.tapisDeroule = false;
 
     
     robot.nom = "robot principal "+cote;
@@ -69,6 +88,8 @@ function creerRobotPrincipal(cote){
 	robot.objetsTenus.nombre = 0;
 	robot.prendrePopcorn = prendrePopcorn;
 	robot.fermerClapet = fermerClapet;
+	robot.deroulerTapis = deroulerTapis;
+
 
 	robot.enDeplacement = false;
 	robot.aParcourir = {valeur : 0,sens : "avant"};
@@ -87,21 +108,56 @@ function creerRobotPrincipal(cote){
 
 function creerRobotSecondaire(cote){
 	var posx = {"gauche":-1.5+0.125+0.07+0.25,"droit":1.5-0.125-0.07-0.25};
-	var geo = new THREE.BoxGeometry(0.15,0.35,0.20);
-  	var boxMat = [
-		new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'brown',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'brown',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'brown',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'brown',side:THREE.doubleSided}),
-		new THREE.MeshLambertMaterial({color:'brown',side:THREE.doubleSided})];
 
+
+
+
+	if(cote==="droit"){
+		geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_PETITS,RAYON_ENNEMIS_PETITS,0.35,25);
+	}
+	else{
+		var geo = new THREE.BoxGeometry(0.15,0.35,0.20);
+	}
+
+
+
+
+
+
+
+  	var boxMat;
+
+  	if(cote==="gauche"){
+		boxMat = [	new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided})];
+	}else
+	{
+		boxMat = [	new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided})];
+	}
+
+
+
+
+/*
 	if(cote=="droit"){
 		var temp = boxMat[4];
 		boxMat[4] = boxMat[0];
 		boxMat[0] = temp;
 		boxMat.reverse();
-	}
+	}*/
+
+
+
+
 	var mat = new THREE.MeshFaceMaterial( boxMat );	
 	var rob = new THREE.Mesh(geo,mat);
 	
@@ -492,3 +548,43 @@ function fermerClapet(clapet){
 	}
 	return false;
 }
+
+
+
+
+
+function deroulerTapis(){
+	if(!this.tapisDeroule){
+		if(this.cote==="gauche")
+		{
+			if(this.verifCibleAtteignable({x: -0.2665,z:-0.420})){
+				plateau.dae.effects["gris_004-effect"].shader.material.color = {r:1,g:0,b:0}; 
+				this.tapisDeroule = true;
+				this.position.z -= 0.540;
+				this.position.x = -0.2265;
+				this.position.y +=  0.088;
+			}
+		}else
+		{
+			if(this.verifCibleAtteignable({x: 0.2665, z: -0.420})){
+				plateau.dae.effects["gris_003-effect"].shader.material.color = {r:1,g:0,b:0}; 
+				this.tapisDeroule = true;
+				this.position.z -= 0.540;
+				this.position.x = 0.2265;
+				this.position.y += 0.088;
+			}
+		}
+	}
+}
+
+
+
+
+/*
+function combinerPopcornGobelet(gob)
+{
+	for(var i=0;i<this.objtenus.nombre;i++)
+	{
+		if(this.objtenus[i])
+	}
+}*/
