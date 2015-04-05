@@ -17,7 +17,7 @@ module.exports = (function () {
 				name: "gr",
 				pos:{
 					x:0,
-					y:0,
+					y:0
 				},
 				speed:{ // in mm/sec
 					x:0,
@@ -30,14 +30,14 @@ module.exports = (function () {
 
 		if (this.nb_erobots == 2) {
 			this.erobot.push({ // small robot on position 1
-				name: "pr"
+				name: "pr",
 				pos:{
 					x:0,
-					y:0,
+					y:0
 				},
 				speed:{
 					x:0,
-					y:0,
+					y:0
 				},
 				lastUpdate: 0,
 				d:200, // en mm, penser à la modifier !!
@@ -75,6 +75,10 @@ module.exports = (function () {
 
 		return this[actName[0]][actName[1]];
 	};
+
+	Data.prototype.theEnnemyWentThere = function (pos){
+		// XXX
+	}
 
 	Data.prototype.isOk = function () { // XXX
 		return true;

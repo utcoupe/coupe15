@@ -87,14 +87,25 @@ module.exports = (function () {
 		// Find if there's a nearer one
 		if (!!action_name) {
 			var action_dist = getActionDistance(pos, action_name);
+			var action_priority = 1000;
 
 			Object.keys(this.todo).forEach(function(a_n) {
 				var temp_dist = getActionDistance(pos,a_n);
 
-				if ((isCloser(temp_dist, action_dist)) && // closer
-					(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none")){// suitable for us
-					action_name = a_n;
-					action_dist = temp_dist;
+				if ((this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") && // suitable for us
+					(this.todo[a_n].object.status != "lost")){ // and status initial,...
+
+					if (this.todo[a_n].priority < action_priority){ // more important
+						action_name = a_n;
+						action_dist = temp_dist;
+						action_priority = this.todo[a_n].priority;
+					} else {
+						if ((isCloser(temp_dist, action_dist)) && // closer
+							(this.todo[a_n].priority == action_priority)){ // and as important
+							action_name = a_n;
+							action_dist = temp_dist;
+						}
+					}
 				}
 			});
 		}
