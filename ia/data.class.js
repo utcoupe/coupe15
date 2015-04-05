@@ -76,9 +76,36 @@ module.exports = (function () {
 		return this[actName[0]][actName[1]];
 	};
 
-	Data.prototype.theEnnemyWentThere = function (pos){
-		// XXX
-	}
+	Actions.prototype.isCloser = function (dist1, dist2){ // il y a la meme dans actions.class.js
+		// Returns true if dist1 is smaller than dist2
+		// i.e. object 1 is closer than object 2
+
+		if(dist1 < dist2){
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	Actions.prototype.getDistance = function (pos1, pos2){
+		return sqrt((pos1.x - pos2.x)^2 + (pos1.y - pos2.y)^2);
+	};
+
+	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
+		// takes a position and the ennemy robot # to put everything in its surroundings (~ 1.2 * radius) as "lost" 
+
+		Object.keys(this.cylindre).forEach(function(c) {
+			if (getDistance(pos, this.cylindre(c).pos) < 0.6*this.cylindre(c).diametre) {
+				this.cylindre(c).status = "lost";
+			}
+		});
+
+		Object.keys(this.gobelet).forEach(function(g) {
+			if (getDistance(pos, this.gobelet(g).pos).d < 0.6*this.gobelet(g).diametre) {
+				this.gobelet(g).status = "lost";
+			}
+		});
+	};
 
 	Data.prototype.isOk = function () { // XXX
 		return true;

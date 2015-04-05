@@ -120,7 +120,7 @@ module.exports = (function () {
 		if(dist1.d < dist2.d){
 			return true;
 		} else {
-			if ((dist1.d == dist2.d) && (dist1.a < dist2.a))
+			if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
 				return true;
 			else
 				return false;
