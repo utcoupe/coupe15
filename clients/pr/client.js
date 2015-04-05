@@ -258,6 +258,9 @@
 				case "orders_array":
 					ordersArrayHandler(params.orders);
 					break;
+				case "send_message":
+					client.send("pr", params.name, {action_name: params.action_name});
+					break;
 				default:
 					logger.warn("Order name " + name + " " + from + " not understood");
 			}

@@ -130,7 +130,7 @@ module.exports = (function () {
 							y: dots[dot].y,
 						};
 
-						this.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos);
+						this.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
 					}
 					
 					// and delete the dot

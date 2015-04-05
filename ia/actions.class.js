@@ -37,8 +37,10 @@ module.exports = (function () {
 		// Call the function passing the action name as parameter, for eg.    actions.do("empiler1.1");
 
 		// If action doesn't exist
-		if (!this.exists(action_name))
+		if (!this.exists(action_name)){
+			logger.error("Trying to do an action that doesn't exist '" + action_name + "'");
 			return;
+		}
 
 		// Change action to state "in progress"
 		this.inprogress[action_name] = this.todo[action_name];
@@ -48,6 +50,10 @@ module.exports = (function () {
 		var act = this.inprogress[action_name];
 		act.orders.forEach(function (order, index, array){
 			this.ia.client.send(act.owner, order.name, order.params);
+		});
+		this.ia.client.send(act.owner, "send_message", {
+			name: "action_finished",
+			action_name: action_name
 		});
 
 		// Change action and its "to be killed" actions to state done
