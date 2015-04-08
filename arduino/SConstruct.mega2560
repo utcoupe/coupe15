@@ -66,12 +66,12 @@ elif platform == 'win32':
     SKETCHBOOK_HOME_DEFAULT = ''
 else:
     # For Ubuntu Linux (9.10 or higher)
-    ARDUINO_HOME_DEFAULT = os.path.join("..","..","arduino-1.0/") #'/home/YOU/apps/arduino-00XX/'
-    ARDUINO_PORT_DEFAULT = getUsbTty('/dev/ttyUSB*')
+    ARDUINO_HOME_DEFAULT = os.path.join("..","arduino-1.0/") #'/home/YOU/apps/arduino-00XX/'
+    ARDUINO_PORT_DEFAULT = getUsbTty('/dev/ttyACM*')
     AVR_BIN_PREFIX = 'avr-'
     SKETCHBOOK_HOME_DEFAULT = os.path.realpath('~/share/arduino/sketchbook/')
 
-ARDUINO_BOARD_DEFAULT = os.environ.get('ARDUINO_BOARD', 'nano328')
+ARDUINO_BOARD_DEFAULT = os.environ.get('ARDUINO_BOARD', 'mega2560')
 
 ARDUINO_HOME    = ARGUMENTS.get('ARDUINO_HOME', ARDUINO_HOME_DEFAULT)
 ARDUINO_PORT    = ARGUMENTS.get('ARDUINO_PORT', ARDUINO_PORT_DEFAULT)
@@ -149,7 +149,7 @@ assert(os.path.exists(TARGET+FILE_EXTENSION))
 
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',
     '-funsigned-char', '-funsigned-bitfields', '-fpack-struct', '-fshort-enums',
-    '-O3', '-mmcu=%s'%MCU]
+    '-O3', '-mmcu=%s'%MCU, '-D%s'%ARDUINO_BOARD]
 envArduino = Environment(CC = AVR_BIN_PREFIX+'g++', CXX = AVR_BIN_PREFIX+'g++', AS=AVR_BIN_PREFIX+'gcc',
     CPPPATH = ['build/core'], CPPDEFINES = {'F_CPU':F_CPU, 'ARDUINO':ARDUINO_VER},
     CFLAGS = cFlags+['-Wall'], CCFLAGS = cFlags, ASFLAGS=['-assembler-with-cpp','-mmcu=%s'%MCU],

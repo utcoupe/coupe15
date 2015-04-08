@@ -24,7 +24,7 @@
  * 
  * OPTIONS : '1' - '2 - '4' */
 
-#define ENCODER_EVAL 1
+#define ENCODER_EVAL 2
 
 #define FIXED_POINT_PRECISION 100000 //The robot's position is stocked with a precision of 1/FIXED_POINT_PRECISION ticks
 
