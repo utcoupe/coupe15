@@ -19,13 +19,21 @@ Control control;
 
 #define MAX_READ 64 
 void setup(){
-	//TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
+#ifdef mega2560
+	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
+#else
+#ifdef nano328
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
+#endif
+#endif
 	initPins();
 	SERIAL_MAIN.begin(115200, SERIAL_8N1);
+	analogWrite(MOTOR1_SPD, 127);
+	analogWrite(MOTOR2_SPD, 127);
 }
 
 void loop(){
+	while(1);
 	// on note le temps de debut 
 	timeStart = micros();
 	if (timeStart - timeLED > 60*1000000) {

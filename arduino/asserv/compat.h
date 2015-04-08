@@ -13,7 +13,6 @@
 #include "control.h"
 
 #define LOCAL_ADDR ADDR_TIBOT_ASSERV //Ici l'adresse locale du client
-#define ARDUINO
 
 void interruptLeftA();
 void interruptRightA();
