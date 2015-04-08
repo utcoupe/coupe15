@@ -1,47 +1,115 @@
-(function (){
-	"use strict";
-
+module.exports = (function () {
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('Client');
-	var SocketClient = require('../../server/socket_client.class.js');
+	var logger = log4js.getLogger('clientpr.acts');
 
-	var server = ""; // server adress
-	var client = new SocketClient({
-		server_ip: server,
-		type: "pr"
-	});
+	function Acts() {
+		this.arduinos = {};
+		this.ax12 = {};
+		this.servos = {};
+		
+		this.start();
+	}
 
-	logger.info("Started NodeJS client with pid " + process.pid);
+	Acts.prototype.start = function(){
+		// this.startArduino(this);
+	};
 
-	// Arduino
+	Acts.prototype.quit = function(){
+		if (this.arduinos)
+			this.quitArduinos();
+
+		if (this.ax12)
+			this.quiAX12();
+
+		return;
+	};
+
+	Acts.prototype.quitArduinos = function(){
+		return;
+	};
+
+	Acts.prototype.quiAX12 = function(){
+		return;
+	};
+
+	// Order switch
+	Acts.prototype.orderHandler = function (from, name, params) {
+		logger.info("Just received an order `" + name + "` from " + from + " with params :");
+		logger.info(params);
+
+		switch (name){
+			case "servo_goto":
+				// logger.info(!!params.servo && !!params.position);
+				// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
+					servo_goto(params.servo, params.position);
+				// }
+				break;
+			case "servo_close":
+				servo_close();
+				break;
+			case "servo_open":
+				servo_open();
+				break;
+			case "AX12_goto":
+				AX12_goto(params.position);
+				break;
+			case "AX12_close":
+				AX12_close();
+				break;
+			case "AX12_open":
+				AX12_open();
+				break;
+			case "steppers_move":
+				stepper_do(params.move, params.direction);
+				break;
+			case "steppers_toogle":
+				stepper_toogle();
+				break;
+			case "steppers_set_bottom":
+				stepper_setBottom();
+				break;
+			// case "orders_array":
+			// 	ordersArrayHandler(params.orders);
+			// 	break;
+			case "send_message":
+				client.send("pr", params.name, {action_name: params.action_name});
+				break;
+			default:
+				logger.warn("Order name " + name + " " + from + " not understood");
+		}
+	};
+
+
+	Acts.prototype.startArduino = function(ia){
 		var five = require("johnny-five");
 		var board = new five.Board({repl: false});
-		var boardReady = false;
-
+		
 		board.on("ready", function() {
 			logger.info("Connected to board");
-			boardReady = true;
+
+			ia.arduinos.zero.ready = this;
 			this.servo = [];
 			this.stepper = [];
-			this.stepperIs = "nowhere";
 			
+			// == Connections ==
 			// Pas à pas
 				this.stepper[0] = new five.Stepper({
 					type: five.Stepper.TYPE.FOUR_WIRE,
 					stepsPerRev: 200,
 					pins: [ 8, 9, 10, 11 ]
 				});
+				this.stepper[0].is = "nowhere";
 
-				// this.stepper[1] = new five.Stepper({
-				// 	type: five.Stepper.TYPE.DRIVER,
-				// 	stepsPerRev: 200,
-				// 	pins: [9, 10]
-				// })
+				this.stepper[1] = new five.Stepper({
+					type: five.Stepper.TYPE.DRIVER,
+					stepsPerRev: 200,
+					pins: [9, 10]
+				});
 
 				this.stepper[0].rpm(120).cw(); // change rien
 				// this.stepper[1].rpm(120).ccw();
 
-			// // Servo
+			// Servo
 				// this.servo[0] = new five.Servo({
 				// 	pin: 10
 				// });
@@ -57,64 +125,70 @@
 		board.on("error", function(e) {
 			logger.error(e);
 		});
+	};
 
-		// Servo
-			// function servo_goto(servo, position){
-			// 	if (boardReady) {
-			// 		// logger.info("Servo " + servo + " moved to " + position*180 + " :)");
-			// 		board.servo[servo].to(position*180);
-			// 	}
-			// };
+	Acts.prototype.startAX12 = function(){
+		
+	};
 
-			// function servo_close(){
-			// 	if (boardReady) {
-			// 		board.servo[0].to(65);
-			// 		board.servo[1].to(86);
-			// 	}
-			// };
+	// Servo
+		function servo_goto(servo, position){
+			// if (ia.arduinos.zero.ready) {
+			// 	// logger.info("Servo " + servo + " moved to " + position*180 + " :)");
+			// 	board.servo[servo].to(position*180);
+			// }
+		}
 
-			// function servo_open(){
-			// 	if (boardReady) {
-			// 		board.servo[0].to(112);
-			// 		board.servo[1].to(135);
-			// 	}
-			// };
+		function servo_close(){
+			// if (ia.arduinos.zero.ready) {
+			// 	board.servo[0].to(65);
+			// 	board.servo[1].to(86);
+			// }
+		}
 
-		// Pas à pas
-			function stepper_do(move, direction){
-				// direction is given for the left motor as it sees it
-				if (boardReady) {
-					if (direction == "clockwise"){
-						logger.info("Moving "+move+" clockwise");
-						board.stepper[0].rpm(120).cw().step(move, function(){}); // left
-						// board.stepper[1].rpm(60).cw().step(600, function(){}); // right
-					} else {
-						logger.info("Moving "+move+" counterclockwise");
-						// board.stepper[0].rpm(120).cw(); // change rien
-						// board.stepper[1].rpm(120).cw();
-						board.stepper[0].rpm(120).ccw().step(move, function(){}); // left
-						// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
+		function servo_open(){
+			// if (ia.arduinos.zero.ready) {
+			// 	board.servo[0].to(112);
+			// 	board.servo[1].to(135);
+			// }
+		}
+
+	// Pas à pas
+		function stepper_do(move, direction){
+			// direction is given for the left motor as it sees it
+			if (ia.arduinos.zero.ready) {
+				if (direction == "clockwise"){
+					logger.info("Moving "+move+" clockwise");
+					board.stepper[0].rpm(120).cw().step(move, function(){}); // left
+					// board.stepper[1].rpm(60).cw().step(600, function(){}); // right
+				} else {
+					logger.info("Moving "+move+" counterclockwise");
+					// board.stepper[0].rpm(120).cw(); // change rien
+					// board.stepper[1].rpm(120).cw();
+					board.stepper[0].rpm(120).ccw().step(move, function(){}); // left
+					// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
+				}
+			}
+		}
+
+		function stepper_setBottom(){
+			board.stepper[0].is = "down";
+		}
+
+		function stepper_toogle(){
+			if (ia.arduinos.zero.ready) {
+				if (board.stepper[0].is == "up"){
+					stepper_do(250, "clockwise");
+					board.stepper[0].is = "down";
+				} else {
+					if (board.stepper[0].is == "down") {
+						stepper_do(250, "counterclockwise");
+						board.stepper[0].is = "up";
 					}
 				}
 			}
+		}
 
-			function stepper_setBottom(){
-				board.stepperIs = "down";
-			}
-
-			function stepper_toogle(){
-				if (boardReady) {
-					if (board.stepperIs == "up"){
-						stepper_do(250, "clockwise");
-						board.stepperIs = "down";
-					} else {
-						if (board.stepperIs == "down") {
-							stepper_do(250, "counterclockwise");
-							board.stepperIs = "up";
-						}
-					}
-				}
-			}
 
 	// AX-12
 		// var MotorSystem = require("dynanode");
@@ -219,57 +293,10 @@
 
 
 
-	// Order switch
-		function orderHandler (from, name, params) {
-			// logger.info("Just received an order `" + name + "` from " + from + " with params :");
-			// logger.info(params);
-
-			switch (name){
-				case "servo_goto":
-					// logger.info(!!params.servo && !!params.position);
-					// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
-						servo_goto(params.servo, params.position);
-					// }
-					break;
-				case "servo_close":
-					servo_close();
-					break;
-				case "servo_open":
-					servo_open();
-					break;
-				case "AX12_goto":
-					AX12_goto(params.position);
-					break;
-				case "AX12_close":
-					AX12_close();
-					break;
-				case "AX12_open":
-					AX12_open();
-					break;
-				case "steppers_move":
-					stepper_do(params.move, params.direction);
-					break;
-				case "steppers_toogle":
-					stepper_toogle();
-					break;
-				case "steppers_set_bottom":
-					stepper_setBottom();
-					break;
-				case "orders_array":
-					ordersArrayHandler(params.orders);
-					break;
-				case "send_message":
-					client.send("pr", params.name, {action_name: params.action_name});
-					break;
-				default:
-					logger.warn("Order name " + name + " " + from + " not understood");
-			}
-		}
-
+	
 		// function ordersArrayHandler(array){
 		// 	for (var i = 0; i < array.length; i++)
 		// 		orderHandler("pr", array[i].name, array[i].params);
 		// }
-
-		// client.order(orderHandler);
+	return Acts;
 })();

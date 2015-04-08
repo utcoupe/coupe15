@@ -76,7 +76,7 @@ module.exports = (function () {
 		return this[actName[0]][actName[1]];
 	};
 
-	Actions.prototype.isCloser = function (dist1, dist2){ // il y a la meme dans actions.class.js
+	Data.prototype.isCloser = function (dist1, dist2){ // il y a la meme dans actions.class.js
 		// Returns true if dist1 is smaller than dist2
 		// i.e. object 1 is closer than object 2
 
@@ -87,7 +87,7 @@ module.exports = (function () {
 		}
 	};
 
-	Actions.prototype.getDistance = function (pos1, pos2){
+	Data.prototype.getDistance = function (pos1, pos2){
 		return sqrt((pos1.x - pos2.x)^2 + (pos1.y - pos2.y)^2);
 	};
 

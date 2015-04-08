@@ -1,5 +1,21 @@
 (function () {
+	"use strict";
+
 	// Requires
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('clientpr');
+	// var tmp = require('./actuators.class.js');
+	// console.log(tmp);
+	var acts = new (require('./actuators.class.js'))();
+
+	var SocketClient = require('../../server/socket_client.class.js');
+	var server = ""; // server adress
+	var client = new SocketClient({
+		server_ip: server,
+		type: "pr"
+	});
+
+	logger.info("Started NodeJS client with pid " + process.pid);
 
 	var queue = [];
 
@@ -23,24 +39,43 @@
 
 	// Unshift the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		l = queue.length;
+		var l = queue.length;
 
 		// Adds the order to the queue
 		queue.unshift({
 			from: f,
 			name: n,
-			params: params
+			params: p
 		});
+		// logger.info("Order added to queue ! : ");
+		// logger.info(queue);
 
-		if (l === 0) executeNextOrder();
+		executeNextOrder();
 	}
 
 	// Execute order
 	function executeNextOrder(){
-		order = queue.shift();
-
-		orderHandler(order.from, order.name, order.params);
-
-		if (l === 0) executeNextOrder();
+		if (queue.length !== 0){
+			var order = queue.shift();
+			
+			logger.info("Doing '" + order.name + "'...");
+			acts.orderHandler(order.from, order.name, order.params);
+			
+			executeNextOrder();
+		}
 	}
+
+	function quit () {
+		logger.info("Please wait while exiting...");
+		acts.quit();
+	}
+
+
+	// Exiting :
+	//do something when app is closing
+	process.on('exit', quit);
+	// catches ctrl+c event
+	process.on('SIGINT', quit);
+	// //catches uncaught exceptions
+	// process.on('uncaughtException', quit);
 })();
