@@ -13,17 +13,11 @@
 
 #define PIN_ENC_LEFT_A 2
 #define PIN_ENC_LEFT_B 11
-#define PIN_ENC_LEFT_0 0
 #define PIN_ENC_RIGHT_A 3
 #define PIN_ENC_RIGHT_B 12
-#define PIN_ENC_RIGHT_0 0
 
-#define INTERRUPT_ENC_LEFT_A 1
-#define INTERRUPT_ENC_LEFT_B 4
-#define INTERRUPT_ENC_LEFT_0 0
-#define INTERRUPT_ENC_RIGHT_A 0
-#define INTERRUPT_ENC_RIGHT_B 3
-#define INTERRUPT_ENC_RIGHT_0 1
+#define INTERRUPT_ENC_LEFT_A 0
+#define INTERRUPT_ENC_RIGHT_A 1
 #endif
 
 #ifdef mega2560
@@ -38,10 +32,8 @@
 
 #define PIN_ENC_LEFT_A 18
 #define PIN_ENC_LEFT_B 19
-#define PIN_ENC_LEFT_0 0
 #define PIN_ENC_RIGHT_A 20
 #define PIN_ENC_RIGHT_B 21
-#define PIN_ENC_RIGHT_0 0
 
 #define INTERRUPT_ENC_LEFT_A 5
 #define INTERRUPT_ENC_LEFT_B 4
