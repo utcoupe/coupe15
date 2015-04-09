@@ -21,6 +21,7 @@ class Motor
 
 	private:
 	int motor_side;
+	int last_pwm;
 };
 
 #endif

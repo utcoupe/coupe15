@@ -32,13 +32,10 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case GOTOA: {
 		int x, y, a_int;
 		float a;
-		char a_str[10];
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
 		a = a_int / FLOAT_PRECISION;
-		dtostrf(a, 1, 5, a_str);
 		control.pushGoal(id, TYPE_POS, x, y, 0);
 		control.pushGoal(id, TYPE_ANG, a, 0, 0);
-		Serial.println(a_str);
 		}
 		break;
 	case ROT: {
