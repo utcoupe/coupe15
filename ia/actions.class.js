@@ -11,7 +11,7 @@ module.exports = (function () {
 		this.todo = {};
 		this.inprogress = {};
 		this.killed = {};
-		this.errors = [];
+		this.errors = []; // XXX utile ?
 
 		this.todo = this.importActions(data);
 	}
@@ -49,7 +49,7 @@ module.exports = (function () {
 		// Do action
 		var act = this.inprogress[action_name];
 		act.orders.forEach(function (order, index, array){
-			this.ia.client.send(act.owner, order.name, order.params);
+			this.ia.client.send(act.owner, order.name, order.params); // XXXX pourquoi ça bugue ?
 		});
 		this.ia.client.send(act.owner, "send_message", {
 			name: "action_finished",
@@ -166,7 +166,7 @@ module.exports = (function () {
 	};
 
 	Actions.prototype.isOk = function () { // XXX
-		if (errors.length != 0){
+		if (errors.length !== 0){
 			logger.warn(this.errors);
 			return false;
 		} else 
