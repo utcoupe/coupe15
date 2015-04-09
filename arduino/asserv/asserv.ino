@@ -28,12 +28,9 @@ void setup(){
 #endif
 	initPins();
 	SERIAL_MAIN.begin(115200, SERIAL_8N1);
-	analogWrite(MOTOR1_SPD, 127);
-	analogWrite(MOTOR2_SPD, 127);
 }
 
 void loop(){
-	while(1);
 	// on note le temps de debut 
 	timeStart = micros();
 	if (timeStart - timeLED > 60*1000000) {
