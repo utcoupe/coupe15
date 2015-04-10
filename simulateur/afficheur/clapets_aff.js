@@ -1,4 +1,6 @@
-function afficherClapet(x,y,z,zrot,coul)
+var Simu = Simu || {};
+
+Simu.afficherClapet = function afficherClapet(x,y,z,zrot,coul)
 {
     /*  Entrees :
             x, y, z
@@ -9,9 +11,6 @@ function afficherClapet(x,y,z,zrot,coul)
  	var clapet = new THREE.Mesh(geo,mat);
  	clapet.position.set(x,y,z);
  	clapet.rotation.z = zrot;
- 	scene.add(clapet);
-    clapets.push(clapet);
+ 	Simu.scene.add(clapet);
+    Simu.clapets.push(clapet);
 }
-
-
-

@@ -1,7 +1,7 @@
+var Simu = Simu || {};
 
 
-
-function afficherAmpoule(x,y,z,coul)
+Simu.afficherAmpoule = function afficherAmpoule(x,y,z,coul)
 {
     /*  Entrees
             x, y, z
@@ -12,7 +12,7 @@ function afficherAmpoule(x,y,z,coul)
     var mat = new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSide});
     var ampoule = new THREE.Mesh(geo,mat);
     ampoule.position.set(x,y,z);
-    scene.add(ampoule);
-    ampoules.push(ampoule);
+    Simu.scene.add(ampoule);
+    Simu.ampoules.push(ampoule);
 }
 
