@@ -3,16 +3,14 @@
 
 	// Requires
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('clientpr');
-	// var tmp = require('./actuators.class.js');
-	// console.log(tmp);
+	var logger = log4js.getLogger('clientgr');
 	var acts = new (require('./actuators.class.js'))();
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = ""; // server adress
 	var client = new SocketClient({
 		server_ip: server,
-		type: "pr"
+		type: "gr"
 	});
 
 	logger.info("Started NodeJS client with pid " + process.pid);
@@ -27,10 +25,8 @@
 			return;
 		}
 
-		// if end of match, empty the queue and stop the current action
-		if(name == "stop"){
-			queue = [];
-			// XXX comment stopper un action en cours ???
+		if(name == "pause"){
+			// XXX
 			return;
 		}
 
@@ -64,18 +60,4 @@
 			executeNextOrder();
 		}
 	}
-
-	function quit () {
-		logger.info("Please wait while exiting...");
-		acts.quit();
-	}
-
-
-	// Exiting :
-	//do something when app is closing
-	process.on('exit', quit);
-	// catches ctrl+c event
-	process.on('SIGINT', quit);
-	// //catches uncaught exceptions
-	// process.on('uncaughtException', quit);
 })();

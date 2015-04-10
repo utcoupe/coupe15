@@ -156,5 +156,5 @@
 				logger.info('Child closed with code: ' + code);
 			// Send message XXX
 		});
-	};
+	}
 })();
