@@ -19,11 +19,24 @@
 		<script src="pages/reseau/reseau.js"></script>
 		<script src="pages/simulateur/simulateur.js"></script>
 		<script src="pages/telecommande/telecommande.js"></script>
+
+		<script src="../simulateur/afficheur/js/three.min.js"></script>
+		<script src="../simulateur/afficheur/js/OrbitControls.js"></script>
+		<script src="../simulateur/afficheur/js/ColladaLoader.js"></script>
+		<script src="../simulateur/afficheur/js/loader.js"></script>
+		<script src="../simulateur/afficheur/clapets_aff.js"></script>
+		<script src="../simulateur/afficheur/pieds_aff.js"></script>
+		<script src="../simulateur/afficheur/gobelets_aff.js"></script>
+		<script src="../simulateur/afficheur/ampoules_aff.js"></script>
+		<script src="../simulateur/afficheur/robots_aff.js"></script>
+		<script src="../simulateur/afficheur/afficheur.js"></script>
+
 	</head>
 	<body>
 		<body ng-controller="AppCtrl">
 			<div ng-include="'menu.tpl.html'"></div>
 			<div ng-view class="container-fluid"></div>
 		</body>
+
 	</body>
 </html>
