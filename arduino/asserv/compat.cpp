@@ -4,6 +4,7 @@
  * Date : 13/10/13			*
  ****************************************/
 #include "compat.h"
+#include "pins.h"
 
 #if ENCODER_EVAL == 4
 #ifdef nano328
@@ -68,20 +69,10 @@ void interruptRightB(){
 }
 #endif
 
-#if GESTION_3EME_FIL
-void interruptLeft0{
-	control.getLenc()->interrupt0();
-}
-
-void interruptRight0{
-	control.getRenc()->interrupt0();
-}
-#endif
-
 void serial_send(char data) { //Envoi d'un octet en serial, dépend de la plateforme
-	Serial.write(data);
+	SERIAL_MAIN.write(data);
 }
 
 char generic_serial_read(){
-	return Serial.read();
+	return SERIAL_MAIN.read();
 }

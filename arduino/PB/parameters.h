@@ -6,6 +6,9 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
+#define BAUDRATE 115200
+#define SERIAL_TYPE SERIAL_8N1
+
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
  * (une pour chaque changement de valeur des fils A et B)
@@ -90,11 +93,6 @@
 //MIN_DIST_BLOCKED : disatcne min a parcourir pour ne pas etre considere bloqué (mm)
 #define PERIOD_BLOCKED 1000
 #define MIN_DIST_BLOCKED 3
-
-//PIN LED
-#define LED_MAINLOOP 14
-#define LED_BLOCKED 23
-#define LED_DEBUG 13
 
 #define SERIAL_MAIN Serial
 

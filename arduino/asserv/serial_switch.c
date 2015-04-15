@@ -7,7 +7,7 @@
 #include "protocol.h"
 #include "control.h"
 #include "compat.h"
-
+#include "pins.h"
 
 extern Control control;
 

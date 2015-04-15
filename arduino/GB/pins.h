@@ -18,6 +18,10 @@
 
 #define INTERRUPT_ENC_LEFT_A 0
 #define INTERRUPT_ENC_RIGHT_A 1
+
+#define LED_MAINLOOP 13
+#define LED_DEBUG 13
+#define LED_BLOCKED 14
 #endif
 
 #ifdef mega2560
@@ -37,10 +41,12 @@
 
 #define INTERRUPT_ENC_LEFT_A 5
 #define INTERRUPT_ENC_LEFT_B 4
-#define INTERRUPT_ENC_LEFT_0 0
 #define INTERRUPT_ENC_RIGHT_A 3
 #define INTERRUPT_ENC_RIGHT_B 2
-#define INTERRUPT_ENC_RIGHT_0 1
+
+#define LED_MAINLOOP 13
+#define LED_DEBUG 13
+#define LED_BLOCKED 14
 #endif
 
 #endif

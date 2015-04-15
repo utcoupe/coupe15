@@ -9,6 +9,7 @@
 #include "parameters.h"
 #include "protocol.h"
 #include "control.h"
+#include "pins.h"
 
 unsigned long index = 0;
 unsigned long timeStart = 0;
@@ -27,7 +28,7 @@ void setup(){
 #endif
 #endif
 	initPins();
-	SERIAL_MAIN.begin(115200, SERIAL_8N1);
+	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 }
 
 void loop(){
