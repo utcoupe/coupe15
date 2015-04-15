@@ -26,4 +26,3 @@ lib:
 	
 dep:
 	gccmakedep $(SRCS)
-

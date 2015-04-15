@@ -57,8 +57,8 @@ function loopAX12() {
 	}
 }
 
-// libusb2ax.dxl_write_word(3, P_COUPLE, 800);
-// libusb2ax.dxl_write_word(2, P_COUPLE, 800);
+libusb2ax.dxl_write_word(3, P_COUPLE, 600);
+libusb2ax.dxl_write_word(2, P_COUPLE, 600);
 // libusb2ax.dxl_write_word(3, P_GOAL_POSITION_L, 150*1024/300);
 // libusb2ax.dxl_write_word(2, P_GOAL_POSITION_L, 150*1024/300);
 // setTimeout(function() {
