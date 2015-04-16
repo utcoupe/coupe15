@@ -212,7 +212,7 @@ void dxl_txrx_packet()
 	}while( gbCommStatus == COMM_RXWAITING );	
 }
 
-int dxl_get_result()
+EXPORT int dxl_get_result()
 {
 	return gbCommStatus;
 }
@@ -304,7 +304,7 @@ EXPORT int dxl_read_byte( int id, int address )
 	gbInstructionPacket[LENGTH] = 4;
 	
 	dxl_txrx_packet();
-	usleep(1000);
+	usleep(5000);
 
 	return (int)gbStatusPacket[PARAMETER];
 }
@@ -320,7 +320,7 @@ EXPORT void dxl_write_byte( int id, int address, int value )
 	gbInstructionPacket[LENGTH] = 4;
 	
 	dxl_txrx_packet();
-	usleep(1000);
+	usleep(5000);
 }
 
 EXPORT int dxl_read_word( int id, int address )
@@ -334,7 +334,7 @@ EXPORT int dxl_read_word( int id, int address )
 	gbInstructionPacket[LENGTH] = 4;
 	
 	dxl_txrx_packet();
-	usleep(1000);
+	usleep(5000);
 
 	return dxl_makeword((int)gbStatusPacket[PARAMETER], (int)gbStatusPacket[PARAMETER+1]);
 }
@@ -351,7 +351,7 @@ EXPORT void dxl_write_word( int id, int address, int value )
 	gbInstructionPacket[LENGTH] = 5;
 	
 	dxl_txrx_packet();
-	usleep(1000);
+	usleep(5000);
 }
 
 
