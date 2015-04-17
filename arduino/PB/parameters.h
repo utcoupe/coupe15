@@ -8,6 +8,7 @@
 
 #define BAUDRATE 115200
 #define SERIAL_TYPE SERIAL_8N1
+#define ARDUINO_ID "A"
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick

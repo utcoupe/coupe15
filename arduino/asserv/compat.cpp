@@ -59,6 +59,7 @@ void interruptRightA(){
 	control.getRenc()->interruptA();
 }
 
+
 #if ENCODER_EVAL == 4
 void interruptLeftB(){
 	control.getLenc()->interruptB();

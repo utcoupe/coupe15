@@ -133,7 +133,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		control.resume();
 		break;
 	case WHOAMI:
-		*ret_size = sprintf(ret, "ASSERV");
+		*ret_size = sprintf(ret, ARDUINO_ID);
 		break;
 	default:
 		return -1;//commande inconnue
