@@ -44,9 +44,9 @@
 #define INTERRUPT_ENC_RIGHT_A 3
 #define INTERRUPT_ENC_RIGHT_B 2
 
-#define LED_MAINLOOP 13
-#define LED_DEBUG 13
-#define LED_BLOCKED 14
+#define LED_DEBUG 14
+#define LED_BLOCKED 15
+#define LED_MAINLOOP 16
 #endif
 
 #endif
