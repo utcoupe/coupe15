@@ -6,13 +6,9 @@ var libusb2ax = ffi.Library('../libs/dynamixel/src_lib/libusb2ax', {
   'dxl_initialize': ['int', ['int', 'int']],
   'dxl_write_word': ['void', ['int', 'int', 'int']],
   'dxl_read_word': ['int', ['int', 'int']],
-  'dxl_terminate': ['void', ['void']]
+  'dxl_terminate': ['void', ['void']],
+  'dxl_get_result': ['int', ['void']]
 })
-
-if(libusb2ax.dxl_initialize(0, 1) <= 0) {
-	logger.error("Impossible de se connecter à l'USB2AX");
-	process.exit(1);
-}
 
 var P_GOAL_POSITION_L = 30;
 var P_POSITION = 36;
@@ -51,43 +47,41 @@ function loopAX12() {
 		else {
 			if(!ax12s[i].arrived) {
 				ax12s[i].arrived = true;
-				logger.info(ax12s[i].id+" arrivé !");
+				logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
 			}
 		}
 	}
+	setTimeout(loopAX12, 50);
 }
 
-libusb2ax.dxl_write_word(3, P_COUPLE, 600);
-libusb2ax.dxl_write_word(2, P_COUPLE, 600);
-// libusb2ax.dxl_write_word(3, P_GOAL_POSITION_L, 150*1024/300);
-// libusb2ax.dxl_write_word(2, P_GOAL_POSITION_L, 150*1024/300);
-// setTimeout(function() {
-// 	libusb2ax.dxl_write_word(3, P_GOAL_POSITION_L, parseInt(220*1024/300));
-// 	libusb2ax.dxl_write_word(2, P_GOAL_POSITION_L, parseInt(80*1024/300));
-// }, 500);
+function degToAx12(deg) {
+	return parseInt((deg+150)*1024/300);
+}
+function openAx12Down() {
+	ax12s['2'].obj = degToAx12(0);
+	ax12s['3'].obj = degToAx12(0);
+}
+function closeAx12Down() {
+	ax12s['2'].obj = degToAx12(-75);
+	ax12s['3'].obj = degToAx12(75);
+}
 
-var ite = 0;
+if(libusb2ax.dxl_initialize(0, 1) <= 0) {
+	logger.error("Impossible de se connecter à l'USB2AX");
+	process.exit(1);
+}
+libusb2ax.dxl_write_word(2, P_COUPLE, 700);
+libusb2ax.dxl_write_word(3, P_COUPLE, 700);
+loopAX12();
 
+var t = true;
 function loop() {
-	loopAX12();
-	ite++;
-
-	if(ite > 20) {
-		if(ax12s['3'].obj == parseInt(240*1024/300)) {
-			ax12s['3'].obj = parseInt(150*1024/300);
-			ax12s['2'].obj = parseInt(150*1024/300);
-		}
-		else {
-			ax12s['3'].obj = parseInt(240*1024/300);
-			ax12s['2'].obj = parseInt(60*1024/300);
-		}
-		ite = 0;
-		// printf("change pos_AX12_3 = %d\n", pos_AX12_3);
-		// console.log(ax12s);
+	if(t) {
+		closeAx12Down();
+	} else {
+		openAx12Down();
 	}
-
-	setTimeout(loop, 50);
+	t = !t;
+	setTimeout(loop, 1000);
 }
 loop();
-
-// libusb2ax.dxl_terminate();
