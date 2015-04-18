@@ -4,8 +4,6 @@
 	// Requires
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('clientpr');
-	// var tmp = require('./actuators.class.js');
-	// console.log(tmp);
 	var acts = new (require('./actuators.class.js'))();
 
 	var SocketClient = require('../../server/socket_client.class.js');

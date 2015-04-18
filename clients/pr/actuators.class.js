@@ -87,7 +87,8 @@ module.exports = (function () {
 		board.on("ready", function() {
 			logger.info("Connected to board");
 
-			ia.arduinos.zero.ready = this;
+			ia.arduinos.zero = this;
+			ia.arduinos.zero.ready = true;
 			this.servo = [];
 			this.stepper = [];
 			
