@@ -32,7 +32,6 @@
 
 #define FIXED_POINT_PRECISION 100000 //The robot's position is stocked with a precision of 1/FIXED_POINT_PRECISION ticks
 
-#define MAX_GOALS 15 //nombre max de goals dans la file, évite surcharge mémoire
 #define DUREE_CYCLE 5 //période de calcul, en ms
 #define FREQ (1/(DUREE_CYCLE/1000.0))
 
@@ -80,12 +79,12 @@
 #define ANG_P 300 //spd = P * E_ang(rad)
 #define ANG_I 0 //spd = I * I_ang(rad * s)
 #define ANG_D 50 //a regler par incrementation
-#define ANG_AWU 0 //Anti-windup, en radian
+#define ANG_BIAS 0 //Anti-windup, en radian
 
 #define DIS_P 0.5 //spd = P * E_dis(mm)
 #define DIS_I 0 //spd = I * I_dis(mm * s)
 #define DIS_D 0.09 //a regler par incrementation
-#define DIS_AWU 0 //Anti-windup, en mm
+#define DIS_BIAS 0 //Anti-windup, en mm
 
 #define TIME_BETWEEN_ORDERS 500
 

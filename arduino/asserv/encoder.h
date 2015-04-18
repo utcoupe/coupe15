@@ -1,37 +1,29 @@
 /****************************************
  * Author : Quentin C			*
  * Mail : quentin.chateau@gmail.com	*
- * Date : 11/10/13			*
+ * Date : 18/04/15			*
  ****************************************/
 #ifndef ENCODER_H
 #define ENCODER_H
 
 #include "parameters.h"
 
-#define LEFT_SIDE 0
-#define RIGHT_SIDE 1
+extern volatile long left_ticks;
+extern volatile long right_ticks;
 
-class Encoder{
-	public:
-	long getTicks();
-	void reset();
-	void interruptA();
-	#if ENCODER_EVAL == 4
-	void interruptB();
-	#endif
-	void interrupt0();//renvoie le nbr de ticks depuis le dernier interrupt 0 et 0 si c'est le premier tour
-	int getError();
-	Encoder(int p_side);
+void left_encoder_reset(void);
+void right_encoder_reset(void);
 
-	private:
-	long ticks;
-	long last_ticks_on_0;
-	bool last_value_A;
-	bool last_value_B;
-	bool signal_0_init;
-	int side; //prend les valeur LEFT_SIDE ou RIGHT_SIDE
-	int ticks_error;
-	int pin_b, pin_a;
-};
+inline void encoders_reset(void) {
+	left_encoder_reset();
+	right_encoder_reset();
+}
+
+void leftInterruptA(void);
+void rightInterruptA(void);
+#if ENCODER_EVAL == 4
+void leftInterruptB(void);
+void rightInterruptB(void);
+#endif
 
 #endif
