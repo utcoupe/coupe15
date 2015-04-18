@@ -6,6 +6,7 @@
 #include "serial_switch.h"
 #include "protocol.h"
 #include "control.h"
+#include "encoder.h"
 #include "compat.h"
 #include "pins.h"
 
@@ -21,7 +22,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		digitalWrite(LED_DEBUG, LOW);
 		break;
 	case GET_CODER:
-		*ret_size = sprintf(ret, "%li;%li", control.getLenc()->getTicks(), control.getRenc()->getTicks());
+		*ret_size = sprintf(ret, "%li;%li", left_ticks, right_ticks);
 		break;
 	case GOTO: {
 		int x, y;

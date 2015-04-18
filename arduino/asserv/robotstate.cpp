@@ -13,7 +13,7 @@
  * 		      CLASSE ROBOTSTATE			*
  *							*
  ********************************************************/
-RobotState::RobotState():encoderLeft(LEFT_SIDE), encoderRight(RIGHT_SIDE)
+RobotState::RobotState()
 {
 	RobotState::reset();
 }
@@ -26,10 +26,9 @@ void RobotState::reset(){
 	current_pos.y = 0;
 	current_pos.angle = 0;
 	current_pos.modulo_angle = 0;
-	encoderRight.reset();
-	encoderLeft.reset();
-	last_ticksR = encoderRight.getTicks();
-	last_ticksL = encoderLeft.getTicks();
+	encoders_reset();
+	last_ticksR = right_ticks;
+	last_ticksL = left_ticks;
 }
 
 pos RobotState::getMmPos(){
@@ -38,14 +37,6 @@ pos RobotState::getMmPos(){
 	mm_pos.x = current_pos.x / FIXED_POINT_PRECISION;
 	mm_pos.y = current_pos.y / FIXED_POINT_PRECISION;
 	return mm_pos;
-}
-
-Encoder* RobotState::getRenc(){
-	return &encoderRight;
-}
-
-Encoder* RobotState::getLenc(){
-	return &encoderLeft;
 }
 
 void RobotState::pushMmPos(pos n_pos){
@@ -57,8 +48,8 @@ void RobotState::pushMmPos(pos n_pos){
 
 void RobotState::update(){
 	static float last_angle = current_pos.angle;
-	long ticksR = encoderRight.getTicks();
-	long ticksL = encoderLeft.getTicks();
+	long ticksR = right_ticks;
+	long ticksL = left_ticks;
 	float dl = (ticksL - last_ticksL)*TICKS_TO_MM_LEFT;
 	float dr = (ticksR - last_ticksR)*TICKS_TO_MM_RIGHT;
 

@@ -236,14 +236,6 @@ bool Control::isBlocked() {
 	return robot.isBlocked();
 }
 
-Encoder* Control::getRenc(){
-	return robot.getRenc();
-}
-
-Encoder* Control::getLenc(){
-	return robot.getLenc();
-}
-
 void Control::pause(){
 	fifo.pause();
 }

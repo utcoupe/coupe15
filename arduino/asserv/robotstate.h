@@ -28,8 +28,6 @@ class RobotState{
 	RobotState();//Constructeur
 	void reset();
 	pos getMmPos();
-	Encoder* getRenc();
-	Encoder* getLenc();
 	void pushMmPos(pos n_pos);
 	void update();
 
@@ -38,8 +36,6 @@ class RobotState{
 
 	private:
 	void blocked_management();
-	Encoder encoderLeft;
-	Encoder encoderRight;
 	pos current_pos;
 	bool blocked, use_block, last_block; //Detecte si le robot est bloqué (attention ici immobile = bloqué)
 	long last_ticksR;

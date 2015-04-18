@@ -48,10 +48,6 @@ class Control{
 	pos getPos();
 	bool isBlocked();
 
-	//Renvoie les codeurs (utile pour debug)
-	Encoder* getLenc();
-	Encoder* getRenc();
-
 	//Permet la gestion de la pause
 	void pause();
 	void resume();

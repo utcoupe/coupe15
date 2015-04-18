@@ -1,129 +1,119 @@
 /****************************************
  * Author : Quentin C			*
  * Mail : quentin.chateau@gmail.com	*
- * Date : 13/10/13			*
+ * Date : 18/04/15			*
  ****************************************/
 #include "encoder.h"
 #include "compat.h"
 #include "pins.h"
 
-/********************************************************
- * 							*
- * 		      CLASSE ENCODER			*
- *							*
- ********************************************************/
-Encoder::Encoder(int p_side){
-	side = p_side;
-	if(side == LEFT_SIDE){
-		pin_b = PIN_ENC_LEFT_B;
-		pin_a = PIN_ENC_LEFT_A;
-	}else {
-		pin_b = PIN_ENC_RIGHT_B;
-		pin_a = PIN_ENC_RIGHT_A;
-	}
-	Encoder::reset();
+volatile long left_ticks = 0;
+volatile long right_ticks = 0;
+
+char left_last_value_A = 0;
+char left_last_value_B = 0;
+char right_last_value_A = 0;
+char right_last_value_B = 0;
+
+void left_encoder_reset(void) {
+	left_ticks = 0;
 }
 
-long Encoder::getTicks(){
-	if (side == LEFT_SIDE) {
-		return -ticks;
-	}else {
-		return ticks;
-	}
-}
-
-void Encoder::reset(){
-	ticks = 0;
-	signal_0_init = false;
-	ticks_error = 0;
-	if(side == LEFT_SIDE){
-		last_value_A = digitalRead(PIN_ENC_LEFT_A);
-		last_value_B = digitalRead(PIN_ENC_LEFT_B);
-	}
-	else{
-		last_value_A = digitalRead(PIN_ENC_RIGHT_A);
-		last_value_B = digitalRead(PIN_ENC_RIGHT_B);
-	}
-}
-
-int Encoder::getError(){
-	return ticks_error;
+void right_encoder_reset(void) {
+	right_ticks = 0;
 }
 
 #if ENCODER_EVAL == 4
-void Encoder::interruptA(){
-	bool new_value;
-	new_value = digitalRead(pin_a);
+inline void interruptA(volatile long *ticks, int *last_value_A, int last_value_B, int pin) {
+	int new_value;
+	new_value = digitalRead(pin);
 	if(new_value == 1)
 		if(last_value_B == 1)
-			ticks--;
+			*ticks--;
 		else
-			ticks++;
+			*ticks++;
 
 	else
 		if(last_value_B == 1)
-			ticks++;
+			*ticks++;
 		else
-			ticks--;
-	last_value_A = new_value;
+			*ticks--;
+	*last_value_A = new_value;
 }
 
-void Encoder::interruptB(){
+inline void interruptB(volatile long *ticks, int *last_value_B, int last_value_A, int pin) {
 	bool new_value;
-	new_value = digitalRead(pin_b);
+	new_value = digitalRead(pin);
 	if(new_value == 1)
 		if(last_value_A == 1)
-			ticks++;
+			*ticks++;
 		else
-			ticks--;
+			*ticks--;
 
 	else
 		if(last_value_A == 1)
-			ticks--;
+			*ticks--;
 		else
-			ticks++;
+			*ticks++;
+	*last_value_B = new_value;
+}
 
-	last_value_B = new_value;
+void leftInterruptA(void) {
+	interruptA(&left_ticks, &left_last_value_A,
+		       left_last_value_B, PIN_ENC_LEFT_A);
+}
+
+void rightInterruptA(void) {
+	interruptA(&right_ticks, &right_last_value_A,
+		       right_last_value_B, PIN_ENC_RIGHT_A);
+}
+
+void leftInterruptB(void) {
+	interruptA(&left_ticks, &left_last_value_B,
+		       left_last_value_A, PIN_ENC_LEFT_A);
+}
+
+void rightInterruptB(void) {
+	interruptA(&right_ticks, &right_last_value_B,
+		       right_last_value_A, PIN_ENC_RIGHT_A);
 }
 #elif ENCODER_EVAL == 2
-void Encoder::interruptA(){
-	bool new_value;
-	new_value = digitalRead(pin_a);
-	if(new_value == 1)
-		if(digitalRead(pin_b) == 1)
-			ticks--;
+void interruptA(volatile long *ticks, int pin_a, int pin_b){
+	int value_A, value_B;
+	value_A = digitalRead(pin_a);
+	value_B = digitalRead(pin_b);
+	if(value_A == 1)
+		if(value_B == 1)
+			*ticks--;
 		else
-			ticks++;
+			*ticks++;
 	else
-		if(digitalRead(pin_b) == 1)
-			ticks++;
+		if(value_B == 1)
+			*ticks++;
 		else
-			ticks--;
+			*ticks--;
+}
+
+void leftInterruptA(void) {
+	interruptA(&left_ticks, PIN_ENC_LEFT_A, PIN_ENC_LEFT_B);
+}
+
+void rightInterruptA(void) {
+	interruptA(&right_ticks, PIN_ENC_RIGHT_A, PIN_ENC_RIGHT_B);
 }
 #elif ENCODER_EVAL == 1
-void Encoder::interruptA(){
+void interruptA(volatile long *ticks, int pin_b){
 	if(digitalRead(pin_b) == 1)
-		ticks--;
+		*ticks--;
 	else
-		ticks++;
+		*ticks++;
+}
+
+void leftInterruptA(void) {
+	interruptA(&left_ticks, PIN_ENC_LEFT_B);
+}
+
+void rightInterruptA(void) {
+	interruptA(&right_ticks, PIN_ENC_RIGHT_B);
 }
 #endif
-
-void Encoder::interrupt0(){
-	int diff;
-	if(signal_0_init){
-		diff = ticks - last_ticks_on_0;
-		last_ticks_on_0 = ticks;
-	}
-	else{
-		last_ticks_on_0 = ticks;
-		signal_0_init = true;
-		diff = 0;
-	}
-	if(diff > 0)
-		diff = diff - TICKS_PER_TURN;
-	else if (diff < 0)
-		diff = diff + TICKS_PER_TURN;
-	ticks_error = diff;
-}
-
