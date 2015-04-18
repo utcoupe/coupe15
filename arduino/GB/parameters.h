@@ -30,9 +30,6 @@
 
 #define ENCODER_EVAL 1
 
-#define FIXED_POINT_PRECISION 100000 //The robot's position is stocked with a precision of 1/FIXED_POINT_PRECISION mm 
-
-#define MAX_GOALS 15 //nombre max de goals dans la file, évite surcharge mémoire
 #define DUREE_CYCLE 5 //période de calcul, en ms
 #define FREQ (1/(DUREE_CYCLE/1000.0))
 

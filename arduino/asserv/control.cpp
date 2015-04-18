@@ -9,7 +9,6 @@
 #include "local_math.h"
 #include <math.h>
 
-PID_t PID_angle, PID_distance;
 
 /********************************************************
  * 							*
@@ -21,6 +20,8 @@ PID_t PID_angle, PID_distance;
 Control::Control(){
 	PIDInit(&PID_angle);
 	PIDInit(&PID_distance);
+	RobotStateInit();
+	FifoInit();
 	max_angle = MAX_ANGLE;
 	setMaxAcc(ACC_MAX);
 	setMaxRotSpdRatio(RATIO_SPD_ROT_MAX);
@@ -28,40 +29,34 @@ Control::Control(){
 	value_consigne_right = 0;
 	value_consigne_left = 0;
 	last_finished_id = 0;
+	paused = 0;
 }
 
 void Control::compute(){
 	static bool reset = true, order_started = false;
 	static long start_time, start_end_timer = -1;
-	struct goal current_goal = fifo.getCurrentGoal();
-	static struct goal last_goal = current_goal;
-	pos current_pos = robot.getMmPos();
+	goal_t* current_goal = FifoCurrentGoal();
+	static goal_t last_goal = STRUCT_NO_GOAL;
 	long now = timeMicros();
 
-	if (current_goal.type == NO_GOAL || current_goal.isReached || fifo.isPaused()) {
-		robot.useBlock(false);
-	} else {
-		robot.useBlock(true);
-	}
+	RobotStateUpdate();
 
-	robot.update();
-
-	if(fifo.isPaused() || current_goal.type == NO_GOAL){
+	if(paused || current_goal->type == NO_GOAL){
 		setConsigne(NO_PWM, NO_PWM);
 	}
 	else{
-		if (current_goal.isReached) {
-			last_finished_id = current_goal.ID;
-			if (fifo.getRemainingGoals() > 1){//Si le but est atteint et que ce n'est pas le dernier, on passe au suivant
-				current_goal = fifo.gotoNext();
+		if (current_goal->is_reached) {
+			last_finished_id = current_goal->ID;
+			if (fifo.nb_goals > 1){//Si le but est atteint et que ce n'est pas le dernier, on passe au suivant
+				current_goal = FifoNextGoal();
 				reset = true;
 			}
 		}
-		else if (last_goal.type != current_goal.type || last_goal.data_1 != current_goal.data_1 || last_goal.data_2 != current_goal.data_2 || last_goal.data_3 != current_goal.data_3) { //On a cancel un goal
+		else if (last_goal.type != current_goal->type || last_goal.data_1 != current_goal->data_1 || last_goal.data_2 != current_goal->data_2 || last_goal.data_3 != current_goal->data_3) { //On a cancel un goal
 			reset = true;
 		}
 		if (reset) {//permet de reset des variables entre les goals
-			current_goal = fifo.getCurrentGoal();
+			current_goal = FifoCurrentGoal();
 			PIDReset(&PID_angle);
 			PIDReset(&PID_distance);
 			reset = false;
@@ -70,16 +65,16 @@ void Control::compute(){
 		}
 	
 	/* Choix de l'action en fonction du type d'objectif */
-		switch(current_goal.type){
+		switch(current_goal->type){
 			case TYPE_ANG :
 			{
-				float da = (current_goal.data_1 - current_pos.angle);
+				float da = (current_goal->data_1 - current_pos.angle);
 				
 				//da = moduloTwoPI(da);//Commenter pour multi-tour
 
 				if(abs(da) <= ERROR_ANGLE) {
 					setConsigne(NO_PWM, NO_PWM);
-					fifo.pushIsReached();
+					current_goal->is_reached = 1;
 				}
 				else
 					controlPos(da,0);
@@ -88,8 +83,8 @@ void Control::compute(){
 
 			case TYPE_POS :
 			{
-				float dx = current_goal.data_1 - current_pos.x;
-				float dy = current_goal.data_2 - current_pos.y;
+				float dx = current_goal->data_1 - current_pos.x;
+				float dy = current_goal->data_2 - current_pos.y;
 				float goal_a = atan2(dy, dx);
 				float da = (goal_a - current_pos.angle);
 				float dd = sqrt(pow(dx, 2.0)+pow(dy, 2.0));//erreur en distance
@@ -117,8 +112,8 @@ void Control::compute(){
 				if (abs(d) < ERROR_POS && dd < 2*ERROR_POS) {
 					if (start_end_timer < 0) {
 						start_end_timer = timeMillis();
-					}  else if (!fifo.getCurrentGoal().isReached && timeMillis() - start_end_timer > TIME_BETWEEN_ORDERS) {
-						fifo.pushIsReached();
+					}  else if (!current_goal->is_reached && timeMillis() - start_end_timer > TIME_BETWEEN_ORDERS) {
+						current_goal->is_reached = 1;
 					}
 					da = 0;
 				}
@@ -135,7 +130,7 @@ void Control::compute(){
 				}
 				//En cours de déplacement
 				else {
-					controlPos(da, d + current_goal.data_3);//erreur en dist = dist au point + dist additionelle
+					controlPos(da, d + current_goal->data_3);//erreur en dist = dist au point + dist additionelle
 				}
 				break;
 			}
@@ -148,8 +143,8 @@ void Control::compute(){
 					pwmR = 0; pwmL = 0;
 					order_started = true;
 				}
-				if ((now - start_time)/1000.0 <= current_goal.data_3){
-					float consigneR = current_goal.data_2, consigneL = current_goal.data_1;
+				if ((now - start_time)/1000.0 <= current_goal->data_3){
+					float consigneR = current_goal->data_2, consigneL = current_goal->data_1;
 					check_acc(&consigneL, pwmL);
 					check_acc(&consigneR, pwmR);
 					pwmR = consigneR; pwmL = consigneL;
@@ -157,7 +152,7 @@ void Control::compute(){
 				}
 				else {
 					setConsigne(NO_PWM, NO_PWM);
-					fifo.pushIsReached();
+					current_goal->is_reached = 1;
 				}
 				break;
 			}
@@ -169,18 +164,14 @@ void Control::compute(){
 	}
 
 	applyPwm();
-	last_goal = current_goal;
-}
-
-void Control::update_robot_state(){
-	robot.update();
+      	memcpy(&last_goal, current_goal, sizeof(goal_t));
 }
 
 void Control::reset(){
 	value_consigne_left = 0;
 	value_consigne_right = 0;
-	fifo.clearGoals();
-	robot.reset();
+	FifoClearGoals();
+	RobotStateReset();
 	applyPwm();
 }
 
@@ -196,36 +187,12 @@ void Control::setMaxRotSpdRatio(float n_max_rot_spd){
 	max_rot_spd_ratio = n_max_rot_spd;
 }
 
-void Control::pushPos(pos n_pos){
-	robot.pushMmPos(n_pos);
-}
-
-int Control::pushGoal(int ID, int p_type, float p_data_1, float p_data_2, float p_data_3){
-	return fifo.pushGoal(ID, p_type, p_data_1, p_data_2, p_data_3);
-}
-
-void Control::nextGoal(){
-	fifo.gotoNext();
-}
-
-void Control::clearGoals(){
-	fifo.clearGoals();
-}
-
-pos Control::getPos(){
-	return robot.getMmPos();
-}
-
-bool Control::isBlocked() {
-	return robot.isBlocked();
-}
-
 void Control::pause(){
-	fifo.pause();
+	paused = 1;
 }
 
 void Control::resume(){
-	fifo.resume();
+	paused = 0;
 }
 
 /********** PRIVATE **********/

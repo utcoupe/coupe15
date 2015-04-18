@@ -8,6 +8,8 @@
 #include "PID.h"
 #include "Arduino.h"
 
+PID_t PID_angle, PID_distance;
+
 void PIDInit(PID_t *pid) {
 	pid->P = 0;
 	pid->I = 0;

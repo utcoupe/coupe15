@@ -14,6 +14,7 @@ typedef struct PID {
 } PID_t;
 
 
+extern PID_t PID_angle, PID_distance;
 void PIDInit(PID_t *pid);
 void PIDReset(PID_t *pid);
 void PIDSet(PID_t *pid, float P, float I, float D, float bias);

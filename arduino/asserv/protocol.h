@@ -31,7 +31,6 @@
 #define	GET_POS		'n' 	// no args, response : x(int);y(int);a(decimal) - get current pos (mm and radians)
 #define	GET_POS_ID 	'o'	// no args, response : x(int);y(int);a(decimal);id(int) - get current pos and last id (mm and radians)
 #define GET_LAST_ID	't' 	// no args, response : id(int)
-#define	IS_BLOCKED 	'p' 	// no args, reponse : isBlocked(int) - NOT WORKING
 #define	PAUSE 		'q' 	// no args, pauses control
 #define	RESUME 		'r'	// no args, resumes control
 #define RESET_ID 	's' 	// no args, reset last finished id to 0

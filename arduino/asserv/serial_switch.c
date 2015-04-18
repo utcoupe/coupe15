@@ -4,6 +4,7 @@
  * Date : 18/12/13			*
  ****************************************/
 #include "serial_switch.h"
+#include "robotstate.h"
 #include "protocol.h"
 #include "control.h"
 #include "encoder.h"
@@ -27,7 +28,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case GOTO: {
 		int x, y;
 		sscanf(argv, "%i;%i", &x, &y);
-		control.pushGoal(id, TYPE_POS, x, y, 0);
+		FifoPushGoal(id, TYPE_POS, x, y, 0);
 		}
 		break;
 	case GOTOA: {
@@ -35,8 +36,8 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		float a;
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
 		a = a_int / FLOAT_PRECISION;
-		control.pushGoal(id, TYPE_POS, x, y, 0);
-		control.pushGoal(id, TYPE_ANG, a, 0, 0);
+		FifoPushGoal(id, TYPE_POS, x, y, 0);
+		FifoPushGoal(id, TYPE_ANG, a, 0, 0);
 		}
 		break;
 	case ROT: {
@@ -44,13 +45,13 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		float a;
 		sscanf(argv, "%i", &a_int);
 		a = a_int / FLOAT_PRECISION;
-		control.pushGoal(id, TYPE_ANG, a, 0, 0);
+		FifoPushGoal(id, TYPE_ANG, a, 0, 0);
 		}
 		break;
 	case PWM:{
 		int l, r, t;
 		sscanf(argv, "%i;%i;%i", &l, &r, &t);
-		control.pushGoal(id, TYPE_PWM, l, r, t);
+		FifoPushGoal(id, TYPE_PWM, l, r, t);
 		}
 		break;
 	case PIDA:{
@@ -74,38 +75,40 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case KILLG:
-		control.nextGoal();
+		FifoNextGoal();
 		break;
 	case CLEANG:{
-		control.clearGoals();
-		pos pos = control.getPos();
-		control.pushGoal(0, TYPE_POS, pos.x, pos.y, 0);
-		control.setIsReached();
+		FifoClearGoals();
+		FifoPushGoal(0, TYPE_POS, current_pos.x, current_pos.y, 0);
 		}
 		break;
 	case RESET_ID:
 		control.resetLastFinishedId();
 		break;
 	case SET_POS:{
-		pos pos;
-		int a_int;
-		sscanf(argv, "%li;%li;%i", &(pos.x), &(pos.y), &a_int);
-		pos.angle = a_int / FLOAT_PRECISION;
-		control.pushPos(pos);
+		int x, y, a_int;
+		float angle;
+		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
+		angle = a_int / FLOAT_PRECISION;
+		RobotStateSetPos(x, y, angle);
 		}
 		break;
 	case GET_POS:{
-		pos pos = control.getPos();
-		int x = pos.x, y = pos.y, a_int;
-		float a = pos.angle;
+		int x, y, a_int;
+		float a;
+		a = current_pos.angle;
+	       	x = round(current_pos.x);
+		y = round(current_pos.y);
 		a_int = a * FLOAT_PRECISION;
 		*ret_size = sprintf(ret, "%i;%i;%i", x, y, a_int);
 		}
 		break;
 	case GET_POS_ID:{
-		pos pos = control.getPos();
-		int x = pos.x, y = pos.y, a_int;
-		float a = pos.angle;
+		int x, y, a_int;
+		float a;
+		a = current_pos.angle;
+	       	x = round(current_pos.x);
+		y = round(current_pos.y);
 		a_int = a * FLOAT_PRECISION;
 		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.getLastFinishedId());
 		break;
@@ -124,9 +127,6 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		*ret_size = sprintf(ret, "%i", control.getLastFinishedId());
 		break;
 		}
-	case IS_BLOCKED:
-		*ret_size = sprintf(ret, "%i", control.isBlocked());
-		break;
 	case PAUSE: 
 		control.pause();
 		break;
