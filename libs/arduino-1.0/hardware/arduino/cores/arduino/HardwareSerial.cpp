@@ -97,7 +97,7 @@ inline void store_char(unsigned char c, ring_buffer *buffer)
   // just before the tail (meaning that the head would advance to the
   // current location of the tail), we're about to overflow the buffer
   // and so we don't write the character or advance the head.
-  if (i != buffer->tail) {
+  if ((unsigned int)i != buffer->tail) {
     buffer->buffer[buffer->head] = c;
     buffer->head = i;
   }
@@ -131,14 +131,14 @@ inline void store_char(unsigned char c, ring_buffer *buffer)
       unsigned char c = UDR0;
       store_char(c, &rx_buffer);
     } else {
-      unsigned char c = UDR0;
+      //unsigned char c = UDR0;
     };
   #elif defined(UDR)
     if (bit_is_clear(UCSRA, PE)) {
       unsigned char c = UDR;
       store_char(c, &rx_buffer);
     } else {
-      unsigned char c = UDR;
+      //unsigned char c = UDR;
     };
   #else
     #error UDR not defined
@@ -157,7 +157,7 @@ inline void store_char(unsigned char c, ring_buffer *buffer)
       unsigned char c = UDR1;
       store_char(c, &rx_buffer1);
     } else {
-      unsigned char c = UDR1;
+      //unsigned char c = UDR1;
     };
   }
 #elif defined(SIG_USART1_RECV)
@@ -174,7 +174,7 @@ inline void store_char(unsigned char c, ring_buffer *buffer)
       unsigned char c = UDR2;
       store_char(c, &rx_buffer2);
     } else {
-      unsigned char c = UDR2;
+      //unsigned char c = UDR2;
     };
   }
 #elif defined(SIG_USART2_RECV)
@@ -191,7 +191,7 @@ inline void store_char(unsigned char c, ring_buffer *buffer)
       unsigned char c = UDR3;
       store_char(c, &rx_buffer3);
     } else {
-      unsigned char c = UDR3;
+      //unsigned char c = UDR3;
     };
   }
 #elif defined(SIG_USART3_RECV)
@@ -378,7 +378,7 @@ try_again:
 void HardwareSerial::begin(unsigned long baud, byte config)
 {
   uint16_t baud_setting;
-  uint8_t current_config;
+  //uint8_t current_config;
   bool use_u2x = true;
 
 #if F_CPU == 16000000UL
@@ -477,7 +477,7 @@ size_t HardwareSerial::write(uint8_t c)
   // If the output buffer is full, there's nothing for it other than to 
   // wait for the interrupt handler to empty it a bit
   // ???: return 0 here instead?
-  while (i == _tx_buffer->tail)
+  while ((unsigned int)i == _tx_buffer->tail)
     ;
 	
   _tx_buffer->buffer[_tx_buffer->head] = c;

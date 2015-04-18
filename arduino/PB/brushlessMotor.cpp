@@ -43,6 +43,12 @@ Motor::Motor(int n_motor_side) {
 }
 
 void Motor::setPwm(int pwm) {
+	if (pwm == last_pwm) {
+		return;
+	}
+	else {
+		last_pwm = pwm;
+	}
 	switch (motor_side) {
 		case MOTOR_LEFT:{
 			analogWrite(MOTOR1_SPD, pwm);

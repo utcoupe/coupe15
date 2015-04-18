@@ -4,6 +4,7 @@
  * Date : 13/10/13			*
  ****************************************/
 #include "compat.h"
+#include "pins.h"
 
 #if ENCODER_EVAL == 4
 #ifdef nano328
@@ -17,8 +18,6 @@ void initPins(){
 	//set mode des pins pour arduino
 	pinMode(PIN_ENC_LEFT_A,INPUT_PULLUP);
 	pinMode(PIN_ENC_LEFT_B,INPUT_PULLUP);
-	pinMode(PIN_ENC_LEFT_0,INPUT_PULLUP);
-	pinMode(PIN_ENC_RIGHT_0,INPUT_PULLUP);
 	pinMode(PIN_ENC_RIGHT_A,INPUT_PULLUP);
 	pinMode(PIN_ENC_RIGHT_B,INPUT_PULLUP);
 
@@ -41,12 +40,6 @@ void initPins(){
 	attachInterrupt(INTERRUPT_ENC_LEFT_A,interruptLeftA,RISING);
 	attachInterrupt(INTERRUPT_ENC_RIGHT_A,interruptRightA,RISING);
 #endif
-
-#if GESTION_3EME_FIL
-	//Interruption du 3e fil des codeurs
-	attachInterrupt(INTERRUPT_ENC_LEFT_0,interruptLeft0,RISING);
-	attachInterrupt(INTERRUPT_ENC_RIGHT_0,interruptRight0,RISING);
-#endif
 }
 
 unsigned long timeMillis(){
@@ -66,6 +59,7 @@ void interruptRightA(){
 	control.getRenc()->interruptA();
 }
 
+
 #if ENCODER_EVAL == 4
 void interruptLeftB(){
 	control.getLenc()->interruptB();
@@ -76,20 +70,10 @@ void interruptRightB(){
 }
 #endif
 
-#if GESTION_3EME_FIL
-void interruptLeft0{
-	control.getLenc()->interrupt0();
-}
-
-void interruptRight0{
-	control.getRenc()->interrupt0();
-}
-#endif
-
 void serial_send(char data) { //Envoi d'un octet en serial, dépend de la plateforme
-	Serial.write(data);
+	SERIAL_MAIN.write(data);
 }
 
 char generic_serial_read(){
-	return Serial.read();
+	return SERIAL_MAIN.read();
 }

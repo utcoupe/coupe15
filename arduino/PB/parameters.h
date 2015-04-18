@@ -6,6 +6,10 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
+#define BAUDRATE 115200
+#define SERIAL_TYPE SERIAL_8N1
+#define ARDUINO_ID "A"
+
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
  * (une pour chaque changement de valeur des fils A et B)
@@ -27,8 +31,6 @@
 #define ENCODER_EVAL 2
 
 #define FIXED_POINT_PRECISION 100000 //The robot's position is stocked with a precision of 1/FIXED_POINT_PRECISION ticks
-
-#define GESTION_3EME_FIL false
 
 #define MAX_GOALS 15 //nombre max de goals dans la file, évite surcharge mémoire
 #define DUREE_CYCLE 5 //période de calcul, en ms
@@ -92,11 +94,6 @@
 //MIN_DIST_BLOCKED : disatcne min a parcourir pour ne pas etre considere bloqué (mm)
 #define PERIOD_BLOCKED 1000
 #define MIN_DIST_BLOCKED 3
-
-//PIN LED
-#define LED_MAINLOOP 14
-#define LED_BLOCKED 23
-#define LED_DEBUG 13
 
 #define SERIAL_MAIN Serial
 

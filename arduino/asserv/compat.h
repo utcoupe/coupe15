@@ -20,10 +20,6 @@ void interruptRightA();
 void interruptLeftB();
 void interruptRightB();
 #endif
-#if GESTION_3EME_FIL
-void interruptLeft0();
-void interruptRight0();
-#endif
 
 void initPins();
 unsigned long timeMillis();

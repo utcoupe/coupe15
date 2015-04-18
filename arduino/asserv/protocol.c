@@ -33,7 +33,7 @@ int executeCmd(char data) {
 			end_of_id++;
 			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
 				clean_current_command(current_command, &index);
-				Serial.print(FAILED_MSG);
+				SERIAL_MAIN.print(FAILED_MSG);
 				return -1;
 			}
 		}

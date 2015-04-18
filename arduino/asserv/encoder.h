@@ -31,6 +31,7 @@ class Encoder{
 	bool signal_0_init;
 	int side; //prend les valeur LEFT_SIDE ou RIGHT_SIDE
 	int ticks_error;
+	int pin_b, pin_a;
 };
 
 #endif
