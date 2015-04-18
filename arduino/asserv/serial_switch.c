@@ -60,7 +60,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		p = p_int / FLOAT_PRECISION;
 		i = i_int / FLOAT_PRECISION;
 		d = d_int / FLOAT_PRECISION;
-		control.setPID_angle(p, i, d);
+		PIDSet(&PID_angle, p, i, d, ANG_BIAS);
 		}
 		break;
 	case PIDD: {
@@ -70,7 +70,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		i = i_int / FLOAT_PRECISION;
 		d = d_int / FLOAT_PRECISION;
 		sscanf(argv, "%i;%i;%i", &p_int, &i_int, &d_int);
-		control.setPID_distance(p, i, d);
+		PIDSet(&PID_distance, p, i, d, DIS_BIAS);
 		}
 		break;
 	case KILLG:

@@ -7,8 +7,10 @@
 #include "compat.h"
 #include "motor.h"
 #include "local_math.h"
-
 #include <math.h>
+
+PID_t PID_angle, PID_distance;
+
 /********************************************************
  * 							*
  * 		      CLASSE CONTROLE			*
@@ -17,10 +19,8 @@
 
 /********** PUBLIC **********/
 Control::Control(){
-	setPID_angle(ANG_P, ANG_I, ANG_D);
-	setPID_distance(DIS_P, DIS_I, DIS_D);
-	setErrorUseI_angle(ANG_AWU);
-	setErrorUseI_distance(DIS_AWU);
+	PIDInit(&PID_angle);
+	PIDInit(&PID_distance);
 	max_angle = MAX_ANGLE;
 	setMaxAcc(ACC_MAX);
 	setMaxRotSpdRatio(RATIO_SPD_ROT_MAX);
@@ -62,8 +62,8 @@ void Control::compute(){
 		}
 		if (reset) {//permet de reset des variables entre les goals
 			current_goal = fifo.getCurrentGoal();
-			PID_Angle.reset();
-			PID_Distance.reset();
+			PIDReset(&PID_angle);
+			PIDReset(&PID_distance);
 			reset = false;
 			order_started = false;
 			start_end_timer = -1;
@@ -184,22 +184,6 @@ void Control::reset(){
 	applyPwm();
 }
 
-void Control::setErrorUseI_angle(float I){
-	PID_Angle.setErrorUseI(I);
-}
-
-void Control::setErrorUseI_distance(float I){
-	PID_Distance.setErrorUseI(I);
-}
-
-void Control::setPID_angle(float n_P, float n_I, float n_D){
-	PID_Angle.setPID(n_P, n_I / FREQ, n_D * FREQ);
-}
-
-void Control::setPID_distance(float n_P, float n_I, float n_D){
-	PID_Distance.setPID(n_P, n_I / FREQ, n_D * FREQ);
-}
-
 void Control::setMaxAngCurv(float n_max_ang){
 	max_angle = n_max_ang;
 }
@@ -298,9 +282,9 @@ void Control::controlPos(float da, float dd)
 	float consigneAngle, consigneDistance, consigneR, consigneL;
 	//Asservissement en position, renvoie une consigne de vitesse
 	//Calcul des spd angulaire
-	consigneAngle = PID_Angle.compute(da); //erreur = angle à corriger pour etre en direction du goal
+	consigneAngle = PIDCompute(&PID_angle, da); //erreur = angle à corriger pour etre en direction du goal
 	//Calcul des spd de distance
-	consigneDistance = PID_Distance.compute(dd); //erreur = distance au goal
+	consigneDistance = PIDCompute(&PID_distance, dd); //erreur = distance au goal
 
 	check_max(&consigneAngle, CONSIGNE_RANGE_MAX * max_rot_spd_ratio);
 	check_rot_acc(&consigneAngle);

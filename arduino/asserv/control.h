@@ -11,6 +11,8 @@
 #include "goals.h"
 #include "PID.h"
 
+extern PID_t PID_angle, PID_distance;
+
 class Control{
 	public:
 	//Constructeur sans argument, utilise les #define
@@ -24,14 +26,6 @@ class Control{
 
 	void reset();
 
-	//set des differents PIDs
-	void setPID_angle(float n_P, float n_I, float n_D); //PID de l'asservissement angulaire
-	void setPID_distance(float n_P, float n_I, float n_D); //PID de l'asservissement en position
-
-	//set des anti-windup
-	void setErrorUseI_angle(float I);
-	void setErrorUseI_distance(float I);
-	
 	void setMaxAngCurv(float n_max_ang);
 	void setMaxAcc(float n_max_acc);
 	void setMaxRotSpdRatio(float n_max_rot_spd);
@@ -59,9 +53,6 @@ class Control{
 	private:
 	RobotState robot;
 	Fifo fifo;
-	PID PID_Angle;
-	PID PID_Distance;
-	//interface avec les PIDs
 	void setConsigne(float consigne_left, float consigne_right); //controles puis modification (renvoie l'overflow)
 	void check_acc(float *consigne, float last_consigne);
 	void check_dist_acc(float *consigne);

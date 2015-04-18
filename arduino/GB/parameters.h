@@ -80,12 +80,12 @@
 #define ANG_P 1000 //spd = P * E_ang(rad)
 #define ANG_I 0 //spd = I * I_ang(rad * s)
 #define ANG_D 150 //a regler par incrementation
-#define ANG_AWU 0
+#define ANG_BIAS 0
 
 #define DIS_P 3.5 //spd = P * E_dis(mm)
 #define DIS_I 0 //spd = I * I_dis(mm * s)
 #define DIS_D 0.4 //a regler par incrementation
-#define DIS_AWU 0
+#define DIS_BIAS 0
 
 #define TIME_BETWEEN_ORDERS 500
 
