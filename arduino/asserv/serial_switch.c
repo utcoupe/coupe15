@@ -11,8 +11,6 @@
 #include "compat.h"
 #include "pins.h"
 
-extern Control control;
-
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
 	*ret_size = 0;
@@ -76,14 +74,16 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 	case KILLG:
 		FifoNextGoal();
+		ControlPrepareNewGoal();
 		break;
 	case CLEANG:{
 		FifoClearGoals();
+		ControlPrepareNewGoal();
 		FifoPushGoal(0, TYPE_POS, current_pos.x, current_pos.y, 0);
 		}
 		break;
 	case RESET_ID:
-		control.resetLastFinishedId();
+		control.last_finished_id = 0;
 		break;
 	case SET_POS:{
 		int x, y, a_int;
@@ -110,7 +110,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
 		a_int = a * FLOAT_PRECISION;
-		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.getLastFinishedId());
+		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
 		break;
 		}
 	case ACCMAX:{
@@ -119,19 +119,19 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		sscanf(argv, "%i;%i", &a_int, &r_int);
 		a = a_int / FLOAT_PRECISION;
 		r = r_int / FLOAT_PRECISION;
-		control.setMaxAcc(a);
-		control.setMaxRotSpdRatio(r);
+		ControlSetMaxAcc(a);
+		ControlSetMaxRotSpdRatio(r);
 		}
 		break;
 	case GET_LAST_ID: {
-		*ret_size = sprintf(ret, "%i", control.getLastFinishedId());
+		*ret_size = sprintf(ret, "%i", control.last_finished_id);
 		break;
 		}
 	case PAUSE: 
-		control.pause();
+		control.paused = 1;
 		break;
 	case RESUME:
-		control.resume();
+		control.paused = 0;
 		break;
 	case WHOAMI:
 		*ret_size = sprintf(ret, ARDUINO_ID);

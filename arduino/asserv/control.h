@@ -11,8 +11,26 @@
 #include "goals.h"
 #include "PID.h"
 
+typedef struct control {
+	float max_angle, max_acc, max_rot_spd_ratio;
+	float value_consigne_right, value_consigne_left;
+	float last_consigne_angle, last_consigne_dist;
+	int reset, paused, last_finished_id, consigne_offset;
+	char order_started;
+} control_t;
+
+extern control_t control;
 extern PID_t PID_angle, PID_distance;
 
+void ControlCompute(void);
+void ControlSetMaxRotSpdRatio(float n_max_rot_spd);
+void ControlSetMaxAcc(float n_max_acc);
+void ControlSetMaxAngCurv(float n_max_ang);
+void ControlPrepareNewGoal(void);
+void ControlReset(void);
+void ControlInit(void);
+
+/*
 class Control{
 	public:
 	//Constructeur sans argument, utilise les #define
@@ -58,4 +76,5 @@ class Control{
 	int last_finished_id;
 	int paused;
 };
+*/
 #endif

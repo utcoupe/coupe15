@@ -10,10 +10,7 @@
 #include "parameters.h"
 #include "motor.h"
 #include "encoder.h"
-#include "control.h"
 #include "pins.h"
-
-extern Control control;
 
 inline unsigned long timeMillis(){
 	return millis();

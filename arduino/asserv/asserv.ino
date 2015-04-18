@@ -15,9 +15,6 @@ unsigned long index = 0;
 unsigned long nextTime = 0;
 unsigned long timeLED = 0;
 
-//Creation du controleur
-Control control;
-
 #define MAX_READ 64 
 void setup() {
 #ifdef mega2560
@@ -31,6 +28,7 @@ void setup() {
 	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 	SERIAL_MAIN.write(ARDUINO_ID);
 	nextTime = micros();
+	ControlInit();
 }
 
 void loop(){
@@ -38,7 +36,7 @@ void loop(){
 	digitalWrite(LED_MAINLOOP, HIGH);
 
 	//Action asserv
-	control.compute();
+	ControlCompute();
 
 	// zone programmation libre
 	int available = SERIAL_MAIN.available();
