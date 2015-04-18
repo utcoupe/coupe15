@@ -35,7 +35,7 @@ module.exports = (function () {
 	}
 
 	Ia.prototype.start = function() {
-		logger.info(this.hokuyo);
+		// logger.info(this.hokuyo);
 	};
 
 	Ia.prototype.run = function() {
