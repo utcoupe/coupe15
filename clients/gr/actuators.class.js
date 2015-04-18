@@ -78,24 +78,28 @@ module.exports = (function () {
 	            };
 	        };
 
-	        var accelSmoother = smoother(0.05);
+	        var accelSmoother = smoother(0.02);
 	        var pos = "up";
 			imu.on("change", function() {
 				var smoothed = accelSmoother([this.accelerometer.y, this.accelerometer.z]);
-				console.log("  s            : ", smoothed[0], smoothed[1]);
+				// console.log("  s            : ", smoothed[0], smoothed[1]);
 				var angle = calcAngle(smoothed[0], smoothed[1]);
-				console.log("  a            : ", angle);
-				if ((pos == "up") && (Math.abs(angle) < 0.5)){
-					console.log("Toggle to down");
-						pos = "down";
-						motorA.forward(0);
-						motorB.reverse(0);
+				// console.log("  a            : ", angle);
+				if ((pos == "up") && (Math.abs(angle) < 0.11)){
+					console.log("Toggle to unknown");
+						pos = "unknown";
+						setTimeout(function(){
+							console.log("Toggle to down");
+							pos = "down";
+							motorA.forward(0);
+							motorB.reverse(0);
+						}, 300);
 				} else {
-					if ((pos == "down") && (Math.abs(angle) > 0.5)){
+					if ((pos == "down") && (Math.abs(angle) > 0.15)){
 						console.log("Toogle to up");
 						pos = "up";
-						motorA.forward(124);
-						motorB.reverse(124);
+						motorA.forward(120);
+						motorB.reverse(120);
 					}
 				}
 			});
@@ -105,6 +109,6 @@ module.exports = (function () {
 			logger.error(e);
 		});
 	};
-	
+
 	return Acts;
 })();

@@ -29,12 +29,12 @@
 #define	ACCMAX 		'l' 	// a(decimal) - set max acceleration (mm/s-2)
 #define	SET_POS		'm' 	// x(int);y(int);a(decimal) - set pos (mm / radians)
 #define	GET_POS		'n' 	// no args, response : x(int);y(int);a(decimal) - get current pos (mm and radians)
-#define	GET_POS_ID 	'o'	// no args, response : x(int);y(int);a(decimal);id(int) - get current pos and last id (mm and radians)
+#define	GET_POS_ID 	'o'		// no args, response : x(int);y(int);a(decimal);id(int) - get current pos and last id (mm and radians)
 #define GET_LAST_ID	't' 	// no args, response : id(int)
 #define	PAUSE 		'q' 	// no args, pauses control
-#define	RESUME 		'r'	// no args, resumes control
+#define	RESUME 		'r'		// no args, resumes control
 #define RESET_ID 	's' 	// no args, reset last finished id to 0
-#define PINGPING 	'z'	// no args, switch led state
+#define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
 
 #define FLOAT_PRECISION ((float)10000) // keep it as a float

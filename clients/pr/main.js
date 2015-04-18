@@ -4,8 +4,6 @@
 	// Requires
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('clientpr');
-	// var tmp = require('./actuators.class.js');
-	// console.log(tmp);
 	var acts = new (require('./actuators.class.js'))();
 
 	var SocketClient = require('../../server/socket_client.class.js');
@@ -42,7 +40,7 @@
 		var l = queue.length;
 
 		// Adds the order to the queue
-		queue.unshift({
+		queue.push({
 			from: f,
 			name: n,
 			params: p
@@ -55,7 +53,7 @@
 
 	// Execute order
 	function executeNextOrder(){
-		if (queue.length !== 0){
+		if (queue.length > 0){
 			var order = queue.shift();
 			
 			logger.info("Doing '" + order.name + "'...");
