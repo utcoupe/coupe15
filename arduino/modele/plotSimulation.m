@@ -1,5 +1,5 @@
-function [] = plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, inaccuracy_max, color)
-    [t, V, d] = simulate(Vi, Vm, Acc, Dd0, t0, HZ, inaccuracy_max);
+function [] = plotSimulation(Vi, Vm, Acc, dd, HZ, inaccuracy_max, color)
+    [t, V, d] = simulate(Vi, Vm, Acc, dd, HZ, inaccuracy_max);
     subplot(1,2,1);
     hold on;
     xlabel('Time (s)');
