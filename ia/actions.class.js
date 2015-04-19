@@ -50,23 +50,26 @@ module.exports = (function () {
 		var act = this.inprogress[action_name];
 		act.orders.forEach(function (order, index, array){
 			this.ia.client.send(act.owner, order.name, order.params); // XXXX pourquoi ça bugue ?
-		});
+		}.bind(this));
 		this.ia.client.send(act.owner, "send_message", {
 			name: "action_finished",
 			action_name: action_name
 		});
 
 		// Change action and its "to be killed" actions to state done
-		this.done[action_name] = this.todo[action_name];
+		this.done[action_name] = this.inprogress[action_name];
 		delete this.inprogress[action_name];
 		this.kill(this.done[action_name].kill);
+		console.log(this.todo);
+		console.log(this.inprogress);
+		console.log(this.done);
 	};
 
 	Actions.prototype.kill = function (action_name){
 		// If action doesn't exist
 		if (this.exists(action_name)){
 			this.done[action_name] = this.todo[action_name];
-			delete this.inprogress[action_name];
+			delete this.todo[action_name];
 		}
 	};
 

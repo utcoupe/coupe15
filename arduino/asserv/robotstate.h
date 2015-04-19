@@ -15,35 +15,18 @@
 #define TICKS_TO_MM_RIGHT ((float)((2.0*M_PI*ENC_RIGHT_RADIUS)/(TICKS_PER_TURN)))// = mm/ticks
 #define MM_TO_TICKS_RIGHT ((float)(1/ENC_TICKS_TO_MM_RIGHT))
 
-typedef struct pos pos;
-struct pos{
-	long x;
-	long y;
+typedef struct pos {
+	float x;
+	float y;
 	float angle;
 	int modulo_angle;
-};
+} pos_t;
 
-class RobotState{
-	public:
-	RobotState();//Constructeur
-	void reset();
-	pos getMmPos();
-	Encoder* getRenc();
-	Encoder* getLenc();
-	void pushMmPos(pos n_pos);
-	void update();
+extern pos_t current_pos;
 
-	bool isBlocked();
-	void useBlock(bool state);
-
-	private:
-	void blocked_management();
-	Encoder encoderLeft;
-	Encoder encoderRight;
-	pos current_pos;
-	bool blocked, use_block, last_block; //Detecte si le robot est bloqué (attention ici immobile = bloqué)
-	long last_ticksR;
-	long last_ticksL;
-};
+void RobotStateInit();
+void RobotStateUpdate();
+void RobotStateSetPos(float x, float y, float angle);
+inline void RobotStateReset(void) { RobotStateInit(); };
 
 #endif

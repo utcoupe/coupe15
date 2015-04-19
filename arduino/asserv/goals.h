@@ -7,45 +7,36 @@
 #define GOALS_H
 
 #include "parameters.h"
+#define MAX_GOALS 15 //nombre max de goals dans la file, évite surcharge mémoire
 
 #define TYPE_POS 1
 #define TYPE_ANG 2
 #define TYPE_PWM 3
 #define NO_GOAL -1
+#define STRUCT_NO_GOAL {0,0,0,NO_GOAL,0,0}
 
-struct goal{
-	int type;
+typedef struct goal {
 	float data_1; //	x	angle	pwmL
 	float data_2; //	y	.	pwmR
 	float data_3; //	d_rest	.	duree
+	int type;
 	int ID;
-	bool isReached;
-	struct goal *next; //Chaque goal contient un pointeur vers le goal suivant;
-};
-	
-class Fifo{
-	public:
-	int pushGoal(int ID, int p_type, float p_data_1 = 0, float p_data_2 = 0, float p_data_3 = 0);
-	void killGoal(int ID);
-	void clearGoals();
-	struct goal gotoNext(); //Va au goal suivant et le renvoit
-	void pushIsReached(); //Set le flag isReached du current goal
+	char is_reached;
+} goal_t;
 
-	struct goal getCurrentGoal(); //Renvoie le current goal
-	struct goal getNextGoal(); //renvoit le prochain goal
-	int getRemainingGoals(); //Renvoie le nombre de goals restant
-	bool isPaused();//true si en paus,e false sinon
+typedef struct fifo {
+	goal_t fifo[MAX_GOALS];
+	int nb_goals;
+	int current_goal;
+	int last_goal;
 
-	void pause();//met en pause
-	void resume();//arrete la pause
+} fifo_t;
 
-	Fifo(); //Constructeur
-	private:
-	bool paused;
-	struct goal *current_goal;
-	struct goal *last_goal;
-	int nbrGoals;
-	int maxGoals;
-};
+extern fifo_t fifo;
+void FifoInit();
+int FifoPushGoal(int ID, int type, float data_1, float data_2, float data_3);
+goal_t* FifoCurrentGoal();
+goal_t* FifoNextGoal();
+inline void FifoClearGoals() { FifoInit(); }
 
 #endif
