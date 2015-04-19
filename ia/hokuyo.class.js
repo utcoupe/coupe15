@@ -1,6 +1,7 @@
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
+	var gaussian = require('gaussian');
 	var logger = log4js.getLogger('ia.hokuyo');
 
 	function Hokuyo(ia, gr, pr, data, params) {
@@ -17,7 +18,17 @@ module.exports = (function () {
 	};
 
 	Hokuyo.prototype.isOnTheStairs = function (spot){
+		return (spot.x>967) && (spot.x < 2033) && (spot.y < 580);
+	};
 
+	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt){
+		var estimatedPos = {
+			x: eRobot.pos.x + eRobot.speed.x*dt,
+			y: eRobot.pos.y + eRobot.speed.y*dt
+		};
+
+		var distribution = gaussian(0,eRobot.d);
+		return distribution.pdf(getDistance(spot, estimatedPos));
 	};
 
 	Hokuyo.prototype.updatePos = function (dots) {
@@ -32,7 +43,7 @@ module.exports = (function () {
 			}
 
 			// takes a timestamp to be able to compute speeds
-			now = this.ia.timer.getTime(); // XXX à faire ! retourne le temps depuis le début du match en ms
+			now = this.ia.timer.get(); // retourne le temps depuis le début du match en ms
 
 			// if we have hats, kill ourselves (virtualy, of course)
 			if (this.params.we_have_hats) {
@@ -88,9 +99,9 @@ module.exports = (function () {
 						// for each real point
 						for (var i = 0; i < e_r2Bmatched.length; i++) {
 							// we make a matching coefficient
-							matching_coef[d][i] = getMatchingCoef(dots[d], e_r2Bmatched[i]);
+							matching_coef[d][i] = getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now);
 
-							if (best_coef.value > matching_coef[d][i]) {
+							if (best_coef.value < matching_coef[d][i]) {
 								best_coef.value = matching_coef[d][i];
 								best_coef.dot = d;
 								best_coef.e_robot = i;
@@ -120,6 +131,7 @@ module.exports = (function () {
 								y: (dots[dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT,
 							};
 						else
+							logger.warn("Tiens, deltaT = 0, c'est bizarre...");
 							e_r2Bmatched[best_coef.e_robot].speed = {
 								x:0,
 								y:0,
@@ -136,7 +148,7 @@ module.exports = (function () {
 					// and delete the dot
 					dots.splice(dot,1);
 				} else {
-					// if all the robots are titied up, ouw, that's strange ^^
+					// if all the robots are tidied up, ouw, that's strange ^^
 					logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
 					logger.warn(dots);
 					break;
@@ -155,6 +167,7 @@ module.exports = (function () {
 			}
 
 			// we estimate their position and tag them with "lost"
+			// XXX
 		}
 	};
 
