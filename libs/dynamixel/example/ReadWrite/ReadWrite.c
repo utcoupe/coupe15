@@ -17,7 +17,7 @@
 
 // Defulat setting
 #define DEFAULT_BAUDNUM		1 // 1Mbps
-#define DEFAULT_ID		1
+#define DEFAULT_ID		2
 
 void PrintCommStatus(int CommStatus);
 void PrintErrorCode(void);
@@ -44,59 +44,23 @@ int main()
 	else
 		printf( "Succeed to open USB2Dynamixel!\n" );
 
+	dxl_write_word(2, 34, 1000);
+	usleep(5000);
+	dxl_write_word(3, 34, 1000);
+	usleep(5000);
+
 	while(1)
 	{
-		printf( "Press Enter key to continue!(press ESC and Enter to quit)\n" );
-		if(getchar() == 0x1b)
-			break;
-
 		// Write goal position
-		dxl_write_word( DEFAULT_ID, P_GOAL_POSITION_L, GoalPos[index] );
-		do
-		{
-			// Read present position
-			PresentPos = dxl_read_word( DEFAULT_ID, P_PRESENT_POSITION_L );
-			CommStatus = dxl_get_result();
-
-			if( CommStatus == COMM_RXSUCCESS )
-			{
-				printf( "%d   %d\n",GoalPos[index], PresentPos );
-				PrintErrorCode();
-			}
-			else
-			{
-				PrintCommStatus(CommStatus);
-				break;
-			}
-
-			// Check moving done
-			Moving = dxl_read_byte( DEFAULT_ID, P_MOVING );
-			CommStatus = dxl_get_result();
-			if( CommStatus == COMM_RXSUCCESS )
-			{
-				if( Moving == 0 )
-				{
-					// Change goal position
-					if( index == 0 )
-						index = 1;
-					else
-						index = 0;					
-				}
-
-				PrintErrorCode();
-			}
-			else
-			{
-				PrintCommStatus(CommStatus);
-				break;
-			}
-		}while(Moving == 1);
+		dxl_write_word(2, P_GOAL_POSITION_L, 200);
+		usleep(5000);
+		dxl_write_word(3, P_GOAL_POSITION_L, 200);
+		sleep(1);
+		dxl_write_word(2, P_GOAL_POSITION_L, 1000);
+		usleep(5000);
+		dxl_write_word(3, P_GOAL_POSITION_L, 1000);
+		sleep(1);
 	}
-
-	// Close device
-	dxl_terminate();
-	printf( "Press Enter key to terminate...\n" );
-	getchar();
 	return 0;
 }
 // Print communication result

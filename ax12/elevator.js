@@ -1,6 +1,6 @@
 var ffi = require('ffi');
 var log4js = require('log4js');
-var logger = log4js.getLogger('Test AX12');
+var logger = log4js.getLogger('test.ascenseur');
 
 var libusb2ax = ffi.Library('../libs/dynamixel/src_lib/libusb2ax', {
   'dxl_initialize': ['int', ['int', 'int']],
@@ -62,26 +62,79 @@ function openAx12Down() {
 	ax12s['3'].obj = degToAx12(0);
 }
 function closeAx12Down() {
-	ax12s['2'].obj = degToAx12(-80);
-	ax12s['3'].obj = degToAx12(80);
+	ax12s['2'].obj = degToAx12(-75);
+	ax12s['3'].obj = degToAx12(75);
 }
+// var t = true;
+// function loop() {
+// 	if(t) {
+// 		closeAx12Down();
+// 	} else {
+// 		openAx12Down();
+// 	}
+// 	t = !t;
+// 	setTimeout(loop, 3000);
+// }
+// loop();
 
+// AX12
 if(libusb2ax.dxl_initialize(0, 1) <= 0) {
 	logger.error("Impossible de se connecter à l'USB2AX");
 	process.exit(1);
 }
-libusb2ax.dxl_write_word(2, P_COUPLE, 1000);
-libusb2ax.dxl_write_word(3, P_COUPLE, 1000);
+libusb2ax.dxl_write_word(2, P_COUPLE, 700);
+libusb2ax.dxl_write_word(3, P_COUPLE, 700);
 loopAX12();
 
-var t = true;
-function loop() {
-	if(t) {
-		closeAx12Down();
-	} else {
-		openAx12Down();
-	}
-	t = !t;
-	setTimeout(loop, 3000);
+// Servos
+var five = require("johnny-five");
+var board = new five.Board({
+	port: '/dev/ttyACM2',
+	repl: false
+});
+var servo1, servo2;
+function ouvrirServos() {
+  servod.to(80);
+  servog.to(10);
 }
-loop();
+function fermerServos() {
+  servod.to(55);
+  servog.to(35);
+}
+board.on("ready", function() {
+  servod = new five.Servo(7);
+  servog = new five.Servo(9);
+  fermerServos();
+});
+openAx12Down();
+
+// Ascenseur
+var Elevator = require('../clients/pr/elevator.class.js');
+var elevator = new Elevator('/dev/ttyACM1');
+function descendreAscenseur() {
+	elevator.move1Down();
+}
+function monterAscenseur() {
+	elevator.move1Up();
+}
+
+// Orders
+var orders = [closeAx12Down, ouvrirServos, monterAscenseur, fermerServos, openAx12Down, descendreAscenseur];
+// var orders = [closeAx12Down, ouvrirServos, fermerServos, openAx12Down];
+var order_id = -1;
+function nextOrder() {
+	order_id++;
+	if(order_id >= orders.length) {
+		order_id = 0;
+	}
+	orders[order_id]();
+}
+
+// Programme principal
+var keypress = require('keypress');
+keypress(process.stdin);
+process.stdin.on('keypress', function (ch, key) {
+	if (key.name == 'enter') {
+		nextOrder();
+	}
+});
