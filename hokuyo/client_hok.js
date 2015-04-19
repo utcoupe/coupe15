@@ -1,6 +1,5 @@
 // TODO :
 // 		  message/objet erreur ou pas ?
-// 		  changer command
 
 (function (){
 	"use strict";
@@ -15,44 +14,65 @@
 	var child_process = require('child_process');
 	var child;
 	var SocketClient = require('../server/socket_client.class.js');
+	var config = require('./config.js');
+	var date = new Date();
+	var lastT = date.getTime();
 
-	var server = ""; // server adress
+	var server = config.server || "";
+	var command = config.command || "";
+
 	var client = new SocketClient({
 		server_ip: server,
 		type: "hokuyo"
 	});
 
+	logger.info("Starting with pid " + process.pid);
 
 	client.order(function(from, name, params){
-		logger.info("Just received an order `" + name + "` from " + from + " with params :");
-		logger.info(params);
-		switch (name){
-			case "start":
-				if(!!params.color && !!params.nbrobots)
-					start(params.color, params.nbrobots);
-				break;
-			case "stop":
-				quitC();
-				break;
-			default:
-				logger.warn("Name not understood : " + data);
+		date = new Date();
+		logger.info(date.getTime() - lastT);
+		if (date.getTime() - lastT > 500) { // half a second between two orders
+			logger.info("Just received an order `" + name + "` from " + from + " with params :");
+			logger.info(params);
+
+			lastT = date.getTime();
+			switch (name){
+				case "start":
+					if(!!params.color && !!params.nbrobots)
+						start(params.color, params.nbrobots);
+					break;
+				case "stop":
+					quitC("stop");
+					break;
+				default:
+					logger.warn("Name not understood : " + data);
+			}
+		} else {
+			logger.warn("Received two orders too closely !");
 		}
 	});
 
-	function quitC(){
+	function quitC(code){
 		if(!!child){
 			logger.info("Closing child "+child.pid);
 			child.kill('SIGINT');
 			child = null;
-		} else 
+		} else {
 			logger.info("Can't close child : never born :P");
+			logger.info("Father's pid : " + process.pid);
+			// process.kill(process.pid, 'SIGINT');
+		}
+	}
+
+	function uException(code){
+		logger.error("uException sent with code "+code);
 	}
 
 	function start(color, nbrobots){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
 		// If there's a child, kill it
-		quitC();
+		quitC("start");
 
 		// Exit handlers
 		//do something when app is closing
@@ -60,7 +80,7 @@
 		// catches ctrl+c event
 		process.on('SIGINT', quitC);
 		//catches uncaught exceptions
-		process.on('uncaughtException', quitC);
+		//process.on('uncaughtException', uException);
 
 		// Functions
 		function parseRobots(string) {
@@ -69,6 +89,7 @@
 				var temp = string.split("#");
 				for (var i = 0; i <= temp.length - 1; i++) {
 					temp[i] = temp[i].split(",");
+					dots.push({x: 0, y: 0});
 					dots[i].x = parseInt(temp[i][0]);
 					dots[i].y = 2000-parseInt(temp[i][1]); // Conversion repère math en repère bitmap
 				}
@@ -83,6 +104,9 @@
 		}
 
 		function parseInfo(string) {
+			logger.info("/string2");
+			logger.info(string);
+
 			switch (string.substring(0,1)){
 				case "0":
 					// Send error : no Hokuyo working
@@ -130,11 +154,11 @@
 							logger.info("Data "+ inputAr[i].substring(1,5) + " not understood at line " + i + " : " + inputAr[i]);
 					}
 				}
-			};
+			}
 		}
 
 		// Execute C program
-		var command = "/home/mewen/Bureau/UTCoupe/coupe15/hokuyo/bin/hokuyo";
+		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
 		var args = [color, 'no_init_wizard', nbrobots];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
