@@ -1,6 +1,9 @@
 (function () {
 	"use strict";
 
+	logger.info("Started NodeJS client with pid " + process.pid);
+
+
 	// Requires
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('clientpr');
@@ -13,9 +16,8 @@
 		type: "pr"
 	});
 
-	logger.info("Started NodeJS client with pid " + process.pid);
-
 	var queue = [];
+	var orderInProgress = null;
 
 	// On message
 	client.order(function (from, name, params){
@@ -28,14 +30,15 @@
 		// if end of match, empty the queue and stop the current action
 		if(name == "stop"){
 			queue = [];
-			// XXX comment stopper un action en cours ???
+			// TODO : stopper les actions dans toutes les classes !
+			this.emit('stopAll');
 			return;
 		}
 
 		addOrder2Queue(from, name, params);
 	});
 
-	// Unshift the order (enfiler)
+	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
 		var l = queue.length;
 
@@ -53,14 +56,22 @@
 
 	// Execute order
 	function executeNextOrder(){
-		if (queue.length > 0){
+		if ((queue.length > 0) && (!orderInProgress)){
 			var order = queue.shift();
+			orderInProgress = order.name;
 			
-			logger.info("Doing '" + order.name + "'...");
-			acts.orderHandler(order.from, order.name, order.params);
+			logger.info("Going to do '" + orderInProgress + "'...");
+			acts.orderHandler(order.from, order.name, order.params, actionFinished);
 			
 			executeNextOrder();
 		}
+	}
+
+	function actionFinished(){
+		logger.info(orderInProgress + " just finished !");
+
+		orderInProgress = null;
+		executeNextOrder();
 	}
 
 	function quit () {
