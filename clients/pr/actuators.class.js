@@ -20,17 +20,29 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.connectTo = function(struct){
-		if (!!struct.stepper)
-			elevator = new (require('./elevator.class.js'))(struct.stepper);
+		if (!!struct.stepper) {
+			elevator = new (require('./elevator.class.js'))(
+				new SerialPort(struct.stepper, { baudrate: 57600 });
+			);
+		}
 
-		if (!!struc.servos)
-			servos = new (require('./servos.class.js'))(struct.servos);
+		if (!!struct.servos) {
+			servos = new (require('./servos.class.js'))(
+				new SerialPort(struct.servos, { baudrate: 57600 });
+			);
+		}
 
-		if (!!struc.asserv)
-			asserv = new (require('./asserv.class.js'))(struct.asserv);
+		if (!!struct.asserv) {
+			asserv = new (require('./asserv.class.js'))(
+				new SerialPort(struct.asserv, { baudrate: 57600 });
+			);
+		}
 
-		if (!!struc.ax12)
-			ax12 = new (require('./ax12.class.js'))(struct.ax);
+		if (!!struct.ax12) {
+			ax12 = new (require('./ax12.class.js'))(
+				new SerialPort(struct.ax12, { baudrate: 57600 });
+			);
+		}
 	};
 
 	Acts.prototype.quit = function(){

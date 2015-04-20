@@ -26,16 +26,5 @@ module.exports = (function () {
 		});
 	};
 
-	// Tests
-	// elev = new Elevator();
-	// setTimeout(function() {
-	// 	logger.info("Démarrage");
-	// 	elev.move1Up();
-	// 	elev.move1Down();
-	// 	elev.move1Up();
-	// 	elev.move1Down();
-	// 	elev.release1();
-	// }, 1000);
-
 	return Servos;
 })();
