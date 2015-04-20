@@ -49,7 +49,7 @@ module.exports = (function () {
 		// Do action
 		var act = this.inprogress[action_name];
 		act.orders.forEach(function (order, index, array){
-			this.ia.client.send(act.owner, order.name, order.params); // XXXX pourquoi ça bugue ?
+			this.ia.client.send(act.owner, order.name, order.params);
 		}.bind(this));
 		this.ia.client.send(act.owner, "send_message", {
 			name: "action_finished",

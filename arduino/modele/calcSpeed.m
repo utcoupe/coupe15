@@ -1,13 +1,13 @@
-function [t, Vtarget, d] = calcSpeed(Vi, Vm, Acc, Dd0, t0, HZ)
-    Dsign = sign(Dd0);
-    Dd0 = abs(Dd0);
+function [t, Vtarget, d] = calcSpeed(Vi, Vm, Acc, dd, HZ)
+    Dsign = sign(dd);
+    dd = abs(dd);
     Vi = Vi*Dsign;
     
-    tend = t0 + sqrt(2*Acc*Dd0)/Acc;
-    t = linspace(t0, tend, HZ*(tend-t0)+1);
+    tend = sqrt(2*Acc*dd)/Acc;
+    t = linspace(0, tend, HZ*(tend)+1);
     % Target speed calculation
-    Vacc = (t-t0)*Acc + Vi;
-    Vdec = (t0-t)*Acc + sqrt(2*Acc*Dd0);
+    Vacc = t*Acc + Vi;
+    Vdec = -t*Acc + sqrt(2*Acc*dd);
     Vmax = Vm*ones(1,length(t));
     Vtarget = Dsign*min(vertcat(Vacc, Vmax, Vdec));
     

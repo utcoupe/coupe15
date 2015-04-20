@@ -1,24 +1,31 @@
 %% SIMULATION %%
 % inaccuraccy is max difference between V and Vtarget at any time (m/s)
 
-figure;
-Vi = 0.3;   % m/s
-Vm = 1;     % m/s
-Acc = 0.4;  % m/s2
-Dd0 = -0.5;    % m
-t0 = 0;
-HZ = 100;
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0.01, 'r');
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0.005, 'b');
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0, 'g');
-
-figure;
 Vi = 0;   % m/s
 Vm = 1;     % m/s
 Acc = 0.4;  % m/s2
-Dd0 = 5;    % m
-t0 = 0;
+dd = 5;    % m
 HZ = 100;
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0.01, 'r');
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0.005, 'b');
-plotSimulation(Vi, Vm, Acc, Dd0, t0, HZ, 0, 'g');
+
+encoder_radius = 30; % mm
+ticks_per_turn = 1024;
+
+max_inaccuracy = (HZ * (2*pi*encoder_radius) / ticks_per_turn) / 1000
+
+figure;
+plotSimulation(Vi, Vm, Acc, dd, HZ, max_inaccuracy, 'r');
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0, 'g');
+
+
+figure;
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0.01, 'r');
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0.005, 'b');
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0, 'g');
+
+Vi = 0.3;   % m/s
+dd = -0.5;    % m
+
+figure;
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0.01, 'r');
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0.005, 'b');
+plotSimulation(Vi, Vm, Acc, dd, HZ, 0, 'g');

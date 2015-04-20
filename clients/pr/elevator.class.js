@@ -16,14 +16,15 @@ module.exports = (function () {
 	var ELEV2_MOVE_DOWN =		'y';
 	var ELEV2_RELEASE =			'x';
 
-	function Elevator() {
+	function Elevator(name) {
 		this.sp = null;
 		this.ready = false;
 		this.pos1 = 'down';
 		this.pos2 = 'down';
 		this.orders_sent = [];
 
-		this.connectToArduino();
+		// this.connectToArduino();
+		this.arduinoFound(name);
 	}
 
 	// Fonctions for sending orders to the Arduino
@@ -63,6 +64,7 @@ module.exports = (function () {
 	}
 	Elevator.prototype.move1Down = function() {
 		this.sendOrder(ELEV1_MOVE_DOWN);
+		this.release1();
 	}
 	Elevator.prototype.release1 = function() {
 		this.sendOrder(ELEV1_RELEASE);
@@ -72,6 +74,7 @@ module.exports = (function () {
 	}
 	Elevator.prototype.move2Down = function() {
 		this.sendOrder(ELEV2_MOVE_DOWN);
+		this.release2();
 	}
 	Elevator.prototype.release2 = function() {
 		this.sendOrder(ELEV2_RELEASE);
@@ -85,8 +88,9 @@ module.exports = (function () {
 			for(var i in ports) {
 				sp[i] = new SerialPort(ports[i].comName);
 				sp[i].on("data", function (i, data) {
+					console.log(i, data.toString());
 					if(data == ID_ARDUINO) { // S comme Stepper
-						this.arduinoFound(sp[i], ports[i].comName);
+						this.arduinoFound(ports[i].comName);
 					}
 				}.bind(this, i));
 				sp[i].on("error", function() {}); // Node JS Error if it doesn't exist (and if an "error" event is sent)
@@ -94,14 +98,19 @@ module.exports = (function () {
 		}.bind(this));
 		setTimeout(function() { this.arduinoNotFound(); }.bind(this), 3000);
 	}
-	Elevator.prototype.arduinoFound = function(sp, name) {
+	Elevator.prototype.arduinoFound = function(name) {
 		this.ready = true;
-		this.sp = sp;
+		this.sp = new SerialPort(name);
 		this.sp.on("data", function(data) {
 			this.parseOrder(data.toString());
 		}.bind(this));
 
-		this.move1Down();
+		// TODO close others serial port
+
+		setTimeout(function() {
+			this.move1Up();
+			this.move1Down();
+		}.bind(this), 1000);
 		logger.info("Arduino Stepper found at: "+name);
 	}
 	Elevator.prototype.arduinoNotFound = function() {

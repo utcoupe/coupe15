@@ -33,10 +33,11 @@ module.exports = (function () {
 	};
 
 	// Order switch
-	Acts.prototype.orderHandler = function (from, name, params) {
+	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		logger.info(params);
 
+		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			case "servo_goto":
 				// logger.info(!!params.servo && !!params.position);
