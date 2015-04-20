@@ -4,6 +4,8 @@ module.exports = (function () {
 
 	function Asserv(sp) {
 		this.sp = sp;
+		this.sp.on("data", function(){});
+		this.sp.on("error", function(){});
 	}
 
 	Asserv.prototype.pwm = function(left, right, ms) {

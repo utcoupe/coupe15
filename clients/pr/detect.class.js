@@ -52,13 +52,13 @@ module.exports = (function () {
 				sp[i].on("data", function (i, data) {
 					data = data.toString();
 					console.log(ports[i].comName, data);
-					if (data == 'S'){ // Stepper
+					if (data == 'S' && !this.devicesFound.stepper){ // Stepper
 						this.devicesFound.stepper = ports[i].comName;
 						nb_found++;
-					} else if (data == 'A'){ // Asserv
+					} else if (data == 'A' && !this.devicesFound.asserv){ // Asserv
 						this.devicesFound.asserv = ports[i].comName;
 						nb_found++;
-					} else { // Firmata
+					} else if (!this.devicesFound.servos) { // Firmata
 						this.devicesFound.servos = ports[i].comName;
 						nb_found++;
 					}
