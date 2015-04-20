@@ -1,6 +1,6 @@
 var Simu = Simu || {};
 
-Simu.init = function inti(){
+Simu.init = function(){
 
 
 

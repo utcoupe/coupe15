@@ -84,6 +84,7 @@ if(libusb2ax.dxl_initialize(1, 1) <= 0) {
 }
 libusb2ax.dxl_write_word(2, P_COUPLE, 700);
 libusb2ax.dxl_write_word(3, P_COUPLE, 700);
+openAx12Down();
 loopAX12();
 
 // Servos
@@ -106,7 +107,6 @@ board.on("ready", function() {
   servog = new five.Servo(9);
   fermerServos();
 });
-openAx12Down();
 
 // Ascenseur
 var Elevator = require('../clients/pr/elevator.class.js');
