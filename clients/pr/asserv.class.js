@@ -4,7 +4,13 @@ module.exports = (function () {
 
 	function Asserv(sp) {
 		this.sp = sp;
+
+		
 	}
+
+	Asserv.prototype.connect = function(sp) {
+		// body...
+	};
 
 	return Asserv;
 })();

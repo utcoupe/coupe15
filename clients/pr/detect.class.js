@@ -23,7 +23,10 @@ module.exports = (function () {
 		// Detect other devices
 		serialPort.list(function (err, ports) {
 			for(var i in ports) {
-				sp[i].close();
+				// console.log(sp[i]);
+				
+				if(sp[i].readable)
+					sp[i].close();
 				
 				if((this.devicesFound.stepper != ports[i].comName) &&
 					(this.devicesFound.asserv != ports[i].comName) &&
@@ -48,27 +51,26 @@ module.exports = (function () {
 				sp[i].on("data", function (i, data) {
 					data = data.toString();
 					console.log(ports[i].comName, data);
-					if(data == 'S'){
+					if(data == 'S'){ // Stepper
 						this.devicesFound.stepper = ports[i].comName;
 						if (this.devicesFound.asserv && this.devicesFound.servos){
 							clearTimeout(timeout);
-							sendSP();
+							console.log('Ending S');
+							this.sendSP();
 						}
-					}
-
-					if(data == 'A'){
+					} else if(data == 'A'){ // Asserv
 						this.devicesFound.asserv = ports[i].comName;
-						if (this.devicesFound.stepper && this.devicesFound.stepper){
+						if (this.devicesFound.stepper && this.devicesFound.servos){
 							clearTimeout(timeout);
-							sendSP();
+							console.log('Ending A');
+							this.sendSP();
 						}
-					}
-
-					if(data != ('A' || 'S')){
+					} else { // Firmata
 						this.devicesFound.servos = ports[i].comName;
 						if (this.devicesFound.stepper && this.devicesFound.asserv){
 							clearTimeout(timeout);
-							sendSP();
+							console.log('Ending else');
+							this.sendSP();
 						}
 					}
 
@@ -79,7 +81,7 @@ module.exports = (function () {
 		}.bind(this));
 
 		// On check tous les ports qui ne sont pas enregistrés
-		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 2000);
+		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 5000);
 	};
 
 	return Detect;

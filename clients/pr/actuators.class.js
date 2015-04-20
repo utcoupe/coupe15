@@ -2,6 +2,11 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('clientpr.acts');
 
+	var elevator = null;
+	var servos = null;
+	var asserv = null;
+	var ax12 = null;
+
 	function Acts() {
 		this.arduinos = {};
 		this.ax12 = {};
@@ -12,6 +17,20 @@ module.exports = (function () {
 
 	Acts.prototype.start = function(){
 		// this.startArduino(this);
+	};
+
+	Acts.prototype.connectTo = function(struct){
+		if (!!struct.stepper)
+			elevator = new (require('./elevator.class.js'))(struct.stepper);
+
+		if (!!struc.servos)
+			servos = new (require('./servos.class.js'))(struct.servos);
+
+		if (!!struc.asserv)
+			asserv = new (require('./asserv.class.js'))(struct.asserv);
+
+		if (!!struc.ax12)
+			ax12 = new (require('./ax12.class.js'))(struct.ax);
 	};
 
 	Acts.prototype.quit = function(){

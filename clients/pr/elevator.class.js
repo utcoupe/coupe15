@@ -2,7 +2,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.elevator');
 	var serialPort = require("serialport");
-	var SerialPort = serialPort.SerialPort
+	var SerialPort = serialPort.SerialPort;
 
 	var ID_ARDUINO =			'S'; // Like Stepper
 
@@ -16,22 +16,22 @@ module.exports = (function () {
 	var ELEV2_MOVE_DOWN =		'y';
 	var ELEV2_RELEASE =			'x';
 
-	function Elevator(name) {
+	function Elevator(sp) {
 		this.sp = null;
 		this.ready = false;
 		this.pos1 = 'down';
 		this.pos2 = 'down';
 		this.orders_sent = [];
 
-		// this.connectToArduino();
-		this.arduinoFound(name);
+		this.connect(sp);
 	}
 
 	// Fonctions for sending orders to the Arduino
 	Elevator.prototype.sendOrder = function(order) {
 		this.sp.write(order);
 		this.orders_sent.push(order);
-	}
+	};
+
 	Elevator.prototype.parseOrder = function(order) {
 		if(order == ORDER_ACHIEVED) {
 			switch(this.orders_sent.shift()) {
@@ -58,67 +58,87 @@ module.exports = (function () {
 		} else {
 			logger.warn("Order received unknown: "+order);
 		}
-	}
+	};
+
 	Elevator.prototype.move1Up = function() {
 		this.sendOrder(ELEV1_MOVE_UP);
-	}
+	};
+
 	Elevator.prototype.move1Down = function() {
 		this.sendOrder(ELEV1_MOVE_DOWN);
 		this.release1();
-	}
+	};
+
 	Elevator.prototype.release1 = function() {
 		this.sendOrder(ELEV1_RELEASE);
-	}
+	};
+
 	Elevator.prototype.move2Up = function() {
 		this.sendOrder(ELEV2_MOVE_UP);
-	}
+	};
+
 	Elevator.prototype.move2Down = function() {
 		this.sendOrder(ELEV2_MOVE_DOWN);
 		this.release2();
-	}
+	};
+
 	Elevator.prototype.release2 = function() {
 		this.sendOrder(ELEV2_RELEASE);
-	}
+	};
 
-	// Fonctions for detecting the Arduino
-	Elevator.prototype.connectToArduino = function() {
-		var sp = [];
-		// On check tous les ports disponibles
-		serialPort.list(function (err, ports) {
-			for(var i in ports) {
-				sp[i] = new SerialPort(ports[i].comName);
-				sp[i].on("data", function (i, data) {
-					console.log(i, data.toString());
-					if(data == ID_ARDUINO) { // S comme Stepper
-						this.arduinoFound(ports[i].comName);
-					}
-				}.bind(this, i));
-				sp[i].on("error", function() {}); // Node JS Error if it doesn't exist (and if an "error" event is sent)
-			}
-		}.bind(this));
-		setTimeout(function() { this.arduinoNotFound(); }.bind(this), 3000);
-	}
-	Elevator.prototype.arduinoFound = function(name) {
+	Elevator.prototype.connect = function(sp) {
 		this.ready = true;
-		this.sp = new SerialPort(name);
+		this.sp = new SerialPort(sp);
+
 		this.sp.on("data", function(data) {
 			this.parseOrder(data.toString());
 		}.bind(this));
 
-		// TODO close others serial port
+		// setTimeout(function() {
+		// 	this.move1Up();
+		// 	this.move1Down();
+		// }.bind(this), 1000);
+	};
 
-		setTimeout(function() {
-			this.move1Up();
-			this.move1Down();
-		}.bind(this), 1000);
-		logger.info("Arduino Stepper found at: "+name);
-	}
-	Elevator.prototype.arduinoNotFound = function() {
-		if(!this.ready) {
-			logger.error("Arduino Stepper not found.");
-			process.exit(1);
-		}
-	}
+	// Elevator.prototype.connectToArduino = function() {
+	// 	var sp = [];
+	// 	// On check tous les ports disponibles
+	// 	serialPort.list(function (err, ports) {
+	// 		for(var i in ports) {
+	// 			sp[i] = new SerialPort(ports[i].comName);
+	// 			sp[i].on("data", function (i, data) {
+	// 				console.log(i, data.toString());
+	// 				if(data == ID_ARDUINO) { // S comme Stepper
+	// 					this.arduinoFound(ports[i].comName);
+	// 				}
+	// 			}.bind(this, i));
+	// 			sp[i].on("error", function() {}); // Node JS Error if it doesn't exist (and if an "error" event is sent)
+	// 		}
+	// 	}.bind(this));
+	// };
+
+	// Elevator.prototype.arduinoFound = function(name) {
+	// 	this.ready = true;
+	// 	this.sp = new SerialPort(name);
+	// 	this.sp.on("data", function(data) {
+	// 		this.parseOrder(data.toString());
+	// 	}.bind(this));
+
+	// 	// TODO close others serial port
+
+	// 	setTimeout(function() {
+	// 		this.move1Up();
+	// 		this.move1Down();
+	// 	}.bind(this), 1000);
+	// 	logger.info("Arduino Stepper found at: "+name);
+	// };
+
+	// Elevator.prototype.arduinoNotFound = function() {
+	// 	if(!this.ready) {
+	// 		logger.error("Arduino Stepper not found.");
+	// 		process.exit(1);
+	// 	}
+	// };
 
 	// Tests
 	// elev = new Elevator();
