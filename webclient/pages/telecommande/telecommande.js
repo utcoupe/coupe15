@@ -50,6 +50,8 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 			"position": parseInt($("#rc_pr_servo_pos").val())});
 	});
 
+
+
 	$(document).on("click", "#rc_pr_stab_close", function(e) {
 		Client.send("pr", "stabs_close", {});
 	});
@@ -61,6 +63,27 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 	$(document).on("click", "#rc_pr_stab_open", function(e) {
 		Client.send("pr", "stabs_open", {});
 	});
+
+	$(document).on("click", "#rc_pr_arm_close", function(e) {
+		Client.send("pr", "arm_close", {});
+	});
+
+	$(document).on("click", "#rc_pr_arm_chouilla", function(e) {
+		Client.send("pr", "arm_open_chouilla", {});
+	});
+
+	$(document).on("click", "#rc_pr_arm_open", function(e) {
+		Client.send("pr", "arm_open", {});
+	});
+
+	$(document).on("click", "#rc_pr_AX12_close", function(e) {
+		Client.send("pr", "AX12_close", {});
+	});
+
+	$(document).on("click", "#rc_pr_AX12_open", function(e) {
+		Client.send("pr", "AX12_open", {});
+	});
+
 
 
 

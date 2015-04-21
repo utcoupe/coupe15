@@ -36,16 +36,27 @@ module.exports = (function () {
 		this.connect(sp);
 	}
 
+
+	// ====== General actions ======
+
+	POS_OPENED = 40;
+	POS_CLOSED = 10;
+	POS_BALL_1 = 0;
+	POS_BALL_2 = 0;
+
+
 	Ax12.prototype.connect = function(sp) {
 		if(libusb2ax.dxl_initialize(sp[sp.length-1], 1) <= 0) {
 			logger.error("Impossible de se connecter à l'USB2AX");
 		}
 		this.ready = true;
+		this.ax12s = {};
 
 		libusb2ax.dxl_write_word(2, P_COUPLE, 700);
 		libusb2ax.dxl_write_word(3, P_COUPLE, 700);
-		openAx12Down();
-		loopAX12();
+
+		// openAx12Down();
+		this.loopAX12();
 	};
 
 	Ax12.prototype.disconnect = function(x) {
@@ -53,50 +64,60 @@ module.exports = (function () {
 		this.ready = false;
 	};
 
-	Ax12.prototype.ouvrir = function(x) {
+	Ax12.prototype.ouvrir = function(callback) {
+		this.goTo(POS_OPENED,callback);
 	};
 
-	Ax12.prototype.fermer = function(x) {
+	Ax12.prototype.fermer = function(callback) {
+		this.goTo(POS_CLOSED,callback);
 	};
 
-	// function loopAX12() {
-	// 	var speed;
-	// 	for(var i in ax12s) {
-	// 		// Si il est pas à la bonne position
-	// 		if(ax12s[i].pos < ax12s[i].obj - MARGE_POS || ax12s[i].pos > ax12s[i].obj + MARGE_POS) {
-	// 			ax12s[i].arrived = false;
-	// 			speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
-	// 			// Si il bouge pas, on renvoie l'ordre
-	// 			if(speed == 0) {
-	// 				console.log("ordre"+i);
-	// 				libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
-	// 			}
-	// 			else {
-	// 				ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
-	// 			}
-	// 		}
-	// 		else {
-	// 			if(!ax12s[i].arrived) {
-	// 				ax12s[i].arrived = true;
-	// 				logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
-	// 			}
-	// 		}
-	// 	}
-	// 	setTimeout(loopAX12, 50);
-	// }
+	Ax12.prototype.goTO = function(callback) {
+		callback.call();
+	};
 
-	// function degToAx12(deg) {
-	// 	return parseInt((deg+150)*1024/300);
-	// }
-	// function openAx12Down() {
-	// 	ax12s['2'].obj = degToAx12(0);
-	// 	ax12s['3'].obj = degToAx12(0);
-	// }
-	// function closeAx12Down() {
-	// 	ax12s['2'].obj = degToAx12(-75);
-	// 	ax12s['3'].obj = degToAx12(75);
-	// }
+	Ax12.prototype.loopAX12 = function() {
+		var speed;
+		for(var i in ax12s) {
+			// Si il est pas à la bonne position
+			if(ax12s[i].pos < ax12s[i].obj - MARGE_POS || ax12s[i].pos > ax12s[i].obj + MARGE_POS) {
+				ax12s[i].arrived = false;
+				speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
+				// Si il bouge pas, on renvoie l'ordre
+				if(speed === 0) {
+					console.log("ordre"+i);
+					libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
+				}
+				else {
+					ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
+				}
+			}
+			else {
+				if(!ax12s[i].arrived) {
+					ax12s[i].arrived = true;
+					logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
+				}
+			}
+		}
 
+		setTimeout(function() { this.loopAX12(); }.bind(this), 50);
+	};
+
+	Ax12.prototype.degToAx12 = function(deg) {
+		return parseInt((deg+150)*1024/300);
+	};
+
+	Ax12.prototype.openAx12Down = function(callback) {
+		ax12s['2'].obj = this.degToAx12(0);
+		ax12s['3'].obj = this.degToAx12(0);
+		callback.call();
+	};
+
+	Ax12.prototype.closeAx12Down = function(callback) {
+		ax12s['2'].obj = this.degToAx12(-140);
+		ax12s['3'].obj = this.degToAx12(140);
+		callback.call();
+	};
 
 
 	return Ax12;

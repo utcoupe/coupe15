@@ -21,17 +21,15 @@ module.exports = (function () {
 	POS_RIGHT_STAB_OPENED = 100;
 	POS_RIGHT_STAB_CHOUILLA = 133;
 	POS_RIGHT_STAB_CLOSED = 140;
-	// POS_LEFT_ARM_OPENED = ;
-	// POS_LEFT_ARM_CHOUILLA = ;
-	// POS_LEFT_ARM_CLOSED = ;
-	// POS_RIGHT_ARM_OPENED = ;
-	// POS_RIGHT_ARM_CHOUILLA = ;
-	// POS_RIGHT_ARM_CLOSED = ;
+	POS_LEFT_ARM_OPENED = 30;
+	POS_LEFT_ARM_CHOUILLA = 80;
+	POS_LEFT_ARM_CLOSED = 88;
+	POS_RIGHT_ARM_OPENED = 73;
+	POS_RIGHT_ARM_CHOUILLA = 31;
+	POS_RIGHT_ARM_CLOSED = 23;
 
 
 	Servos.prototype.connect = function(sp) {
-		var that = this;
-
 		board = new five.Board({
 			port: sp,
 			repl: false
@@ -80,19 +78,22 @@ module.exports = (function () {
 		callback.call();
 	};
 
-	Servos.prototype.ouvrirBras = function() {
+	Servos.prototype.ouvrirBras = function(callback) {
 		this.servos.left_arm.to(POS_LEFT_ARM_OPENED);
 		this.servos.right_arm.to(POS_RIGHT_ARM_OPENED);
+		callback.call();
 	};
 
-	Servos.prototype.ouvrirChouillaBras = function() {
+	Servos.prototype.ouvrirChouillaBras = function(callback) {
 		this.servos.left_arm.to(POS_LEFT_ARM_CHOUILLA);
 		this.servos.right_arm.to(POS_RIGHT_ARM_CHOUILLA);
+		callback.call();
 	};
 
-	Servos.prototype.fermerBras = function() {
+	Servos.prototype.fermerBras = function(callback) {
 		this.servos.left_arm.to(POS_LEFT_ARM_CLOSED);
 		this.servos.right_arm.to(POS_RIGHT_ARM_CLOSED);
+		callback.call();
 	};
 
 	Servos.prototype.servo_goto = function(servo, pos, callback) {

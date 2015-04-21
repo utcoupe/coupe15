@@ -73,20 +73,23 @@ module.exports = (function () {
 			case "stabs_open":
 				servos.ouvrirStabilisateur(callback);
 				break;
-			case "servo_close":
-				servo_close();
+			case "arm_close":
+				servos.fermerBras(callback);
 				break;
-			case "servo_open":
-				servo_open();
+			case "arm_open_chouilla":
+				servos.ouvrirChouillaBras(callback);
 				break;
-			case "AX12_goto":
-				AX12_goto(params.position);
+			case "arm_open":
+				servos.ouvrirBras(callback);
 				break;
+			// case "AX12_goto":
+			// 	AX12_goto(params.position);
+			// 	break;
 			case "AX12_close":
-				AX12_close();
+				ax12.closeAx12Down(callback);
 				break;
 			case "AX12_open":
-				AX12_open();
+				ax12.openAx12Down(callback);
 				break;
 			case "steppers_move":
 				stepper_do(params.move, params.direction);
@@ -97,9 +100,6 @@ module.exports = (function () {
 			case "steppers_set_bottom":
 				stepper_setBottom();
 				break;
-			// case "orders_array":
-			// 	ordersArrayHandler(params.orders);
-			// 	break;
 			case "send_message":
 				client.send("pr", params.name, {action_name: params.action_name});
 				break;
