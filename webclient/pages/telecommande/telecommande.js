@@ -1,5 +1,44 @@
 angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', function($scope, Client) {
-	$scope.rc_pr_pos_value = 0.5;
+	$scope.gr_pwm_gauche = 50;
+	$scope.gr_pwm_droite = 50;
+	$scope.gr_pwm_ms = 1000;
+
+	$scope.grAcheter = function() {
+		Client.send("gr", "acheter", {});
+	}
+	$scope.grVendre = function() {
+		Client.send("gr", "vendre", {});
+	}
+	$scope.grPWM = function() {
+		Client.send("gr", "pwm", {
+			left: $scope.gr_pwm_droite,
+			right: $scope.gr_pwm_gauche,
+			ms: $scope.gr_pwm_ms
+		});
+	}
+	$scope.grScript = function() {
+		$scope.grAcheter();
+		$scope.gr_pwm_gauche = 80;
+		$scope.gr_pwm_droite = 80;
+		$scope.gr_pwm_ms = 3550;
+		$scope.grPWM();
+		$scope.gr_pwm_gauche = -100;
+		$scope.gr_pwm_droite = 100;
+		$scope.gr_pwm_ms = 1600;
+		$scope.grPWM();
+		$scope.gr_pwm_gauche = 80;
+		$scope.gr_pwm_droite = 80;
+		$scope.gr_pwm_ms = 2500;
+		$scope.grPWM();
+		$scope.grVendre();
+		$scope.gr_pwm_gauche = 80;
+		$scope.gr_pwm_droite = 80;
+		$scope.gr_pwm_ms = 1500;
+		$scope.grPWM();
+		$scope.grAcheter();
+	}
+
+	/*$scope.rc_pr_pos_value = 0.5;
 	$scope.rc_pr_AX12_pos = 500;
 	$scope.rc_pr_servo1_min = 63;
 	$scope.rc_pr_servo1_max = 90;
@@ -90,5 +129,5 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 
 	$scope.prSteppersSetBottom = function (){
 		Client.send("pr", "steppers_set_bottom", {});
-	};
+	};*/
 }]);

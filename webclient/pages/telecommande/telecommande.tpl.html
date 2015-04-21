@@ -4,6 +4,15 @@
 <div ng-controller="TelecommandeCtrl">
 	<h1>Télécommande</h1>
 
+	<h2>GR</h2>
+	<button type="button" class="btn" ng-click="grAcheter()">Acheter</button> 
+	<button type="button" class="btn" ng-click="grVendre()">Vendre</button> <br><br>
+	G <input type="number" ng-model="gr_pwm_gauche" />
+	D <input type="number" ng-model="gr_pwm_droite" />
+	<input type="number" ng-model="gr_pwm_ms" /> ms
+	<button type="button" class="btn" ng-click="grPWM()">PWM</button><br><br>
+	<button type="button" class="btn" ng-click="grScript()">Script</button> <br><br>
+<!-- 
 	<h2>Hokuyo</h2>
 	Nb robots :
 	<select id="rc_hok_nbrobots">
@@ -25,9 +34,9 @@
 	<select id="rc_pr_numservo">
 		<option value="0" default>0</option>
 		<option value="1" default>1</option>
-	<!-- 	<option value="2">2</option>
+	<!-	<option value="2">2</option>
 		<option value="3">3</option>
-		<option value="4">4</option> -->
+		<option value="4">4</option> ->
 	</select> <br>
 	Position servo : 
 	<input type="range" id="rc_pr_pos" min="0" max="1" step="0.0009765" value="{{rc_pr_pos_value}}" ng-model="rc_pr_pos_value" ng-change="updatePosValue(rc_pr_pos_value)">
@@ -88,5 +97,5 @@
 	Position pas-à-pas : <input type="number" step="10" class="form-control" id="rc_pr_steppers_move" value="{{rc_pr_steppers_move}}" ng-model="rc_pr_steppers_move" ng-change="updateSteppersMoveValue(rc_pr_steppers_move)">
 	<button type="button" class="btn" id="rc_pr_steppers_set_bottom" ng-click="prSteppersSetBottom()">Définir la position basse</button>
 	<button type="button" class="btn" id="rc_pr_steppers_toogle" ng-click="prSteppersToogle()">Changer de position</button>
-	<br><br>
+	<br><br>-->
 </div>

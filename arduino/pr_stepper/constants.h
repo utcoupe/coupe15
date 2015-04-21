@@ -9,6 +9,6 @@
 #define MOTOR2_DIR_DOWN				FORWARD
 #define MOTOR2_DIR_UP				BACKWARD
 
-#define SERIAL_BAUDRATE				9600
+#define SERIAL_BAUDRATE				57600
 
 #endif

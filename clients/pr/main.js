@@ -6,8 +6,7 @@
 
 	// Requires
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('clientpr');
-	var acts = new (require('./actuators.class.js'))();
+	var logger = log4js.getLogger('pr');
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = ""; // server adress
@@ -15,6 +14,9 @@
 		server_ip: server,
 		type: "pr"
 	});
+
+	var acts = new (require('./actuators.class.js'))();
+	var detect = new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];
 	var orderInProgress = null;
@@ -38,20 +40,40 @@
 		addOrder2Queue(from, name, params);
 	});
 
+	function devicesDetected(struct){
+		// Verify content
+		if (!struct.stepper)
+			logger.warn("Missing stepper Mega !");
+
+		if (!struc.servos)
+			logger.warn("Missing servos Nano !");
+
+		if (!struc.asserv)
+			logger.warn("Missing asserv Nano");
+
+		if (!struc.ax12)
+			logger.warn("Missing USB2AX");
+
+		// Connect to what's detected
+		acts.connectTo(struct);
+
+		// Send struc to server
+	}
+
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		var l = queue.length;
+		if(queue.length<5){
+			// Adds the order to the queue
+			queue.push({
+				from: f,
+				name: n,
+				params: p
+			});
+			// logger.info("Order added to queue ! : ");
+			// logger.info(queue);
 
-		// Adds the order to the queue
-		queue.push({
-			from: f,
-			name: n,
-			params: p
-		});
-		// logger.info("Order added to queue ! : ");
-		// logger.info(queue);
-
-		executeNextOrder();
+			executeNextOrder();
+		}
 	}
 
 	// Execute order

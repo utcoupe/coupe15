@@ -78,18 +78,19 @@ function closeAx12Down() {
 // loop();
 
 // AX12
-if(libusb2ax.dxl_initialize(0, 1) <= 0) {
+if(libusb2ax.dxl_initialize(1, 1) <= 0) {
 	logger.error("Impossible de se connecter à l'USB2AX");
 	process.exit(1);
 }
 libusb2ax.dxl_write_word(2, P_COUPLE, 700);
 libusb2ax.dxl_write_word(3, P_COUPLE, 700);
+openAx12Down();
 loopAX12();
 
 // Servos
 var five = require("johnny-five");
 var board = new five.Board({
-	port: '/dev/ttyACM2',
+	port: '/dev/ttyACM0',
 	repl: false
 });
 var servo1, servo2;
@@ -106,11 +107,10 @@ board.on("ready", function() {
   servog = new five.Servo(9);
   fermerServos();
 });
-openAx12Down();
 
 // Ascenseur
 var Elevator = require('../clients/pr/elevator.class.js');
-var elevator = new Elevator('/dev/ttyACM1');
+var elevator = new Elevator('/dev/ttyACM2');
 function descendreAscenseur() {
 	elevator.move1Down();
 }

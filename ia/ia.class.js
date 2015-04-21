@@ -29,8 +29,7 @@ module.exports = (function () {
 			nb_erobots: this.nb_erobots,
 			we_have_hats: this.we_have_hats
 		});
-
-
+		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
 	}
 

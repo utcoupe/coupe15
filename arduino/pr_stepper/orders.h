@@ -1,7 +1,7 @@
 #ifndef ORDERS_H
 #define ORDERS_H
 
-#define ID_ARDUINO			'S' // Like Stepper
+#define ID_ARDUINO			'A' // Like Stepper
 
 #define ORDER_ACHIEVED		'K' // Like Ok
 #define ORDER_UNKNOWN		'U' // Like Unknown

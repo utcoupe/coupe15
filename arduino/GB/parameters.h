@@ -6,7 +6,7 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#define BAUDRATE 115200
+#define BAUDRATE 57600
 #define SERIAL_TYPE SERIAL_8N1
 #define ARDUINO_ID "A"
 
