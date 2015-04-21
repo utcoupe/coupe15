@@ -12,6 +12,25 @@
 	<input type="number" ng-model="gr_pwm_ms" /> ms
 	<button type="button" class="btn" ng-click="grPWM()">PWM</button><br><br>
 	<button type="button" class="btn" ng-click="grScript()">Script</button> <br><br>
+
+
+	<h2>PR</h2>
+	Numéro servo :
+	<select id="rc_pr_numservo">
+		<option value="left_stab">left_stab</option>
+		<option value="right_stab">right_stab</option>
+		<option value="left_arm">left_arm</option>
+		<option value="right_arm">right_arm</option>
+	</select> <br>
+	Position servo :
+		<input type="text"  class="form-control" id="rc_pr_servo_pos" style="width:auto" value="90"> <br>
+		<button type="button" class="btn" id="rc_pr_servo">Go !</button> <br>
+	Stabilisateurs :
+		<button type="button" class="btn" id="rc_pr_stab_close">Fermer</button>
+		<button type="button" class="btn" id="rc_pr_stab_chouilla">Ouvrir chouilla</button>
+		<button type="button" class="btn" id="rc_pr_stab_open">Ouvrir</button>
+
+	<br><br>
 <!-- 
 	<h2>Hokuyo</h2>
 	Nb robots :
@@ -29,18 +48,6 @@
 	<button type="button" class="btn" id="rc_hok_start">start</button>
 	 <button type="button" class="btn" id="rc_hok_stop">stop</button>
 
-	<h2>PR</h2>
-	Numéro servo :
-	<select id="rc_pr_numservo">
-		<option value="0" default>0</option>
-		<option value="1" default>1</option>
-	<!-	<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option> ->
-	</select> <br>
-	Position servo : 
-	<input type="range" id="rc_pr_pos" min="0" max="1" step="0.0009765" value="{{rc_pr_pos_value}}" ng-model="rc_pr_pos_value" ng-change="updatePosValue(rc_pr_pos_value)">
-	{{ rc_pr_pos_value }} <br><br>
 	
 	<table class="table" style="width: auto;">
 		<tr>
