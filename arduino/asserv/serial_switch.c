@@ -3,6 +3,8 @@
  * Mail : quentin.chateau@gmail.com	*
  * Date : 18/12/13			*
  ****************************************/
+
+#include <stdio.h>
 #include "serial_switch.h"
 #include "robotstate.h"
 #include "protocol.h"
@@ -10,6 +12,7 @@
 #include "encoder.h"
 #include "compat.h"
 #include "pins.h"
+#include "goals.h"
 
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
@@ -26,7 +29,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case GOTO: {
 		int x, y;
 		sscanf(argv, "%i;%i", &x, &y);
-		FifoPushGoal(id, TYPE_POS, x, y, 0);
+		FifoPushGoal(id, TYPE_POS, POS_DATA(x, y));
 		}
 		break;
 	case GOTOA: {
@@ -34,8 +37,8 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		float a;
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
 		a = a_int / FLOAT_PRECISION;
-		FifoPushGoal(id, TYPE_POS, x, y, 0);
-		FifoPushGoal(id, TYPE_ANG, a, 0, 0);
+		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y));
+		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
 		}
 		break;
 	case ROT: {
@@ -43,13 +46,13 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		float a;
 		sscanf(argv, "%i", &a_int);
 		a = a_int / FLOAT_PRECISION;
-		FifoPushGoal(id, TYPE_ANG, a, 0, 0);
+		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
 		}
 		break;
 	case PWM:{
 		int l, r, t;
 		sscanf(argv, "%i;%i;%i", &l, &r, &t);
-		FifoPushGoal(id, TYPE_PWM, l, r, t);
+		FifoPushGoal(id, TYPE_PWM, PWM_DATA(l, r, t));
 		}
 		break;
 	case PIDA:{
@@ -79,7 +82,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case CLEANG:{
 		FifoClearGoals();
 		ControlPrepareNewGoal();
-		FifoPushGoal(0, TYPE_POS, current_pos.x, current_pos.y, 0);
+		FifoPushGoal(0, TYPE_POS, POS_DATA(current_pos.x, current_pos.y));
 		}
 		break;
 	case RESET_ID:

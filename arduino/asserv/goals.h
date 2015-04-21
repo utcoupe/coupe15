@@ -15,10 +15,31 @@
 #define NO_GOAL -1
 #define STRUCT_NO_GOAL {0,0,0,NO_GOAL,0,0}
 
+#define POS_DATA(px,py) ((goal_data_t){ .pos_data=(pos_data_t){.x=px, .y=py}})
+#define ANG_DATA(a) ((goal_data_t){ .ang_data=(ang_data_t){.angle=a}})
+#define PWM_DATA(l,r,t) ((goal_data_t){ .pwm_data=(pwm_data_t){.pwm_l=l, .pwm_r=r, .time=t}})
+
+typedef struct pos_data {
+	int x, y;
+} pos_data_t;
+
+typedef struct ang_data {
+	float angle;
+} ang_data_t;
+
+typedef struct pwm_data {
+	float time;
+	int pwm_l, pwm_r;
+} pwm_data_t;
+
+typedef union goal_data {
+	pos_data_t pos_data;
+	ang_data_t ang_data;
+	pwm_data_t pwm_data;
+} goal_data_t;
+
 typedef struct goal {
-	float data_1; //	x	angle	pwmL
-	float data_2; //	y	.	pwmR
-	float data_3; //	d_rest	.	duree
+	goal_data_t data;
 	int type;
 	int ID;
 	char is_reached;
@@ -34,9 +55,9 @@ typedef struct fifo {
 
 extern fifo_t fifo;
 void FifoInit();
-int FifoPushGoal(int ID, int type, float data_1, float data_2, float data_3);
+int FifoPushGoal(int ID, int type, goal_data_t data);
 goal_t* FifoCurrentGoal();
 goal_t* FifoNextGoal();
-inline void FifoClearGoals() { FifoInit(); }
+extern inline void FifoClearGoals() { FifoInit(); }
 
 #endif

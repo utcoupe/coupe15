@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "protocol.h"
 #include "compat.h"
 #include "serial_switch.h"
@@ -33,7 +34,7 @@ int executeCmd(char data) {
 			end_of_id++;
 			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
 				clean_current_command(current_command, &index);
-				SERIAL_MAIN.print(FAILED_MSG);
+				serial_print(FAILED_MSG);
 				return -1;
 			}
 		}
