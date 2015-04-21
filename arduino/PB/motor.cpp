@@ -3,14 +3,18 @@
  * Mail : quentin.chateau@gmail.com	*
  * Date : 29/11/13			*
  ****************************************/
-#include "motor.h"
+
 #include "parameters.h"
+#include "brushlessMotor.h"
 
 //Controleur :
 //0:127   : Marche arriere
 //127:255 : Marche avant
 Motor motor_left(MOTOR_LEFT);
 Motor motor_right(MOTOR_RIGHT);
+
+extern "C" void set_pwm_right(int pwm);
+extern "C" void set_pwm_left(int pwm);
 
 void set_pwm_left(int pwm){
 	if (pwm != NO_PWM) {

@@ -3,8 +3,10 @@
  * Mail : quentin.chateau@gmail.com	*
  * Date : 29/11/13			*
  ****************************************/
-#include "motor.h"
 #include "parameters.h"
+#include "AFMotor.h"
+
+#define abs(x) (x>=0?x:-x)
 
 //Controleur :
 //-255:0 : Marche arrière
@@ -12,6 +14,9 @@
 
 AF_DCMotor motor_left(1, MOTOR12_64KHZ);
 AF_DCMotor motor_right(2, MOTOR12_64KHZ);
+
+extern "C" void set_pwm_right(int pwm);
+extern "C" void set_pwm_left(int pwm);
 
 void set_pwm_left(int pwm){
 	pwm = -pwm;//les moteurs sont faces à face, pour avancer il faut qu'il tournent dans un sens différent

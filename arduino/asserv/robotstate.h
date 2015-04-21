@@ -32,6 +32,6 @@ extern wheels_spd_t wheels_spd;
 void RobotStateInit();
 void RobotStateUpdate();
 void RobotStateSetPos(float x, float y, float angle);
-inline void RobotStateReset(void) { RobotStateInit(); };
+extern inline void RobotStateReset(void) { RobotStateInit(); };
 
 #endif

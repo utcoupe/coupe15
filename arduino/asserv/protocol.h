@@ -44,6 +44,10 @@
 #define ID_START_INDEX 2
 #define MAX_RESPONSE_LEN 50
 
+#ifdef __cplusplus
+extern "C" int executeCmd(char data);
+#else
 int executeCmd(char data);
+#endif
 
 #endif

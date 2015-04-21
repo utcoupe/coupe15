@@ -149,8 +149,8 @@ assert(os.path.exists(TARGET+FILE_EXTENSION))
 
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',
     '-funsigned-char', '-funsigned-bitfields', '-fpack-struct', '-fshort-enums',
-    '-O3', '-mmcu=%s'%MCU, '-D%s'%ARDUINO_BOARD]
-envArduino = Environment(CC = AVR_BIN_PREFIX+'g++', CXX = AVR_BIN_PREFIX+'g++', AS=AVR_BIN_PREFIX+'gcc',
+    '-O3', '-mmcu=%s'%MCU]
+envArduino = Environment(CC = AVR_BIN_PREFIX+'gcc', CXX = AVR_BIN_PREFIX+'g++', AS=AVR_BIN_PREFIX+'gcc',
     CPPPATH = ['build/core'], CPPDEFINES = {'F_CPU':F_CPU, 'ARDUINO':ARDUINO_VER},
     CFLAGS = cFlags+['-Wall'], CCFLAGS = cFlags, ASFLAGS=['-assembler-with-cpp','-mmcu=%s'%MCU],
     TOOLS = ['gcc','g++', 'as'])
@@ -241,7 +241,7 @@ def fnPatchCore(target, source, env):
 		p.wait()
 
 envArduino.Append(BUILDERS = {'Processing':Builder(action = fnProcessing,
-        suffix = '.cpp', src_suffix = FILE_EXTENSION)})
+        suffix = '.c', src_suffix = FILE_EXTENSION)})
 envArduino.Append(BUILDERS = {'PatchCore':Builder(action = fnPatchCore) })
 envArduino.Append(BUILDERS = {'CompressCore':Builder(action = fnCompressCore) })
 envArduino.Append(BUILDERS={'Elf':Builder(action=AVR_BIN_PREFIX+'gcc '+

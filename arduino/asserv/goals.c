@@ -17,7 +17,7 @@ void FifoInit() {
 	}
 }
 
-int FifoPushGoal(int ID, int type, float data_1, float data_2, float data_3) {
+int FifoPushGoal(int ID, int type, goal_data_t data) {
 	goal_t *new_goal;
 	if (fifo.nb_goals >= MAX_GOALS) {
 		return -1;
@@ -27,9 +27,7 @@ int FifoPushGoal(int ID, int type, float data_1, float data_2, float data_3) {
 	new_goal = &fifo.fifo[fifo.last_goal];
 
 	new_goal->type = type;
-	new_goal->data_1 = data_1;
-	new_goal->data_2 = data_2;
-	new_goal->data_3 = data_3;
+	new_goal->data = data;
 	new_goal->ID = ID;
 	new_goal->is_reached = 0;
 

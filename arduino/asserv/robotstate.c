@@ -50,8 +50,8 @@ void RobotStateUpdate() {
 	ticksL = left_ticks;
 	dl = (ticksL - left_last_ticks)*TICKS_TO_MM_LEFT;
 	dr = (ticksR - right_last_ticks)*TICKS_TO_MM_RIGHT;
-	wheels_spd.left_wheel = dl / HZ;
-	wheels_spd.right_wheel = dr / HZ;
+	wheels_spd.left_wheel = dl / FREQ;
+	wheels_spd.right_wheel = dr / FREQ;
 
 	//d_angle = atan2((dr - dl), ENTRAXE_ENC); //sans approximation tan
 	d_angle = (dr - dl)/ENTRAXE_ENC; // approximation tan

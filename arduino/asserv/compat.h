@@ -7,27 +7,28 @@
 #define COMPAARDUINO_H
 
 #include "Arduino.h"
-#include "parameters.h"
-#include "motor.h"
 #include "encoder.h"
+#include "parameters.h"
 #include "pins.h"
 
-inline unsigned long timeMillis(){
+extern inline unsigned long timeMillis(){
 	return millis();
 }
-inline unsigned long timeMicros(){
+extern inline unsigned long timeMicros(){
 	return micros();
 }
 
-inline void serial_send(char data) { //Envoi d'un octet en serial, dépend de la plateforme
-	SERIAL_MAIN.write(data);
-}
+#ifdef __cplusplus
+extern "C" char generic_serial_read();
+extern "C" void serial_send(char data);
+extern "C" void serial_print(const char *str);
+#else
+char generic_serial_read();
+void serial_send(char data);
+void serial_print(const char *str);
+#endif
 
-inline char generic_serial_read(){
-	return SERIAL_MAIN.read();
-}
-
-inline void initPins(){
+extern inline void initPins(){
 	//set mode des pins pour arduino
 	pinMode(PIN_ENC_LEFT_A,INPUT_PULLUP);
 	pinMode(PIN_ENC_LEFT_B,INPUT_PULLUP);

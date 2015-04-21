@@ -6,7 +6,6 @@
 
 #include "parameters.h"
 #include "PID.h"
-#include "Arduino.h"
 
 PID_t PID_angle, PID_distance;
 
