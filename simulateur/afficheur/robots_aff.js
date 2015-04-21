@@ -15,7 +15,7 @@ z: 0.35
 var Simu = Simu || {};
 
 Simu.afficherGR = function afficherGR(x,y,z,yrot,coul){
-	var geo = new THREE.BoxGeometry(0.25,0.35,0.35);
+	var geo = new THREE.BoxGeometry(0.28,0.20,0.25);
 	var boxMat = [
 				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),
@@ -35,7 +35,7 @@ Simu.afficherGR = function afficherGR(x,y,z,yrot,coul){
 
 Simu.afficherPR = function afficherPR(x,y,z,yrot,coul){
 
-	var geo = new THREE.BoxGeometry(0.15,0.35,0.20);
+	var geo = new THREE.BoxGeometry(0.14,0.35,0.22);
 	var boxMat = [
 				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
 				new THREE.MeshLambertMaterial({color:coul,side:THREE.doubleSided}),

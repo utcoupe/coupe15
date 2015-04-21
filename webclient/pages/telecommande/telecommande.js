@@ -5,17 +5,20 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 
 	$scope.grAcheter = function() {
 		Client.send("gr", "acheter", {});
-	}
+	};
+
 	$scope.grVendre = function() {
 		Client.send("gr", "vendre", {});
-	}
+	};
+
 	$scope.grPWM = function() {
 		Client.send("gr", "pwm", {
 			left: $scope.gr_pwm_droite,
 			right: $scope.gr_pwm_gauche,
 			ms: $scope.gr_pwm_ms
 		});
-	}
+	};
+
 	$scope.grScript = function() {
 		$scope.grAcheter();
 		$scope.gr_pwm_gauche = 80;
@@ -36,7 +39,30 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 		$scope.gr_pwm_ms = 1500;
 		$scope.grPWM();
 		$scope.grAcheter();
-	}
+	};
+
+
+
+
+	$(document).on("click", "#rc_pr_servo", function(e) {
+		Client.send("pr", "servo_goto", {
+			"servo": $("#rc_pr_numservo").val(),
+			"position": parseInt($("#rc_pr_servo_pos").val())});
+	});
+
+	$(document).on("click", "#rc_pr_stab_close", function(e) {
+		Client.send("pr", "stabs_close", {});
+	});
+
+	$(document).on("click", "#rc_pr_stab_chouilla", function(e) {
+		Client.send("pr", "stabs_open_chouilla", {});
+	});
+
+	$(document).on("click", "#rc_pr_stab_open", function(e) {
+		Client.send("pr", "stabs_open", {});
+	});
+
+
 
 	/*$scope.rc_pr_pos_value = 0.5;
 	$scope.rc_pr_AX12_pos = 500;
