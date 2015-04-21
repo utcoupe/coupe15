@@ -18,7 +18,7 @@ module.exports = (function () {
 	Acts.prototype.connectTo = function(struct){
 		if (!!struct.stepper) {
 			elevator = new (require('./elevator.class.js'))(
-				new SerialPort(struct.stepper, { baudrate: 57600 });
+				new SerialPort(struct.stepper, { baudrate: 57600 })
 			);
 		}
 
@@ -28,7 +28,7 @@ module.exports = (function () {
 
 		if (!!struct.asserv) {
 			asserv = new (require('./asserv.class.js'))(
-				new SerialPort(struct.asserv, { baudrate: 57600 });
+				new SerialPort(struct.asserv, { baudrate: 57600 })
 			);
 		}
 
@@ -53,16 +53,25 @@ module.exports = (function () {
 
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
-		logger.info("Just received an order `" + name + "` from " + from + " with params :");
-		logger.info(params);
+		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
+		// logger.info(params);
 
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			case "servo_goto":
 				// logger.info(!!params.servo && !!params.position);
 				// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
-					servo_goto(params.servo, params.position);
+					servos.servo_goto(params.servo, params.position, callback);
 				// }
+				break;
+			case "stabs_close":
+				servos.fermerStabilisateur(callback);
+				break;
+			case "stabs_open_chouilla":
+				servos.ouvrirChouillaStabilisateur(callback);
+				break;
+			case "stabs_open":
+				servos.ouvrirStabilisateur(callback);
 				break;
 			case "servo_close":
 				servo_close();

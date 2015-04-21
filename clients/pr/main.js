@@ -1,12 +1,11 @@
 (function () {
 	"use strict";
 
-	logger.info("Started NodeJS client with pid " + process.pid);
-
-
 	// Requires
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr');
+
+	logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = ""; // server adress
@@ -46,7 +45,7 @@
 			logger.warn("Missing stepper Mega !");
 
 		if (!struct.servos)
-			loggert.warn("Missing servos Nano !");
+			logger.warn("Missing servos Nano !");
 
 		if (!struct.asserv)
 			logger.warn("Missing asserv Nano");
@@ -105,9 +104,9 @@
 
 	// Exiting :
 	//do something when app is closing
-	process.on('exit', quit);
+	// process.on('exit', quit);
 	// catches ctrl+c event
-	process.on('SIGINT', quit);
+	// process.on('SIGINT', quit);
 	// //catches uncaught exceptions
 	// process.on('uncaughtException', quit);
 })();
