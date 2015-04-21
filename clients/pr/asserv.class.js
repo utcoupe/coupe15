@@ -10,6 +10,10 @@ module.exports = (function () {
 		this.sp.on("data", function(data) {
 			this.parseOrder(data.toString());
 		}.bind(this));
+
+		this.sp.on("error", function(data){
+			logger.debug("error", data.toString());
+ 		});
 	}
 
 	Asserv.prototype.pwm = function(left, right, ms) {
