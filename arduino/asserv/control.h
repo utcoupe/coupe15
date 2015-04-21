@@ -9,19 +9,16 @@
 #include "PID.h"
 
 typedef struct control {
-	float max_angle, max_acc, max_rot_spd_ratio;
-	float value_consigne_right, value_consigne_left;
-	float last_consigne_angle, last_consigne_dist;
-	int reset, paused, last_finished_id, consigne_offset;
-	char order_started;
+	float max_acc, max_spd, rot_spd_ratio;
+	float angular_speed, linear_speed;
+	int reset, paused, last_finished_id;
+	int order_started;
+	int pwm_left, pwm_right;
 } control_t;
 
 extern control_t control;
-extern PID_t PID_angle, PID_distance;
+extern PID_t PID_left, PID_right;
 
-void ControlSetMaxRotSpdRatio(float n_max_rot_spd);
-void ControlSetMaxAcc(float n_max_acc);
-void ControlSetMaxAngCurv(float n_max_ang);
 void ControlPrepareNewGoal(void);
 void ControlReset(void);
 

@@ -50,7 +50,7 @@ int executeCmd(char data) {
 		// if ever this happens, the order will be corrupted
 		// decrease index so the arduino keep going on
 		// that means we overwrite the last received char
-		index--;
+		index = MAX_COMMAND_LEN-1;
 		return 1;
 	}
 	return 0;

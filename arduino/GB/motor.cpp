@@ -5,8 +5,13 @@
  ****************************************/
 #include "parameters.h"
 #include "AFMotor.h"
+#include "Arduino.h"
 
-#define abs(x) (x>=0?x:-x)
+#define abs(x) ((x)>=0?(x):-(x))
+
+#ifndef PWM_MIN
+#define PWM_MIN 0
+#endif
 
 //Controleur :
 //-255:0 : Marche arrière

@@ -28,7 +28,7 @@ inline void initPWM1(uint8_t freq) {
 #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
     // on arduino mega, pin 3 is now PE5 (OC3C)
     TCCR3A |= _BV(COM1C1) | _BV(WGM10); // fast PWM, turn on oc3c
-    TCCR3B = _BV(CS00); //(freq & 0x7) | _BV(WGM12);
+    TCCR3B = (freq & 0x7) | _BV(WGM12);
     OCR3C = 0;
 	
 #else
@@ -67,7 +67,7 @@ inline void initPWM2(uint8_t freq) {
 #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
     // on arduino mega, pin 11 is now PB5 (OC1A)
     TCCR1A |= _BV(COM1A1) | _BV(WGM10); // fast PWM, turn on oc1a
-    TCCR1B = _BV(CS00); //(freq & 0x7) | _BV(WGM12);
+    TCCR1B = (freq & 0x7) | _BV(WGM12);
     OCR1A = 0;
 #else
    #error "This chip is not supported!"

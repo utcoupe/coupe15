@@ -17,10 +17,11 @@ unsigned long timeLED = 0;
 
 #define MAX_READ 64 
 void setup() {
-#ifdef mega2560
+#ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
+	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
 #else
-#ifdef nano328
+#ifdef __AVR_ATmega328P__
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
 #endif
 #endif
@@ -32,7 +33,7 @@ void setup() {
 }
 
 void loop(){
-	nextTime = nextTime + DUREE_CYCLE*1000;
+	nextTime = nextTime + DT*1000000;
 	digitalWrite(LED_MAINLOOP, HIGH);
 
 	//Action asserv

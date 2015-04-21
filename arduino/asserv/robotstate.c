@@ -28,8 +28,8 @@ void RobotStateInit() {
 	current_pos.y = 0;
 	current_pos.angle = 0;
 	current_pos.modulo_angle = 0;
-	wheels_spd.left_wheel = 0;
-	wheels_spd.right_wheel = 0;
+	wheels_spd.left = 0;
+	wheels_spd.right = 0;
 	encoders_reset();
 }
 
@@ -43,15 +43,16 @@ void RobotStateSetPos(float x, float y, float angle) {
 void RobotStateUpdate() {
 	static long left_last_ticks = 0, right_last_ticks = 0;
 	static float last_angle = 0;
-	long ticksR, ticksL;
 	float dd, dl, dr, d_angle;
+	long lt, rt;
 
-	ticksR = right_ticks;
-	ticksL = left_ticks;
-	dl = (ticksL - left_last_ticks)*TICKS_TO_MM_LEFT;
-	dr = (ticksR - right_last_ticks)*TICKS_TO_MM_RIGHT;
-	wheels_spd.left_wheel = dl / FREQ;
-	wheels_spd.right_wheel = dr / FREQ;
+	lt = left_ticks;
+	rt = right_ticks;
+
+	dl = (lt - left_last_ticks)*TICKS_TO_MM_LEFT;
+	dr = (rt - right_last_ticks)*TICKS_TO_MM_RIGHT;
+	wheels_spd.left = dl * HZ;
+	wheels_spd.right = dr * HZ;
 
 	//d_angle = atan2((dr - dl), ENTRAXE_ENC); //sans approximation tan
 	d_angle = (dr - dl)/ENTRAXE_ENC; // approximation tan
@@ -63,7 +64,7 @@ void RobotStateUpdate() {
 	current_pos.y += dd*sin((current_pos.angle + last_angle)/2.0);
 
 	// prepare la prochaine update
-	right_last_ticks = ticksR;
-	left_last_ticks = ticksL;
+	right_last_ticks = rt;
+	left_last_ticks = lt;
 	last_angle = current_pos.angle;
 }

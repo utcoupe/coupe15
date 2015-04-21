@@ -55,24 +55,23 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		FifoPushGoal(id, TYPE_PWM, PWM_DATA(l, r, t));
 		}
 		break;
-	case PIDA:{
+	case PIDALL:
+	case PIDRIGHT:
+	case PIDLEFT:{
 		int p_int, i_int, d_int;
 		float p, i, d;
 		sscanf(argv, "%i;%i;%i", &p_int, &i_int, &d_int);
 		p = p_int / FLOAT_PRECISION;
 		i = i_int / FLOAT_PRECISION;
 		d = d_int / FLOAT_PRECISION;
-		PIDSet(&PID_angle, p, i, d, ANG_BIAS);
+		if (ordre == PIDLEFT) 
+			PIDSet(&PID_left, p, i, d, LEFT_BIAS);
+		else if (ordre == PIDRIGHT)
+			PIDSet(&PID_right, p, i, d, RIGHT_BIAS);
+		else {
+			PIDSet(&PID_left, p, i, d, LEFT_BIAS);
+			PIDSet(&PID_right, p, i, d, RIGHT_BIAS);
 		}
-		break;
-	case PIDD: {
-		int p_int, i_int, d_int;
-		float p, i, d;
-		p = p_int / FLOAT_PRECISION;
-		i = i_int / FLOAT_PRECISION;
-		d = d_int / FLOAT_PRECISION;
-		sscanf(argv, "%i;%i;%i", &p_int, &i_int, &d_int);
-		PIDSet(&PID_distance, p, i, d, DIS_BIAS);
 		}
 		break;
 	case KILLG:
@@ -122,8 +121,8 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		sscanf(argv, "%i;%i", &a_int, &r_int);
 		a = a_int / FLOAT_PRECISION;
 		r = r_int / FLOAT_PRECISION;
-		ControlSetMaxAcc(a);
-		ControlSetMaxRotSpdRatio(r);
+		control.max_acc = a;
+		control.rot_spd_ratio = r;
 		}
 		break;
 	case GET_LAST_ID: {
