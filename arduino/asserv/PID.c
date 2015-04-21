@@ -6,8 +6,9 @@
 
 #include "parameters.h"
 #include "PID.h"
+#include "compat.h"
 
-PID_t PID_angle, PID_distance;
+PID_t PID_left, PID_right;
 
 void PIDInit(PID_t *pid) {
 	pid->P = 0;
@@ -26,8 +27,8 @@ void PIDReset(PID_t *pid) {
 }
 
 void PIDSet(PID_t *pid, float P, float I, float D, float bias) {
-		I /= FREQ;
-		D *= FREQ;
+		I /= HZ;
+		D *= HZ;
 		pid->P = P;
 		pid->I = I;
 		pid->D = D;
@@ -35,7 +36,7 @@ void PIDSet(PID_t *pid, float P, float I, float D, float bias) {
 }
 
 float PIDCompute(PID_t *pid, float error) {
-	float error_D;
+	float error_D, bias, P_part, I_part, D_part;
 
 	if(!pid->init_done){ 
 		//Lors du premier compute, on ne tient pas compte de D
@@ -46,12 +47,15 @@ float PIDCompute(PID_t *pid, float error) {
 		error_D = (error - pid->last_error); 
 	}
 
-	pid->error_sum += error;
+	pid->error_sum = (pid->error_sum) + error;
 	pid->last_error = error;
 	
         //calcul de la sortie avec le PID
-	pid->output = pid->bias + (pid->P*error) + 
-		(pid->I*pid->error_sum) + (pid->D*error_D);
+	bias = pid->bias;
+	P_part = pid->P * error;
+	I_part = pid->I * pid->error_sum;
+	D_part = pid->D * error_D;
+	pid->output = bias + P_part + I_part + D_part;
 
 	return pid->output;
 }

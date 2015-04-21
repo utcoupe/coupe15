@@ -22,8 +22,9 @@
 #define	ROT 		'e' 	// a(decimal) - (radian)
 #define	KILLG 		'f' 	// no args, go to next order
 #define	CLEANG 		'g' 	// no args, cancel all orders
-#define	PIDA 		'h' 	// p(decimal);i(decimal);d(decimal) - set angle PID
-#define	PIDD 		'i' 	// p(decimal);i(decimal);d(decimal) - set distance PID
+#define	PIDLEFT		'h' 	// p(decimal);i(decimal);d(decimal) - set left PID
+#define	PIDRIGHT	'i' 	// p(decimal);i(decimal);d(decimal) - set right PID
+#define PIDALL 		'u' 	// p(decimal);i(decimal);d(decimal) - set both PID
 #define	GET_CODER 	'j' 	// no args, response : l(long);r(long)
 #define	PWM 		'k' 	// l(int);r(int);duration(int) - set left and right pwm for duration ms
 #define	ACCMAX 		'l' 	// a(decimal) - set max acceleration (mm/s-2)
@@ -37,7 +38,7 @@
 #define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
 
-#define FLOAT_PRECISION ((float)10000) // keep it as a float
+#define FLOAT_PRECISION ((float)10000)
 #define FAILED_MSG "FAILED\n"
 #define MAX_COMMAND_LEN 60
 #define MAX_ID_LEN 10
