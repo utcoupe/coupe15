@@ -196,7 +196,7 @@
 				"y":1750
 			}
 		},
-		"front_left2":{
+		"front_right2":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -205,7 +205,7 @@
 				"y":1850
 			}
 		},
-		"middle_left1":{
+		"middle_right1":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -214,7 +214,7 @@
 				"y":1355
 			}
 		},
-		"middle_left2":{
+		"middle_right2":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -223,7 +223,7 @@
 				"y":1400
 			}
 		},
-		"middle_left3":{
+		"middle_right3":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -232,7 +232,7 @@
 				"y":1770
 			}
 		},
-		"rear_left":{
+		"rear_right":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -241,7 +241,7 @@
 				"y":200
 			}
 		},
-		"stairs_left1":{
+		"stairs_right1":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
@@ -250,7 +250,7 @@
 				"y":100
 			}
 		},
-		"stairs_left2":{
+		"stairs_right2":{
 			"diametre": 60,
 			"color": "green",
 			"status": "initial",
