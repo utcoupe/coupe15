@@ -4,24 +4,19 @@ module.exports = (function () {
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
 
-	var ID_ARDUINO =			'S'; // Like Stepper
-
 	var ORDER_ACHIEVED =		'K'; // Like Ok
 	var ORDER_UNKNOWN =			'U'; // Like Unknown
 
-	var ELEV1_MOVE_UP =			'a';
-	var ELEV1_MOVE_DOWN =		'b';
-	var ELEV1_RELEASE =			'c';
-	var ELEV2_MOVE_UP =			'z';
-	var ELEV2_MOVE_DOWN =		'y';
-	var ELEV2_RELEASE =			'x';
+	var ELEV_MOVE_UP =			'u';
+	var ELEV_MOVE_DOWN =		'd';
+	var ELEV_RELEASE =			'r';
+	var ELEV_CHOUILLA =			'c';
 
 	function Elevator(sp) {
 		// sp is Serial Port OBJECT
 		this.sp = sp;
 		this.ready = true;
-		this.pos1 = 'down';
-		this.pos2 = 'down';
+		this.pos = 'down';
 		this.orders_sent = [];
 
 		this.sp.on("data", function(data) {
@@ -40,24 +35,36 @@ module.exports = (function () {
 		this.ready = false;
 	};
 
+
+	// ====== General actions ======
+
+	Elevator.prototype.monter = function() {
+		this.sendOrder(ELEV_MOVE_UP);
+	};
+
+	Elevator.prototype.monterChouilla = function() {
+		this.sendOrder(ELEV_CHOUILLA);
+	};
+
+	Elevator.prototype.descendre = function() {
+		this.sendOrder(ELEV_MOVE_DOWN);
+		this.lacher();
+	};
+
+	Ele.prototype.lacher = function() {
+		this.sendOrder(ELEV_RELEASE);
+	};
+
 	Elevator.prototype.parseOrder = function(order) {
 		if(order == ORDER_ACHIEVED) {
 			switch(this.orders_sent.shift()) {
-				case ELEV1_MOVE_UP:
-					this.pos1 = 'up';
-					logger.info("Elevator 1 is up");
+				case ELEV_MOVE_UP:
+					this.pos = 'up';
+					logger.info("Elevator is up");
 				break;
-				case ELEV1_MOVE_DOWN:
+				case ELEV_MOVE_DOWN:
 					this.pos1 = 'down';
-					logger.info("Elevator 1 is down");
-				break;
-				case ELEV2_MOVE_UP:
-					this.pos2 = 'up';
-					logger.info("Elevator 2 is up");
-				break;
-				case ELEV2_MOVE_DOWN:
-					this.pos2 = 'down';
-					logger.info("Elevator 2 is down");
+					logger.info("Elevator is down");
 				break;
 			}
 		} else if (order == ORDER_UNKNOWN) {
@@ -67,45 +74,6 @@ module.exports = (function () {
 			logger.warn("Order received unknown: "+order);
 		}
 	};
-
-	Elevator.prototype.move1Up = function() {
-		this.sendOrder(ELEV1_MOVE_UP);
-	};
-
-	Elevator.prototype.move1Down = function() {
-		this.sendOrder(ELEV1_MOVE_DOWN);
-		this.release1();
-	};
-
-	Elevator.prototype.release1 = function() {
-		this.sendOrder(ELEV1_RELEASE);
-	};
-
-	Elevator.prototype.move2Up = function() {
-		this.sendOrder(ELEV2_MOVE_UP);
-	};
-
-	Elevator.prototype.move2Down = function() {
-		this.sendOrder(ELEV2_MOVE_DOWN);
-		this.release2();
-	};
-
-	Elevator.prototype.release2 = function() {
-		this.sendOrder(ELEV2_RELEASE);
-	};
-
-
-	
-	// Tests
-	// elev = new Elevator();
-	// setTimeout(function() {
-	// 	logger.info("Démarrage");
-	// 	elev.move1Up();
-	// 	elev.move1Down();
-	// 	elev.move1Up();
-	// 	elev.move1Down();
-	// 	elev.release1();
-	// }, 1000);
 
 	return Elevator;
 })();

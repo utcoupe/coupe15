@@ -25,5 +25,8 @@ module.exports = (function () {
 		this.ready = false;
 	};
 
+	Asserv.prototype.goTo = function(pos) { // pos = {x, y, a}
+	};
+
 	return Asserv;
 })();
