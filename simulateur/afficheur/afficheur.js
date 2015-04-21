@@ -289,7 +289,7 @@ Simu.init = function(){
         var t = data.robots.pe;
         Simu.PE.position.set(t.x,t.y,t.z);
         
-
+/* TEMP on n'update que les robots
     // update des ampoules
 
         var t = data.ampoules;
@@ -332,10 +332,8 @@ Simu.init = function(){
         for(var i=0;i<Simu.popcorns.length;i++){
             Simu.popcorns[i].position.set(t[i].x,t[i].y,t[i].z);
         }
-
+*/
     }
-
-
 
 
     //var data = JSON.parse(datatext);
