@@ -3,8 +3,14 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.export_simulator');
 
+	var __timeout = null;
+
+	function convertX(x) { return (x-1500)/1000; }
+	function convertY(y) { return (y-1000)/1000; }
+	function convertA(a) { return a*Math.PI/180; }
+
 	function ExportSimulator(ia) {
-		this.timeout = null;
+		this.ia = ia;
 		this.start();
 	}
 
@@ -12,17 +18,27 @@ module.exports = (function () {
 		this.orderToSimu();
 	}
 	ExportSimulator.prototype.stop = function() {
-		clearTimeout(this.timeout);
+		clearTimeout(__timeout);
 	}
 
 	ExportSimulator.prototype.orderToSimu = function() {
 		var data = {};
-		logger.debug(ia.gr);
 		data.robots = {
-			gr:2
+			gr: {
+				x: convertX(this.ia.gr.pos.x),
+				y: convertY(this.ia.gr.pos.y),
+				a: convertA(this.ia.gr.pos.a)
+			},
+			pr: {
+				x: convertX(this.ia.pr.pos.x),
+				y: convertY(this.ia.pr.pos.y),
+				a: convertA(this.ia.pr.pos.a)
+			}
 		}
+		logger.debug(data);
+		this.ia.client.send("webclient", "simulator_update", data);
 
-		this.timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000);
+		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 5000);
 	}
 
 	return ExportSimulator;

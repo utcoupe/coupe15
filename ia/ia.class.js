@@ -38,7 +38,7 @@ module.exports = (function () {
 	};
 
 	Ia.prototype.run = function() {
-		logger.info(this.actions.do("empiler1.1"));
+		//logger.info(this.actions.do("empiler1.1"));
 	};
 
 	return Ia;

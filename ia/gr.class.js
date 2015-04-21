@@ -6,7 +6,7 @@ module.exports = (function () {
 	function Gr(ia, color) {
 		this.ia = ia;
 		this.pos = {
-			x: 250,
+			x: 210,
 			y: 1000,
 			a: 0
 		};

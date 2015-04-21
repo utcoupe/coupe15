@@ -1,5 +1,5 @@
 angular.module('app', [
-	'ngRoute',
+	'ngRoute'
 ]);
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -13,9 +13,11 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'Logger', 'Reseau', function($scope, Logger, Reseau) {
+angular.module('app').controller('AppCtrl', ['$scope', 'Logger', 'Reseau', 'Simulateur',
+	function($scope, Logger, Reseau, Simulateur) {
 	Logger.init();
 	Reseau.init();
+	Simulateur.init();
 }]);
 
 angular.module('app').controller('MenuCtrl', ['$scope', function($scope) {
