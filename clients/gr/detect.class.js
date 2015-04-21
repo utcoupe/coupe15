@@ -52,7 +52,7 @@ module.exports = (function () {
 		}.bind(this));
 
 		// On check tous les ports qui ne sont pas enregistrés
-		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 5000);
+		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 3000);
 	};
 
 	return Detect;

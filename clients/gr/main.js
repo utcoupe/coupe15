@@ -1,18 +1,17 @@
 (function () {
 	"use strict";
+	// Requires
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('gr');
 
 	logger.info("Started NodeJS client with pid " + process.pid);
 
 
-	// Requires
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('clientpr');
-
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = ""; // server adress
+	var server = "127.0.0.1:3128"; // server adress
 	var client = new SocketClient({
 		server_ip: server,
-		type: "pr"
+		type: "gr"
 	});
 
 	var acts = new (require('./actuators.class.js'))();
@@ -42,38 +41,30 @@
 
 	function devicesDetected(struct){
 		// Verify content
-		if (!struct.stepper)
-			logger.error("Missing stepper Mega !");
-
-		if (!struc.servos)
-			logger.error("Missing servos Nano !");
-
-		if (!struc.asserv)
+		if (!struct.servos)
+			logger.warn("Missing servos Nano !");
+		if (!struct.asserv)
 			logger.warn("Missing asserv Nano");
-
-		if (!struc.ax12)
-			logger.warn("Missing USB2AX");
 
 		// Connect to what's detected
 		acts.connectTo(struct);
 
-		// Send struc to server
+		// Send struct to server
 	}
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		var l = queue.length;
-
-		// Adds the order to the queue
-		queue.push({
-			from: f,
-			name: n,
-			params: p
-		});
-		// logger.info("Order added to queue ! : ");
-		// logger.info(queue);
-
-		executeNextOrder();
+		if(queue.length < 10) {
+			// Adds the order to the queue
+			queue.push({
+				from: f,
+				name: n,
+				params: p
+			});
+			// logger.info("Order added to queue ! : ");
+			// logger.info(queue);
+			executeNextOrder();
+		}
 	}
 
 	// Execute order
@@ -92,21 +83,22 @@
 	function actionFinished(){
 		logger.info(orderInProgress + " just finished !");
 
-		orderInProgress = null;
+		orderInProgress = false;
 		executeNextOrder();
 	}
 
 	function quit () {
 		logger.info("Please wait while exiting...");
-		acts.quit();
+		// acts.quit();
+		process.exit(0);
 	}
 
 
 	// Exiting :
 	//do something when app is closing
-	process.on('exit', quit);
+	//process.on('exit', quit);
 	// catches ctrl+c event
-	process.on('SIGINT', quit);
+	//process.on('SIGINT', quit);
 	// //catches uncaught exceptions
 	// process.on('uncaughtException', quit);
 })();
