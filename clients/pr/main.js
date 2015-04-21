@@ -19,7 +19,7 @@
 	var detect = new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];
-	var orderInProgress = null;
+	var orderInProgress = false;
 
 	// On message
 	client.order(function (from, name, params){
@@ -45,19 +45,19 @@
 		if (!struct.stepper)
 			logger.warn("Missing stepper Mega !");
 
-		if (!struc.servos)
-			logger.warn("Missing servos Nano !");
+		if (!struct.servos)
+			loggert.warn("Missing servos Nano !");
 
-		if (!struc.asserv)
+		if (!struct.asserv)
 			logger.warn("Missing asserv Nano");
 
-		if (!struc.ax12)
+		if (!struct.ax12)
 			logger.warn("Missing USB2AX");
 
 		// Connect to what's detected
 		acts.connectTo(struct);
 
-		// Send struc to server
+		// Send struct to server
 	}
 
 	// Push the order (enfiler)
@@ -92,13 +92,14 @@
 	function actionFinished(){
 		logger.info(orderInProgress + " just finished !");
 
-		orderInProgress = null;
+		orderInProgress = false;
 		executeNextOrder();
 	}
 
 	function quit () {
 		logger.info("Please wait while exiting...");
 		acts.quit();
+		process.exit();
 	}
 
 
