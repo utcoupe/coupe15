@@ -22,7 +22,12 @@ typedef struct pos {
 	int modulo_angle;
 } pos_t;
 
+typedef struct wheels_spd {
+	float left_wheel, right_wheel;
+} wheels_spd_t;
+
 extern pos_t current_pos;
+extern wheels_spd_t wheels_spd;
 
 void RobotStateInit();
 void RobotStateUpdate();

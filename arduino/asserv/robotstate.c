@@ -10,6 +10,7 @@
 #include <math.h>
 
 pos_t current_pos;
+wheels_spd_t wheels_spd;
 
 void PosUpdateAngle() {
 	if (current_pos.angle > M_PI) {
@@ -27,6 +28,8 @@ void RobotStateInit() {
 	current_pos.y = 0;
 	current_pos.angle = 0;
 	current_pos.modulo_angle = 0;
+	wheels_spd.left_wheel = 0;
+	wheels_spd.right_wheel = 0;
 	encoders_reset();
 }
 
@@ -47,6 +50,8 @@ void RobotStateUpdate() {
 	ticksL = left_ticks;
 	dl = (ticksL - left_last_ticks)*TICKS_TO_MM_LEFT;
 	dr = (ticksR - right_last_ticks)*TICKS_TO_MM_RIGHT;
+	wheels_spd.left_wheel = dl / HZ;
+	wheels_spd.right_wheel = dr / HZ;
 
 	//d_angle = atan2((dr - dl), ENTRAXE_ENC); //sans approximation tan
 	d_angle = (dr - dl)/ENTRAXE_ENC; // approximation tan
