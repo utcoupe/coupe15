@@ -16,8 +16,7 @@ Simu.init = function(){
 
     Simu.datatext = {
         "robots" : {
-
-            "gr" : { "x": -1.305, "y": 0.185, "z": 0, "yrot": 0, "coul": "#ffff00"},
+            "gr" : { "x": -1.290, "y": 0.11, "z": 0, "yrot": 0, "coul": "#ffff00"},
             "pr" : { "x": -1.055, "y": 0.185, "z": 0, "yrot": 0, "coul": "#ffff00"},
             "ge" : { "x": 1.305, "y": 0.185, "z": 0, "coul": "#ff00ff"},
             "pe" : { "x": 1.055, "y": 0.185, "z": 0, "coul": "#ff00ff"}
@@ -110,110 +109,6 @@ Simu.init = function(){
         ]
     };
 
-
-
-
-
-
-    Simu.data2 = {
-        "robots" : {
-
-            "gr" : { "x": -1.305, "y": 0.185, "z": 0, "yrot": 0, "coul": "#ff0000"},
-            "pr" : { "x": -0.7, "y": 0.185, "z": 0, "yrot": 0, "coul": "#ff0000"},
-            "ge" : { "x": 1.305, "y": 0.185, "z": 0, "coul": "#ff0000"},
-            "pe" : { "x": 0.5, "y": 0.185, "z": 0, "coul": "#ff0000"}
-        },
-
-        "ampoules" : [
-            {"x":-1.465, "y": 0.06, "z":0 ,"coul": "#ffff00"},
-            {"x":-0.25, "y": 0.06, "z":0.950,"coul": "#ffff00"},
-            { "x":0.25 , "y": 0.06, "z":0.950 ,"coul": "#ffff00"},
-            {"x":1.465 , "y": 0.06, "z":0,"coul": "#ffff00"}
-        ],
-
-        "clapets" : [
-            {"x":-1.18,"y":0.123,"z":1.015,"zrot": 0, "coul": "#ffff00"},
-            {"x":-0.88,"y":0.123,"z":1.015,"zrot": 0, "coul": "#00ff00"},
-            {"x":-0.58,"y":0.123,"z":1.015,"zrot": 0, "coul": "#ffff00"},
-            {"x":0.58,"y":0.123,"z":1.015,"zrot": 0, "coul": "#00ff00"},
-            {"x":0.88,"y":0.123,"z":1.015,"zrot": 0, "coul": "#ffff00"},
-            {"x":1.18,"y":0.123,"z":1.015,"zrot": 0, "coul": "#00ff00"}
-        ],
-
-        "gobelets" : [
-            {"x":-1.250,"y": 0.01,"z":0.750, "coul": "#0000ff"},
-            {"x":-0.590,"y": 0.01,"z": -0.170, "coul": "#0000ff"},
-            {"x":0,"y": 0.01,"z": 0.650, "coul": "#0000ff"},
-            {"x":0.590,"y": 0.01,"z": -0.170, "coul": "#0000ff"},
-            {"x":1.250,"y": 0.01,"z": 0.750, "coul": "#0000ff"}
-        ],
-
-        "pieds" : [
-            {"x":-1.410,"y": 0.01,"z":-0.800,"coul": "#ffff00"},
-            {"x":-0.650,"y": 0.01,"z": -0.900,"coul": "#ffff00"},
-            {"x":-0.650,"y": 0.01,"z": -0.800,"coul": "#ffff00"},
-            {"x":-1.410,"y": 0.01,"z": 0.750,"coul": "#ffff00"},
-            {"x":-1.410,"y": 0.01,"z": 0.850,"coul": "#ffff00"},
-            {"x":-0.630,"y": 0.01,"z": 0.355,"coul": "#ffff00"},
-            {"x":-0.200,"y": 0.01,"z": 0.400,"coul": "#ffff00"},
-            {"x":-0.400,"y": 0.01,"z": 0.770,"coul": "#ffff00"},
-            {"x":1.410,"y": 0.01,"z":-0.800,"coul": "#00ff00"},
-            {"x":0.650,"y": 0.01,"z": -0.900,"coul": "#00ff00"},
-            {"x":0.650,"y": 0.01,"z": -0.800,"coul": "#00ff00"},
-            {"x":1.410,"y": 0.01,"z": 0.750,"coul": "#00ff00"},
-            {"x":1.410,"y": 0.01,"z": 0.850,"coul": "#00ff00"},
-            {"x":0.630,"y": 0.01,"z": 0.355,"coul": "#00ff00"},
-            {"x":0.200,"y": 0.01,"z": 0.400,"coul": "#00ff00"},
-            {"x":0.400,"y": 0.01,"z": 0.770,"coul": "#00ff00"}
-        ],
-
-        "popcorns" : [
-            {"x": -1.2,"y": 0.19732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -1.2,"y": 0.23732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -1.2,"y": 0.27732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -1.2,"y": 0.31732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -1.2,"y": 0.35732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -0.9,"y": 0.19732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -0.9,"y": 0.23732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -0.9,"y": 0.27732,"z": -0.965,"coul": "#ffff00"},
-            {"x": -0.9,"y": 0.31732,"z": -0.965,"coul": "#00ff00"},
-            {"x": -0.9,"y": 0.35732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 0.9,"y": 0.19732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 0.9,"y": 0.23732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 0.9,"y": 0.27732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 0.9,"y": 0.31732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 0.9,"y": 0.35732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 1.2,"y": 0.19732,"z": -0.965,"coul": "#00ff00"},
-            {"x": 1.2,"y": 0.23732,"z": -0.965,"coul": "#ffff00"},
-            {"x": 1.2,"y": 0.27732,"z": -0.965,"coul": "#ffff00"},
-            {"x": 1.2,"y": 0.31732,"z": -0.965,"coul": "#ffff00"},
-            {"x": 1.2,"y": 0.35732,"z": -0.965,"coul": "#ffff00"},
-            {"x":-1.255,"y": 0.028,"z":0.745,"coul": "#ffff00"},
-            {"x":-1.240,"y": 0.063,"z":0.760,"coul": "#ffff00"},
-            {"x":-1.250,"y": 0.093,"z":0.735,"coul": "#ffff00"},
-            {"x":-1.262,"y": 0.113,"z":0.766,"coul": "#ffff00"},
-            {"x":-0.595,"y": 0.028,"z": -0.175,"coul": "#00ff00"},
-            {"x":-0.580,"y": 0.063,"z": -0.160,"coul": "#00ff00"},
-            {"x":-0.590,"y": 0.093,"z": -0.185,"coul": "#00ff00"},
-            {"x":-0.602,"y": 0.113,"z": -0.154,"coul": "#00ff00"},
-            {"x":0.005,"y": 0.028,"z": 0.645,"coul": "#00ff00"},
-            {"x":-0.01,"y": 0.063,"z": 0.660,"coul": "#00ff00"},
-            {"x":0.000,"y": 0.093,"z": 0.635,"coul": "#00ff00"},
-            {"x":0.012,"y": 0.113,"z": 0.666,"coul": "#00ff00"},
-            {"x":0.595,"y": 0.028,"z": -0.175,"coul": "#ffff00"},
-            {"x":0.580,"y": 0.063,"z": -0.160,"coul": "#ffff00"},
-            {"x":0.590,"y": 0.093,"z": -0.185,"coul": "#ffff00"},
-            {"x":0.602,"y": 0.113,"z": -0.154,"coul": "#ffff00"},
-            {"x":1.255,"y": 0.028,"z": 0.745,"coul": "#ffff00"},
-            {"x":1.240,"y": 0.063,"z": 0.760,"coul": "#ffff00"},
-            {"x":1.250,"y": 0.093,"z": 0.735,"coul": "#ffff00"},
-            {"x":1.262,"y": 0.113,"z": 0.766,"coul": "#ffff00"}
-        ]
-    };
-
-
-
-
     Simu.generer_scene = function generer_scene(data){
 
     //Chargement des robots
@@ -260,36 +155,36 @@ Simu.init = function(){
             Simu.afficherPied(t[i].x,t[i].y,t[i].z,t[i].coul);
         }
 
-
+/*
     // chargement des popcorns
         
         var t = data.popcorns;
         for(var i=0;i<t.length;i++){
             Simu.afficherPopcorn(t[i].x,t[i].y,t[i].z,t[i].coul);
-        }
+        }*/
     }
 
 
-    Simu.update = function update(data){
+    Simu.update = function (data){
 
     // update des robots
 
         var t = data.robots.gr;
-        Simu.GR.position.set(t.x,t.y,t.z);
-        Simu.GR.rotation.y = t.yrot;
+        Simu.GR.position.set(t.x,0.11,t.y);
+        Simu.GR.rotation.y = t.a;
 
         var t = data.robots.pr;
-        Simu.PR.position.set(t.x,t.y,t.z);
-        Simu.PR.rotation.y = t.yrot;
-
+        Simu.PR.position.set(t.x,0.185,t.y);
+        Simu.PR.rotation.y = t.a;
+/* TEMP on n'update que les robots
         var t = data.robots.ge;
-        Simu.GE.position.set(t.x,t.y,t.z);
+        Simu.GE.position.set(t.x,0.185,t.y);
         
 
         var t = data.robots.pe;
-        Simu.PE.position.set(t.x,t.y,t.z);
+        Simu.PE.position.set(t.x,0.185,t.y);
         
-/* TEMP on n'update que les robots
+
     // update des ampoules
 
         var t = data.ampoules;

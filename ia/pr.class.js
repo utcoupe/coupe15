@@ -6,7 +6,7 @@ module.exports = (function () {
 	function Pr(ia, color) {
 		this.ia = ia;
 		this.pos = { // if we are yellow, default, left side of the table
-			x: 500,
+			x: 445,
 			y: 1000,
 			a: 0
 		};

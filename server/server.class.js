@@ -79,7 +79,7 @@ module.exports = (function () {
 				// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
 				this.server
 					.to('webclient')
-					.to('simulator')
+					// .to('simulator')
 					.to(data.to)
 					.emit('order', data);
 			});
