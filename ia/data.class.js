@@ -110,6 +110,8 @@ module.exports = (function () {
 	Data.prototype.isOk = function () { // XXX
 		return true;
 	};
+
+	var data = new Data();
 	
 	return Data;
 })();

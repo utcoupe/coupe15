@@ -17,7 +17,10 @@ module.exports = (function () {
 
 	ExportSimulator.prototype.orderToSimu = function() {
 		var data = {};
-		
+		logger.debug(ia.gr);
+		data.robots = {
+			gr:2
+		}
 
 		this.timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000);
 	}
