@@ -7,6 +7,10 @@
 #include "parameters.h"
 #include "brushlessMotor.h"
 
+#ifndef PWM_MIN
+#define PWM_MIN 0
+#endif
+
 //Controleur :
 //0:127   : Marche arriere
 //127:255 : Marche avant

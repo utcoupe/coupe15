@@ -42,7 +42,7 @@ typedef struct goal {
 	goal_data_t data;
 	int type;
 	int ID;
-	char is_reached;
+	int is_reached;
 } goal_t;
 
 typedef struct fifo {

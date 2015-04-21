@@ -10,10 +10,10 @@
 volatile long left_ticks = 0;
 volatile long right_ticks = 0;
 
-char left_last_value_A = 0;
-char left_last_value_B = 0;
-char right_last_value_A = 0;
-char right_last_value_B = 0;
+int left_last_value_A = 0;
+int left_last_value_B = 0;
+int right_last_value_A = 0;
+int right_last_value_B = 0;
 
 void left_encoder_reset(void) {
 	left_ticks = 0;
@@ -29,15 +29,15 @@ inline void interruptA(volatile long *ticks, int *last_value_A, int last_value_B
 	new_value = digitalRead(pin);
 	if(new_value == 1)
 		if(last_value_B == 1)
-			*ticks--;
+			(*ticks)--;
 		else
-			*ticks++;
+			(*ticks)++;
 
 	else
 		if(last_value_B == 1)
-			*ticks++;
+			(*ticks)++;
 		else
-			*ticks--;
+			(*ticks)--;
 	*last_value_A = new_value;
 }
 
@@ -46,15 +46,15 @@ inline void interruptB(volatile long *ticks, int *last_value_B, int last_value_A
 	new_value = digitalRead(pin);
 	if(new_value == 1)
 		if(last_value_A == 1)
-			*ticks++;
+			(*ticks)++;
 		else
-			*ticks--;
+			(*ticks)--;
 
 	else
 		if(last_value_A == 1)
-			*ticks--;
+			(*ticks)--;
 		else
-			*ticks++;
+			(*ticks)++;
 	*last_value_B = new_value;
 }
 
@@ -84,14 +84,14 @@ void interruptA(volatile long *ticks, int pin_a, int pin_b){
 	value_B = digitalRead(pin_b);
 	if(value_A == 1)
 		if(value_B == 1)
-			*ticks--;
+			(*ticks)--;
 		else
-			*ticks++;
+			(*ticks)++;
 	else
 		if(value_B == 1)
-			*ticks++;
+			(*ticks)++;
 		else
-			*ticks--;
+			(*ticks)--;
 }
 
 void leftInterruptA(void) {
@@ -104,9 +104,9 @@ void rightInterruptA(void) {
 #elif ENCODER_EVAL == 1
 void interruptA(volatile long *ticks, int pin_b){
 	if(digitalRead(pin_b) == 1)
-		*ticks--;
+		(*ticks)--;
 	else
-		*ticks++;
+		(*ticks)++;
 }
 
 void leftInterruptA(void) {

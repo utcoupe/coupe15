@@ -1,6 +1,14 @@
 #include "compat.h"
 #include "parameters.h"
 
+extern "C" void serial_print_int(int i) {
+	SERIAL_MAIN.print(i);
+}
+
+extern "C" void serial_print_float(float f) {
+	SERIAL_MAIN.print(f);
+}
+
 extern "C" void serial_print(const char *str) {
 	SERIAL_MAIN.print(str);
 }

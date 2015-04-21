@@ -15,8 +15,8 @@ module.exports = (function () {
 		if(!we_have_hats) {
 			logger.error('Please say true if we have something on our robots detactable by the Hokuyos');
 		}
-		this.color = color;
-		this.nb_erobots = nb_erobots;
+		this.color = color || "yellow";
+		this.nb_erobots = nb_erobots || 2;
 
 		this.client = new (require('./socket_client.class.js'))({type: 'ia'});
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
@@ -31,6 +31,22 @@ module.exports = (function () {
 		});
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
+		this.client.order(function(from, name, params) {
+			var classe = name.split('.')[0];
+				// logger.debug(this[classe]);
+			if(!!this[classe]) {
+				// logger.debug("Order to class: "+classe);
+				if(!this[classe].parseOrder) {
+					logger.warn("Attention, pas de fonction parseOrder dans ia."+classe);
+				} else {
+					this[classe].parseOrder(from, name, params);
+				}
+			}
+		}.bind(this));
+
+		// temp //
+		this.gr.start();
+		//////////
 	}
 
 	Ia.prototype.start = function() {

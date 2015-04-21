@@ -10,11 +10,11 @@ typedef struct PID {
 	float P, I, D, bias;
 	float error_sum, last_error;
 	float output;
-	char init_done;
+	int init_done;
 } PID_t;
 
 
-extern PID_t PID_angle, PID_distance;
+extern PID_t PID_left, PID_right;
 void PIDInit(PID_t *pid);
 void PIDReset(PID_t *pid);
 void PIDSet(PID_t *pid, float P, float I, float D, float bias);

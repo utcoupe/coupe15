@@ -19,13 +19,17 @@ extern inline unsigned long timeMicros(){
 }
 
 #ifdef __cplusplus
+extern "C" void serial_print_int(int i);
 extern "C" char generic_serial_read();
 extern "C" void serial_send(char data);
 extern "C" void serial_print(const char *str);
+extern "C" void serial_print_float(float f);
 #else
+void serial_print_int(int i);
 char generic_serial_read();
 void serial_send(char data);
 void serial_print(const char *str);
+void serial_print_float(float f);
 #endif
 
 extern inline void initPins(){

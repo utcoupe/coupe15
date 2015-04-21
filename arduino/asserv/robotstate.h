@@ -23,7 +23,7 @@ typedef struct pos {
 } pos_t;
 
 typedef struct wheels_spd {
-	float left_wheel, right_wheel;
+	float left, right;
 } wheels_spd_t;
 
 extern pos_t current_pos;
