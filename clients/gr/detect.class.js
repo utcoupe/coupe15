@@ -9,28 +9,15 @@ module.exports = (function () {
 	function Detect(callback) {
 		this.devicesFound = {
 			asserv: null,
-			stepper: null,
-			servos: null,
-			ax12: null
+			servos: null
 		};
 		this.callback = callback;
 		this.searchArduinos();
 	}
 
 	Detect.prototype.sendSP = function (){
-		// Close opened ports & detect other devices
-		serialPort.list(function (err, ports) {
-			for(var i in ports) {
-				if(sp[i].readable){
-					logger.info("Closing  "+ports[i].comName);
-					this.devicesFound.ax12 = ports[i].comName;
-					sp[i].close();
-				}
-			}
-
-			// Sent to acts
-			this.callback(this.devicesFound);
-		}.bind(this));
+		// Sent to acts
+		this.callback(this.devicesFound);
 	};
 
 	Detect.prototype.searchArduinos = function() {
@@ -43,10 +30,7 @@ module.exports = (function () {
 				sp[i].on("data", function (i, data) {
 					data = data.toString();
 					console.log(ports[i].comName, data);
-					if (data == 'S' && !this.devicesFound.stepper){ // Stepper
-						this.devicesFound.stepper = ports[i].comName;
-						nb_found++;
-					} else if (data == 'A' && !this.devicesFound.asserv){ // Asserv
+					if (data == 'A' && !this.devicesFound.asserv){ // Asserv
 						this.devicesFound.asserv = ports[i].comName;
 						nb_found++;
 					} else if (!this.devicesFound.servos) { // Firmata
@@ -56,9 +40,8 @@ module.exports = (function () {
 
 					sp[i].close();
 
-					if (nb_found == 3) {
+					if (nb_found == 2) {
 						nb_found++; // UGLYYYYY !
-						// console.log("3 found, clearTimeout");
 						clearTimeout(timeout);
 						this.sendSP();
 					}

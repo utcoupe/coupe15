@@ -43,10 +43,10 @@
 	function devicesDetected(struct){
 		// Verify content
 		if (!struct.stepper)
-			logger.error("Missing stepper Mega !");
+			logger.warn("Missing stepper Mega !");
 
 		if (!struc.servos)
-			logger.error("Missing servos Nano !");
+			logger.warn("Missing servos Nano !");
 
 		if (!struc.asserv)
 			logger.warn("Missing asserv Nano");

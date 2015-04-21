@@ -5,7 +5,7 @@ module.exports = (function () {
 	var board = null;
 
 	function Servos(sp) {
-		// sp is Serial Port NAME
+		this.sp = null;
 		this.ready = false;
 		this.orders_sent = [];
 
@@ -19,17 +19,11 @@ module.exports = (function () {
 		});
 
 		board.on("ready", function() {
-			this.ready = true;
+			var servo = new five.Servo(9);
 
-			// var servo = new five.Servo(9);
-
-			// // Sweep from 0-180 and repeat.
-			// servo.sweep();
-		}.bind(this));
-	};
-
-	Servos.prototype.disconnect = function() {
-		this.ready = false;
+			// Sweep from 0-180 and repeat.
+			servo.sweep();
+		});
 	};
 
 	return Servos;
