@@ -14,7 +14,7 @@
 		type: "gr"
 	});
 
-	var acts = new (require('./actuators.class.js'))();
+	var acts = new (require('./actuators.class.js'))(client);
 	var detect = new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];

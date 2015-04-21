@@ -35,10 +35,10 @@ module.exports = (function () {
 				a: convertA(this.ia.pr.pos.a)
 			}
 		}
-		logger.debug(data);
+		// logger.debug(data);
 		this.ia.client.send("webclient", "simulator_update", data);
 
-		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 5000);
+		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 200);
 	}
 
 	return ExportSimulator;

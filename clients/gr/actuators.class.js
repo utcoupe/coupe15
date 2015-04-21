@@ -7,8 +7,9 @@ module.exports = (function () {
 	var servos = null;
 	var asserv = null;
 
-	function Acts() {
+	function Acts(client) {
 		this.start();
+		this.client = client;
 	}
 
 	Acts.prototype.start = function(){
@@ -19,9 +20,11 @@ module.exports = (function () {
 		if (!!struct.servos) {
 			servos = new (require('./servos.class.js'))(struct.servos);
 		}
-		if (!!struct.asserv) {
+		if (!struct.asserv) {
+			asserv = new (require('./asserv.class.js'))(null, this.client);
+		} else {
 			asserv = new (require('./asserv.class.js'))(
-				new SerialPort(struct.asserv, { baudrate: 57600 })
+				new SerialPort(struct.asserv, { baudrate: 57600 }, this.client)
 			);
 		}
 	};
@@ -42,15 +45,19 @@ module.exports = (function () {
 		switch (name){
 			case "acheter":
 				servos.acheter(callback);
-				break;
+			break;
 			case "vendre":
 				servos.vendre(callback);
-				break;
+			break;
 			case "pwm":
 				asserv.pwm(callback, params.left, params.right, params.ms);
-				break;
+			break;
+			case "setpos":
+				asserv.setPos(callback, params);
+			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");
+				callback();
 		}
 	};
 
