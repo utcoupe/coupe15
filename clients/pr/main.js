@@ -6,7 +6,7 @@
 
 	// Requires
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('clientpr');
+	var logger = log4js.getLogger('pr');
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = ""; // server adress
@@ -62,18 +62,18 @@
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		var l = queue.length;
+		if(queue.length<5){
+			// Adds the order to the queue
+			queue.push({
+				from: f,
+				name: n,
+				params: p
+			});
+			// logger.info("Order added to queue ! : ");
+			// logger.info(queue);
 
-		// Adds the order to the queue
-		queue.push({
-			from: f,
-			name: n,
-			params: p
-		});
-		// logger.info("Order added to queue ! : ");
-		// logger.info(queue);
-
-		executeNextOrder();
+			executeNextOrder();
+		}
 	}
 
 	// Execute order

@@ -156,18 +156,26 @@ module.exports = (function () {
 
 			}
 
-			// if there's some robots to be matched (but no real point left :/), they're lost...
 			// XXX /!\ robots on the stairs !
 
-			var should_have_been_matched = [];
 
+			// if there's some robots to be matched (but no real point left :/), they're lost...
+			// we estimate their position and tag them with "lost"
 			for (var i = 0; i < this.data.erobot.length; i++) {
-				if(this.data.erobot[i].lastUpdate < now)
-					should_have_been_matched.push(this.data.erobot[i]);
+				if ((this.data.erobot[i].lastUpdate < now) && (this.data.erobot[i].status == "moving")){
+					this.data.erobot[i].pos = {
+						x: this.data.erobot[i].pos.x +  this.data.erobot[i].pos.speed.x*Math.abs(this.data.erobot[i].lastUpdate - now),
+						y: this.data.erobot[i].pos.y +  this.data.erobot[i].pos.speed.y*Math.abs(this.data.erobot[i].lastUpdate - now)
+					};
+					this.data.erobot[i].speed = {
+						x:0,
+						y:0,
+					};
+					this.data.erobot[i].status = "lost";
+					this.data.erobot[i].lastUpdate = now;
+				}
 			}
 
-			// we estimate their position and tag them with "lost"
-			// XXX
 		}
 	};
 

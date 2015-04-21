@@ -3,11 +3,11 @@ module.exports = (function () {
 	var logger = log4js.getLogger('pr.ax12');
 	var ffi = require('ffi');
 	var libusb2ax = ffi.Library('../libs/dynamixel/src_lib/libusb2ax', {
-	  'dxl_initialize': ['int', ['int', 'int']],
-	  'dxl_write_word': ['void', ['int', 'int', 'int']],
-	  'dxl_read_word': ['int', ['int', 'int']],
-	  'dxl_terminate': ['void', ['void']],
-	  'dxl_get_result': ['int', ['void']]
+		'dxl_initialize': ['int', ['int', 'int']],
+		'dxl_write_word': ['void', ['int', 'int', 'int']],
+		'dxl_read_word': ['int', ['int', 'int']],
+		'dxl_terminate': ['void', ['void']],
+		'dxl_get_result': ['int', ['void']]
 	})
 
 	// Constants
@@ -53,43 +53,51 @@ module.exports = (function () {
 		this.ready = false;
 	};
 
-	function loopAX12() {
-		var speed;
-		for(var i in ax12s) {
-			// Si il est pas à la bonne position
-			if(ax12s[i].pos < ax12s[i].obj - MARGE_POS || ax12s[i].pos > ax12s[i].obj + MARGE_POS) {
-				ax12s[i].arrived = false;
-				speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
-				// Si il bouge pas, on renvoie l'ordre
-				if(speed == 0) {
-					console.log("ordre"+i);
-					libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
-				}
-				else {
-					ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
-				}
-			}
-			else {
-				if(!ax12s[i].arrived) {
-					ax12s[i].arrived = true;
-					logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
-				}
-			}
-		}
-		setTimeout(loopAX12, 50);
-	}
+	Ax12.prototype.ouvrir = function(x) {
+	};
 
-	function degToAx12(deg) {
-		return parseInt((deg+150)*1024/300);
-	}
-	function openAx12Down() {
-		ax12s['2'].obj = degToAx12(0);
-		ax12s['3'].obj = degToAx12(0);
-	}
-	function closeAx12Down() {
-		ax12s['2'].obj = degToAx12(-75);
-		ax12s['3'].obj = degToAx12(75);
-	}
+	Ax12.prototype.fermer = function(x) {
+	};
+
+	// function loopAX12() {
+	// 	var speed;
+	// 	for(var i in ax12s) {
+	// 		// Si il est pas à la bonne position
+	// 		if(ax12s[i].pos < ax12s[i].obj - MARGE_POS || ax12s[i].pos > ax12s[i].obj + MARGE_POS) {
+	// 			ax12s[i].arrived = false;
+	// 			speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
+	// 			// Si il bouge pas, on renvoie l'ordre
+	// 			if(speed == 0) {
+	// 				console.log("ordre"+i);
+	// 				libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
+	// 			}
+	// 			else {
+	// 				ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
+	// 			}
+	// 		}
+	// 		else {
+	// 			if(!ax12s[i].arrived) {
+	// 				ax12s[i].arrived = true;
+	// 				logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
+	// 			}
+	// 		}
+	// 	}
+	// 	setTimeout(loopAX12, 50);
+	// }
+
+	// function degToAx12(deg) {
+	// 	return parseInt((deg+150)*1024/300);
+	// }
+	// function openAx12Down() {
+	// 	ax12s['2'].obj = degToAx12(0);
+	// 	ax12s['3'].obj = degToAx12(0);
+	// }
+	// function closeAx12Down() {
+	// 	ax12s['2'].obj = degToAx12(-75);
+	// 	ax12s['3'].obj = degToAx12(75);
+	// }
+
+
 
 	return Ax12;
 })();

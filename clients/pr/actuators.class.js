@@ -1,6 +1,6 @@
 module.exports = (function () {
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('clientpr.acts');
+	var logger = log4js.getLogger('pr.acts');
 
 	var elevator = null;
 	var servos = null;
@@ -8,10 +8,6 @@ module.exports = (function () {
 	var ax12 = null;
 
 	function Acts() {
-		this.arduinos = {};
-		this.ax12 = {};
-		this.servos = {};
-		
 		this.start();
 	}
 
@@ -42,17 +38,17 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.quit = function(){
-		if (this.elevator)
-			this.elevator.disconnect();
+		if (elevator)
+			elevator.disconnect();
 
-		if (this.servos)
-			this.servos.disconnect();
+		if (servos)
+			servos.disconnect();
 
-		if (this.asserv)
-			this.asserv.disconnect();
+		if (asserv)
+			asserv.disconnect();
 
-		if (this.ax12)
-			this.ax12.disconnect();
+		if (ax12)
+			ax12.disconnect();
 	};
 
 	// Order switch
@@ -103,40 +99,8 @@ module.exports = (function () {
 		}
 	};
 
-	// Pas à pas
-		function stepper_do(move, direction){
-			// direction is given for the left motor as it sees it
-			if (ia.arduinos.zero.ready) {
-				if (direction == "clockwise"){
-					logger.info("Moving "+move+" clockwise");
-					board.stepper[0].rpm(120).cw().step(move, function(){}); // left
-					// board.stepper[1].rpm(60).cw().step(600, function(){}); // right
-				} else {
-					logger.info("Moving "+move+" counterclockwise");
-					// board.stepper[0].rpm(120).cw(); // change rien
-					// board.stepper[1].rpm(120).cw();
-					board.stepper[0].rpm(120).ccw().step(move, function(){}); // left
-					// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
-				}
-			}
-		}
+	// Prendre plot
+	// 
 
-		function stepper_setBottom(){
-			board.stepper[0].is = "down";
-		}
-
-		function stepper_toogle(){
-			if (ia.arduinos.zero.ready) {
-				if (board.stepper[0].is == "up"){
-					stepper_do(250, "clockwise");
-					board.stepper[0].is = "down";
-				} else {
-					if (board.stepper[0].is == "down") {
-						stepper_do(250, "counterclockwise");
-						board.stepper[0].is = "up";
-					}
-				}
-			}
-		}
 	return Acts;
 })();
