@@ -13,7 +13,7 @@
 //  ONE ascii char long
 //
 //  float are transmitted as integer
-//  therefore any number refered as
+//  therefore any number refered as 
 //  "decimal" is actually an int
 //  multiplied by FLOAT_PRECISION
 
@@ -42,7 +42,7 @@
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
 // END_ORDERS - Do not remove this comment
 
-#define FLOAT_PRECISION 10000.0
+#define FLOAT_PRECISION 1000.0
 #define FAILED_MSG "FAILED\n"
 #define MAX_COMMAND_LEN 60
 #define MAX_ID_LEN 10
