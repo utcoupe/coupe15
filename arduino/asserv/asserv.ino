@@ -11,9 +11,7 @@
 #include "control.h"
 #include "pins.h"
 
-unsigned long index = 0;
 unsigned long nextTime = 0;
-unsigned long timeLED = 0;
 
 void setup() {
 #ifdef __AVR_ATmega2560__
@@ -32,17 +30,27 @@ void setup() {
 }
 
 void loop(){
+#if defined(AUTO_STATUS_HZ) && AUTO_STATUS_HZ != 0
+	static int i = 0;
+#endif
 	nextTime = nextTime + DT*1000000;
 	digitalWrite(LED_MAINLOOP, HIGH);
 
 	//Action asserv
 	ControlCompute();
 
+#if defined(AUTO_STATUS_HZ) && AUTO_STATUS_HZ != 0
+	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
+		ProtocolAutoSendStatus();
+		i = 0;
+	}
+#endif
+
 	// zone programmation libre
 	int available = SERIAL_MAIN.available();
 	for(int i = 0; i < available; i++) {
 		// recuperer l'octet courant
-		executeCmd(generic_serial_read());
+		ProtocolExecuteCmd(generic_serial_read());
 		if ((nextTime - micros()) < MAX_COM_TIME*1000000) {
 			break;
 		}

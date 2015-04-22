@@ -50,9 +50,11 @@
 #define MAX_RESPONSE_LEN 50
 
 #ifdef __cplusplus
-extern "C" int executeCmd(char data);
+extern "C" int ProtocolExecuteCmd(char data);
+extern "C" void ProtocolAutoSendStatus(void);
 #else
-int executeCmd(char data);
+void ProtocolAutoSendStatus(void);
+int ProtocolExecuteCmd(char data);
 #endif
 
 #endif

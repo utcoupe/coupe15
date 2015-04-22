@@ -2,6 +2,11 @@
 #include "protocol.h"
 #include "compat.h"
 #include "serial_switch.h"
+#include "robotstate.h"
+#include "control.h"
+
+#define DEBUG_TARGET_SPEED 0
+#define PRINT_ID 0
 
 void sendResponse(char order, char *buf, int size){
 	int i;
@@ -18,7 +23,30 @@ void clean_current_command(char *buffer, int* end_of_cmd) {
 	*end_of_cmd = 0;
 }
 
-int executeCmd(char data) {
+void ProtocolAutoSendStatus(void) {
+	serial_print("~;");
+#if PRINT_ID
+	serial_print_int(control.last_finished_id);
+	serial_print(";");
+#endif
+	serial_print_int(current_pos.x);
+	serial_print(";");
+	serial_print_int(current_pos.y);
+	serial_print(";");
+	serial_print_int(current_pos.angle*FLOAT_PRECISION);
+	serial_print(";");
+	serial_print_int(wheels_spd.left);
+	serial_print(";");
+	serial_print_int(wheels_spd.right);
+#if DEBUG_TARGET_SPEED
+	serial_print(";");
+	serial_print_int(control.linear_speed - control.angular_speed);
+	serial_print(";");
+	serial_print_int(control.linear_speed + control.angular_speed);
+#endif
+}
+
+int ProtocolExecuteCmd(char data) {
 	static char current_command[MAX_COMMAND_LEN];
 	static int index = 0;
 	if (data == '\r') data = '\n';
@@ -34,6 +62,10 @@ int executeCmd(char data) {
 			end_of_id++;
 			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
 				clean_current_command(current_command, &index);
+				if (order != '\n') {
+					serial_send(order);
+					serial_print(";");
+				}
 				serial_print(FAILED_MSG);
 				return -1;
 			}
