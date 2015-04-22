@@ -32,6 +32,7 @@
 
 #define HZ 100
 #define DT (1.0/HZ)
+#define MAX_COM_TIME 0.001 // s
 
 #define SPD_MAX 1000 //mm/s
 #define ACC_MAX 500  //mm/s2

@@ -36,7 +36,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		int x, y, a_int;
 		float a;
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
-		a = a_int / FLOAT_PRECISION;
+		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y));
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
 		}
@@ -45,7 +45,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		int a_int;
 		float a;
 		sscanf(argv, "%i", &a_int);
-		a = a_int / FLOAT_PRECISION;
+		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
 		}
 		break;
@@ -61,9 +61,9 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		int p_int, i_int, d_int;
 		float p, i, d;
 		sscanf(argv, "%i;%i;%i", &p_int, &i_int, &d_int);
-		p = p_int / FLOAT_PRECISION;
-		i = i_int / FLOAT_PRECISION;
-		d = d_int / FLOAT_PRECISION;
+		p = p_int / (float)FLOAT_PRECISION;
+		i = i_int / (float)FLOAT_PRECISION;
+		d = d_int / (float)FLOAT_PRECISION;
 		if (ordre == PIDLEFT) 
 			PIDSet(&PID_left, p, i, d, LEFT_BIAS);
 		else if (ordre == PIDRIGHT)
@@ -91,7 +91,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		int x, y, a_int;
 		float angle;
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
-		angle = a_int / FLOAT_PRECISION;
+		angle = a_int / (float)FLOAT_PRECISION;
 		RobotStateSetPos(x, y, angle);
 		}
 		break;
@@ -101,8 +101,22 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
-		a_int = a * FLOAT_PRECISION;
+		a_int = a * (float)FLOAT_PRECISION;
 		*ret_size = sprintf(ret, "%i;%i;%i", x, y, a_int);
+		}
+		break;
+	case GET_SPD: {
+		int l, r;
+		l = wheels_spd.left;
+		r = wheels_spd.right;
+		*ret_size = sprintf(ret, "%i;%i", l, r);
+		}
+		break;
+	case GET_TARGET_SPD: {
+		int left_spd, right_spd;
+		left_spd = control.linear_speed - control.angular_speed;
+		right_spd = control.linear_speed + control.angular_speed;
+		*ret_size = sprintf(ret, "%i;%i", left_spd, right_spd);
 		}
 		break;
 	case GET_POS_ID:{
@@ -111,16 +125,16 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
-		a_int = a * FLOAT_PRECISION;
+		a_int = a * (float)FLOAT_PRECISION;
 		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
-		break;
 		}
+		break;
 	case ACCMAX:{
 		int a_int, r_int;
 		float a, r;
 		sscanf(argv, "%i;%i", &a_int, &r_int);
-		a = a_int / FLOAT_PRECISION;
-		r = r_int / FLOAT_PRECISION;
+		a = a_int / (float)FLOAT_PRECISION;
+		r = r_int / (float)FLOAT_PRECISION;
 		control.max_acc = a;
 		control.rot_spd_ratio = r;
 		}

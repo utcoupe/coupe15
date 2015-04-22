@@ -17,6 +17,7 @@
 //  "decimal" is actually an int
 //  multiplied by FLOAT_PRECISION
 
+// BEGIN_ORDERS - Do not remove this comment
 #define	GOTOA 		'c' 	// x(int);y(int);a(decimal) - (mm and radian)
 #define	GOTO 		'd' 	// x(int);y(int) - (mm)
 #define	ROT 		'e' 	// a(decimal) - (radian)
@@ -30,6 +31,8 @@
 #define	ACCMAX 		'l' 	// a(decimal) - set max acceleration (mm/s-2)
 #define	SET_POS		'm' 	// x(int);y(int);a(decimal) - set pos (mm / radians)
 #define	GET_POS		'n' 	// no args, response : x(int);y(int);a(decimal) - get current pos (mm and radians)
+#define GET_SPD 	'y' 	// no args, respond : l(int);r(int) - get wheels speed (mm/s)
+#define GET_TARGET_SPD 	'v' 	// no args, respond : l(int);r(int) - get target wheels speed (mm/s)
 #define	GET_POS_ID 	'o'		// no args, response : x(int);y(int);a(decimal);id(int) - get current pos and last id (mm and radians)
 #define GET_LAST_ID	't' 	// no args, response : id(int)
 #define	PAUSE 		'q' 	// no args, pauses control
@@ -37,8 +40,9 @@
 #define RESET_ID 	's' 	// no args, reset last finished id to 0
 #define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
+// END_ORDERS - Do not remove this comment
 
-#define FLOAT_PRECISION ((float)10000)
+#define FLOAT_PRECISION 10000.0
 #define FAILED_MSG "FAILED\n"
 #define MAX_COMMAND_LEN 60
 #define MAX_ID_LEN 10

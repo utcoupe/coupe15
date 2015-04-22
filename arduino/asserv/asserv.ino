@@ -15,7 +15,6 @@ unsigned long index = 0;
 unsigned long nextTime = 0;
 unsigned long timeLED = 0;
 
-#define MAX_READ 64 
 void setup() {
 #ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
@@ -41,12 +40,12 @@ void loop(){
 
 	// zone programmation libre
 	int available = SERIAL_MAIN.available();
-	if (available > MAX_READ) {
-		available = MAX_READ;
-	}
 	for(int i = 0; i < available; i++) {
 		// recuperer l'octet courant
 		executeCmd(generic_serial_read());
+		if ((nextTime - micros()) < MAX_COM_TIME*1000000) {
+			break;
+		}
 	}
 
 	digitalWrite(LED_MAINLOOP, LOW);
