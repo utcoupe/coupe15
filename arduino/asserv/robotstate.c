@@ -57,7 +57,9 @@ void RobotStateUpdate() {
 	//d_angle = atan2((dr - dl), ENTRAXE_ENC); //sans approximation tan
 	d_angle = (dr - dl)/ENTRAXE_ENC; // approximation tan
 	current_pos.angle += d_angle;
+#if MODULO_TWOPI
 	PosUpdateAngle();
+#endif
 
 	dd = (dr + dl) / 2.0;
 	current_pos.x += dd*cos((current_pos.angle + last_angle)/2.0);

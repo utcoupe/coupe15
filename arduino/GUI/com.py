@@ -16,16 +16,16 @@ class Communication:
     def sendOrderSafe(self, order, ID=0, args=[]):
         try:
             self.sendOrder(order, ID, args)
-        except Exception as e:
+        except IOError as e:
             print("Failed to send order "+order)
             print(e)
         
     def sendOrder(self, order, ID=0, args=[]):
         order = self.vars[order]
         order = order.strip("'")
-        cmd = order+";"+str(ID)+";"
+        cmd = order+";"+str(int(ID))+";"
         for arg in args:
-            cmd += str(arg)+";"
+            cmd += str(int(arg))+";"
         cmd += "\n"
         try:
             self.serial.write(cmd.encode())
@@ -35,13 +35,13 @@ class Communication:
         begin = time.time()
         while (order not in self.responses.keys() or self.responses[order] == ''):
             if time.time() - begin > 3:
-                raise IOError("Arduino denied order")
+                raise IOError("Arduino denied order (1)")
         self.responses[order] = ''
         if order not in self.responses.keys() or\
             "FAILED" in self.responses[order]:
-                raise IOError("Arduino denied order")
+                raise IOError("Arduino denied order (2)")
         else:
-            return self.responses[4:].split(";")
+            return self.responses[order][4:].split(";")
 
     def goto(self, x, y, a=None):
         if a is not None:
@@ -92,9 +92,9 @@ class Communication:
 
         status = status.split(';')
         if len(status) % 2 == 1:
-            pos = status[2:5]
+            pos = [float(x) for x in status[2:5]]
         else:
-            pos = status[1:4]
+            pos = [float(x) for x in status[1:4]]
         return pos
 
     def stop(self):
@@ -109,6 +109,10 @@ class Communication:
     def readThread(self):
         while not self.pause:
             l = self.serial.readline()
-            self.responses[l[0]] = l
-            if (l[0] == '~'):
-                print(l)
+            if len(l) > 0:
+                l = l.decode("ascii")[:-1]
+                self.responses[l[0]] = l
+                if (l[0] == '~'):
+                    print(l)
+                if (l[0] == '#'):
+                    print(l)

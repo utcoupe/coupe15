@@ -81,7 +81,6 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case CLEANG:{
 		FifoClearGoals();
 		ControlPrepareNewGoal();
-		FifoPushGoal(0, TYPE_POS, POS_DATA(current_pos.x, current_pos.y));
 		}
 		break;
 	case RESET_ID:
@@ -129,11 +128,16 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
 		}
 		break;
+	case SPDMAX:{
+		int s;
+		sscanf(argv, "%i", &s);
+		control.max_spd = s;
+		}
+		break;
 	case ACCMAX:{
-		int a_int, r_int;
-		float a, r;
-		sscanf(argv, "%i;%i", &a_int, &r_int);
-		a = a_int / (float)FLOAT_PRECISION;
+		int a, r_int;
+		float r;
+		sscanf(argv, "%i;%i", &a, &r_int);
 		r = r_int / (float)FLOAT_PRECISION;
 		control.max_acc = a;
 		control.rot_spd_ratio = r;

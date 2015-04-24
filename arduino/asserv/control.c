@@ -162,13 +162,15 @@ int controlPos(float dx, float dy, float da) {
 	int ret;
 	float dd, dda, ddd;
 
+#if MODULO_TWOPI
 	da = moduloTwoPI(da);
+#endif
 	dd = sqrt(pow(dx, 2.0)+pow(dy, 2.0));
 
-	if (abs(da) > CONE_ALIGNEMENT) {
+	/*if (abs(da) > CONE_ALIGNEMENT) {
 		da = moduloTwoPI(da - PI);
 		dd = - dd;
-	}
+	}*/
 
 	dda = da * (ENTRAXE_ENC/2);
 	ddd = dd * exp(-abs(K_DISTANCE_REDUCTION*da));
