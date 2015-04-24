@@ -13,10 +13,10 @@
 #define TYPE_ANG 2
 #define TYPE_PWM 3
 #define NO_GOAL -1
-#define STRUCT_NO_GOAL {0,0,0,NO_GOAL,0,0}
+#define STRUCT_NO_GOAL {.type = NO_GOAL, .is_reached=0}
 
 #define POS_DATA(px,py) ((goal_data_t){ .pos_data=(pos_data_t){.x=px, .y=py}})
-#define ANG_DATA(a) ((goal_data_t){ .ang_data=(ang_data_t){.angle=a}})
+#define ANG_DATA(a,m) ((goal_data_t){ .ang_data=(ang_data_t){.angle=a, .modulo=m}})
 #define PWM_DATA(l,r,t) ((goal_data_t){ .pwm_data=(pwm_data_t){.pwm_l=l, .pwm_r=r, .time=t}})
 
 typedef struct pos_data {
@@ -25,6 +25,7 @@ typedef struct pos_data {
 
 typedef struct ang_data {
 	float angle;
+	int modulo;
 } ang_data_t;
 
 typedef struct pwm_data {

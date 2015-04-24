@@ -24,9 +24,9 @@ control_t control;
 void goalPos(goal_t *goal);
 void goalPwm(goal_t *goal);
 void goalAngle(goal_t *goal);
-int controlPos(float dx, float dy, float da);
+int controlPos(float dd, float da);
 
-float calcSpeed(float init_spd, float dd, float max_spd);
+float calcSpeed(float init_spd, float dd, float max_spd, float final_speed);
 void applyPID(void);
 void applyPwm(void);
 void stopRobot(void);
@@ -135,15 +135,19 @@ void goalAngle(goal_t *goal) {
 	float angle, da;
 	angle = goal->data.ang_data.angle;
 	da = angle - current_pos.angle;
+
+	if (goal->data.ang_data.modulo) {
+		da = moduloTwoPI(da);
+	}
 	
-	if (controlPos(0, 0, da) & ANG_REACHED) {
+	if (controlPos(0, da) & ANG_REACHED) {
 		goal->is_reached = 1;
 	}
 }
 
 void goalPos(goal_t *goal) {
 	int x, y;
-	float dx, dy, da, goal_a;
+	float dx, dy, da, dd, goal_a;
 
 	x = goal->data.pos_data.x;
 	y = goal->data.pos_data.y;
@@ -151,34 +155,30 @@ void goalPos(goal_t *goal) {
 	dy = y - current_pos.y;
 	goal_a = atan2(dy, dx);
 	da = (goal_a - current_pos.angle);
-
-	if (controlPos(dx, dy, da) == REACHED) {
-		goal->is_reached = 1;
-	}
-
-}
-
-int controlPos(float dx, float dy, float da) {
-	int ret;
-	float dd, dda, ddd;
-
-#if MODULO_TWOPI
 	da = moduloTwoPI(da);
-#endif
 	dd = sqrt(pow(dx, 2.0)+pow(dy, 2.0));
 
-	/*if (abs(da) > CONE_ALIGNEMENT) {
-		da = moduloTwoPI(da - PI);
+	if (abs(da) > CONE_ALIGNEMENT) {
+		da = moduloPI(da);
 		dd = - dd;
-	}*/
+	}
+
+	if (controlPos(dd, da) == REACHED) {
+		goal->is_reached = 1;
+	}
+}
+
+int controlPos(float dd, float da) {
+	int ret;
+	float dda, ddd;
 
 	dda = da * (ENTRAXE_ENC/2);
 	ddd = dd * exp(-abs(K_DISTANCE_REDUCTION*da));
 
 	control.angular_speed = calcSpeed(control.angular_speed, dda, 
-			control.max_spd * control.rot_spd_ratio);
+			control.max_spd * control.rot_spd_ratio, 0);
 	control.linear_speed = calcSpeed(control.linear_speed, ddd,
-			control.max_spd);
+			control.max_spd, 0);
 
 	ret = 0;
 	if (abs(dd) < ERROR_POS) {
@@ -192,7 +192,7 @@ int controlPos(float dx, float dy, float da) {
 	return ret;
 }
 
-float calcSpeed(float init_spd, float dd, float max_spd) {
+float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 	float dd_abs, acc_spd, dec_spd, target_spd;
 	int d_sign;
 	dd_abs = abs(dd);
@@ -200,7 +200,7 @@ float calcSpeed(float init_spd, float dd, float max_spd) {
 
 	init_spd *= d_sign;
 	acc_spd = init_spd + (control.max_acc*DT);
-	dec_spd = sqrt(2*control.max_acc*dd_abs) - (control.max_acc*DT);
+	dec_spd = sqrt(2*control.max_acc*dd_abs) - (control.max_acc*DT) + final_speed;
 	target_spd = min(max_spd, min(acc_spd, dec_spd))*d_sign;
 	return target_spd;
 }

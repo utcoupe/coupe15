@@ -179,7 +179,6 @@ class GUI:
 
     def goto(self, gotox, gotoy):
         self.chaine.configure(text = "Goto : "+str(gotox)+" ; "+str(gotoy))
-        #ENVOYER DATA PROTOCOLE 
         if self.fifo_switch.get() == 0: 
             #on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
@@ -189,22 +188,19 @@ class GUI:
     
     def gotoa(self, gotox, gotoy, gotoa):
         self.chaine.configure(text = "Gotoa : "+str(gotox)+" ; "+str(gotoy)+" ; "+str(gotoa))
-        #ENVOYER DATA PROTOCOLE
         if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 
     def angle(self, gotoa):
         self.chaine.configure(text = "Angle : "+str(gotoa))
-        #ENVOYER DATA PROTOCOLE
         if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 
         arguments = [int(float(gotoa)*1000)]
-        self.com.sendOrderSafe('ROT', args=arguments)
+        self.com.sendOrderSafe('ROTNOMODULO', args=arguments)
 
     def sendPwm(self, g, d, duration):
         self.chaine.configure(text = "pwm : "+str(g)+" ; "+str(d)+" ; "+str(duration))
-        #ENVOYER DATA PROTOCOLE
         if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 

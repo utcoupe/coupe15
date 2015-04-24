@@ -38,7 +38,7 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y));
-		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
+		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
 		}
 		break;
 	case ROT: {
@@ -46,7 +46,15 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		float a;
 		sscanf(argv, "%i", &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
-		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a));
+		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
+		}
+		break;
+	case ROTNOMODULO: {
+		int a_int;
+		float a;
+		sscanf(argv, "%i", &a_int);
+		a = a_int / (float)FLOAT_PRECISION;
+		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,0));
 		}
 		break;
 	case PWM:{
