@@ -4,8 +4,8 @@
 // 	COMMANDS :
 // 'ordre;id;arg1;arg2;argn'
 //  For example :
-// 'GOTOA;3;120;1789;31400'
-// 'GET_CODER;0;'
+// 'c;3;120;1789;31400'
+// 'j;0;'
 // issues the order GOTOA with
 // ID 3 to X=120, Y=1789 and angle = 3.14
 //
@@ -42,6 +42,9 @@
 #define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
 // END_ORDERS - Do not remove this comment
+
+#define AUTO_SEND	'~'		// x(int);y(int);a(decimal)
+
 
 #define FLOAT_PRECISION 1000.0
 #define FAILED_MSG "FAILED\n"
