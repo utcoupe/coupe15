@@ -6,7 +6,7 @@
 #ifndef COMPAARDUINO_H
 #define COMPAARDUINO_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "encoder.h"
 #include "parameters.h"
 #include "pins.h"
@@ -42,6 +42,7 @@ extern inline void initPins(){
 	pinMode(LED_DEBUG, OUTPUT);
 	pinMode(LED_MAINLOOP, OUTPUT);
 	pinMode(LED_BLOCKED, OUTPUT) ;
+
 	digitalWrite(LED_DEBUG, LOW); //LOW = eteinte
 	digitalWrite(LED_MAINLOOP, LOW); //LOW = eteinte
 	digitalWrite(LED_BLOCKED, LOW); //LOW = eteinte

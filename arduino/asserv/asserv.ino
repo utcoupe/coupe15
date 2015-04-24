@@ -4,7 +4,7 @@
  * Date : 13/10/13			*
  ****************************************/
   
-#include "Arduino.h"
+#include <Arduino.h>
 #include "compat.h"
 #include "parameters.h"
 #include "protocol.h"
@@ -30,6 +30,9 @@ void setup() {
 }
 
 void loop(){
+#if defined(USE_SHARP) && USE_SHARP
+	float voltage_sharp;
+#endif
 #if defined(AUTO_STATUS_HZ) && AUTO_STATUS_HZ != 0
 	static int i = 0;
 #endif
@@ -43,6 +46,15 @@ void loop(){
 	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
 		ProtocolAutoSendStatus();
 		i = 0;
+	}
+#endif
+
+#if defined(USE_SHARP) && USE_SHARP
+	voltage_sharp = (analogRead(PIN_SHARP)*5.0/1024.0);
+	if (voltage_sharp > STOP_SHARP_VOLTAGE) {
+		control.block_sharp = 1;
+	} else {
+		control.block_sharp = 0;
 	}
 #endif
 

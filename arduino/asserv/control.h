@@ -7,6 +7,7 @@
 #define CONTROL_H
 
 #include "PID.h"
+#include "parameters.h"
 
 typedef struct control {
 	float max_acc, max_spd, rot_spd_ratio;
@@ -14,6 +15,9 @@ typedef struct control {
 	int reset, paused, last_finished_id;
 	int order_started;
 	int pwm_left, pwm_right;
+#if defined(USE_SHARP) && USE_SHARP
+	int block_sharp;
+#endif
 } control_t;
 
 extern control_t control;

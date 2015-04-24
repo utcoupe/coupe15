@@ -30,7 +30,8 @@
 
 #define ENCODER_EVAL 1
 
-#define MODULO_TWOPI 0
+#define USE_SHARP 1
+#define STOP_SHARP_VOLTAGE 1 // 1V = 30cm, NOT LINEAR, check datasheet
 
 #define HZ 100
 #define DT (1.0/HZ)

@@ -86,6 +86,12 @@ void ControlCompute(void) {
 	if (control.paused)
 		stopRobot();
 
+#if defined(USE_SHARP) && USE_SHARP
+	if (control.block_sharp) {
+		stopRobot();
+	}
+#endif
+
 	now = timeMicros();
 
 	if (current_goal->is_reached) {
@@ -207,8 +213,14 @@ float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 
 void stopRobot(void) {
 	// restore control and re-compute speeds
+	int sign;
+	float speed;
 	control = last_control;
-	controlPos(0,0);
+	control.angular_speed = 0;
+	sign = sign(control.linear_speed);
+	speed = abs(control.linear_speed);
+	speed -= max(0, control.max_acc * DT);
+	control.linear_speed = sign*speed;
 }
 
 void emergencyStop(void) {
