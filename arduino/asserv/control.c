@@ -19,7 +19,7 @@
 
 #define sign(x) ((x)>=0?1:-1)
 
-control_t control;
+control_t control, last_control;
 
 void goalPos(goal_t *goal);
 void goalPwm(goal_t *goal);
@@ -39,8 +39,7 @@ void ControlInit(void) {
 	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
-	control.max_spd = SPD_MAX;
-	control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
+	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
 
 	RobotStateInit();
 	FifoInit();
@@ -67,6 +66,7 @@ void ControlCompute(void) {
 	static long time_reached = -1;
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
+	last_control = control;
 
 	switch (current_goal->type) {
 		case TYPE_ANG:
@@ -206,6 +206,12 @@ float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 }
 
 void stopRobot(void) {
+	// restore control and re-compute speeds
+	control = last_control;
+	controlPos(0,0);
+}
+
+void emergencyStop(void) {
 	control.pwm_left = 0;
 	control.pwm_right = 0;
 	control.linear_speed = 0;
