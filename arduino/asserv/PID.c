@@ -33,6 +33,7 @@ void PIDSet(PID_t *pid, float P, float I, float D, float bias) {
 		pid->I = I;
 		pid->D = D;
 		pid->bias = bias;
+		PIDReset(pid);
 }
 
 float PIDCompute(PID_t *pid, float error) {

@@ -28,7 +28,8 @@
 #define PIDALL 		'u' 	// p(decimal);i(decimal);d(decimal) - set both PID
 #define	GET_CODER 	'j' 	// no args, response : l(long);r(long)
 #define	PWM 		'k' 	// l(int);r(int);duration(int) - set left and right pwm for duration ms
-#define	ACCMAX 		'l' 	// a(decimal) - set max acceleration (mm/s-2)
+#define	ACCMAX 		'l' 	// a(int),r(decimal) - set max acceleration (mm/s-2) and rotation ratio
+#define	SPDMAX 		'x' 	// a(int),r(decimal) - set max acceleration (mm/s-2) and rotation ratio
 #define	SET_POS		'm' 	// x(int);y(int);a(decimal) - set pos (mm / radians)
 #define	GET_POS		'n' 	// no args, response : x(int);y(int);a(decimal) - get current pos (mm and radians)
 #define GET_SPD 	'y' 	// no args, respond : l(int);r(int) - get wheels speed (mm/s)

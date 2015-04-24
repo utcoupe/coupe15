@@ -27,6 +27,7 @@ class GUI:
         self.fen.title("GUI")
 
         self.chaine = Label(self.fen)
+        self.chaine_pos = Label(self.fen)
 
         self.cadre = Canvas(self.fen, width=self.widthfen, height =self.heightfen, bg="light yellow")
         self.cadre.bind("<Button-1>", self.clic_goto)
@@ -51,6 +52,7 @@ class GUI:
         self.goto_frame = Frame()
         self.send_goto = Button(self.goto_frame, text="Goto", command=self.goto_handler).pack(side='left')
         self.send_gotoa = Button(self.goto_frame, text="Gotoa", command=self.gotoa_handler).pack(side='right')
+        self.send_angle = Button(self.goto_frame, text="Angle", command=self.angle_handler).pack(side='right')
 
 
         #pwm menu
@@ -64,32 +66,37 @@ class GUI:
         #reglages
         self.pidl_text = Label(self.fen, text="PID left")
         self.pidl_p = Entry(self.fen)
-        self.pidl_p.insert(0, '180')
+        self.pidl_p.insert(0, '0.5')
         self.pidl_i = Entry(self.fen)
-        self.pidl_i.insert(0, '0')
+        self.pidl_i.insert(0, '0.01')
         self.pidl_d = Entry(self.fen)
-        self.pidl_d.insert(0, '40')
+        self.pidl_d.insert(0, '0')
 
         self.pidr_text = Label(self.fen, text="PID right")
         self.pidr_p = Entry(self.fen)
-        self.pidr_p.insert(0, '2')
+        self.pidr_p.insert(0, '0.5')
         self.pidr_i = Entry(self.fen)
-        self.pidr_i.insert(0, '0')
+        self.pidr_i.insert(0, '0.01')
         self.pidr_d = Entry(self.fen)
-        self.pidr_d.insert(0, '0.5')
+        self.pidr_d.insert(0, '0')
 
         self.acc_max_text = Label(self.fen, text="Acc max")
         self.acc_max = Entry(self.fen)
-        self.acc_max.insert(0, '2')
+        self.acc_max.insert(0, '500')
+
+        self.spd_ratio_text = Label(self.fen, text="Spd rotation ratio")
+        self.spd_ratio = Entry(self.fen)
+        self.spd_ratio.insert(0, '1')
 
         self.spd_max_text = Label(self.fen, text="Spd max")
         self.spd_max = Entry(self.fen)
-        self.spd_max.insert(0, '1')
+        self.spd_max.insert(0, '1000')
 
 
         self.send_reg = Button(self.fen, text="Send", command=self.val_reg)
 
         self.chaine.pack(side='bottom')
+        self.chaine_pos.pack(side='bottom')
         self.cadre.pack(side='right', padx=10, pady=10)
         self.fifo_switch.pack()
         self.reset_goals_button.pack(pady=10)
@@ -116,6 +123,8 @@ class GUI:
         self.pidr_i.pack(side='bottom')
         self.pidr_p.pack(side='bottom')
         self.pidr_text.pack(side='bottom')
+        self.spd_ratio.pack(side='bottom')
+        self.spd_ratio_text.pack(side='bottom')
         self.acc_max.pack(side='bottom')
         self.acc_max_text.pack(side='bottom')
         self.spd_max.pack(side='bottom')
@@ -131,6 +140,7 @@ class GUI:
     def move_robot(self, x, y, a):
         x = int(x)
         y = int(y)
+        a = float(a)
         self.cadre.coords(self.robot_rect, ((x / self.areax) * self.widthfen) - self.robotsize / 2, self.heightfen - ((y / self.areay) * self.heightfen) - self.robotsize / 2, ((x / self.areax) * self.widthfen) + self.robotsize / 2, self.heightfen - ((y / self.areay) * self.heightfen) + self.robotsize / 2)
         self.cadre.coords(self.robot_txt, ((x / self.areax) * self.widthfen), self.heightfen - ((y / self.areay) * self.heightfen) + self.robotsize / 1.5)
         self.cadre.itemconfig(self.robot_txt, text=str(x) + ";" + str(y) + ";" + "{:.2f}".format(a))
@@ -138,6 +148,7 @@ class GUI:
     def pos_update(self):
         while 1:
             self.robot_pos = self.com.getPos()
+            self.chaine_pos.configure(text="Pos : "+str(self.robot_pos))
             time.sleep(0.01)
 
     def pos_loop(self):
@@ -153,16 +164,18 @@ class GUI:
         self.com.sendOrderSafe('CLEANG')
 
     def val_reg(self):
-        arguments = [str(float(self.acc_max.get())*1000)]
+        arguments = [int(self.acc_max.get()), int(float(self.spd_ratio.get())*1000)]
         self.com.sendOrderSafe('ACCMAX', args=arguments)
-        arguments = [str(1000*float(self.pidl_p.get())),
-                str(1000*float(self.pidl_i.get())),
-                str(1000*float(self.pidl_d.get()))]
-        self.com.sendOrderSafe('PIDL', args=arguments)
-        arguments = [str(1000*float(self.pidr_p.get())),
-                str(1000*float(self.pidr_i.get())),
-                str(1000*float(self.pidr_d.get()))]
-        self.com.sendOrderSafe('PIDR', args=arguments)
+        arguments = [int(self.spd_max.get())]
+        self.com.sendOrderSafe('SPDMAX', args=arguments)
+        arguments = [int(1000*float(self.pidl_p.get())),
+                int(1000*float(self.pidl_i.get())),
+                int(1000*float(self.pidl_d.get()))]
+        self.com.sendOrderSafe('PIDLEFT', args=arguments)
+        arguments = [int(1000*float(self.pidr_p.get())),
+                int(1000*float(self.pidr_i.get())),
+                int(1000*float(self.pidr_d.get()))]
+        self.com.sendOrderSafe('PIDRIGHT', args=arguments)
 
     def goto(self, gotox, gotoy):
         self.chaine.configure(text = "Goto : "+str(gotox)+" ; "+str(gotoy))
@@ -171,7 +184,7 @@ class GUI:
             #on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 
-        arguments = [str(gotox), str(gotoy)]
+        arguments = [int(gotox), int(gotoy)]
         self.com.sendOrderSafe('GOTO', args=arguments)
     
     def gotoa(self, gotox, gotoy, gotoa):
@@ -180,8 +193,14 @@ class GUI:
         if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 
-        arguments = [str(gotox), str(gotoy), str(float(gotoa)*1000)]
-        self.com.sendOrderSafe('GOTOA', args=arguments)
+    def angle(self, gotoa):
+        self.chaine.configure(text = "Angle : "+str(gotoa))
+        #ENVOYER DATA PROTOCOLE
+        if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
+            self.com.sendOrderSafe('CLEANG')
+
+        arguments = [int(float(gotoa)*1000)]
+        self.com.sendOrderSafe('ROT', args=arguments)
 
     def sendPwm(self, g, d, duration):
         self.chaine.configure(text = "pwm : "+str(g)+" ; "+str(d)+" ; "+str(duration))
@@ -189,7 +208,7 @@ class GUI:
         if self.fifo_switch.get() == 0:#on clean la file a chaque nouvel ordre
             self.com.sendOrderSafe('CLEANG')
 
-        arguments = [str(g), str(d), str(duration)]
+        arguments = [int(g), int(d), int(duration)]
         self.com.sendOrderSafe('PWM', args=arguments)
 
     def pwm_handler(self):
@@ -200,6 +219,9 @@ class GUI:
 
     def gotoa_handler(self):
         self.gotoa(self.gotox_e.get(), self.gotoy_e.get(), self.gotoang.get())
+
+    def angle_handler(self):
+        self.angle(self.gotoang.get())
 
     def clic_goto(self, event):
         gotox = int((event.x/self.widthfen)*self.areax)

@@ -44,6 +44,7 @@ void ProtocolAutoSendStatus(void) {
 	serial_print(";");
 	serial_print_int(control.linear_speed + control.angular_speed);
 #endif
+	serial_print("\n");
 }
 
 int ProtocolExecuteCmd(char data) {
