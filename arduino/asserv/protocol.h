@@ -20,7 +20,8 @@
 // BEGIN_ORDERS - Do not remove this comment
 #define	GOTOA 		'c' 	// x(int);y(int);a(decimal) - (mm and radian)
 #define	GOTO 		'd' 	// x(int);y(int) - (mm)
-#define	ROT 		'e' 	// a(decimal) - (radian)
+#define	ROT 		'e' 	// a(decimal) - (radian), can't turn more than 1 turn
+#define ROTNOMODULO	'a' 	// a(decimal) - radian, can turn more than 1 turn
 #define	KILLG 		'f' 	// no args, go to next order
 #define	CLEANG 		'g' 	// no args, cancel all orders
 #define	PIDLEFT		'h' 	// p(decimal);i(decimal);d(decimal) - set left PID

@@ -5,7 +5,7 @@
  ****************************************/
 #include "parameters.h"
 #include "AFMotor.h"
-#include "Arduino.h"
+#include <Arduino.h>
 
 #ifndef PWM_MIN
 #define PWM_MIN 0
