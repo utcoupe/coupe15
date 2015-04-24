@@ -9,7 +9,12 @@ module.exports = (function () {
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
-		this.ip = networkInterfaces.wlan0[0].address;
+		var currentInterface = networkInterfaces["wlan0"] || networkInterfaces["Wi-Fi"];
+		if(!currentInterface){
+			logger.error("No valid wireless lan interace :\n"+Arrays.toString(Object.keys(networkInterfaces)));
+			process.exit();
+		}
+		this.ip = currentInterface[0].address;
 		this.ip_port = this.ip+':'+this.server_port;
 		this.webclient_url = this.ip+'/webclient/webclient.html';
 
