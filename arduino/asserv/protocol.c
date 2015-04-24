@@ -24,7 +24,8 @@ void clean_current_command(char *buffer, int* end_of_cmd) {
 }
 
 void ProtocolAutoSendStatus(void) {
-	serial_print("~;");
+	serial_send(AUTO_SEND);
+	serial_print(";");
 #if PRINT_ID
 	serial_print_int(control.last_finished_id);
 	serial_print(";");
