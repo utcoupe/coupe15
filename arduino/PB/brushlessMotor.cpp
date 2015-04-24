@@ -2,7 +2,6 @@
 //Commande de shield arduino brushless by UTCoupe
 
 #include "Arduino.h"
-
 #include "brushlessMotor.h"
 
 
@@ -17,32 +16,26 @@ might be configured to smth else in order use speed control
 see datasheet of DEC-MODULE-24/2
 ***********************************/
 
-Motor::Motor(int n_motor_side) {
-	motor_side = n_motor_side;
+extern "C" void BrushlessMotorsInit() {
+		pinMode(MOTOR1_SPD, OUTPUT);
+		pinMode(MOTOR1_EN, OUTPUT);
+		pinMode(MOTOR1_RDY, INPUT);
+		pinMode(MOTOR2_SPD, OUTPUT);
+		pinMode(MOTOR2_EN, OUTPUT);
+		pinMode(MOTOR2_RDY, INPUT);
 
-	switch (motor_side) {
-		case MOTOR_LEFT:{
-		 	pinMode(MOTOR1_SPD, OUTPUT);
-
-		 	pinMode(MOTOR1_EN, OUTPUT);
-			digitalWrite(MOTOR1_EN, LOW); //Enable motor
-
-			pinMode(MOTOR1_RDY, INPUT);
-			break;
-		}
-		case MOTOR_RIGHT:{
-			pinMode(MOTOR2_SPD, OUTPUT);
-
-			pinMode(MOTOR2_EN, OUTPUT);
-			digitalWrite(MOTOR2_EN,LOW); //enable motor
-
-			pinMode(MOTOR2_RDY, INPUT);
-		   	break;
-		}
-	}
+		digitalWrite(MOTOR1_EN, LOW);
+		digitalWrite(MOTOR2_EN, LOW);
 }
 
-void Motor::setPwm(int pwm) {
+extern "C" int BrushlessMotorsReady() {
+	return (digitalRead(MOTOR1_RDY) << LEFT_READY_SHIFT) +
+		(digitalRead(MOTOR2_RDY) << RIGHT_READY_SHIFT);
+}
+
+
+extern "C" void BrushlessMotorSetPwm(int motor_side, int pwm) {
+	static int last_pwm = 0;
 	if (pwm == last_pwm) {
 		return;
 	}

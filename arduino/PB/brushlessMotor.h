@@ -11,17 +11,22 @@
 #define MOTOR_LEFT 1
 #define MOTOR_RIGHT 2
 
+#define LEFT_READY_SHIFT 1
+#define RIGHT_READY_SHIFT 2
+
+#define LEFT_READY (1<<LEFT_READY_SHIFT)
+#define RIGHT_READY (1<<RIGHT_READY_SHIFT)
+
 #define NO_PWM 666
 
-class Motor
-{
-	public:
-	Motor(int n_motor_side);
-	void setPwm(int pwm);
-
-	private:
-	int motor_side;
-	int last_pwm;
-};
+#ifdef __cplusplus
+extern "C" void BrushlessMotorsInit();
+extern "C" int BrushlessMotorsReady();
+extern "C" void BrushlessMotorSetPwm(int motor_side, int pwm);
+#else
+void BrushlessMotorsInit();
+int BrushlessMotorsReady();
+void BrushlessMotorSetPwm(int motor_side, int pwm);
+#endif
 
 #endif
