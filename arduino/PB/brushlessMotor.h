@@ -19,14 +19,8 @@
 
 #define NO_PWM 666
 
-#ifdef __cplusplus
-extern "C" void BrushlessMotorsInit();
-extern "C" int BrushlessMotorsReady();
-extern "C" void BrushlessMotorSetPwm(int motor_side, int pwm);
-#else
 void BrushlessMotorsInit();
 int BrushlessMotorsReady();
 void BrushlessMotorSetPwm(int motor_side, int pwm);
-#endif
 
 #endif

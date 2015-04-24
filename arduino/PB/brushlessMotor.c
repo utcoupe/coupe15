@@ -16,7 +16,7 @@ might be configured to smth else in order use speed control
 see datasheet of DEC-MODULE-24/2
 ***********************************/
 
-extern "C" void BrushlessMotorsInit() {
+void BrushlessMotorsInit() {
 		pinMode(MOTOR1_SPD, OUTPUT);
 		pinMode(MOTOR1_EN, OUTPUT);
 		pinMode(MOTOR1_RDY, INPUT);
@@ -28,13 +28,13 @@ extern "C" void BrushlessMotorsInit() {
 		digitalWrite(MOTOR2_EN, LOW);
 }
 
-extern "C" int BrushlessMotorsReady() {
+int BrushlessMotorsReady() {
 	return (digitalRead(MOTOR1_RDY) << LEFT_READY_SHIFT) +
 		(digitalRead(MOTOR2_RDY) << RIGHT_READY_SHIFT);
 }
 
 
-extern "C" void BrushlessMotorSetPwm(int motor_side, int pwm) {
+void BrushlessMotorSetPwm(int motor_side, int pwm) {
 	static int last_pwm = 0;
 	if (pwm == last_pwm) {
 		return;

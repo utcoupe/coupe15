@@ -8,6 +8,8 @@
 
 #include "brushlessMotor.h"
 
+#define NO_PWM 0
+
 void set_pwm(int side, int pwm);
 
 inline void set_pwm_left(int pwm){
