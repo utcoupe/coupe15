@@ -21,7 +21,9 @@ module.exports = (function () {
 		return (spot.x>967) && (spot.x < 2033) && (spot.y < 580);
 	};
 
-	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt){
+	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt, status){
+		// XXX : add a status coefficient
+
 		var estimatedPos = {
 			x: eRobot.pos.x + eRobot.speed.x*dt,
 			y: eRobot.pos.y + eRobot.speed.y*dt
@@ -99,7 +101,7 @@ module.exports = (function () {
 						// for each real point
 						for (var i = 0; i < e_r2Bmatched.length; i++) {
 							// we make a matching coefficient
-							matching_coef[d][i] = getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now);
+							matching_coef[d][i] = getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now, e_r2Bmatched[i].status);
 
 							if (best_coef.value < matching_coef[d][i]) {
 								best_coef.value = matching_coef[d][i];
@@ -109,41 +111,39 @@ module.exports = (function () {
 						}
 					}
 
+					// if the bigger coefficient is under the arbitrary threshold
+					// XXXX
+
 					// we take the best/bigger coefficient (well named best_coef :P )
 
-					// if it's climbing the stairs, set the correct status
-					if (isOnTheStairs(dots[best_coef.dot])){
-						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
-						e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
+					// if it isn't, set the new position, speed, status, call the "ennemy went there" function
+					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
+					var deltaT = now - this.lastNow;
+					if (deltaT !== 0)
+						e_r2Bmatched[best_coef.e_robot].speed = {
+							x: (dots[dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT,
+							y: (dots[dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT,
+						};
+					else
+						logger.warn("Tiens, deltaT = 0, c'est bizarre...");
 						e_r2Bmatched[best_coef.e_robot].speed = {
 							x:0,
 							y:0,
 						};
 
-					} else {
-						// if it isn't, set the new position, speed, status, call the "ennemy went there" function
+					e_r2Bmatched[best_coef.e_robot].pos = {
+						x: dots[dot].x,
+						y: dots[dot].y,
+					};
+
+					this.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
+
+
+					// if it's climbing the stairs, set the correct status
+					if (isOnTheStairs(dots[best_coef.dot]))
+						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
+					else
 						e_r2Bmatched[best_coef.e_robot].status = "moving";
-						e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
-						var deltaT = now - this.lastNow;
-						if (deltaT !== 0)
-							e_r2Bmatched[best_coef.e_robot].speed = {
-								x: (dots[dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT,
-								y: (dots[dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT,
-							};
-						else
-							logger.warn("Tiens, deltaT = 0, c'est bizarre...");
-							e_r2Bmatched[best_coef.e_robot].speed = {
-								x:0,
-								y:0,
-							};
-
-						e_r2Bmatched[best_coef.e_robot].pos = {
-							x: dots[dot].x,
-							y: dots[dot].y,
-						};
-
-						this.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
-					}
 					
 					// and delete the dot
 					dots.splice(dot,1);
@@ -176,7 +176,9 @@ module.exports = (function () {
 				}
 			}
 
+			this.lastNow = now;
 		}
+
 	};
 
 	Hokuyo.prototype.updateNumberOfRobots = function (nb) {
