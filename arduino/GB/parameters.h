@@ -38,8 +38,8 @@
 #define AUTO_STATUS_HZ 5 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 1000 //mm/s
-#define ACC_MAX 500  //mm/s2
-#define RATIO_ROT_SPD_MAX 1
+#define ACC_MAX 1000  //mm/s2
+#define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
