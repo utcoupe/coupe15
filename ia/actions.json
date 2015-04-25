@@ -1,64 +1,264 @@
+// Add durations, priority
+// 		- plots
+// 		- gobelet pos
+
+// Priorities :
+	// - balles après le plot middle 3
+	// - claps 1 et 6 après plots et gobelet empiler_front
+	// - prio plots entre eux
+
 {
 	"actions":{
-		"empiler1.1": {
-			"type": "plot",
+		"prendre_balle_gauche":{
+			"type": "balle",
 			"owner": "pr",
-			"objectname": "cylindre__front_left1",
+			"objectname": "balle__gauche",
+			"startpoints": [{
+				"x": 1100,
+				"y": 1800,
+				"a": -45
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_balle",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_balle_droite":{
+			"type": "balle",
+			"owner": "pr",
+			"objectname": "balle__droite",
 			"startpoints": [{
 				"x": 120,
 				"y": 200,
-				"a": 50
+				"a": -135
 			}],
 			"priority": 1,
-			"duration": 4000,
+			"duration": 1,
 			"orders":[{
-				"name": "pile_up_red",
+				"name": "prendre_balle",
 				"params": {}
 				}],
-			"kill": "empiler1.2"
+			"kill": null
 		},
-		"empiler1.2": {
-			"type": "plot",
+		"faire_les_claps_1&3":{
+			"type": "clap",
 			"owner": "pr",
-			"objectname": "cylindre__front_left1",
+			"objectname": "clap__1",
 			"startpoints": [{
 				"x": 120,
-				"y": 200,
-				"a": 230
+				"y": 1850,
+				"a": 0
 			}],
 			"priority": 1,
-			"duration": 4000,
+			"duration": 1,
 			"orders":[{
-				"name": "pile_up_blue",
+				"name": "ouvrir_baton_droit",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_droit",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "ouvrir_baton_droit",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_droit",
 				"params": {}
 				}],
-			"kill": "empiler1.1"
+			"kill": null
 		},
-		"fermer1": {
+		"faire_les_claps_2":{
 			"type": "clap",
 			"owner": "pr",
 			"objectname": "clap__2",
 			"startpoints": [{
-				"x": 240,
-				"y": 560,
+				"x": 400,
+				"y": 1850,
 				"a": 0
 			}],
 			"priority": 1,
-			"duration": 2000,
+			"duration": 1,
 			"orders":[{
-				"name": "open_arm",
+				"name": "ouvrir_baton_droit",
 				"params": {}
 				},
 				{
-				"name": "move",
-				"params": {
-					"to": {
-						"x": 400,
-						"y": 560
-					}
-				}
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_droit",
+				"params": {}
 				}],
 			"kill": null
-		}	
+		},
+		"faire_les_claps_6&4":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "clap__4",
+			"startpoints": [{
+				"x": 2880,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "ouvrir_baton_gauche",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_gauche",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "ouvrir_baton_gauche",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_gauche",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"faire_les_claps_5":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "clap__5",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "ouvrir_baton_gauche",
+				"params": {}
+				},
+				{
+				"name": "avancer_clap",
+				"params": {}
+				},
+				{
+				"name": "fermer_baton_gauche",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_front_left":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "gobelet__front_left",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle_left":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "gobelet__middle_left",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "gobelet__middle",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle_right":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "gobelet__middle_right",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_front_right":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "gobelet__front_right",
+			"startpoints": [{
+				"x": 2600,
+				"y": 1850,
+				"a": 180
+			}],
+			"priority": 1,
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		}
 	}
 }

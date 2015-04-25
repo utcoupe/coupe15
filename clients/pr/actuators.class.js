@@ -108,6 +108,18 @@ module.exports = (function () {
 		}
 	};
 
+	// prendre_balle (avancer + prendre)
+
+	// ouvrir_baton_droit
+	// avancer_clap
+	// fermer_baton_droit
+	// ouvrir_baton_gauche
+	// fermer_baton_gauche
+
+	// prendre_gobelet
+
+	
+
 	// Prendre plot
 	// 
 

@@ -33,8 +33,8 @@ module.exports = (function () {
 		return actions;
 	};
 
-	Actions.prototype.do = function (action_name) {
-		// Call the function passing the action name as parameter, for eg.    actions.do("empiler1.1");
+	Actions.prototype.do = function (action_name, numero_startpoint) {
+		// Call the function passing the action name + the choosen startpoint as parameter, for eg.    actions.do("empiler1.1", 2);
 
 		// If action doesn't exist
 		if (!this.exists(action_name)){
@@ -48,6 +48,9 @@ module.exports = (function () {
 
 		// Do action
 		var act = this.inprogress[action_name];
+		this.ia.client.send(act.owner, "go_to", {
+			pos: act.startpoints[numero_startpoint]
+		});
 		act.orders.forEach(function (order, index, array){
 			this.ia.client.send(act.owner, order.name, order.params);
 		}.bind(this));
@@ -55,6 +58,8 @@ module.exports = (function () {
 			name: "action_finished",
 			action_name: action_name
 		});
+
+		// Set object to "done" ! XXX
 
 		// Change action and its "to be killed" actions to state done
 		this.done[action_name] = this.inprogress[action_name];
@@ -67,7 +72,7 @@ module.exports = (function () {
 
 	Actions.prototype.kill = function (action_name){
 		// If action doesn't exist
-		if (this.exists(action_name)){
+		if (!!action_name && this.exists(action_name)){
 			this.done[action_name] = this.todo[action_name];
 			delete this.todo[action_name];
 		}
