@@ -1,3 +1,6 @@
+
+
+
 module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('gr.asserv');
@@ -32,7 +35,7 @@ module.exports = (function () {
 		callback();
 	}
 	Asserv.prototype.sendPos = function(pos) {
-		this.client.send('ia', 'gr.pos', pos)
+		this.client.send('ia', 'gr.pos', pos);
 	}
 
 	Asserv.prototype.simu_pwm = function(pwm, x, y, a, dt) {
