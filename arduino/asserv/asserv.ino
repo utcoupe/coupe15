@@ -10,6 +10,7 @@
 #include "protocol.h"
 #include "control.h"
 #include "pins.h"
+#include "emergency.h"
 
 unsigned long nextTime = 0;
 
@@ -30,33 +31,15 @@ void setup() {
 }
 
 void loop(){
-#if defined(USE_SHARP) && USE_SHARP
-	float voltage_sharp;
-#endif
-#if defined(AUTO_STATUS_HZ) && AUTO_STATUS_HZ != 0
-	static int i = 0;
-#endif
 	nextTime = nextTime + DT*1000000;
 	digitalWrite(LED_MAINLOOP, HIGH);
 
 	//Action asserv
+	ComputeEmergency();
 	ControlCompute();
 
-#if defined(AUTO_STATUS_HZ) && AUTO_STATUS_HZ != 0
-	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
-		ProtocolAutoSendStatus();
-		i = 0;
-	}
-#endif
-
-#if defined(USE_SHARP) && USE_SHARP
-	voltage_sharp = (analogRead(PIN_SHARP)*5.0/1024.0);
-	if (voltage_sharp > STOP_SHARP_VOLTAGE) {
-		control.block_sharp = 1;
-	} else {
-		control.block_sharp = 0;
-	}
-#endif
+	// Auto send status if necessary
+	ProtocolAutoSendStatus();
 
 	// zone programmation libre
 	int available = SERIAL_MAIN.available();

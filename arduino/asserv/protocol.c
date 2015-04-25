@@ -5,17 +5,14 @@
 #include "robotstate.h"
 #include "control.h"
 
-#define DEBUG_TARGET_SPEED 0
-#define PRINT_ID 0
-
 void sendResponse(char order, char *buf, int size){
-	int i;
-	serial_send(order);
-	serial_send(';');
-	for (i=0; i<size; i++){
-		serial_send(buf[i]);
-	}
-	serial_send('\n');
+	char message[MAX_COMMAND_LEN];
+	message[0] = order;
+	message[1] = ';';
+	memcpy(message+2, buf, size*sizeof(char));
+	message[2+size] = '\n';
+	message[3+size] = '\0';
+	serial_print(message);
 }
 
 void clean_current_command(char *buffer, int* end_of_cmd) {
@@ -23,28 +20,35 @@ void clean_current_command(char *buffer, int* end_of_cmd) {
 	*end_of_cmd = 0;
 }
 
-void ProtocolAutoSendStatus(void) {
-	serial_print("~;");
-#if PRINT_ID
-	serial_print_int(control.last_finished_id);
-	serial_print(";");
-#endif
-	serial_print_int(current_pos.x);
-	serial_print(";");
-	serial_print_int(current_pos.y);
-	serial_print(";");
-	serial_print_int(current_pos.angle*FLOAT_PRECISION);
-	serial_print(";");
-	serial_print_int(wheels_spd.left);
-	serial_print(";");
-	serial_print_int(wheels_spd.right);
+void autoSendStatus(void) {
+	char message[MAX_COMMAND_LEN];
+	int index = 0;
+	index += sprintf(message, "%c;%i;%i;%i:%i", 
+			AUTO_SEND,
+			control.last_finished_id,
+			(int)current_pos.x,
+			(int)current_pos.y,
+			(int)(current_pos.angle*FLOAT_PRECISION));
 #if DEBUG_TARGET_SPEED
-	serial_print(";");
-	serial_print_int(control.linear_speed - control.angular_speed);
-	serial_print(";");
-	serial_print_int(control.linear_speed + control.angular_speed);
+	index += sprintf(message+index, ";%i;%i;%i;%i",
+			(int)wheels_spd.left,
+			(int)wheels_spd.right,
+			(int)(control.linear_speed - control.angular_speed),
+			(int)(control.linear_speed + control.angular_speed));
 #endif
-	serial_print("\n");
+	message[index] = '\n';
+	message[index+1] = '\0';
+	serial_print(message);
+}
+
+void ProtocolAutoSendStatus(void) {
+	static int i=0;
+#if AUTO_STATUS_HZ
+	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
+		ProtocolAutoSendStatus();
+		i = 0;
+	}
+#endif
 }
 
 int ProtocolExecuteCmd(char data) {
@@ -62,12 +66,16 @@ int ProtocolExecuteCmd(char data) {
 		while (current_command[end_of_id] != ';') {
 			end_of_id++;
 			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
+				char message[MAX_COMMAND_LEN];
+				int msg_index = 0;
 				clean_current_command(current_command, &index);
 				if (order != '\n') {
-					serial_send(order);
-					serial_print(";");
+					message[0] = order;
+					message[1] = ';';
+					msg_index = 2;
 				}
-				serial_print(FAILED_MSG);
+				sprintf(message+msg_index, "%s\n", FAILED_MSG);
+				serial_print(message);
 				return -1;
 			}
 		}

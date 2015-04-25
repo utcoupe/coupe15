@@ -9,6 +9,7 @@
 #define BAUDRATE 57600
 #define SERIAL_TYPE SERIAL_8N1
 #define ARDUINO_ID "A"
+#define DEBUG_TARGET_SPEED 1
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
@@ -31,11 +32,10 @@
 #define ENCODER_EVAL 1
 
 #define USE_SHARP 1
-#define STOP_SHARP_VOLTAGE 1 // 1V = 30cm, NOT LINEAR, check datasheet
+#define EMERGENCY_STOP_DISTANCE 0.3 // m
 
 #define HZ 100
 #define DT (1.0/HZ)
-#define MAX_COM_TIME 0.001 // s
 #define AUTO_STATUS_HZ 5 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 1000 //mm/s
@@ -54,29 +54,24 @@
 
 #define CONE_ALIGNEMENT (120.0/180.0*3.14159) //120deg
 
-#define LEFT_P 0.5
-#define LEFT_I 0.01
-#define LEFT_D 0
-#define LEFT_BIAS 0
+#define PID_P 0.5
+#define PID_I 0.01
+#define PID_D 0
+#define PID_BIAS 0
 
-#define RIGHT_P 0.5
-#define RIGHT_I 0.01
-#define RIGHT_D 0
-#define RIGHT_BIAS 0
+#define LEFT_P (PID_P)
+#define LEFT_I (PID_I)
+#define LEFT_D (PID_D)
+#define LEFT_BIAS (PID_BIAS)
+
+#define RIGHT_P (PID_P)
+#define RIGHT_I (PID_I)
+#define RIGHT_D (PID_D)
+#define RIGHT_BIAS (PID_BIAS)
 
 #define TIME_BETWEEN_ORDERS 0 // s
 
 //DEFINES ARDUINO
 #define SERIAL_MAIN Serial
 
-/*****************************************
- *            PRIVATE                    *
- *****************************************/
-#if ENCODER_EVAL == 4
-	#define TICKS_PER_TURN (ENC_RESOLUTION * 4)
-#elif ENCODER_EVAL == 2
-	#define TICKS_PER_TURN (ENC_RESOLUTION * 2)
-#elif ENCODER_EVAL == 1
-	#define TICKS_PER_TURN ENC_RESOLUTION
-#endif
 #endif

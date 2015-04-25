@@ -48,12 +48,13 @@
 
 
 #define FLOAT_PRECISION 1000.0
-#define FAILED_MSG "FAILED\n"
+#define FAILED_MSG "FAILED"
 #define MAX_COMMAND_LEN 60
 #define MAX_ID_VAL 32767
-#define MAX_ID_LEN 10
+#define MAX_ID_LEN 5
 #define ID_START_INDEX 2
 #define MAX_RESPONSE_LEN 50
+#define MAX_COM_TIME 0.001 
 
 #ifdef __cplusplus
 extern "C" int ProtocolExecuteCmd(char data);
