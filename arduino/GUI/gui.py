@@ -146,10 +146,11 @@ class GUI:
         self.cadre.itemconfig(self.robot_txt, text=str(x) + ";" + str(y) + ";" + "{:.2f}".format(a))
 
     def pos_update(self):
-        while 1:
-            self.robot_pos = self.com.getPos()
-            self.chaine_pos.configure(text="Pos : "+str(self.robot_pos))
-            time.sleep(0.01)
+        #while 1:
+		self.robot_pos = self.com.getPos()
+		self.chaine_pos.configure(text="Pos : "+str(self.robot_pos))
+        self.fen.after(10, self.pos_update)
+        #    time.sleep(0.01)
 
     def pos_loop(self):
         self.move_robot(*self.robot_pos)

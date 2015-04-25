@@ -55,11 +55,11 @@ class Communication:
         else:
            status = '' 
         if status == '':
-            return (1, 1)
+            return (0, 0)
 
         status = status.split(';')
         if len(status) < 7:
-            return (1, 1)
+            return (0, 0)
 
         if len(status) % 2 == 1:
             spd = status[7:9]
@@ -73,7 +73,7 @@ class Communication:
         else:
            status = '' 
         if status == '':
-            return (1, 1)
+            return (0, 0)
 
         status = status.split(';')
         if len(status) % 2 == 1:
