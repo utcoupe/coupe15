@@ -147,8 +147,8 @@ class GUI:
 
     def pos_update(self):
         #while 1:
-		self.robot_pos = self.com.getPos()
-		self.chaine_pos.configure(text="Pos : "+str(self.robot_pos))
+        self.robot_pos = self.com.getPos()
+        self.chaine_pos.configure(text="Pos : "+str(self.robot_pos))
         self.fen.after(10, self.pos_update)
         #    time.sleep(0.01)
 
