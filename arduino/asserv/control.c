@@ -70,7 +70,6 @@ void ControlPrepareNewGoal(void) {
 }
 
 void ControlCompute(void) {
-	long now;
 	static long time_reached = -1;
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
@@ -94,9 +93,9 @@ void ControlCompute(void) {
 	if (control.stop_bits)
 		stopRobot();
 
-	now = timeMicros();
-
+#if TIME_BETWEEN_ORDERS
 	if (current_goal->is_reached) {
+		long now = timeMicros();
 		if (time_reached < 0) {
 			time_reached = now;
 		}
@@ -111,6 +110,12 @@ void ControlCompute(void) {
 			time_reached = -1;
 		}
 	}
+#else
+	if (current_goal->is_reached) {
+		FifoNextGoal();
+		ControlPrepareNewGoal();
+	}
+#endif
 
 	applyPwm();
 }
@@ -218,10 +223,17 @@ void stopRobot(void) {
 	int sign;
 	float speed;
 	control = last_control;
-	control.angular_speed = 0;
+	
+	sign = sign(control.angular_speed);
+	speed = abs(control.angular_speed);
+	speed -= control.max_acc * DT;
+	speed = max(0, speed);
+	control.angular_speed = speed;
+
 	sign = sign(control.linear_speed);
 	speed = abs(control.linear_speed);
-	speed -= max(0, control.max_acc * DT);
+	speed -= control.max_acc * DT;
+	speed = max(0, speed);
 	control.linear_speed = sign*speed;
 }
 
