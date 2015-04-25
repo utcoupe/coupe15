@@ -31,9 +31,17 @@ void applyPID(void);
 void applyPwm(void);
 void stopRobot(void);
 
+void ControlSetStop(int mask) {
+	control.stop_bits |= mask;
+}
+
+void ControlUnsetStop(int mask) {
+	control.stop_bits &= ~mask;
+}
+
 void ControlInit(void) {
 	control.reset = 1;
-	control.paused = 0;
+	control.stop_bits = 0;
 	control.angular_speed = 0,
 	control.linear_speed = 0;
 	control.last_finished_id = 0;
@@ -83,14 +91,8 @@ void ControlCompute(void) {
 			break;
 	}
 
-	if (control.paused)
+	if (control.stop_bits)
 		stopRobot();
-
-#if defined(USE_SHARP) && USE_SHARP
-	if (control.block_sharp) {
-		stopRobot();
-	}
-#endif
 
 	now = timeMicros();
 

@@ -156,10 +156,10 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 		}
 	case PAUSE: 
-		control.paused = 1;
+		ControlSetStop(PAUSE_BIT);
 		break;
 	case RESUME:
-		control.paused = 0;
+		ControlUnsetStop(PAUSE_BIT);
 		break;
 	case WHOAMI:
 		*ret_size = sprintf(ret, ARDUINO_ID);
