@@ -118,10 +118,11 @@ module.exports = (function () {
 
 	// prendre_gobelet
 
-	
-
-	// Prendre plot
-	// 
+	// prendre_plot
+		// ouvrir pieds
+		// avancer
+		// fermer pieds
+		// monter...
 
 	return Acts;
 })();
