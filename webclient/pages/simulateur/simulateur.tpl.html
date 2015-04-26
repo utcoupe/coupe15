@@ -1,5 +1,13 @@
-<div id="simulateur_container" ng-controller="SimulateurCtrl" name="simulateur_c" class="simulateur_c">
-	<h1>Simulateur</h1>
+<div ng-controller="SimulateurCtrl" style="margin-top:0" >
+	<div id="simu_before" >
+		<button type="button" class="btn" ng-click="vueDeFace()">Vue de face</button> 
+		<button type="button" class="btn" ng-click="vueDeDessus()">Vue de dessus</button> 
+		<button type="button" class="btn" ng-click="vueDeDerriere()">Vue de derrière</button> 
+		<button type="button" class="btn" ng-click="vueDeGauche()">Vue de gauche</button> 
+		<button type="button" class="btn" ng-click="vueDeDroite()">Vue de droite</button> 
+	</div>
+	<div id="simulateur_container" name="simulateur_c" class="simulateur_c" style="width:99%" >
+	</div>
 </div>
 
 

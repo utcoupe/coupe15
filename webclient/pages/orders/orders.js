@@ -1,8 +1,8 @@
-angular.module('app').controller('LoggerCtrl', ['$scope', 'Logger', '$interval', function($scope, Logger, $interval) {
-	$scope.orders = Logger.orders;
+angular.module('app').controller('OrdersCtrl', ['$scope', 'Orders', '$interval', function($scope, Orders, $interval) {
+	$scope.orders = Orders.orders;
 }]);
 
-angular.module('app').service('Logger', ['$rootScope', 'Client', function($rootScope, Client) {
+angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootScope, Client) {
 	this.orders = [];
 	this.init = function () {
 		Client.order(function (from, name, data, to) {
