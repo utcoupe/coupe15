@@ -124,7 +124,7 @@ Simu.init = function(){
 
 		t = data.robots.pe;
 		Simu.afficherPE(t.x,t.y,t.z,t.coul);
-
+/*
 	// chargement des ampoules
 
 		var t = data.ampoules;
@@ -155,7 +155,7 @@ Simu.init = function(){
 			Simu.afficherPied(t[i].x,t[i].y,t[i].z,t[i].coul);
 		}
 
-/*
+// */ /*
 	// chargement des popcorns
 		
 		var t = data.popcorns;
