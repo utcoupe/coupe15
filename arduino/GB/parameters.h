@@ -32,13 +32,13 @@
 #define ENCODER_EVAL 1
 
 #define USE_SHARP 1
-#define EMERGENCY_STOP_DISTANCE 0.3 // m
+#define EMERGENCY_STOP_DISTANCE 0.4 // m
 
 #define HZ 100
 #define DT (1.0/HZ)
-#define AUTO_STATUS_HZ 5 // must be a divider a HZ or 0 to disable
+#define AUTO_STATUS_HZ 30 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 1000 //mm/s
+#define SPD_MAX 500 //mm/s
 #define ACC_MAX 1000  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
@@ -52,10 +52,10 @@
 #define ERROR_ANGLE 0.015 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
 
-#define CONE_ALIGNEMENT (120.0/180.0*3.14159) //120deg
+#define CONE_ALIGNEMENT 100 // NEVER
 
-#define PID_P 0.5
-#define PID_I 0.01
+#define PID_P 1.5
+#define PID_I 1
 #define PID_D 0
 #define PID_BIAS 0
 
@@ -68,6 +68,9 @@
 #define RIGHT_I (PID_I)
 #define RIGHT_D (PID_D)
 #define RIGHT_BIAS (PID_BIAS)
+
+#define PID_I_RATIO (1/10.0)
+#define PID_D_RATIO (1/1000.0)
 
 #define TIME_BETWEEN_ORDERS 0 // s
 

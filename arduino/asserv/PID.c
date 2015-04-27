@@ -27,6 +27,8 @@ void PIDReset(PID_t *pid) {
 }
 
 void PIDSet(PID_t *pid, float P, float I, float D, float bias) {
+		I *= PID_I_RATIO;
+		D *= PID_D_RATIO;
 		I /= HZ;
 		D *= HZ;
 		pid->P = P;
