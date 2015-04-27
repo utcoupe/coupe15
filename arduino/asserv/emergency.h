@@ -12,7 +12,7 @@ typedef enum emergency_phase {
 
 typedef struct emergency_status {
 	float old_max_spd;
-	long start_time;
+	long start_time, start_detection_time;
 	emergency_phase_t phase;
 } emergency_status_t;
 
