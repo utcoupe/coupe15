@@ -51,7 +51,7 @@ module.exports = (function () {
 		this.lacher();
 	};
 
-	Ele.prototype.lacher = function() {
+	Elevator.prototype.release = function() {
 		this.sendOrder(ELEV_RELEASE);
 	};
 

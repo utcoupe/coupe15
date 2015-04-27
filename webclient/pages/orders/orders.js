@@ -1,4 +1,6 @@
-angular.module('app').controller('OrdersCtrl', ['$scope', 'Orders', function($scope, Orders) {
+angular.module('app').controller('OrdersCtrl', ['$rootScope', '$scope', 'Orders',
+	function($rootScope, $scope, Orders) {
+	$rootScope.act_page = 'orders';
 	$scope.orders = Orders.orders;
 }]);
 
@@ -15,7 +17,9 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 				});
 				if(this.orders.length > 500)
 					this.orders.pop();
-				$rootScope.$apply();
+				if($rootScope.act_page == 'orders') {
+					$rootScope.$apply();
+				}
 			}
 		}.bind(this));
 	};

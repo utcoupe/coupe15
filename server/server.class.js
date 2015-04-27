@@ -162,19 +162,27 @@ module.exports = (function () {
 					from: 'server'
 				});
 			}.bind(this));
-			this.progs[prog].on('error', function (data) {
+			this.progs[prog].on('error', function (prog, data) {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: '[ERROR] '+data.toString(),
+					params: '[ERROR]['+prog+'] '+data.toString(),
 					from: 'server'
 				});
-			}.bind(this));
+			}.bind(this, prog));
+			this.progs[prog].on('close', function (prog, data) {
+				this.server.to('webclient').emit('order', {
+					to: 'webclient',
+					name: 'logger',
+					params: '[CLOSE]['+prog+'] '+data.toString(),
+					from: 'server'
+				});
+				this.stop(prog);
+			}.bind(this, prog));
 			 
 				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
 			this.utcoupe[prog] = true;
-			
 		}
 		this.sendUTCoupe();
 	}

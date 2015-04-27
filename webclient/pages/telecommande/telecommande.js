@@ -1,7 +1,10 @@
-angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', function($scope, Client) {
+angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'Client',
+	function($rootScope, $scope, Client) {
+	$rootScope.act_page = 'telecommande';
 	$scope.gr_pwm_gauche = 50;
 	$scope.gr_pwm_droite = 50;
 	$scope.gr_pwm_ms = 1000;
+	$scope.gr_a = 0;
 
 	$scope.grAcheter = function() {
 		Client.send("gr", "acheter", {});
@@ -17,6 +20,10 @@ angular.module('app').controller('TelecommandeCtrl', ['$scope', 'Client', functi
 			right: $scope.gr_pwm_gauche,
 			ms: $scope.gr_pwm_ms
 		});
+	};
+
+	$scope.grGoa = function() {
+		Client.send("gr", "goa", parseFloat($scope.gr_a)*Math.PI/180);
 	};
 
 	$scope.grScript = function() {

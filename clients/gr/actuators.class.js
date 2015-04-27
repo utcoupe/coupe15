@@ -21,9 +21,9 @@ module.exports = (function () {
 			servos = new (require('./servos.class.js'))(struct.servos);
 		}
 		if (!struct.asserv) {
-			asserv = new (require('./asserv.class.js'))(null, this.client);
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client);
 		} else {
-			asserv = new (require('./asserv.class.js'))(
+			asserv = new (require('../shared/asserv.class.js'))(
 				new SerialPort(struct.asserv, { baudrate: 57600 }, this.client)
 			);
 		}
@@ -66,14 +66,19 @@ module.exports = (function () {
 
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
+			// Others
 			case "acheter":
 				servos.acheter(callback);
 			break;
 			case "vendre":
 				servos.vendre(callback);
 			break;
+			// Asserv
 			case "pwm":
 				asserv.pwm(callback, params.left, params.right, params.ms);
+			break;
+			case "goa":
+				asserv.goa(callback, params);
 			break;
 			case "setpos":
 				asserv.setPos(callback, params);

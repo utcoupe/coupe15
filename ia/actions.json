@@ -1,11 +1,5 @@
-// Add durations, priority
-
-// Priorities :
-	// - balles après le plot middle 3
-	// - claps 1 et 6 après plots et gobelet empiler_front
-	// - prio plots entre eux
-
 {
+	"__comment": "\nAdd durations, priority\nPriorities :\n- balles après le plot middle 3\n- claps 1 et 6 après plots et gobelet empiler_front\n- prio plots entre eux\n",
 	"actions":{
 		"prendre_balle_gauche":{
 			"type": "balle",

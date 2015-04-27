@@ -22,7 +22,7 @@ module.exports = (function () {
 
 		if (color == "green"){
 			this.pos.x = 3000 - this.pos.x;
-			this.pos.a = 180;
+			this.pos.a = 3.1416;
 		}
 	}
 
