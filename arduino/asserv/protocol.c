@@ -23,7 +23,7 @@ void clean_current_command(char *buffer, int* end_of_cmd) {
 void autoSendStatus(void) {
 	char message[MAX_COMMAND_LEN];
 	int index = 0;
-	index += sprintf(message, "%c;%i;%i;%i:%i", 
+	index += sprintf(message, "%c;%i;%i;%i;%i", 
 			AUTO_SEND,
 			control.last_finished_id,
 			(int)current_pos.x,
@@ -42,10 +42,10 @@ void autoSendStatus(void) {
 }
 
 void ProtocolAutoSendStatus(void) {
-	static int i=0;
 #if AUTO_STATUS_HZ
+	static int i=0;
 	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
-		ProtocolAutoSendStatus();
+		autoSendStatus();
 		i = 0;
 	}
 #endif

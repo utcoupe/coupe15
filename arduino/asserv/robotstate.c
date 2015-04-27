@@ -9,6 +9,10 @@
 #include "encoder.h"
 #include <math.h>
 
+#define FC (2)
+#define RC (1/(2*PI*FC))
+#define ALPHA (DT / (RC + DT))
+
 pos_t current_pos;
 wheels_spd_t wheels_spd;
 
@@ -40,11 +44,17 @@ void RobotStateSetPos(float x, float y, float angle) {
 	PosUpdateAngle();
 }
 
+void lowPass(wheels_spd_t *old_spd, wheels_spd_t *new_spd, float a) {
+	new_spd->left = old_spd->left + a * (new_spd->left - old_spd->left);
+	new_spd->right = old_spd->right + a * (new_spd->right - old_spd->right);
+}
+
 void RobotStateUpdate() {
 	static long left_last_ticks = 0, right_last_ticks = 0;
 	static float last_angle = 0;
 	float dd, dl, dr, d_angle;
 	long lt, rt;
+	wheels_spd_t old_wheels_spd = wheels_spd;
 
 	lt = left_ticks;
 	rt = right_ticks;
@@ -53,6 +63,9 @@ void RobotStateUpdate() {
 	dr = (rt - right_last_ticks)*TICKS_TO_MM_RIGHT;
 	wheels_spd.left = dl * HZ;
 	wheels_spd.right = dr * HZ;
+
+	// low pass filter on speed
+	lowPass(&old_wheels_spd, &wheels_spd, ALPHA);
 
 	//d_angle = atan2((dr - dl), ENTRAXE_ENC); //sans approximation tan
 	d_angle = (dr - dl)/ENTRAXE_ENC; // approximation tan

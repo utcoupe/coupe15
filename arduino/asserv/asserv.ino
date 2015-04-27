@@ -15,6 +15,7 @@
 unsigned long nextTime = 0;
 
 void setup() {
+	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 #ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
@@ -24,7 +25,6 @@ void setup() {
 #endif
 #endif
 	initPins();
-	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 	SERIAL_MAIN.write(ARDUINO_ID);
 	nextTime = micros();
 	ControlInit();

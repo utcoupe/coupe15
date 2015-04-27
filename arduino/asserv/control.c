@@ -67,10 +67,14 @@ void ControlReset(void) {
 
 void ControlPrepareNewGoal(void) {
 	control.order_started = 0;
+	PIDReset(&PID_left);
+	PIDReset(&PID_right);
 }
 
 void ControlCompute(void) {
+#if TIME_BETWEEN_ORDERS
 	static long time_reached = -1;
+#endif
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
 	last_control = control;
@@ -117,6 +121,7 @@ void ControlCompute(void) {
 	}
 #endif
 
+	applyPID();
 	applyPwm();
 }
 
@@ -201,7 +206,6 @@ int controlPos(float dd, float da) {
 		ret |= ANG_REACHED;
 	}
 
-	applyPID();
 	return ret;
 }
 
@@ -235,6 +239,9 @@ void stopRobot(void) {
 	speed -= control.max_acc * DT;
 	speed = max(0, speed);
 	control.linear_speed = sign*speed;
+
+	PIDReset(&PID_left);
+	PIDReset(&PID_right);
 }
 
 void emergencyStop(void) {
