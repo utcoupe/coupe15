@@ -176,9 +176,10 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 			// console.log("[Network log] Network updated");
 				this.network = params.network;
 
-				if (!!$("#page")[0])
+				if (!!$("#page")[0]) {
 				    this.updateLayout(this.network);
-				$rootScope.$apply();
+					$rootScope.$apply();
+				}
 			}
 		}.bind(this));
 
@@ -187,9 +188,9 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    this.updateLayout(this.network);
 		}.bind(this);
 
-		setInterval(function () {
-		    this.updateLayout(this.network);
-		}.bind(this), 1000);
+		// setInterval(function () {
+		//     this.updateLayout(this.network);
+		// }.bind(this), 1000);
 	};
 
 }]);

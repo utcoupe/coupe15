@@ -39,13 +39,15 @@ module.exports = (function () {
 		};
 		this.utcoupe = {
 			'ia': false,
-			// 'pr': false,
-			'gr': false
+			'pr': false,
+			'gr': false,
+			'hokuyo': false
 		};
 		this.progs = {
 			'ia': null,
-			// 'pr': null,
-			'gr': null
+			'pr': null,
+			'gr': null,
+			'hokuyo': false
 		}
 
 		// When the client is connected
@@ -128,21 +130,24 @@ module.exports = (function () {
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['../ia/main.js', params.color]);
+					this.progs[prog] = spawn('node', ['./ia/main.js', params.color]);
 				break;
 				case 'pr':
-					this.progs[prog] = spawn('node', ['../clients/pr/main.js']);
+					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);
 				break;
 				case 'gr':
-					this.progs[prog] = spawn('node', ['../clients/gr/main.js']);
+					this.progs[prog] = spawn('sudo', ['node', './clients/gr/main.js']);
+				break;
+				case 'hokuyo':
+					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);
 				break;
 			}
 
 			this.progs[prog].stdout.on('data', function (data) {
-				// console.log(data);
+				// logger.debug(data);
 				// for(var i in data) {
 				// 	if(data[i] == 5)
-				// 		console.log('LOL');
+				// 		logger.debug('LOL');
 				// }
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
@@ -160,6 +165,7 @@ module.exports = (function () {
 				});
 			}.bind(this));
 			 
+				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
 			this.utcoupe[prog] = true;
 			
