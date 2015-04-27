@@ -76,8 +76,8 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		            // var height = parentHeight * 0.9/divs.length + "px";
 		            // var margin = parentHeight * 0.1/divs.length + "px";
 
-		            console.log("Les divs WC ont été redimensionnés à " + height + " ou 90/" + divs.length + " de " + parentHeight + " avec un intervalle de "+ margin);
-		            console.log(divs);
+		            // console.log("Les divs WC ont été redimensionnés à " + height + " ou 90/" + divs.length + " de " + parentHeight + " avec un intervalle de "+ margin);
+		            // console.log(divs);
 		            for(var i=0; i < divs.length; i++) {
 		                divs[i].style.minHeight = "0px";
 		                divs[i].style.height = height;
@@ -239,15 +239,14 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 	this.init = function (){
 		Client.order(function (from, name, params){
-			if (name = "reseau"){
-				console.log("[Network log] Network updated");
+			if (name == "reseau"){
+				// console.log("[Network log] Network updated");
 				this.network = params.network;
 
 				if (!!$("#page")[0])
 				    this.updateLayout(this.network);
+				$rootScope.$apply();
 			}
-			
-			$rootScope.$apply();
 		}.bind(this));
 
 

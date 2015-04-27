@@ -9,7 +9,7 @@
 	if(!color) color = null;
 	var nb_erobots = process.argv[3];
 	if(!nb_erobots) nb_erobots = null;
-	var we_have_hats = process.argv[2];
+	var we_have_hats = process.argv[4];
 	if(!we_have_hats) we_have_hats = null;
 
 	var ia = new (require('./ia.class.js'))(color, nb_erobots, we_have_hats);

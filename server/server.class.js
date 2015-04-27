@@ -2,6 +2,7 @@ module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Server');
+	var spawn = require('child_process').spawn;
 
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
@@ -34,6 +35,16 @@ module.exports = (function () {
 			pr: {},
 			gr: {}
 		};
+		this.utcoupe = {
+			'ia': false,
+			'pr': false,
+			'gr': false
+		};
+		this.progs = {
+			'ia': null,
+			'pr': null,
+			'gr': null
+		}
 
 		// When the client is connected
 		this.server.on('connection', function (client) {
@@ -65,6 +76,7 @@ module.exports = (function () {
 				client.join(client.type);
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 				this.sendNetwork();
+				this.sendUTCoupe();
 			}.bind(this));
 
 			// When the client send an order
@@ -77,17 +89,19 @@ module.exports = (function () {
 					logger.error("The order hasn't 'to' argument (recipient)");
 					return;
 				}
-				if(!(data.to in client.adapter.rooms)) {
-					logger.warn("The order recipient `"+data.to+"` doesn't exist.");
+				// if(!(data.to in client.adapter.rooms)) {
+				// 	logger.warn("The order recipient `"+data.to+"` doesn't exist.");
+				// }
+				if(data.name == 'server.launch') {
+					this.launch(data.params);
+				} else if(data.name == 'server.stop') {
+					this.stop(data.params);
+				} else {
+					// The order is valid
+					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
+					this.server.to('webclient').to(data.to).emit('order', data);
 				}
-				// The order is valid
-				// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-				this.server
-					.to('webclient')
-					// .to('simulator')
-					.to(data.to)
-					.emit('order', data);
-			});
+			}.bind(this));
 		}.bind(this));
 
 		this.server.listen(this.server_port);
@@ -105,6 +119,70 @@ module.exports = (function () {
 			},
 			from: 'server'
 			});
+	}
+
+	Server.prototype.launch = function(params) {
+		var prog = params.prog;
+		if(!this.utcoupe[prog]) {
+			switch(prog) {
+				case 'ia':
+					this.progs[prog] = spawn('node', ['../ia/main.js', params.color]);
+				break;
+				case 'pr':
+					this.progs[prog] = spawn('node', ['../clients/pr/main.js']);
+				break;
+				case 'gr':
+					this.progs[prog] = spawn('node', ['../clients/gr/main.js']);
+				break;
+			}
+
+			this.progs[prog].stdout.on('data', function (data) {
+				this.server.to('webclient').emit('order', {
+					to: 'webclient',
+					name: 'logger',
+					params: {
+						time: '', // TODO parse
+						type: '', // TODO parse
+						name: data.toString()
+					},
+					from: 'server'
+				});
+			}.bind(this));
+			this.progs[prog].on('error', function (data) {
+				this.server.to('webclient').emit('order', {
+					to: 'webclient',
+					name: 'logger',
+					params: {
+						time: '', // TODO parse
+						type: '', // TODO parse
+						name: '[ERROR] '+data.toString()
+					},
+					from: 'server'
+				});
+			}.bind(this));
+			 
+				// logger.fatal(prog, '|stdout|', data.toString());
+			this.utcoupe[prog] = true;
+			
+		}
+		this.sendUTCoupe();
+	}
+
+	Server.prototype.stop = function(prog) {
+		if(this.utcoupe[prog]) {
+			this.progs[prog].kill();
+
+			this.utcoupe[prog] = false;
+		}
+		this.sendUTCoupe();
+	}
+	Server.prototype.sendUTCoupe = function(prog) {
+		this.server.to('webclient').emit('order', {
+			to: 'webclient',
+			name: 'utcoupe',
+			params: this.utcoupe,
+			from: 'server'
+		});
 	}
 
 	return Server;

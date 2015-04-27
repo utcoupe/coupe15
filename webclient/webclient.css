@@ -1,0 +1,10 @@
+li {
+	font-size: 18px;
+}
+
+.utcoupe {
+	color: red;
+}
+.utcoupe.launched {
+	color: green;
+}

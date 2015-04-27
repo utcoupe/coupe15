@@ -1,3 +1,12 @@
 <div ng-controller="IndexCtrl">
-	<h1>WebClient :)</h1>
+	<h1>(: UTCoupe :)</h1>
+	
+	<ul>
+		<li ng-repeat="(name, launched) in utcoupe">
+			<span class="utcoupe" ng-class="{launched: launched}" >{{ name }}</span>
+			<button type="button" class="btn" ng-hide="launched" ng-click="launch(name)">Lancer</button> 
+			<button type="button" class="btn" ng-show="launched" ng-click="stop(name)">Arrêter</button> 
+			<br /><br />
+		</li>
+	</ul>
 </div>
