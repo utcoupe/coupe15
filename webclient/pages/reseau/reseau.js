@@ -1,19 +1,9 @@
 angular.module('app').controller('ReseauCtrl', ['$scope', 'Reseau', function($scope, Reseau) {
 	Reseau.updateLayout(Reseau.network);
-	// $scope.html = Reseau.html;
 }]);
 
 angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootScope, Client) {
 	this.network = {};
-
-	// this.html = {};
-	// this.html.webclients = "";
-	// this.html.arrows1 = "";
-	// this.html.brain = "";
-	// this.html.arrows2 = "";
-	// this.html.clients = "";
-	// this.html.arrows3 = "";
-	// this.html.sensors_actuators = "";
 
 	/* --------- Prints ------------- */
 		function addDiv (parentId, currentId, type, color, name, ip) {
@@ -22,11 +12,11 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    var newDiv = document.createElement('div');
 
 		    var more = "";
-		    if (parentId == "2B1") 
+		    if (parentId == "webclients") 
 		        more = " webclient";
-		    else if (parentId == "2B3") 
+		    else if (parentId == "clients") 
 		        more = " client";
-		    else if ((parentId == "2B2") && (type != "server"))
+		    else if ((parentId == "brain") && (type != "server"))
 		        more = " brain";
 		    more += " " + color;
 
@@ -37,7 +27,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    newDiv.innerHTML = "<h3>" + name + "</h3>";
 		    if(color == "error")
 		        newDiv.innerHTML += "<br><span class='ip'>Impossible de se connecter !</span>";
-		    else if(ip != "")
+		    else if(ip !== "")
 		        newDiv.innerHTML += "<br><span class='ip'>"+ip+"</span>";
 
 		    document.getElementById(parentId).appendChild(newDiv);
@@ -45,60 +35,20 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 		function printNotConnected () {
 		    clearArrows();
-		    var blocstoBeCentered = document.querySelectorAll(".toBeCentered");
+		    var devices = document.querySelectorAll(".rects");
 
-		    for(var i=0; i < blocstoBeCentered.length; i++) {
-		        var current = blocstoBeCentered[i];
+		    for(var i=0; i < devices.length; i++) {
+		        var current = devices[i];
 		        current.innerHTML = "";
 		    }
 
-		    addDiv("2B1", "owner", "laptop", "", "Toi", "127.0.0.1");
-		    addDiv("2B2", "server", "server", "error", "Serveur", "?");
+		    addDiv("webclients", "owner", "laptop", "", "Toi", "127.0.0.1");
+		    addDiv("brain", "server", "server", "error", "Serveur", "?");
 		}
 
 
 
 	/* --------- Layout ------------- */
-
-		function resizeWC () {
-		    // TODO ATTENTION !!  Cette fonction fonctionne mal !
-		    var divs = document.querySelectorAll(".webclient");
-		    // console.log(divs);
-		    if (divs.length > 0) {
-		        var firstDiv = window.getComputedStyle(divs[0]);
-
-		        if ((parseFloat(firstDiv.height) + parseFloat(firstDiv.marginTop)) * divs.length > window.getComputedStyle(document.getElementById("webclients")).height.replace("px", "")) {
-		            // if there's too many divs in the column, they're reduced
-
-		            var parentHeight = window.getComputedStyle(document.getElementById("webclients")).height.replace("px", "");
-		            var height =  900/divs.length + "%";
-		            var margin =  10/divs.length + "%";
-		            // var height = parentHeight * 0.9/divs.length + "px";
-		            // var margin = parentHeight * 0.1/divs.length + "px";
-
-		            console.log("Les divs WC ont été redimensionnés à " + height + " ou 90/" + divs.length + " de " + parentHeight + " avec un intervalle de "+ margin);
-		            console.log(divs);
-		            for(var i=0; i < divs.length; i++) {
-		                divs[i].style.minHeight = "0px";
-		                divs[i].style.height = height;
-		                divs[i].style.marginTop = margin;
-		            }
-		        }
-		    }
-		}
-
-		function centerBlocs () {
-		    // Centers divs "toBeCentered" verticaly
-
-		    var blocstoBeCentered = document.querySelectorAll(".toBeCentered");
-
-		    for(var i=0; i < blocstoBeCentered.length; i++) {
-		        var current = blocstoBeCentered[i];
-		        var currentSize = $("#"+current.id).height();
-		        var parentSize =$("#"+current.id).parent().height();
-		        $("#"+current.id).css({ "margin-top": ((parentSize - currentSize) / 2)+"px" });
-		    }
-		}
 
 		this.updateLayout = function (status) {
 		    clearColumns();
@@ -113,53 +63,45 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		        var client, i;
 
 		        if (Object.keys(status.simulator).length == 1) {
-		            addDiv("2B2", "simu", "simu", "", "Simulateur", "");
+		            addDiv("brain", "simu", "simu", "", "Simulateur", "");
 		        }
 
-		        addDiv("2B2", "server", "server", "", "Serveur", status.server.ip);
+		        addDiv("brain", "server", "server", "", "Serveur", status.server.ip);
 
 		        if (Object.keys(status.ia).length !== 0) {
-		            addDiv("2B2", "ia1", "ia", "green", "IA 1", "");
-		            addDiv("2B2", "ia2", "ia", "yellow", "IA 2", "");
+		            addDiv("brain", "ia1", "ia", "green", "IA 1", "");
+		            addDiv("brain", "ia2", "ia", "yellow", "IA 2", "");
 		        }
 
 		        for(i in status.webclient) {
 		            client = status.webclient[i];
-		            addDiv("2B1", i, client.type, "", client.name, client.ip);
+		            addDiv("webclients", i, client.type, "", client.name, client.ip);
 		        }
 
 		        for(i in status.hokuyo) {
 		            client = status.hokuyo[i];
-		            addDiv("2B3", i, "hok", "hokuyo", "Hokuyo", client.ip);
+		            addDiv("clients", i, "hok", "hokuyo", "Hokuyo", client.ip);
 		        }
 
 		        for(i in status.gr) {
 		            client = status.gr[i];
-		            addDiv("2B3", i, "robot", "gr", "Oscar (GR)", client.ip);
+		            addDiv("clients", i, "robot", "gr", "Oscar (GR)", client.ip);
 		        }
 
 		        for(i in status.pr) {
 		            client = status.pr[i];
-		            addDiv("2B3", i, "robot", "pr", "Cesar (PR)", client.ip);
+		            addDiv("clients", i, "robot", "pr", "Cesar (PR)", client.ip);
 		        }
 
-
-		        resizeWC();
-		        centerBlocs();
-
 		        updateArrows();
-		    } else {
+		    } else
 		        printNotConnected();
-
-		        resizeWC();
-		        centerBlocs();
-		    }
-		}
+		};
 
 		function clearColumns () {
-		    document.getElementById("2B1").innerHTML = "";
-		    document.getElementById("2B2").innerHTML = "";
-		    document.getElementById("2B3").innerHTML = "";
+		    document.getElementById("webclients").innerHTML = "";
+		    document.getElementById("brain").innerHTML = "";
+		    document.getElementById("clients").innerHTML = "";
 		}
 
 
@@ -229,17 +171,9 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		//     });
 		// }
 
-		/* --------- Server communication ------------- */
-		// function updateIpServer(ip){
-		//     // TODO : Penser à changer la fonction !
-		//     $("#server .ip").html(ip);
-		// }
-
-		/* --------- Server events ------------- */
-
 	this.init = function (){
 		Client.order(function (from, name, params){
-			if (name = "reseau"){
+			if (name == "reseau"){
 				console.log("[Network log] Network updated");
 				this.network = params.network;
 
@@ -254,5 +188,10 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		window.onresize = function () {
 		    this.updateLayout(this.network);
 		}.bind(this);
+
+		setInterval(function () {
+		    this.updateLayout(this.network);
+		}.bind(this), 1000);
 	};
+
 }]);

@@ -1,5 +1,10 @@
 angular.module('app').controller('SimulateurCtrl', ['$scope', function($scope) {
 	Simu.init();
+	$scope.vueDeFace = function() { Simu.vueDeFace(); }
+	$scope.vueDeDessus = function() { Simu.vueDeDessus(); }
+	$scope.vueDeDerriere = function() { Simu.vueDeDerriere(); }
+	$scope.vueDeGauche = function() { Simu.vueDeGauche(); }
+	$scope.vueDeDroite = function() { Simu.vueDeDroite(); }
 }]);
 
 angular.module('app').service('Simulateur', ['Client', function(Client) {

@@ -6,16 +6,16 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 	// $locationProvider.html5Mode(true);
 	$routeProvider
 		.when('/', {templateUrl: 'index.tpl.html'})
-		.when('/logger', {templateUrl: 'pages/logger/logger.tpl.html'})
+		.when('/orders', {templateUrl: 'pages/orders/orders.tpl.html'})
 		.when('/reseau', {templateUrl: 'pages/reseau/reseau.tpl.html'})
 		.when('/simulateur', {templateUrl: 'pages/simulateur/simulateur.tpl.html'})
 		.when('/telecommande', {templateUrl: 'pages/telecommande/telecommande.tpl.html'})
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'Logger', 'Reseau', 'Simulateur',
-	function($scope, Logger, Reseau, Simulateur) {
-	Logger.init();
+angular.module('app').controller('AppCtrl', ['$scope', 'Orders', 'Reseau', 'Simulateur',
+	function($scope, Orders, Reseau, Simulateur) {
+	Orders.init();
 	Reseau.init();
 	Simulateur.init();
 }]);
