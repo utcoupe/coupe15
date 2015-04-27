@@ -3,6 +3,8 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Server');
 	var spawn = require('child_process').spawn;
+	var Convert = require('ansi-to-html');
+	var convert = new Convert({newLine: true});
 
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
@@ -37,12 +39,12 @@ module.exports = (function () {
 		};
 		this.utcoupe = {
 			'ia': false,
-			'pr': false,
+			// 'pr': false,
 			'gr': false
 		};
 		this.progs = {
 			'ia': null,
-			'pr': null,
+			// 'pr': null,
 			'gr': null
 		}
 
@@ -137,14 +139,15 @@ module.exports = (function () {
 			}
 
 			this.progs[prog].stdout.on('data', function (data) {
+				// console.log(data);
+				// for(var i in data) {
+				// 	if(data[i] == 5)
+				// 		console.log('LOL');
+				// }
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: {
-						time: '', // TODO parse
-						type: '', // TODO parse
-						name: data.toString()
-					},
+					params: convert.toHtml(data.toString()),
 					from: 'server'
 				});
 			}.bind(this));
@@ -152,11 +155,7 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: {
-						time: '', // TODO parse
-						type: '', // TODO parse
-						name: '[ERROR] '+data.toString()
-					},
+					params: '[ERROR] '+data.toString(),
 					from: 'server'
 				});
 			}.bind(this));

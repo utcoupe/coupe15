@@ -1,19 +1,7 @@
 <div ng-controller="LoggerCtrl">
-    <form class="form-inline">
-        <div class="form-group">
-            <input ng-model="search.type" type="text" class="form-control" id="search_type" placeholder="Type">
-        </div>
-        <div class="form-group">
-            <input ng-model="search.name" type="text" class="form-control" id="search_name" placeholder="Name">
-        </div>
-    </form>
-    <br/>
-    <div>
-        <p ng-repeat="log in logs | filter: search">
-            <span class="label label-default">{{ log.time }} | {{ log.type }}</span>
-            <!-- <span class="label label-default"></span> -->
-            <span class="label label-info">{{ log.name }}</span>
-            <span>{{ log.data }}</span>
+    <div style="background:#222;">
+        <p ng-repeat="log in logs">
+            <span ng-bind-html="log" ></span>
         </p>
     </div>
 </div>

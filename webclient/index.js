@@ -16,7 +16,7 @@ angular.module('app').controller('IndexCtrl', ['$scope', 'UTCoupe', 'Client',
 angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($rootScope, Client) {
 	this.utcoupe = {
 		'ia': false,
-		'pr': false,
+		// 'pr': false,
 		'gr': false
 	};
 	this.init = function () {
@@ -24,7 +24,7 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 			if(name == 'utcoupe') {
 				this.utcoupe.ia = data.ia;
 				this.utcoupe.gr = data.gr;
-				this.utcoupe.pr = data.pr;
+				// this.utcoupe.pr = data.pr;
 				// console.log('[UTCoupe update]');
 				$rootScope.$apply();
 			}
