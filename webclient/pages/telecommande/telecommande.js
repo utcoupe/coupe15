@@ -23,7 +23,7 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	};
 
 	$scope.grGoa = function() {
-		Client.send("gr", "goa", parseFloat($scope.gr_a)*Math.PI/180);
+		Client.send("gr", "goa", {a: parseFloat($scope.gr_a)*Math.PI/180});
 	};
 
 	$scope.grScript = function() {

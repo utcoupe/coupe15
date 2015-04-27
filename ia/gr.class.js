@@ -53,7 +53,7 @@ module.exports = (function () {
 		}
 	};
 
-	Gr.prototype.onColision = function () {
+	Gr.prototype.onCollision = function () {
 		logger.warn("Collision du gros robot");
 		// TODO send order STOP
 	};

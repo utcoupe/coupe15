@@ -12,7 +12,7 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope',
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {
 	this.init = function () {
 		Client.order(function (from, name, data) {
-			if(name == "simulator_update" && $rootScope.act_page == 'simulateur') {
+			if(name == 'simulateur' && $rootScope.act_page == 'simulateur') {
 				Simu.update(data);
 			}
 		});

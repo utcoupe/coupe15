@@ -78,7 +78,7 @@ module.exports = (function () {
 				asserv.pwm(callback, params.left, params.right, params.ms);
 			break;
 			case "goa":
-				asserv.goa(callback, params);
+				asserv.goa(callback, params.a);
 			break;
 			case "setpos":
 				asserv.setPos(callback, params);

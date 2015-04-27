@@ -4,11 +4,11 @@ module.exports = (function () {
 	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
 
 	// For simu
-	var SIMU_VITESSE = 1000*0.5; 	// Vitesse en mm/s (*0.5 pour le simu)
+	var SIMU_VITESSE = 800*0.5; 	// Vitesse en mm/s *0.5 pour le simu
 	var SIMU_FACTOR_A = 0.3; 	// Facteur
 	// var SIMU_PWM_REF = 255; 	// à une PWM de 80
 	function SIMU_DIST(pwm, dt) { return SIMU_V_REF*dt; }
-	function SIMU_DIST_ROT(a) { return a*100; } // Rayon aproximatif de 10cm
+	function SIMU_DIST_ROT(a) { return Math.abs(a)*100; } // Rayon aproximatif de 10cm
 	function SIMU_ROT_TIME(a) { return SIMU_DIST_ROT(a)/(SIMU_VITESSE*SIMU_FACTOR_A); }
 	var FPS = 30;
 
@@ -21,6 +21,7 @@ module.exports = (function () {
 	}
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Asserv.prototype.setA = function(a) {
+		// logger.debug(a, convertA(a));
 		this.pos.a = convertA(a);
 	}
 
@@ -81,11 +82,12 @@ module.exports = (function () {
 		}.bind(this);
 	}
 	Asserv.prototype.goa = function(callback, a){
-		a = convertA(a);
-		if (a < 0) a += 2*Math.PI;
-		var tf = SIMU_ROT_TIME(a)*1000;
+		da = convertA(a-this.pos.a);
+
+		var tf = SIMU_ROT_TIME(da)*1000;
 		for(var t = 0; t < tf; t += 1000/FPS) {
-			setTimeout(this.simu_goa(this.pos.a+(a-this.pos.a)*t/tf), t);
+			// logger.debug(this.pos.a+da*t/tf);
+			setTimeout(this.simu_goa(this.pos.a+da*t/tf), t);
 		}
 		setTimeout(this.simu_goa(a), tf);
 		setTimeout(callback, tf);
