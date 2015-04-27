@@ -1,8 +1,11 @@
-angular.module('app').controller('LoggerCtrl', ['$scope', 'Logger', function($scope, Logger) {
+angular.module('app').controller('LoggerCtrl', ['$rootScope', '$scope', 'Logger',
+	function($rootScope, $scope, Logger) {
+	// $rootScope.act_page = 'logger';
 	$scope.logs = Logger.logs;
 }]);
 
-angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client', function($rootScope, $sce, Client) {
+angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client',
+	function($rootScope, $sce, Client) {
 	this.logs = [];
 	this.init = function () {
 		Client.order(function (from, name, data) {
@@ -11,7 +14,9 @@ angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client', functio
 				this.logs.unshift($sce.trustAsHtml(data));
 				if(this.logs.length > 500)
 					this.logs.pop();
-				$rootScope.$apply();
+				if($rootScope.act_page == 'index') {
+					$rootScope.$apply();
+				}
 			}
 		}.bind(this));
 	};

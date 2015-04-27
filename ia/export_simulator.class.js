@@ -4,10 +4,11 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.export_simulator');
 
 	var __timeout = null;
+	var FPS = 30;
 
 	function convertX(x) { return (x-1500)/1000; }
 	function convertY(y) { return (y-1000)/1000; }
-	function convertA(a) { return a*Math.PI/180; }
+	function convertA(a) { return a; }
 
 	function ExportSimulator(ia) {
 		this.ia = ia;
@@ -38,7 +39,7 @@ module.exports = (function () {
 		// logger.debug(data);
 		this.ia.client.send("webclient", "simulator_update", data);
 
-		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 200);
+		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);
 	}
 
 	return ExportSimulator;

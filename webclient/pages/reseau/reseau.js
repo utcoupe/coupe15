@@ -1,4 +1,6 @@
-angular.module('app').controller('ReseauCtrl', ['$scope', 'Reseau', function($scope, Reseau) {
+angular.module('app').controller('ReseauCtrl', ['$rootScope', '$scope', 'Reseau',
+	function($rootScope, $scope, Reseau) {
+	$rootScope.act_page = 'reseau';
 	Reseau.updateLayout(Reseau.network);
 }]);
 
@@ -176,7 +178,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 			// console.log("[Network log] Network updated");
 				this.network = params.network;
 
-				if (!!$("#page")[0]) {
+				if ($rootScope.act_page == 'reseau') {
 				    this.updateLayout(this.network);
 					$rootScope.$apply();
 				}
@@ -185,7 +187,9 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 
 		window.onresize = function () {
-		    this.updateLayout(this.network);
+			if ($rootScope.act_page == 'reseau') {
+		    	this.updateLayout(this.network);
+			}
 		}.bind(this);
 
 		// setInterval(function () {

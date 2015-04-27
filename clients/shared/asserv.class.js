@@ -1,8 +1,3 @@
-
-
-
-
-
 module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.asserv');
 	var COMMANDS = require('./defineParser.js')('../../arduino/asserv/protocol.h');

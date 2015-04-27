@@ -1,5 +1,6 @@
-angular.module('app').controller('IndexCtrl', ['$scope', 'UTCoupe', 'Client',
-	function($scope, UTCoupe, Client) {
+angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe', 'Client',
+	function($rootScope, $scope, UTCoupe, Client) {
+	$rootScope.act_page = 'index';
 	$scope.utcoupe = UTCoupe.utcoupe;
 	$scope.our_color = 'yellow';
 	$scope.launch = function(u) {
@@ -28,7 +29,9 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 				this.utcoupe.gr = data.gr;
 				this.utcoupe.pr = data.pr;
 				this.utcoupe.hokuyo = data.hokuyo;
-				$rootScope.$apply();
+				if($rootScope.act_page == 'index') {
+					$rootScope.$apply();
+				}
 			}
 		}.bind(this));
 	};
