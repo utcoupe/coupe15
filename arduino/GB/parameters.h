@@ -9,7 +9,7 @@
 #define BAUDRATE 57600
 #define SERIAL_TYPE SERIAL_8N1
 #define ARDUINO_ID "A"
-#define DEBUG_TARGET_SPEED 1
+#define DEBUG_TARGET_SPEED 0
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
@@ -32,7 +32,7 @@
 #define ENCODER_EVAL 1
 
 #define USE_SHARP 1
-#define EMERGENCY_STOP_DISTANCE 0.4 // m
+#define EMERGENCY_STOP_DISTANCE 0.3 // m
 
 #define HZ 100
 #define DT (1.0/HZ)

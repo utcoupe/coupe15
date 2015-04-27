@@ -17,14 +17,18 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.connectTo = function(struct){
-		if (!!struct.servos) {
+		if (!struct.servos) {
+			logger.fatal("Lancement des servos gr en mode simu !");
+			servos = new (require('./servos.simu.class.js'))();
+		} else {
 			servos = new (require('./servos.class.js'))(struct.servos);
 		}
 		if (!struct.asserv) {
-			asserv = new (require('../shared/asserv.simu.class.js'))(this.client);
+			logger.fatal("Lancement de l'asserv gr en mode simu !");
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'gr');
 		} else {
 			asserv = new (require('../shared/asserv.class.js'))(
-				new SerialPort(struct.asserv, { baudrate: 57600 }, this.client)
+				new SerialPort(struct.asserv, { baudrate: 57600 }), this.client
 			);
 		}
 	};
@@ -75,6 +79,9 @@ module.exports = (function () {
 			// Asserv
 			case "pwm":
 				asserv.pwm(callback, params.left, params.right, params.ms);
+			break;
+			case "setvit":
+				asserv.setVitesse(callback, params.v);
 			break;
 			case "goa":
 				asserv.goa(callback, params.a);
