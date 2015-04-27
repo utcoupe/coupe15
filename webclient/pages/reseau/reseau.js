@@ -7,7 +7,6 @@ angular.module('app').controller('ReseauCtrl', ['$rootScope', '$scope', 'Reseau'
 angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootScope, Client) {
 	this.network = {};
 	var links = [];
-	var arcLinks = [];
 
 	/* --------- Prints ------------- */
 		function addDiv (parentId, currentId, type, color, name, ip) {
@@ -74,7 +73,6 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		this.updateLayout = function (status) {
 		    clearColumns();
 		    links = [];
-		    arcLinks = [];
 
 		    // Update content size
 		    $("#page").height(0.95*($( window ).height() - $("#page").offset().top));
@@ -93,11 +91,6 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					for(i in status.webclient) {
 					    client = status.webclient[i];
 					    addDiv("webclients", i, client.type, "", client.name, client.ip);
-
-					    arcLinks.push({
-					    	start: "server",
-					    	end: i
-					    });
 					}
 
 		        addDiv("brain", "server", "server", "", "Serveur", status.server.ip);
@@ -224,8 +217,6 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    for (i = 0; i < links.length; i++) {
 		        linkDivs(links[i].start, links[i].end, "arrows3");
 		    }
-
-		    // TODO : penser à ajouter les créations de links avec les I/O
 		}
 
 

@@ -40,16 +40,15 @@ module.exports = (function () {
 		};
 
 		data.status = "everythingIsAwesome";
-		
-		if(servos)
+
+		if(servos && !servos.client){
 			data.children.push("Arduino servos");
-		else
+		}else
 			data.status = "ok";
 
-		if(asserv && !asserv.client)
-			// logger.info(asserv);
+		if(asserv && !asserv.client){
 			data.children.push("Arduino asserv");
-		else
+		}else
 			data.status = "error";
 
 		return data;
