@@ -80,6 +80,9 @@ module.exports = (function () {
 			case "goa":
 				asserv.goa(callback, params.a);
 			break;
+			case "goxy":
+				asserv.goxy(callback, params.x, params.y);
+			break;
 			case "setpos":
 				asserv.setPos(callback, params);
 			break;

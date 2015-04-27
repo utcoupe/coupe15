@@ -5,6 +5,8 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.gr_pwm_droite = 50;
 	$scope.gr_pwm_ms = 1000;
 	$scope.gr_a = 0;
+	$scope.gr_x = 0;
+	$scope.gr_y = 0;
 
 	$scope.grAcheter = function() {
 		Client.send("gr", "acheter", {});
@@ -24,6 +26,13 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 
 	$scope.grGoa = function() {
 		Client.send("gr", "goa", {a: parseFloat($scope.gr_a)*Math.PI/180});
+	};
+	$scope.grGoxy = function() {
+		Client.send("gr", "goxy", {x: parseFloat($scope.gr_x), y: parseFloat($scope.gr_y)});
+	};
+	$scope.grGoxya = function() {
+		$scope.grGoxy();
+		$scope.grGoa();
 	};
 
 	$scope.grScript = function() {

@@ -64,16 +64,25 @@ module.exports = (function () {
 	};
 
 
-	//Early commit, callback should be called when order is done, not when order in correctly ACK'ed
-
-	Asserv.prototype.goxy = function(callback, pos){
-		// this.clean();
-		// sendCommand(callback, COMMANDS.GOTOA, [
-		// 	pos.x,
-		// 	pos.y,
-		// 	writeAngle(pos.a)
-		// ]);
-		callback();
+	Asserv.prototype.simu_goxy = function(x, y) {
+		return function() {
+			this.pos.x = x;
+			this.pos.y = y;
+			this.sendPos();
+		}.bind(this);
+	}
+	Asserv.prototype.goxy = function(callback, x, y){
+		var dx = x-this.pos.x;
+		var dy = y-this.pos.y;
+		var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
+		var tf = (dist / SIMU_VITESSE)*1000; // *1000 s->ms
+		this.goa(function() {
+			for(var t = 0; t < tf; t += 1000/FPS) {
+				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
+			}
+			setTimeout(this.simu_goxy(x, y), tf);
+			setTimeout(callback, tf);
+		}.bind(this), -Math.atan2(dy,dx));
 	};
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {
@@ -84,7 +93,7 @@ module.exports = (function () {
 	Asserv.prototype.goa = function(callback, a){
 		da = convertA(a-this.pos.a);
 
-		var tf = SIMU_ROT_TIME(da)*1000;
+		var tf = SIMU_ROT_TIME(da)*1000; // *1000 s->ms
 		for(var t = 0; t < tf; t += 1000/FPS) {
 			// logger.debug(this.pos.a+da*t/tf);
 			setTimeout(this.simu_goa(this.pos.a+da*t/tf), t);
