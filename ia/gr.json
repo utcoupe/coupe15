@@ -1,31 +1,59 @@
 {
-	"yellow": [
+	"pos": {
+		"x": 210,
+		"y": 1000,
+		"a": 0
+	},
+	"script_yellow": [
 		{
-			"name": "goto",
+			"name": "setpos",
 			"data": {
-				"x": 1239,
+				"x": 210,
 				"y": 1000,
-				"a": 1.5708
+				"a": 0
 			}
 		},{
-			"name": "goto",
+			"name": "acheter",
+			"data": {}
+		},{
+			"name": "setvit",
+			"data": {
+				"v": 800
+			}
+		},{
+			"name": "goxy",
 			"data": {
 				"x": 1239,
-				"y": 545,
-				"a": 1.5708
+				"y": 1000
+			}
+		},{
+			"name": "goxy",
+			"data": {
+				"x": 1239,
+				"y": 830
+			}
+		},{
+			"name": "setvit",
+			"data": {
+				"v": 300
+			}
+		},{
+			"name": "goxy",
+			"data": {
+				"x": 1239,
+				"y": 540
 			}
 		},{
 			"name": "vendre",
 			"data": {}
 		},{
-			"name": "goto",
+			"name": "goxy",
 			"data": {
 				"x": 1239,
-				"y": 300,
-				"a": 1.5708
+				"y": 300
 			}
 		}
 	],
-	"green": [
+	"script_green": [
 	]
 }
