@@ -100,6 +100,12 @@ module.exports = (function () {
 					this.launch(data.params);
 				} else if(data.name == 'server.stop') {
 					this.stop(data.params);
+				} else if(data.name == 'server.childrenUpdate') {
+					// console.log(this.network);
+					this.network[client.type][client.id].status = data.params.status || "";
+					this.network[client.type][client.id].children = data.params.children || "";
+					// console.log(this.network);
+					this.sendNetwork();
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);

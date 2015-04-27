@@ -35,6 +35,42 @@ module.exports = (function () {
 		if (!!struct.ax12) {
 			ax12 = new (require('./ax12.class.js'))(struct.ax12);
 		}
+
+
+	};
+
+	Acts.prototype.getStatus = function(){
+		var data = {
+			"status": "",
+			"children": []
+		};
+
+		data.status = "everythingIsAwesome";
+
+
+		if(asserv){
+			data.children.push("Arduino asserv");
+
+
+			if(elevator)
+				data.children.push("Arduino steppers");
+			else
+				data.status = "ok";
+
+			if(servos)
+				data.children.push("Arduino servos");
+			else
+				data.status = "ok";
+
+			if(ax12)
+				data.children.push("USB2AX");
+			else
+				data.status = "ok";
+
+		} else
+			data.status = "error";
+
+		return data;
 	};
 
 	Acts.prototype.quit = function(){

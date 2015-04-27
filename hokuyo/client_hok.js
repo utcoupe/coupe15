@@ -26,6 +26,12 @@
 		type: "hokuyo"
 	});
 
+	var nb_active_hokuyos = 0;
+	var lastStatus = {
+		"status": "waiting"
+	};
+	sendChildren(lastStatus);
+
 	logger.info("Starting with pid " + process.pid);
 
 	client.order(function(from, name, params){
@@ -71,6 +77,8 @@
 	function start(color, nbrobots){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
+		sendChildren({"status": "starting"});
+
 		// If there's a child, kill it
 		quitC("start");
 
@@ -107,22 +115,32 @@
 			logger.info("/string2");
 			logger.info(string);
 
+			var prev_n_a_h = nb_active_hokuyos;
+
 			switch (string.substring(0,1)){
 				case "0":
 					// Send error : no Hokuyo working
-					client.send("ia", "nb_hokuyo", {nb: 0});
+					// client.send("ia", "nb_hokuyo", {nb: 0});
+					nb_active_hokuyos = 0;
 					break;
 				case "1":
 					// Send warning : one Hokuyo is missing
-					client.send("ia", "nb_hokuyo", {nb: 1});
+					// client.send("ia", "nb_hokuyo", {nb: 1});
+					nb_active_hokuyos = 1;
 					break;
 				case "2":
 					// Send message : Hokuyos are ok
-					client.send("ia", "nb_hokuyo", {nb: 2});
+					// client.send("ia", "nb_hokuyo", {nb: 2});
+					nb_active_hokuyos = 2;
 					break;
 				default:
 					logger.info("Error not understood : " + string);
+					return;
 			}
+
+			if(prev_n_a_h != nb_active_hokuyos)
+				sendChildren(getStatus());
+
 		}
 
 		function dataFromCHandler(input) {
@@ -157,6 +175,7 @@
 			}
 		}
 
+
 		// Execute C program
 		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
 		var args = [color, 'no_init_wizard', nbrobots];
@@ -180,5 +199,44 @@
 				logger.info('Child closed with code: ' + code);
 			// Send message XXX
 		});
+	}
+
+	function getStatus(){
+		var data = {
+			"status": "",
+			"children": []
+		};
+		
+		switch (nb_active_hokuyos){
+			case 0:
+				data.status = "error";
+				break;
+			case 1:
+				data.status = "ok";
+				data.children =  ["Lonesome hokuyo :/"];
+				break;
+			case 2:
+				data.status = "everythingIsAwesome";
+				data.children =  ["Hokuyo 1", "Hokuyo 2"];
+				break;
+		}
+
+		return data;
+	}
+
+
+	// Sends status to server
+	function sendChildren(status){
+		lastStatus = status;
+
+		client.send("server", "server.childrenUpdate", lastStatus);
+	}
+
+	function isOk(){
+		if(lastStatus.status != "waiting")
+			lastStatus = getStatus();
+		
+		client.send("ia", "isOkAnswer", lastStatus);
+		client.send("server", "server.childrenUpdate", lastStatus);
 	}
 })();

@@ -14,6 +14,11 @@
 		type: "pr"
 	});
 
+	var lastStatus = {
+		"status": "waiting"
+	};
+	sendChildren(lastStatus);
+
 	var acts = new (require('./actuators.class.js'))();
 	var detect = new (require('./detect.class.js'))(devicesDetected);
 
@@ -57,7 +62,24 @@
 		acts.connectTo(struct);
 
 		// Send struct to server
+		sendChildren(acts.getStatus());
 	}
+
+	// Sends status to server
+	function sendChildren(status){
+		lastStatus = status;
+
+		client.send("server", "server.childrenUpdate", lastStatus);
+	}
+
+	function isOk(){
+		if(lastStatus.status != "waiting")
+			lastStatus = acts.getStatus();
+		
+		client.send("ia", "isOkAnswer", lastStatus);
+		client.send("server", "server.childrenUpdate", lastStatus);
+	}
+
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
@@ -94,7 +116,6 @@
 		orderInProgress = false;
 		executeNextOrder();
 	}
-
 	function quit () {
 		logger.info("Please wait while exiting...");
 		acts.quit();

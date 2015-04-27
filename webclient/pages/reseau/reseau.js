@@ -7,7 +7,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 	/* --------- Prints ------------- */
 		function addDiv (parentId, currentId, type, color, name, ip) {
-		    // possible colors : error, green, yellow, transparent or normal (just "" )
+		    // possible colors : error, green, yellow, waiting, ok, starting, everythingIsAwesome or normal (just "" )
 
 		    var newDiv = document.createElement('div');
 
@@ -21,14 +21,14 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    more += " " + color;
 
 		    newDiv.id    = currentId;
-		    newDiv.title = "ID de l'appareil : " + currentId;
+		    newDiv.title = "ID de l'appareil : " + currentId + "\nStatus : "+color;
 		    newDiv.setAttribute('class', "thing device" + type + more);
 
 		    newDiv.innerHTML = "<h3>" + name + "</h3>";
 		    if(color == "error")
-		        newDiv.innerHTML += "<br><span class='ip'>Impossible de se connecter !</span>";
+		        newDiv.innerHTML += "<br/><span class='ip'>Impossible de se connecter !</span>";
 		    else if(ip !== "")
-		        newDiv.innerHTML += "<br><span class='ip'>"+ip+"</span>";
+		        newDiv.innerHTML += "<br/><span class='ip'>"+ip+"</span>";
 
 		    document.getElementById(parentId).appendChild(newDiv);
 		}
@@ -79,17 +79,17 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 		        for(i in status.hokuyo) {
 		            client = status.hokuyo[i];
-		            addDiv("clients", i, "hok", "hokuyo", "Hokuyo", client.ip);
+		            addDiv("clients", i, "hok", client.status, "Hokuyo", client.ip);
 		        }
 
 		        for(i in status.gr) {
 		            client = status.gr[i];
-		            addDiv("clients", i, "robot", "gr", "Oscar (GR)", client.ip);
+		            addDiv("clients", i, "robot", client.status, "Oscar (GR)", client.ip);
 		        }
 
 		        for(i in status.pr) {
 		            client = status.pr[i];
-		            addDiv("clients", i, "robot", "pr", "Cesar (PR)", client.ip);
+		            addDiv("clients", i, "robot", client.status, "Cesar (PR)", client.ip);
 		        }
 
 		        updateArrows();

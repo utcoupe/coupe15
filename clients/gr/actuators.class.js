@@ -29,6 +29,29 @@ module.exports = (function () {
 		}
 	};
 
+	Acts.prototype.getStatus = function(){
+		var data = {
+			"status": "",
+			"children": []
+		};
+
+		data.status = "everythingIsAwesome";
+		
+		if(asserv && !asserv.client){
+			logger.info(asserv);
+			data.children.push("Arduino asserv");
+
+			if(servos)
+				data.children.push("Arduino servos");
+			else
+				data.status = "ok";
+			
+		} else
+			data.status = "error";
+
+		return data;
+	};
+
 	Acts.prototype.quit = function(){
 		if (!!servos)
 			servos.disconnect();
