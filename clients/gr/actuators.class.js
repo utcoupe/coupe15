@@ -37,16 +37,15 @@ module.exports = (function () {
 
 		data.status = "everythingIsAwesome";
 		
-		if(asserv && !asserv.client){
-			logger.info(asserv);
-			data.children.push("Arduino asserv");
+		if(servos)
+			data.children.push("Arduino servos");
+		else
+			data.status = "ok";
 
-			if(servos)
-				data.children.push("Arduino servos");
-			else
-				data.status = "ok";
-			
-		} else
+		if(asserv && !asserv.client)
+			// logger.info(asserv);
+			data.children.push("Arduino asserv");
+		else
 			data.status = "error";
 
 		return data;

@@ -155,6 +155,7 @@
 							// XXX send "C started" to server
 							logger.info('C Hokuyo software says "Hi !" :)');
 							// client.send("IA", "nb_hokuyo", {nb: 2});
+							sendChildren({"status": "error"});
 							break;
 						case "DATA":
 							logger.info('C Hokuyo software sends datas');
@@ -197,7 +198,9 @@
 				logger.info('Child closed correctly');
 			else
 				logger.info('Child closed with code: ' + code);
-			// Send message XXX
+
+			// Send message
+			sendChildren({"status": "waiting", "children":[]});
 		});
 	}
 
