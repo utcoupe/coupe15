@@ -2,18 +2,18 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.asserv');
 	// var COMMANDS = require('./defineParser.js')('../../arduino/asserv/protocol.h');
 	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
+	var __vitesse = 800; 	// Vitesse en mm/s *0.5 pour le simu
 
 	// For simu
-	var SIMU_VITESSE = 800*0.5; 	// Vitesse en mm/s *0.5 pour le simu
+	var SIMU_FACTOR_VIT = 0.5;
 	var SIMU_FACTOR_A = 0.3; 	// Facteur
 	// var SIMU_PWM_REF = 255; 	// à une PWM de 80
-	function SIMU_DIST(pwm, dt) { return SIMU_V_REF*dt; }
+	function SIMU_DIST(pwm, dt) { return (__vitesse*SIMU_FACTOR_VIT)*dt; }
 	function SIMU_DIST_ROT(a) { return Math.abs(a)*100; } // Rayon aproximatif de 10cm
-	function SIMU_ROT_TIME(a) { return SIMU_DIST_ROT(a)/(SIMU_VITESSE*SIMU_FACTOR_A); }
+	function SIMU_ROT_TIME(a) { return SIMU_DIST_ROT(a)/(__vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
 	var FPS = 30;
 
-	function Asserv(client) {
-		logger.fatal("Lancement de l'asserv en mode simu !");
+	function Asserv(client, who) {
 		this.client = client;
 		this.pos = {};
 
@@ -44,6 +44,11 @@ module.exports = (function () {
 		callback();
 	};
 
+	Asserv.prototype.setVitesse = function(callback, v) {
+		__vitesse = parseInt(v);
+		callback();
+	};
+
 	Asserv.prototype.simu_pwm = function(pwm, x, y, a, dt) {
 		return function() {
 			this.pos = {
@@ -63,7 +68,6 @@ module.exports = (function () {
 		setTimeout(callback, ms);
 	};
 
-
 	Asserv.prototype.simu_goxy = function(x, y) {
 		return function() {
 			this.pos.x = x;
@@ -75,7 +79,7 @@ module.exports = (function () {
 		var dx = x-this.pos.x;
 		var dy = y-this.pos.y;
 		var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-		var tf = (dist / SIMU_VITESSE)*1000; // *1000 s->ms
+		var tf = (dist / (__vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
 		this.goa(function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
