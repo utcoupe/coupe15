@@ -28,7 +28,10 @@ module.exports = (function () {
 			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'gr');
 		} else {
 			asserv = new (require('../shared/asserv.class.js'))(
-				new SerialPort(struct.asserv, { baudrate: 57600 }), this.client
+				new SerialPort(struct.asserv, {
+					baudrate: 57600,
+					parser:serialPort.parsers.readline('\n')
+				}), this.client
 			);
 		}
 	};
@@ -66,7 +69,6 @@ module.exports = (function () {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		logger.info(name, params);
 
-		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			// Others
 			case "acheter":
@@ -80,7 +82,7 @@ module.exports = (function () {
 				asserv.pwm(callback, params.left, params.right, params.ms);
 			break;
 			case "setvit":
-				asserv.setVitesse(callback, params.v);
+				asserv.setVitesse(callback, params.v, params.r);
 			break;
 			case "goa":
 				asserv.goa(callback, params.a);
@@ -90,6 +92,9 @@ module.exports = (function () {
 			break;
 			case "setpos":
 				asserv.setPos(callback, params);
+			break;
+			case "setpid":
+				asserv.setPid(callback, params.p, params.i, params.d);
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

@@ -17,19 +17,20 @@ module.exports = (function () {
 
 		board.on("ready", function() {
 			logger.info("Board servos Ready");
-			servo_gauche = new five.Servo(10);
-			servo_droit = new five.Servo(8);
-		});
+			servo_gauche = new five.Servo(2);
+			servo_droit = new five.Servo(3);
+			this.acheter();
+		}.bind(this));
 	};
 
 	Servos.prototype.acheter = function(callback) {
-		servo_gauche.to(160);
-		servo_droit.to(10);
+		servo_gauche.to(170);
+		servo_droit.to(0);
 		setTimeout(callback, 500);
 	};
 	Servos.prototype.vendre = function(callback) {
-		servo_gauche.to(0);
-		servo_droit.to(170);
+		servo_gauche.to(50);
+		servo_droit.to(120);
 		setTimeout(callback, 500);
 	};
 
