@@ -32,6 +32,11 @@ void setup() {
 
 void loop(){
 	int available, sent_bytes;
+#if DEBUG_MAINLOOP
+	static unsigned long start_overtime = micros();
+	unsigned long now;
+#endif
+
 	nextTime = nextTime + DT*1000000;
 	digitalWrite(LED_MAINLOOP, HIGH);
 
@@ -52,5 +57,16 @@ void loop(){
 	ProtocolAutoSendStatus(MAX_BYTES_PER_IT - sent_bytes);
 
 	digitalWrite(LED_MAINLOOP, LOW);
+
+#if DEBUG_MAINLOOP
+	now = micros();
+	if (now - start_overtime > 1000000) {
+		digitalWrite(LED_DEBUG, LOW);
+	}
+	if (now >= nextTime) {
+		start_overtime = micros();
+		digitalWrite(LED_DEBUG, HIGH);
+	}
+#endif
 	while (micros() < nextTime) {}
 }
