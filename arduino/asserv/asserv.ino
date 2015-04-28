@@ -31,6 +31,12 @@ void setup() {
 }
 
 void loop(){
+	int available, sent_bytes;
+#if DEBUG_MAINLOOP
+	static unsigned long start_overtime = micros();
+	unsigned long now;
+#endif
+
 	nextTime = nextTime + DT*1000000;
 	digitalWrite(LED_MAINLOOP, HIGH);
 
@@ -38,19 +44,29 @@ void loop(){
 	ComputeEmergency();
 	ControlCompute();
 
-	// Auto send status if necessary
-	ProtocolAutoSendStatus();
-
+	// Flush serial every time to stay in time
+	Serial.flush();
 	// zone programmation libre
-	int available = SERIAL_MAIN.available();
+	available = SERIAL_MAIN.available();
+	sent_bytes = 0;
 	for(int i = 0; i < available; i++) {
 		// recuperer l'octet courant
-		ProtocolExecuteCmd(generic_serial_read());
-		if ((nextTime - micros()) < MAX_COM_TIME*1000000) {
-			break;
-		}
+		sent_bytes = ProtocolExecuteCmd(generic_serial_read());
 	}
+	// Auto send status if necessary
+	ProtocolAutoSendStatus(MAX_BYTES_PER_IT - sent_bytes);
 
 	digitalWrite(LED_MAINLOOP, LOW);
+
+#if DEBUG_MAINLOOP
+	now = micros();
+	if (now - start_overtime > 1000000) {
+		digitalWrite(LED_DEBUG, LOW);
+	}
+	if (now >= nextTime) {
+		start_overtime = micros();
+		digitalWrite(LED_DEBUG, HIGH);
+	}
+#endif
 	while (micros() < nextTime) {}
 }

@@ -19,7 +19,7 @@
 
 #define sign(x) ((x)>=0?1:-1)
 
-control_t control, last_control;
+control_t control;
 
 void goalPos(goal_t *goal);
 void goalPwm(goal_t *goal);
@@ -29,6 +29,7 @@ int controlPos(float dd, float da);
 float calcSpeed(float init_spd, float dd, float max_spd, float final_speed);
 void applyPID(void);
 void applyPwm(void);
+void allStop(void);
 void stopRobot(void);
 
 void ControlSetStop(int mask) {
@@ -42,8 +43,8 @@ void ControlUnsetStop(int mask) {
 void ControlInit(void) {
 	control.reset = 1;
 	control.stop_bits = 0;
-	control.angular_speed = 0,
-	control.linear_speed = 0;
+	control.speeds.angular_speed = 0,
+	control.speeds.linear_speed = 0;
 	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
@@ -58,7 +59,7 @@ void ControlInit(void) {
 }
 
 void ControlReset(void) {
-	control.linear_speed = 0;
+	control.speeds.linear_speed = 0;
 	control.last_finished_id = 0;
 	FifoClearGoals();
 	RobotStateReset();
@@ -67,8 +68,8 @@ void ControlReset(void) {
 
 void ControlPrepareNewGoal(void) {
 	control.order_started = 0;
-	PIDReset(&PID_left);
-	PIDReset(&PID_right);
+	//PIDReset(&PID_left);
+	//PIDReset(&PID_right);
 }
 
 void ControlCompute(void) {
@@ -77,29 +78,27 @@ void ControlCompute(void) {
 #endif
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
-	last_control = control;
-
-	switch (current_goal->type) {
-		case TYPE_ANG:
-			goalAngle(current_goal);
-			break;
-		case TYPE_POS:
-			goalPos(current_goal);
-			break;
-		case TYPE_PWM:
-			goalPwm(current_goal);
-			break;
-		default:
-			stopRobot();
-			break;
-	}
 
 	if (control.stop_bits) {
 		stopRobot();
-		applyPID();
-		applyPwm();
-		return;
+	} else {
+		switch (current_goal->type) {
+			case TYPE_ANG:
+				goalAngle(current_goal);
+				break;
+			case TYPE_POS:
+				goalPos(current_goal);
+				break;
+			case TYPE_PWM:
+				goalPwm(current_goal);
+				break;
+			default:
+				stopRobot();
+				break;
+		}
 	}
+
+	applyPwm();
 
 #if TIME_BETWEEN_ORDERS
 	if (current_goal->is_reached) {
@@ -108,9 +107,7 @@ void ControlCompute(void) {
 			time_reached = now;
 		}
 		control.last_finished_id = current_goal->ID;
-		stopRobot();
-		if (fifo.nb_goals > 1 && 
-		(now-time_reached) > (TIME_BETWEEN_ORDERS*1000000)) {
+		if ((now-time_reached) > (TIME_BETWEEN_ORDERS*1000000)) {
 			//Si le but est atteint et que ce n'est pas 
 			//le dernier, on passe au suivant
 			FifoNextGoal();
@@ -120,15 +117,11 @@ void ControlCompute(void) {
 	}
 #else
 	if (current_goal->is_reached) {
+		control.last_finished_id = current_goal->ID;
 		FifoNextGoal();
 		ControlPrepareNewGoal();
 	}
 #endif
-
-	if (current_goal->type != TYPE_PWM) {
-		applyPID();
-	}
-	applyPwm();
 }
 
 /* INTERNAL FUNCTIONS */
@@ -145,12 +138,12 @@ void goalPwm(goal_t *goal) {
 		pwmL = goal->data.pwm_data.pwm_l;
 		pwmR = goal->data.pwm_data.pwm_r;
 
-		control.pwm_left = pwmL;
-		control.pwm_right = pwmR;
+		control.speeds.pwm_left = pwmL;
+		control.speeds.pwm_right = pwmR;
 	}
 	else {
-		control.pwm_left = 0;
-		control.pwm_right = 0;
+		control.speeds.pwm_left = 0;
+		control.speeds.pwm_right = 0;
 		goal->is_reached = 1;
 	}
 }
@@ -167,6 +160,7 @@ void goalAngle(goal_t *goal) {
 	if (controlPos(0, da) & ANG_REACHED) {
 		goal->is_reached = 1;
 	}
+	applyPID();
 }
 
 void goalPos(goal_t *goal) {
@@ -190,6 +184,7 @@ void goalPos(goal_t *goal) {
 	if (controlPos(dd, da) == REACHED) {
 		goal->is_reached = 1;
 	}
+	applyPID();
 }
 
 int controlPos(float dd, float da) {
@@ -199,9 +194,9 @@ int controlPos(float dd, float da) {
 	dda = da * (ENTRAXE_ENC/2);
 	ddd = dd * exp(-abs(K_DISTANCE_REDUCTION*da));
 
-	control.angular_speed = calcSpeed(control.angular_speed, dda, 
+	control.speeds.angular_speed = calcSpeed(control.speeds.angular_speed, dda, 
 			control.max_spd * control.rot_spd_ratio, 0);
-	control.linear_speed = calcSpeed(control.linear_speed, ddd,
+	control.speeds.linear_speed = calcSpeed(control.speeds.linear_speed, ddd,
 			control.max_spd, 0);
 
 	ret = 0;
@@ -232,43 +227,45 @@ void stopRobot(void) {
 	// restore control and re-compute speeds
 	int sign;
 	float speed;
-	control = last_control;
-	
-	sign = sign(control.angular_speed);
-	speed = abs(control.angular_speed);
+
+	sign = sign(control.speeds.angular_speed);
+	speed = abs(control.speeds.angular_speed);
 	speed -= control.max_acc * DT;
 	speed = max(0, speed);
-	control.angular_speed = speed;
+	control.speeds.angular_speed = speed;
 
-	sign = sign(control.linear_speed);
-	speed = abs(control.linear_speed);
+	sign = sign(control.speeds.linear_speed);
+	speed = abs(control.speeds.linear_speed);
 	speed -= control.max_acc * DT;
 	speed = max(0, speed);
-	control.linear_speed = sign*speed;
+	control.speeds.linear_speed = sign*speed;
 
-	PIDReset(&PID_left);
-	PIDReset(&PID_right);
+	if (abs(wheels_spd.left) + abs(wheels_spd.right) < SPD_TO_STOP) {
+		allStop();
+	} else {
+		applyPID();
+	}
 }
 
-void emergencyStop(void) {
-	control.pwm_left = 0;
-	control.pwm_right = 0;
-	control.linear_speed = 0;
-	control.angular_speed = 0;
+void allStop(void) {
+	control.speeds.pwm_left = 0;
+	control.speeds.pwm_right = 0;
+	control.speeds.linear_speed = 0;
+	control.speeds.angular_speed = 0;
 }
 
 void applyPwm(void) {
-	set_pwm_left(control.pwm_left);
-	set_pwm_right(control.pwm_right);
+	set_pwm_left(control.speeds.pwm_left);
+	set_pwm_right(control.speeds.pwm_right);
 }
 
 void applyPID(void) {
 	float left_spd, right_spd;
 	float left_ds, right_ds;
-	left_spd = control.linear_speed - control.angular_speed;
-	right_spd = control.linear_speed + control.angular_speed;
+	left_spd = control.speeds.linear_speed - control.speeds.angular_speed;
+	right_spd = control.speeds.linear_speed + control.speeds.angular_speed;
 	left_ds = left_spd - wheels_spd.left;
 	right_ds = right_spd - wheels_spd.right;
-	control.pwm_left = PIDCompute(&PID_left, left_ds);
-	control.pwm_right = PIDCompute(&PID_right, right_ds);
+	control.speeds.pwm_left = PIDCompute(&PID_left, left_ds);
+	control.speeds.pwm_right = PIDCompute(&PID_right, right_ds);
 }

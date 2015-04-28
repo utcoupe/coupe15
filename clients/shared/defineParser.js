@@ -33,7 +33,7 @@ module.exports = (function(){
 				parsed[findings[1]] = eval(findings[2]);
 				// try to evaluate calculus...
 				nb++;
-			};
+			}
 			logger.info("done parsing \""+file+"\" with "+nb+" defines");
 			//should be quick enough
 		});

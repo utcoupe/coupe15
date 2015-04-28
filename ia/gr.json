@@ -6,9 +6,16 @@
 	},
 	"script_yellow": [
 		{
+			"name": "setpid",
+			"data": {
+				"p": 1.5,
+				"i": 5,
+				"d": 5
+			}
+		},{
 			"name": "setpos",
 			"data": {
-				"x": 210,
+				"x": 110,
 				"y": 1000,
 				"a": 0
 			}
@@ -18,30 +25,31 @@
 		},{
 			"name": "setvit",
 			"data": {
-				"v": 800
+				"v": 1200,
+				"r": 0.1
 			}
 		},{
 			"name": "goxy",
 			"data": {
-				"x": 1239,
+				"x": 1230,
 				"y": 1000
 			}
 		},{
-			"name": "goxy",
+			"name": "goa",
 			"data": {
-				"x": 1239,
-				"y": 830
+				"a": 1.5708
 			}
 		},{
 			"name": "setvit",
 			"data": {
-				"v": 300
+				"v": 150,
+				"r": 0.3
 			}
 		},{
 			"name": "goxy",
 			"data": {
-				"x": 1239,
-				"y": 540
+				"x": 1230,
+				"y": 490
 			}
 		},{
 			"name": "vendre",
@@ -49,9 +57,12 @@
 		},{
 			"name": "goxy",
 			"data": {
-				"x": 1239,
-				"y": 300
+				"x": 1230,
+				"y": 250
 			}
+		},{
+			"name": "acheter",
+			"data": {}
 		}
 	],
 	"script_green": [

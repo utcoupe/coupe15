@@ -121,8 +121,8 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 	case GET_TARGET_SPD: {
 		int left_spd, right_spd;
-		left_spd = control.linear_speed - control.angular_speed;
-		right_spd = control.linear_speed + control.angular_speed;
+		left_spd = control.speeds.linear_speed - control.speeds.angular_speed;
+		right_spd = control.speeds.linear_speed + control.speeds.angular_speed;
 		*ret_size = sprintf(ret, "%i;%i", left_spd, right_spd);
 		}
 		break;

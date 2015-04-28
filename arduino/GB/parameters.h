@@ -10,6 +10,7 @@
 #define SERIAL_TYPE SERIAL_8N1
 #define ARDUINO_ID "A"
 #define DEBUG_TARGET_SPEED 0
+#define DEBUG_MAINLOOP 0
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
@@ -29,14 +30,14 @@
  * 
  * OPTIONS : '1' - '2 - '4' */
 
-#define ENCODER_EVAL 1
+#define ENCODER_EVAL 2
 
 #define USE_SHARP 1
-#define EMERGENCY_STOP_DISTANCE 0.3 // m
+#define EMERGENCY_STOP_DISTANCE 0.32 // m
 
 #define HZ 100
 #define DT (1.0/HZ)
-#define AUTO_STATUS_HZ 30 // must be a divider a HZ or 0 to disable
+#define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 500 //mm/s
 #define ACC_MAX 1000  //mm/s2
@@ -51,12 +52,13 @@
 
 #define ERROR_ANGLE 0.015 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
+#define SPD_TO_STOP 10
 
 #define CONE_ALIGNEMENT 100 // NEVER
 
 #define PID_P 1.5
-#define PID_I 1
-#define PID_D 0
+#define PID_I 30
+#define PID_D 5
 #define PID_BIAS 0
 
 #define LEFT_P (PID_P)
@@ -69,10 +71,11 @@
 #define RIGHT_D (PID_D)
 #define RIGHT_BIAS (PID_BIAS)
 
-#define PID_I_RATIO (1/10.0)
+#define PID_I_RATIO (1/1000.0)
 #define PID_D_RATIO (1/1000.0)
 
-#define TIME_BETWEEN_ORDERS 0 // s
+#define TIME_BETWEEN_ORDERS 1 // s
+#define KEEP_LAST_GOAL 0
 
 //DEFINES ARDUINO
 #define SERIAL_MAIN Serial
