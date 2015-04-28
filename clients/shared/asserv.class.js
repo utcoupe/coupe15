@@ -62,8 +62,8 @@ module.exports = (function () {
 	// Arduino to JS
 	//////////////////
 	Asserv.prototype.parseCommand = function(data){
+		// logger.debug(data);
 		var datas = data.split(';');
-		// logger.debug(datas);
 		var cmd = datas.shift();//, id = datas.shift();
 		if(cmd == COMMANDS.AUTO_SEND && datas.length == 4) { // periodic position update
 			var lastFinishedId = parseInt(datas.shift()); // TODO
@@ -80,11 +80,13 @@ module.exports = (function () {
 				this.currentId = lastFinishedId;
 				this.callback();
 			}
-		} else if(cmd == this.order_sent && !this.wait_for_id) {
-			// logger.debug('finish', this.order_sent);
-			this.callback();
+		} else if(cmd == this.order_sent) {
+			this.order_sent = '';
+			// logger.debug('finish', datas.shift());
+			if(!this.wait_for_id)
+				this.callback();
 		} else {
-			// logger.debug(datas);
+			// logger.warn(datas);
 			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
 		// else {

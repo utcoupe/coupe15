@@ -107,6 +107,10 @@ module.exports = (function () {
 		setTimeout(callback, tf);
 	};
 
+	Asserv.prototype.setPid = function(callback, p, i, d){
+		callback();
+	};
+
 	// Asserv.prototype.gotoPath = function(callback, path){
 	// 	// this.clean();
 	// 	// if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now

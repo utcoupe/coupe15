@@ -7,6 +7,8 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.gr_a = 0;
 	$scope.gr_x = 0;
 	$scope.gr_y = 0;
+	$scope.gr_v = 500;
+	$scope.gr_r = 0.3;
 
 	$scope.grAcheter = function() {
 		Client.send("gr", "acheter", {});
@@ -34,30 +36,9 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		$scope.grGoxy();
 		$scope.grGoa();
 	};
-
-	$scope.grScript = function() {
-		$scope.grAcheter();
-		$scope.gr_pwm_gauche = 80;
-		$scope.gr_pwm_droite = 80;
-		$scope.gr_pwm_ms = 3550;
-		$scope.grPWM();
-		$scope.gr_pwm_gauche = -100;
-		$scope.gr_pwm_droite = 100;
-		$scope.gr_pwm_ms = 1600;
-		$scope.grPWM();
-		$scope.gr_pwm_gauche = 80;
-		$scope.gr_pwm_droite = 80;
-		$scope.gr_pwm_ms = 2500;
-		$scope.grPWM();
-		$scope.grVendre();
-		$scope.gr_pwm_gauche = 80;
-		$scope.gr_pwm_droite = 80;
-		$scope.gr_pwm_ms = 1500;
-		$scope.grPWM();
-		$scope.grAcheter();
+	$scope.grSetVit = function() {
+		Client.send("gr", "setvit", {v: parseInt($scope.gr_v), r: parseFloat($scope.gr_r) });
 	};
-
-
 
 
 	$(document).on("click", "#rc_pr_servo", function(e) {
