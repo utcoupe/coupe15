@@ -121,6 +121,7 @@ void ControlCompute(void) {
 	}
 #else
 	if (current_goal->is_reached) {
+		control.last_finished_id = current_goal->ID;
 		FifoNextGoal();
 		ControlPrepareNewGoal();
 	}
