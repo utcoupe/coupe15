@@ -13,11 +13,13 @@
 #define EMERGENCY_BIT (1<<1)
 
 typedef struct control {
+	struct speeds {
+		int pwm_left, pwm_right;
+		float angular_speed, linear_speed;
+	} speeds;
 	float max_acc, max_spd, rot_spd_ratio;
-	float angular_speed, linear_speed;
 	int reset, last_finished_id;
 	int order_started;
-	int pwm_left, pwm_right;
 	int stop_bits;
 } control_t;
 
