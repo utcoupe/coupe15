@@ -34,8 +34,8 @@ void autoSendStatus(void) {
 	index += sprintf(message+index, ";%i;%i;%i;%i",
 			(int)wheels_spd.left,
 			(int)wheels_spd.right,
-			(int)(control.linear_speed - control.angular_speed),
-			(int)(control.linear_speed + control.angular_speed));
+			(int)(control.speeds.linear_speed - control.speeds.angular_speed),
+			(int)(control.speeds.linear_speed + control.speeds.angular_speed));
 #endif
 	message[index] = '\n';
 	message[index+1] = '\0';
