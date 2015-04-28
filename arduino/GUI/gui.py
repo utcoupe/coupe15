@@ -70,9 +70,9 @@ class GUI:
 		self.pid_p = Entry(self.fen)
 		self.pid_p.insert(0, '1.5')
 		self.pid_i = Entry(self.fen)
-		self.pid_i.insert(0, '1')
+		self.pid_i.insert(0, '30')
 		self.pid_d = Entry(self.fen)
-		self.pid_d.insert(0, '0')
+		self.pid_d.insert(0, '15')
 
 		#self.pidl_text = Label(self.fen, text="PID left")
 		#self.pidl_p = Entry(self.fen)
