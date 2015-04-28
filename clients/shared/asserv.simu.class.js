@@ -1,22 +1,21 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.asserv');
-	// var COMMANDS = require('./defineParser.js')('../../arduino/asserv/protocol.h');
-	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
-	var __vitesse = 800; 	// Vitesse en mm/s *0.5 pour le simu
 
 	// For simu
 	var SIMU_FACTOR_VIT = 0.5;
 	var SIMU_FACTOR_A = 0.3; 	// Facteur
 	// var SIMU_PWM_REF = 255; 	// à une PWM de 80
-	function SIMU_DIST(pwm, dt) { return (__vitesse*SIMU_FACTOR_VIT)*dt; }
+	function SIMU_DIST(pwm, dt, vitesse) { return (vitesse*SIMU_FACTOR_VIT)*dt; }
 	function SIMU_DIST_ROT(a) { return Math.abs(a)*100; } // Rayon aproximatif de 10cm
-	function SIMU_ROT_TIME(a) { return SIMU_DIST_ROT(a)/(__vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
+	function SIMU_ROT_TIME(a, vitesse) { return SIMU_DIST_ROT(a)/(vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
 	var FPS = 30;
 
 	function Asserv(client, who) {
 		this.client = client;
-		this.pos = {};
-
+		this.pos = {
+			x:0,y:0,a:0
+		};
+		this.vitesse = 800
 		this.getPos();
 	}
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
@@ -24,11 +23,13 @@ module.exports = (function () {
 		// logger.debug(a, convertA(a));
 		this.pos.a = convertA(a);
 	}
-
-	Asserv.prototype.setPos = function(callback, pos) {
+	Asserv.prototype.Pos = function(pos) {
 		this.pos.x = pos.x;
 		this.pos.y = pos.y;
 		this.setA(pos.a);
+	}
+	Asserv.prototype.setPos = function(callback, pos) {
+		this.Pos(pos);
 		this.sendPos();
 		callback();
 	}
@@ -45,15 +46,15 @@ module.exports = (function () {
 	};
 
 	Asserv.prototype.setVitesse = function(callback, v) {
-		__vitesse = parseInt(v);
+		this.vitesse = parseInt(v);
 		callback();
 	};
 
 	Asserv.prototype.simu_pwm = function(pwm, x, y, a, dt) {
 		return function() {
 			this.pos = {
-				x: x + Math.cos(a) * SIMU_DIST(pwm, dt),
-				y: y + Math.sin(a) * SIMU_DIST(pwm, dt),
+				x: x + Math.cos(a) * SIMU_DIST(pwm, dt, this.vitesse),
+				y: y + Math.sin(a) * SIMU_DIST(pwm, dt, this.vitesse),
 				a: a
 			}
 			this.sendPos();
@@ -79,7 +80,7 @@ module.exports = (function () {
 		var dx = x-this.pos.x;
 		var dy = y-this.pos.y;
 		var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-		var tf = (dist / (__vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
+		var tf = (dist / (this.vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
 		this.goa(function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
@@ -97,7 +98,7 @@ module.exports = (function () {
 	Asserv.prototype.goa = function(callback, a){
 		da = convertA(a-this.pos.a);
 
-		var tf = SIMU_ROT_TIME(da)*1000; // *1000 s->ms
+		var tf = SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms
 		for(var t = 0; t < tf; t += 1000/FPS) {
 			// logger.debug(this.pos.a+da*t/tf);
 			setTimeout(this.simu_goa(this.pos.a+da*t/tf), t);
@@ -106,12 +107,12 @@ module.exports = (function () {
 		setTimeout(callback, tf);
 	};
 
-	Asserv.prototype.gotoPath = function(callback, path){
-		// this.clean();
-		// if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now
-		// path.forEach(function(item));
-		callback();
-	};
+	// Asserv.prototype.gotoPath = function(callback, path){
+	// 	// this.clean();
+	// 	// if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now
+	// 	// path.forEach(function(item));
+	// 	callback();
+	// };
 
 	return Asserv;
 })();

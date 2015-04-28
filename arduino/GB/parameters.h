@@ -72,7 +72,7 @@
 #define PID_I_RATIO (1/10.0)
 #define PID_D_RATIO (1/1000.0)
 
-#define TIME_BETWEEN_ORDERS 0 // s
+#define TIME_BETWEEN_ORDERS 1 // s
 
 //DEFINES ARDUINO
 #define SERIAL_MAIN Serial

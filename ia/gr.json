@@ -6,6 +6,13 @@
 	},
 	"script_yellow": [
 		{
+			"name": "setpid",
+			"data": {
+				"p": 1.5,
+				"i": 1,
+				"d": 0
+			}
+		},{
 			"name": "setpos",
 			"data": {
 				"x": 210,
@@ -18,7 +25,8 @@
 		},{
 			"name": "setvit",
 			"data": {
-				"v": 800
+				"v": 800,
+				"r": 0.3
 			}
 		},{
 			"name": "goxy",
@@ -35,7 +43,8 @@
 		},{
 			"name": "setvit",
 			"data": {
-				"v": 300
+				"v": 100,
+				"r": 0.3
 			}
 		},{
 			"name": "goxy",
