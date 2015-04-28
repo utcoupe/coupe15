@@ -5,7 +5,7 @@
 #include "robotstate.h"
 #include "control.h"
 
-void sendResponse(char order, char *buf, int size){
+int sendResponse(char order, char *buf, int size){
 	char message[MAX_COMMAND_LEN];
 	message[0] = order;
 	message[1] = ';';
@@ -13,6 +13,7 @@ void sendResponse(char order, char *buf, int size){
 	message[2+size] = '\n';
 	message[3+size] = '\0';
 	serial_print(message);
+	return 4+size;
 }
 
 void clean_current_command(char *buffer, int* end_of_cmd) {
@@ -41,12 +42,16 @@ void autoSendStatus(void) {
 	serial_print(message);
 }
 
-void ProtocolAutoSendStatus(void) {
+void ProtocolAutoSendStatus(int bytes_left) {
 #if AUTO_STATUS_HZ
 	static int i=0;
 	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
-		autoSendStatus();
-		i = 0;
+		if (bytes_left >= MAX_AUTOSEND_SIZE) {
+			autoSendStatus();
+			i = 0;
+		} else {
+			i--;
+		}
 	}
 #endif
 }
@@ -56,11 +61,18 @@ int ProtocolExecuteCmd(char data) {
 	static int index = 0;
 	if (data == '\r') data = '\n';
 	current_command[index++] = data;
+	if (index >= MAX_COMMAND_LEN) {
+		// epic fail, this MUST NEVER happen
+		// if ever this happens, the order will be corrupted
+		// decrease index so the arduino keep going on
+		// that means we overwrite the last received char
+		index = MAX_COMMAND_LEN-1;
+	}
 	if (data == '\n') {
 		// end of current command
 		char order = current_command[0];
 		char response[MAX_RESPONSE_LEN];
-		int id, end_of_id, response_size;
+		int id, end_of_id, response_size, sent_size;
 		current_command[index] = '\0';
 		end_of_id = ID_START_INDEX; // start after first ';'
 		while (current_command[end_of_id] != ';') {
@@ -74,25 +86,18 @@ int ProtocolExecuteCmd(char data) {
 					message[1] = ';';
 					msg_index = 2;
 				}
-				sprintf(message+msg_index, "%s\n", FAILED_MSG);
+				sent_size = sprintf(message+msg_index, "%s\n", FAILED_MSG);
 				serial_print(message);
-				return -1;
+				return sent_size;
 			}
 		}
 		current_command[end_of_id] = '\0';
 		sscanf(&current_command[ID_START_INDEX], "%i", &id);
 
 		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
-		sendResponse(order, response, response_size);
+		sent_size = sendResponse(order, response, response_size);
 		clean_current_command(current_command, &index);
-	}
-	if (index >= MAX_COMMAND_LEN) {
-		// epic fail, this MUST NEVER happen
-		// if ever this happens, the order will be corrupted
-		// decrease index so the arduino keep going on
-		// that means we overwrite the last received char
-		index = MAX_COMMAND_LEN-1;
-		return 1;
+		return sent_size;
 	}
 	return 0;
 }
