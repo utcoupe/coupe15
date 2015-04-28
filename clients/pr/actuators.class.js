@@ -48,26 +48,24 @@ module.exports = (function () {
 		data.status = "everythingIsAwesome";
 
 
-		if(asserv){
+		if(elevator)
+			data.children.push("Arduino steppers");
+		else
+			data.status = "ok";
+
+		if(servos)
+			data.children.push("Arduino servos");
+		else
+			data.status = "ok";
+
+		if(ax12)
+			data.children.push("USB2AX");
+		else
+			data.status = "ok";
+
+		if(asserv)
 			data.children.push("Arduino asserv");
-
-
-			if(elevator)
-				data.children.push("Arduino steppers");
-			else
-				data.status = "ok";
-
-			if(servos)
-				data.children.push("Arduino servos");
-			else
-				data.status = "ok";
-
-			if(ax12)
-				data.children.push("USB2AX");
-			else
-				data.status = "ok";
-
-		} else
+		else
 			data.status = "error";
 
 		return data;

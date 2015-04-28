@@ -110,6 +110,12 @@ div.everythingIsAwesome{
 	background-position: 5% 50%;
 }
 
+.devicearduino {
+	background: url('./img/arduino.png') no-repeat;
+	background-size: 25%;
+	background-position: 5% 50%;
+}
+
 h3 {
 	margin-bottom: 0px;
 	margin-top: 0px;

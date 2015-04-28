@@ -94,8 +94,12 @@ void ControlCompute(void) {
 			break;
 	}
 
-	if (control.stop_bits)
+	if (control.stop_bits) {
 		stopRobot();
+		applyPID();
+		applyPwm();
+		return;
+	}
 
 #if TIME_BETWEEN_ORDERS
 	if (current_goal->is_reached) {
@@ -121,7 +125,9 @@ void ControlCompute(void) {
 	}
 #endif
 
-	applyPID();
+	if (current_goal->type != TYPE_PWM) {
+		applyPID();
+	}
 	applyPwm();
 }
 

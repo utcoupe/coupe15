@@ -101,16 +101,6 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	});
 
 
-
-
-	/*$scope.rc_pr_pos_value = 0.5;
-	$scope.rc_pr_AX12_pos = 500;
-	$scope.rc_pr_servo1_min = 63;
-	$scope.rc_pr_servo1_max = 90;
-	$scope.rc_pr_servo2_min = 63;
-	$scope.rc_pr_servo2_max = 90;
-	$scope.rc_pr_steppers_move = 0;
-
 	$(document).on("click", "#rc_hok_start", function(e) {
 		Client.send("hokuyo", "start", {
 			"color": $("#rc_hok_color").val(),
@@ -122,6 +112,16 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		Client.send("hokuyo", "stop", {});
 		console.log("Message `stop` sent");
 	});
+
+
+	/*$scope.rc_pr_pos_value = 0.5;
+	$scope.rc_pr_AX12_pos = 500;
+	$scope.rc_pr_servo1_min = 63;
+	$scope.rc_pr_servo1_max = 90;
+	$scope.rc_pr_servo2_min = 63;
+	$scope.rc_pr_servo2_max = 90;
+	$scope.rc_pr_steppers_move = 0;
+
 
 
 	$scope.updatePosValue = function (value){
