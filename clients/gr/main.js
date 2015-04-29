@@ -24,6 +24,8 @@
 	var queue = [];
 	var orderInProgress = null;
 
+	start();
+
 	// On message
 	client.order(function (from, name, params){
 		// logger.info("Recieved an order "+name);
