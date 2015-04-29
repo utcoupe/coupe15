@@ -1,106 +1,47 @@
 module.exports = (function () {
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('pr.servos');
-	var five = require("johnny-five");
-	var board = null;
+	var logger = require('log4js').getLogger('Others');
 
-	function Servos(sp) {
-		// sp is Serial Port NAME
-		this.ready = false;
-		this.servos = {};
+	function Others(sp, client) {
+		this.sp = sp;
+		this.client = client;
 
-		this.connect(sp);
-	}
-
-
-	// ====== General actions ======
-
-	POS_LEFT_STAB_OPENED = 40;
-	POS_LEFT_STAB_CHOUILLA = 10;
-	POS_LEFT_STAB_CLOSED = 2;
-	POS_RIGHT_STAB_OPENED = 100;
-	POS_RIGHT_STAB_CHOUILLA = 133;
-	POS_RIGHT_STAB_CLOSED = 140;
-	POS_LEFT_ARM_OPENED = 30;
-	POS_LEFT_ARM_CHOUILLA = 80;
-	POS_LEFT_ARM_CLOSED = 88;
-	POS_RIGHT_ARM_OPENED = 73;
-	POS_RIGHT_ARM_CHOUILLA = 31;
-	POS_RIGHT_ARM_CLOSED = 23;
-
-
-	Servos.prototype.connect = function(sp) {
-		board = new five.Board({
-			port: sp,
-			repl: false
+		this.sp.on("data", function(data){
+			this.parseCommand(data.toString());
+		}.bind(this));
+		this.sp.on("error", function(data){
+			logger.debug("error", data.toString());
 		});
 
-		board.on("ready", function() {
-			logger.info("Servos board connected !");
-			this.ready = true;
+		setTimeout(function() {
+			this.getPos();
+		}.bind(this), 2000);
+	}
 
-			console.log(this);
-			this.servos.left_arm = new five.Servo(2);
-			this.servos.right_arm = new five.Servo(3);
+	Others.prototype.parseCommand = function(data) {
+		if(this.order_sent == data) {
+			this.order_sent = '';
+			setTimeout(function() {
+				this.callback();
+			}.bind(this), this.callback_delay);
+		} else {
+			logger.warn("Arduino others unknown: "+data);
+		}
+	}
 
-			this.servos.left_stab = new five.Servo(11);
-			this.servos.right_stab = new five.Servo(12);
+	Others.prototype.sendCommand = function(callback, cmd, args, callback_delay){
+		if(typeof callback !== "function")
+			callback = function(){};
+		this.callback = callback;
+		this.callback_delay = callback_delay;
+		this.order_sent = cmd;
 
-			this.servos.left_arm.to(90);
-			this.servos.right_arm.to(90);
-			this.servos.left_stab.to(POS_LEFT_STAB_OPENED);
-			this.servos.right_stab.to(POS_RIGHT_STAB_OPENED);
-		}.bind(this));
+		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
+		this.sp.write([cmd].concat(args).join(";")+"\n");
+	}
+
+	Others.prototype.ouvrirHaut = function(callback) {
+		this.sendCommand(callback, 'H', [100, 100], 300);
 	};
 
-	Servos.prototype.disconnect = function() {
-		this.ready = false;
-	};
-
-
-	// ====== General actions ======
-
-	Servos.prototype.ouvrirStabilisateur = function(callback) {
-		this.servos.left_stab.to(POS_LEFT_STAB_OPENED);
-		this.servos.right_stab.to(POS_RIGHT_STAB_OPENED);
-		callback.call();
-	};
-
-	Servos.prototype.ouvrirChouillaStabilisateur = function(callback) {
-		this.servos.left_stab.to(POS_LEFT_STAB_CHOUILLA);
-		this.servos.right_stab.to(POS_RIGHT_STAB_CHOUILLA);
-		callback.call();
-	};
-
-	Servos.prototype.fermerStabilisateur = function(callback) {
-		this.servos.left_stab.to(POS_LEFT_STAB_CLOSED);
-		this.servos.right_stab.to(POS_RIGHT_STAB_CLOSED);
-		callback.call();
-	};
-
-	Servos.prototype.ouvrirBras = function(callback) {
-		this.servos.left_arm.to(POS_LEFT_ARM_OPENED);
-		this.servos.right_arm.to(POS_RIGHT_ARM_OPENED);
-		callback.call();
-	};
-
-	Servos.prototype.ouvrirChouillaBras = function(callback) {
-		this.servos.left_arm.to(POS_LEFT_ARM_CHOUILLA);
-		this.servos.right_arm.to(POS_RIGHT_ARM_CHOUILLA);
-		callback.call();
-	};
-
-	Servos.prototype.fermerBras = function(callback) {
-		this.servos.left_arm.to(POS_LEFT_ARM_CLOSED);
-		this.servos.right_arm.to(POS_RIGHT_ARM_CLOSED);
-		callback.call();
-	};
-
-	Servos.prototype.servo_goto = function(servo, pos, callback) {
-		logger.info(servo + " going to "+pos);
-		this.servos[servo].to(pos);
-		callback.call();
-	};
-
-	return Servos;
+	return Others;
 })();
