@@ -19,6 +19,7 @@ void annalyse_chaine();
 void setup() 
 {  
   Serial.begin(57600);
+  Serial.print('O');
   stepper.setSpeed(60); 
   
   // /!\  Pour éviter les conflits, il ne faut pas utiliser les PIN deja prisent par la shield !!!
