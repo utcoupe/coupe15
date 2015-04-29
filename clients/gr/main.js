@@ -4,8 +4,7 @@
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('gr');
 
-	logger.info("Started NodeJS client with pid " + process.pid);
-
+	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = "127.0.0.1:3128"; // server adress
@@ -33,13 +32,14 @@
 			return;
 		}
 
+		// TODO
 		// if end of match, empty the queue and stop the current action
-		if(name == "stop"){
-			queue = [];
-			// TODO : stopper les actions dans toutes les classes !
-			this.emit('stopAll');
-			return;
-		}
+		// if(name == "stop"){
+		// 	queue = [];
+		// 	// TODO : stopper les actions dans toutes les classes !
+		// 	this.emit('stopAll');
+		// 	return;
+		// }
 
 		addOrder2Queue(from, name, params);
 	});
@@ -75,7 +75,7 @@
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		if(queue.length < 10) {
+		if(queue.length < 50) {
 			// Adds the order to the queue
 			queue.push({
 				from: f,
@@ -94,7 +94,7 @@
 			var order = queue.shift();
 			orderInProgress = order.name;
 			
-			logger.info("Going to do '" + orderInProgress + "'...");
+			logger.info("Going to do '" + orderInProgress + "' "+order.params.toString());
 			acts.orderHandler(order.from, order.name, order.params, actionFinished);
 			
 			executeNextOrder();

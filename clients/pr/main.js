@@ -2,13 +2,12 @@
 	"use strict";
 
 	// Requires
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('pr');
+	var logger = require('log4js').getLogger('pr');
 
-	logger.info("Started NodeJS client with pid " + process.pid);
+	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = ""; // server adress
+	var server = "127.0.0.1:3128"; // server adress
 	var client = new SocketClient({
 		server_ip: server,
 		type: "pr"
@@ -19,7 +18,7 @@
 	};
 	sendChildren(lastStatus);
 
-	var acts = new (require('./actuators.class.js'))();
+	var acts = new (require('./actuators.class.js'))(client);
 	var detect = new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];
@@ -33,24 +32,25 @@
 			return;
 		}
 
-		// if end of match, empty the queue and stop the current action
-		if(name == "stop"){
-			queue = [];
-			// TODO : stopper les actions dans toutes les classes !
-			this.emit('stopAll');
-			return;
-		}
+		// TODO
+		// // if end of match, empty the queue and stop the current action
+		// if(name == "stop"){
+		// 	queue = [];
+		// 	// TODO : stopper les actions dans toutes les classes !
+		// 	this.emit('stopAll');
+		// 	return;
+		// }
 
 		addOrder2Queue(from, name, params);
 	});
 
 	function devicesDetected(struct){
 		// Verify content
-		if (!struct.stepper)
-			logger.warn("Missing stepper Mega");
+		if (!struct.others)
+			logger.warn("Missing others Mega");
 
-		if (!struct.servos)
-			logger.warn("Missing servos Nano");
+		// if (!struct.servos)
+		// 	logger.warn("Missing servos Nano");
 
 		if (!struct.asserv)
 			logger.warn("Missing asserv Nano");
@@ -83,7 +83,10 @@
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		if(queue.length<5){
+		if(n == 'clean') {
+			logger.info("Going to do '" + n);
+			acts.orderHandler(f, n, p, actionFinished);
+		} else if(queue.length < 50){
 			// Adds the order to the queue
 			queue.push({
 				from: f,
@@ -103,7 +106,8 @@
 			var order = queue.shift();
 			orderInProgress = order.name;
 			
-			logger.info("Going to do '" + orderInProgress + "'...");
+			logger.info("Going to do '" + orderInProgress);
+			logger.debug(order.params);
 			acts.orderHandler(order.from, order.name, order.params, actionFinished);
 			
 			executeNextOrder();

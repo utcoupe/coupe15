@@ -11,8 +11,7 @@
 	D <input type="number" ng-model="gr_pwm_droite" />
 	<input type="number" ng-model="gr_pwm_ms" /> ms
 	<button type="button" class="btn" ng-click="grPWM()">PWM</button><br><br>
-	<button type="button" class="btn" ng-click="grScript()">Script</button> <br><br>
-	<input type="number" ng-model="gr_x" /> mm <input type="number" ng-model="gr_y" /> mm
+	x : <input type="number" ng-model="gr_x" /> mm ; y : <input type="number" ng-model="gr_y" /> mm
 	<button type="button" class="btn" ng-click="grGoxy()">Go to xy</button><br><br>
 	<input type="number" ng-model="gr_a" /> deg
 	<button type="button" class="btn" ng-click="grGoa()">Go to angle</button><br><br>
@@ -20,6 +19,29 @@
 	<input type="number" ng-model="gr_v" /> mm/s
 	<input type="number" ng-model="gr_r" /> 
 	<button type="button" class="btn" ng-click="grSetVit()">Set vitesse</button><br><br>
+	<!-- <button type="button" class="btn" ng-click="grClean()">Clean</button><br><br> -->
+	<!-- TODO set pos -->
+
+	<h2>PR</h2>
+	G <input type="number" ng-model="pr_pwm_gauche" />
+	D <input type="number" ng-model="pr_pwm_droite" />
+	<input type="number" ng-model="pr_pwm_ms" /> ms
+	<button type="button" class="btn" ng-click="prPWM()">PWM</button><br><br>
+	x : <input type="number" ng-model="pr_x" /> mm <br> y : <input type="number" ng-model="pr_y" /> mm
+	<button type="button" class="btn" ng-click="prGoxy()">Go to xy</button><br><br>
+	<input type="number" ng-model="pr_a" /> deg
+	<button type="button" class="btn" ng-click="prGoa()">Go to angle</button><br><br>
+	<button type="button" class="btn" ng-click="prGoxya()">Go to xy angle</button><br><br>
+	<input type="number" ng-model="pr_v" /> mm/s
+	<input type="number" ng-model="pr_r" /> 
+	<button type="button" class="btn" ng-click="prSetVit()">Set vitesse</button><br><br>
+	<input type="number" ng-model="pr_acc" /> 
+	<button type="button" class="btn" ng-click="prSetAcc()">Set acc</button><br><br>
+	<button type="button" class="btn" ng-click="prClean()">Clean</button><br><br>
+	x : <input type="number" ng-model="pr_set_x" /> mm <br> y : <input type="number" ng-model="pr_set_y" /> mm <br> a : <input type="number" ng-model="pr_set_a" /> deg
+	<button type="button" class="btn" ng-click="prSetPos()">Set Pos</button><br><br>
+	P : <input type="number" ng-model="pr_PID_P" /> <br> I : <input type="number" ng-model="pr_PID_I" /> <br> D : <input type="number" ng-model="pr_PID_D" />
+	<button type="button" class="btn" ng-click="prSetPID()">Set PID</button><br><br>
 
 
 	<h2>PR</h2>

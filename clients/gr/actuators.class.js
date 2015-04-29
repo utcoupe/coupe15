@@ -1,6 +1,5 @@
 module.exports = (function () {
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('gr.acts');
+	var logger = require('log4js').getLogger('gr.acts');
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
 
@@ -8,8 +7,8 @@ module.exports = (function () {
 	var asserv = null;
 
 	function Acts(client) {
-		this.start();
 		this.client = client;
+		this.start();
 	}
 
 	Acts.prototype.start = function(){
@@ -30,8 +29,8 @@ module.exports = (function () {
 			asserv = new (require('../shared/asserv.class.js'))(
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
-					parser:serialPort.parsers.readline('\n')
-				}), this.client
+					parser:serialPort.parsers.readline('\n'),
+				}), this.client, 'gr'
 			);
 		}
 	};
@@ -84,6 +83,9 @@ module.exports = (function () {
 			case "setvit":
 				asserv.setVitesse(callback, params.v, params.r);
 			break;
+			case "clean":
+				asserv.clean(callback);
+			break;
 			case "goa":
 				asserv.goa(callback, params.a);
 			break;
@@ -102,40 +104,5 @@ module.exports = (function () {
 		}
 	};
 
-	// Pas à pas
-		function stepper_do(move, direction){
-			// direction is given for the left motor as it sees it
-			if (ia.arduinos.zero.ready) {
-				if (direction == "clockwise"){
-					logger.info("Moving "+move+" clockwise");
-					board.stepper[0].rpm(120).cw().step(move, function(){}); // left
-					// board.stepper[1].rpm(60).cw().step(600, function(){}); // right
-				} else {
-					logger.info("Moving "+move+" counterclockwise");
-					// board.stepper[0].rpm(120).cw(); // change rien
-					// board.stepper[1].rpm(120).cw();
-					board.stepper[0].rpm(120).ccw().step(move, function(){}); // left
-					// board.stepper[1].rpm(600).ccw().step(600, function(){}); // right
-				}
-			}
-		}
-
-		function stepper_setBottom(){
-			board.stepper[0].is = "down";
-		}
-
-		function stepper_toogle(){
-			if (ia.arduinos.zero.ready) {
-				if (board.stepper[0].is == "up"){
-					stepper_do(250, "clockwise");
-					board.stepper[0].is = "down";
-				} else {
-					if (board.stepper[0].is == "down") {
-						stepper_do(250, "counterclockwise");
-						board.stepper[0].is = "up";
-					}
-				}
-			}
-		}
 	return Acts;
 })();

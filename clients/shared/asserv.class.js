@@ -1,5 +1,5 @@
 module.exports = (function () {
-	var logger = require('log4js').getLogger('gr.asserv');
+	var logger = require('log4js').getLogger('asserv');
 	var COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
 	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
 
@@ -16,6 +16,7 @@ module.exports = (function () {
 		this.sp = sp;
 		this.client = client;
 		this.pos = {};
+		this.who = who;
 		this.currentId = 0;
 
 		this.sp.on("data", function(data){
@@ -48,10 +49,10 @@ module.exports = (function () {
 		]);
 	}
 	Asserv.prototype.getPos = function(pos) {
-		this.client.send('ia', 'gr.getpos');
+		this.client.send('ia', this.who+'.getpos');
 	}
 	Asserv.prototype.sendPos = function() {
-		this.client.send('ia', 'gr.pos', this.pos);
+		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
 	// For float
@@ -62,16 +63,18 @@ module.exports = (function () {
 	// Arduino to JS
 	//////////////////
 	Asserv.prototype.parseCommand = function(data){
-		// logger.debug(data);
+		logger.debug(data);
 		var datas = data.split(';');
 		var cmd = datas.shift();//, id = datas.shift();
-		if(cmd == COMMANDS.AUTO_SEND && datas.length == 4) { // periodic position update
+		if(cmd == COMMANDS.AUTO_SEND && datas.length >= 4) { // periodic position update
 			var lastFinishedId = parseInt(datas.shift()); // TODO
 			this.Pos({
 				x: parseInt(datas.shift()),
 				y: 2000-parseInt(datas.shift()),
 				a: myParseFloat(datas.shift())
 			});
+
+			
 			this.sendPos();
 
 			// logger.debug(lastFinishedId);
@@ -138,10 +141,17 @@ module.exports = (function () {
 	// }
 
 	Asserv.prototype.setVitesse = function(callback, v, r) {
-		logger.debug(myWriteFloat(r));
+		// logger.debug(myWriteFloat(r));
 		this.sendCommand(callback, COMMANDS.SPDMAX, [
 			parseInt(v),
 			myWriteFloat(r)
+		]);
+	};
+
+	Asserv.prototype.setAcc = function(callback, acc) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(callback, COMMANDS.ACCMAX, [
+			parseInt(acc)
 		]);
 	};
 

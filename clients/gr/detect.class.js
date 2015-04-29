@@ -23,7 +23,6 @@ module.exports = (function () {
 	Detect.prototype.searchArduinos = function() {
 		// On check tous les ports disponibles
 		serialPort.list(function (err, ports) {
-			// var nb_found = 0;
 			for(var i in ports) {
 				if(ports[i].comName.indexOf('ttyUSB') >= 0) {
 					this.devicesFound.servos = ports[i].comName;

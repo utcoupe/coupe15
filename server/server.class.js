@@ -121,7 +121,7 @@ module.exports = (function () {
 
 	Server.prototype.sendNetwork = function(){
 		// logger.info("Message sent to webclient !");
-		logger.info(this.network);
+		// logger.info(this.network);
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',
 			name: 'reseau',
