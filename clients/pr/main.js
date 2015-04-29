@@ -20,29 +20,50 @@
 	sendChildren(lastStatus);
 
 	var acts = new (require('./actuators.class.js'))();
-	var detect = new (require('./detect.class.js'))(devicesDetected);
+	var detect = null;
 
 	var queue = [];
 	var orderInProgress = false;
 
 	// On message
 	client.order(function (from, name, params){
-		// if flush the queue
-		if(name == "queue_flush"){
-			queue = [];
-			return;
+		// logger.info("Recieved an order "+name);
+		switch (name){
+			case "queue_flush":
+				queue = [];
+				break;
+			case "start":
+				queue = [];
+				start();
+				break;
+			case "stop":
+				queue = [];
+				// quitC("stop");
+				stop();
+				break;
+			default:
+				addOrder2Queue(from, name, params);
 		}
-
-		// if end of match, empty the queue and stop the current action
-		if(name == "stop"){
-			queue = [];
-			// TODO : stopper les actions dans toutes les classes !
-			this.emit('stopAll');
-			return;
-		}
-
-		addOrder2Queue(from, name, params);
 	});
+
+	function start(){
+		logger.info("Starting  :)");
+		sendChildren({
+			status: "starting", 
+			children:[]
+		});
+		detect = new (require('./detect.class.js'))(devicesDetected);
+	}
+
+	function stop(){
+		acts.quit();
+
+		// Send struct to server
+		sendChildren({
+			status: "waiting", 
+			children:[]
+		});
+	}
 
 	function devicesDetected(struct){
 		// Verify content

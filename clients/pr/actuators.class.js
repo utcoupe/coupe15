@@ -48,22 +48,22 @@ module.exports = (function () {
 		data.status = "everythingIsAwesome";
 
 
-		if(elevator)
+		if(elevator && elevator.ready)
 			data.children.push("Arduino steppers");
 		else
 			data.status = "ok";
 
-		if(servos)
+		if(servos && servos.ready)
 			data.children.push("Arduino servos");
 		else
 			data.status = "ok";
 
-		if(ax12)
+		if(ax12 && asserv.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv)
+		if(asserv && ax12.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -72,16 +72,16 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.quit = function(){
-		if (elevator)
+		if (elevator && elevator.ready)
 			elevator.disconnect();
 
-		if (servos)
+		if (servos && servos.ready)
 			servos.disconnect();
 
-		if (asserv)
+		if (asserv && asserv.ready)
 			asserv.disconnect();
 
-		if (ax12)
+		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
 
