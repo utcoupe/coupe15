@@ -10,6 +10,7 @@
 #define SERIAL_TYPE SERIAL_8N1
 #define ARDUINO_ID "A"
 #define DEBUG_TARGET_SPEED 0
+#define DEBUG_MAINLOOP 0
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
@@ -36,7 +37,7 @@
 
 #define HZ 100
 #define DT (1.0/HZ)
-#define AUTO_STATUS_HZ 30 // must be a divider a HZ or 0 to disable
+#define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 500 //mm/s
 #define ACC_MAX 1000  //mm/s2

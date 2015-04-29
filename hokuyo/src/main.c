@@ -54,7 +54,7 @@ int main(int argc, char **argv){
 	// Open log file
 	logfile = fopen("/tmp/hokuyo.log", "a+");
 	if (logfile == NULL) {
-		fprintf(stderr, "Can't open log file\n");
+		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
 		exit(EXIT_FAILURE);
 	}
 	fprintf(logfile, "\n\n===== Starting Hokuyo =====\n");
@@ -139,7 +139,7 @@ void frame(int nb_robots_to_find){
 			hok1.zone = hok2.zone;
 			hok2.zone = temp;
 		}
-	} else { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
+	} else if (hok1.isWorking || hok2.isWorking) { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
 		pushInfo('1');
 		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
 	}

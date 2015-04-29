@@ -1,6 +1,8 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include "parameters.h"
+
 // 	COMMANDS :
 // 'ordre;id;arg1;arg2;argn'
 //  For example :
@@ -54,14 +56,21 @@
 #define MAX_ID_LEN 5
 #define ID_START_INDEX 2
 #define MAX_RESPONSE_LEN 50
-#define MAX_COM_TIME 0.001 
+
+#define MAX_BYTES_PER_IT (0.9*BAUDRATE/(HZ*10))
+
+#ifdef DEBUG_TARGET_SPEED
+#define MAX_AUTOSEND_SIZE (48)
+#else
+#define MAX_AUTOSEND_SIZE (24)
+#endif
 
 #ifdef __cplusplus
 extern "C" int ProtocolExecuteCmd(char data);
-extern "C" void ProtocolAutoSendStatus(void);
+extern "C" void ProtocolAutoSendStatus(int bytes_left);
 #else
-void ProtocolAutoSendStatus(void);
 int ProtocolExecuteCmd(char data);
+void ProtocolAutoSendStatus(int bytes_left);
 #endif
 
 #endif

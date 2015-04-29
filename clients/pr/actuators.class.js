@@ -59,12 +59,12 @@ module.exports = (function () {
 		else
 			data.status = "ok";
 
-		if(ax12)
+		if(ax12 && asserv.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv)
+		if(asserv && ax12.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -76,10 +76,10 @@ module.exports = (function () {
 		if (others)
 			others.disconnect();
 
-		if (asserv)
+		if (asserv && asserv.ready)
 			asserv.disconnect();
 
-		if (ax12)
+		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
 

@@ -43,12 +43,12 @@ module.exports = (function () {
 
 		data.status = "everythingIsAwesome";
 
-		if(servos && !servos.client){
+		if(servos && !servos.client && servos.ready){
 			data.children.push("Arduino servos");
 		}else
 			data.status = "ok";
 
-		if(asserv && !asserv.client){
+		if(asserv && !asserv.client && asserv.ready){
 			data.children.push("Arduino asserv");
 		}else
 			data.status = "error";
@@ -57,9 +57,9 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.quit = function(){
-		if (!!servos)
+		if (!!servos && servos.ready)
 			servos.disconnect();
-		if (!!asserv)
+		if (!!asserv && asserv.ready)
 			asserv.disconnect();
 	};
 
