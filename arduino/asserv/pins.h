@@ -3,19 +3,19 @@
 
 // nano
 #ifdef __AVR_ATmega328P__
-#define MOTOR1_EN 4
-#define MOTOR2_EN 5
+#define MOTOR1_EN 7
+#define MOTOR2_EN 12
 
 #define MOTOR1_SPD 9
 #define MOTOR2_SPD 10
 
-#define MOTOR1_RDY 6
-#define MOTOR2_RDY 7
+#define MOTOR1_BRK 8
+#define MOTOR2_BRK 11
 
 #define PIN_ENC_LEFT_A 2
-#define PIN_ENC_LEFT_B 11
+#define PIN_ENC_LEFT_B 5
 #define PIN_ENC_RIGHT_A 3
-#define PIN_ENC_RIGHT_B 12
+#define PIN_ENC_RIGHT_B 4
 
 #define INTERRUPT_ENC_LEFT_A 0
 #define INTERRUPT_ENC_RIGHT_A 1

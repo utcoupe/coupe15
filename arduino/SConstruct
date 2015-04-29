@@ -53,6 +53,7 @@ def getUsbTty(rx):
 
 AVR_BIN_PREFIX = None
 AVRDUDE_CONF = None
+ARDUINO_BOARD_DEFAULT = os.environ.get('ARDUINO_BOARD', 'mega2560')
 
 if platform == 'darwin':
     # For MacOS X, pick up the AVR tools from within Arduino.app
@@ -68,10 +69,10 @@ else:
     # For Ubuntu Linux (9.10 or higher)
     ARDUINO_HOME_DEFAULT = os.path.join("..","arduino-1.0/") #'/home/YOU/apps/arduino-00XX/'
     ARDUINO_PORT_DEFAULT = getUsbTty('/dev/ttyACM*')
+    if ARDUINO_BOARD_DEFAULT == 'nano328':
+        ARDUINO_PORT_DEFAULT = getUsbTty('/dev/ttyUSB*')
     AVR_BIN_PREFIX = 'avr-'
     SKETCHBOOK_HOME_DEFAULT = os.path.realpath('~/share/arduino/sketchbook/')
-
-ARDUINO_BOARD_DEFAULT = os.environ.get('ARDUINO_BOARD', 'mega2560')
 
 ARDUINO_HOME    = ARGUMENTS.get('ARDUINO_HOME', ARDUINO_HOME_DEFAULT)
 ARDUINO_PORT    = ARGUMENTS.get('ARDUINO_PORT', ARDUINO_PORT_DEFAULT)
