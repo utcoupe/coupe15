@@ -37,6 +37,8 @@
 # $ scons EXTRA_LIB=<my-extra-library-dir>
 #
 from glob import glob
+import serial
+import time
 import sys
 import re
 import subprocess
@@ -151,6 +153,9 @@ assert(os.path.exists(TARGET+FILE_EXTENSION))
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',
     '-funsigned-char', '-funsigned-bitfields', '-fpack-struct', '-fshort-enums',
     '-O3', '-mmcu=%s'%MCU]
+if ARDUINO_BOARD == "leonardo":
+        cFlags += ["-DUSB_VID=0x2341"]
+        cFlags += ["-DUSB_PID=0x8036"]
 envArduino = Environment(CC = AVR_BIN_PREFIX+'gcc', CXX = AVR_BIN_PREFIX+'g++', AS=AVR_BIN_PREFIX+'gcc',
     CPPPATH = ['build/core'], CPPDEFINES = {'F_CPU':F_CPU, 'ARDUINO':ARDUINO_VER},
     CFLAGS = cFlags+['-Wall'], CCFLAGS = cFlags, ASFLAGS=['-assembler-with-cpp','-mmcu=%s'%MCU],
@@ -333,13 +338,15 @@ envArduino.Command(None, TARGET+'.hex', AVR_BIN_PREFIX+'size --target=ihex $SOUR
 
 # Reset
 def pulseDTR(target, source, env):
-    import serial
-    import time
-    ser = serial.Serial(ARDUINO_PORT)
-    ser.setDTR(1)
-    time.sleep(0.5)
-    ser.setDTR(0)
-    ser.close()
+    if ARDUINO_BOARD != 'leonardo':
+        import serial
+        import time
+        print(ARDUINO_PORT)
+        ser = serial.Serial(ARDUINO_PORT)
+        ser.setDTR(1)
+        time.sleep(0.5)
+        ser.setDTR(0)
+        ser.close()
 
 if RST_TRIGGER:
     reset_cmd = '%s %s'%(RST_TRIGGER, ARDUINO_PORT)
@@ -354,7 +361,7 @@ if UPLOAD_PROTOCOL == 'stk500':
     UPLOAD_PROTOCOL = 'stk500v1'
 
 
-avrdudeOpts = ['-V', '-D', '-F', '-c %s'%UPLOAD_PROTOCOL, '-b %s'%UPLOAD_SPEED,
+avrdudeOpts = ['-V', '-vv', '-D', '-F', '-c %s'%UPLOAD_PROTOCOL, '-b %s'%UPLOAD_SPEED,
     '-p %s'%MCU, '-P %s'%ARDUINO_PORT, '-U flash:w:$SOURCES']
 if AVRDUDE_CONF:
     avrdudeOpts += ['-C %s'%AVRDUDE_CONF]
@@ -363,6 +370,7 @@ fuse_cmd = '%s %s'%(pathJoin(os.path.dirname(AVR_BIN_PREFIX), 'avrdude'),
                      ' '.join(avrdudeOpts))
 
 upload = envArduino.Alias('upload', TARGET+'.hex', [reset_cmd, fuse_cmd]);
+
 AlwaysBuild(upload)
 
 # Clean build directory
