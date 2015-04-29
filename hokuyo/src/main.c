@@ -54,7 +54,7 @@ int main(int argc, char **argv){
 	// Open log file
 	logfile = fopen("/tmp/hokuyo.log", "a+");
 	if (logfile == NULL) {
-		fprintf(stderr, "Can't open log file\n");
+		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
 		exit(EXIT_FAILURE);
 	}
 	fprintf(logfile, "\n\n===== Starting Hokuyo =====\n");

@@ -13,7 +13,7 @@ module.exports = (function () {
 			logger.error('Please give the number of ennemis robots');
 		}
 		if(!we_have_hats) {
-			logger.error('Please say true if we have something on our robots detactable by the Hokuyos');
+			logger.error('Please say true if we have something on our robots detectable by the Hokuyos');
 		}
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
@@ -30,6 +30,8 @@ module.exports = (function () {
 			we_have_hats: this.we_have_hats
 		});
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
+
+		this.client.send("server", "server.iaColor", {color: this.color});
 
 		this.client.order(function(from, name, params) {
 			var classe = name.split('.')[0];

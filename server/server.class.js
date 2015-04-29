@@ -106,6 +106,9 @@ module.exports = (function () {
 					this.network[client.type][client.id].children = data.params.children || "";
 					// console.log(this.network);
 					this.sendNetwork();
+				} else if (data.name == 'server.iaColor') {
+					this.network[client.type][client.id].color = data.params.color || "";
+					this.sendNetwork();
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);

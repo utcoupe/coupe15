@@ -88,7 +88,7 @@
 		//do something when app is closing
 		process.on('exit', quitC);
 		// catches ctrl+c event
-		process.on('SIGINT', quitC);
+		// process.on('SIGINT', quitC);
 		//catches uncaught exceptions
 		//process.on('uncaughtException', uException);
 

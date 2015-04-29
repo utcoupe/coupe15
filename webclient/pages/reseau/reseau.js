@@ -151,7 +151,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		        // IA(s)
 					for(i in status.ia) {
 					    client = status.ia[i];
-					    addDiv("brain", i, "ia", "", "IA", ""); // /!\ color !!!
+					    addDiv("brain", i, "ia", (client.color || ""), "IA", "");
 
 					}
 
