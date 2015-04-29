@@ -8,6 +8,35 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 	this.network = {};
 	var links = [];
 
+	/* ------------- Page reactions ------------- */
+
+	$(document).on("click", ".hokuyo", function(e) {
+		if(e.target.innerHTML == "Start"){
+			Client.send("hokuyo", "start", {
+				"color": $("#rc_hok_color").val(),
+				"nbrobots": parseInt($("#rc_hok_nbrobots").val())});
+		} else {
+			Client.send("hokuyo", "stop", {});
+		}
+	});
+
+	$(document).on("click", ".pr", function(e) {
+		if(e.target.innerHTML == "Start"){
+			Client.send("hokuyo", "start", {});
+		} else {
+			Client.send("hokuyo", "stop", {});
+		}
+	});
+
+	$(document).on("click", ".gr", function(e) {
+		if(e.target.innerHTML == "Start"){
+			Client.send("hokuyo", "start", {});
+		} else {
+			Client.send("hokuyo", "stop", {});
+		}
+	});
+
+
 	/* --------- Prints ------------- */
 		function addDiv (parentId, currentId, type, color, name, ip) {
 		    // possible colors : error, green, yellow, waiting, ok, starting, everythingIsAwesome or normal (just "" )
@@ -46,6 +75,30 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    		break;
 		    	default:
 		    		newDiv.innerHTML += "<br/>";
+		    }
+
+		    if(parentId == "clients"){
+		    	devClass = "";
+		    	switch (name){
+		    		case "Hokuyo":
+		    			devClass = "hokuyo";
+		    			break;
+		    		case "Oscar (GR)":
+		    			devClass = "gr";
+		    			break;
+		    		case "Cesar (PR)":
+		    			devClass = "pr";
+		    			break;
+		    	}
+		    	
+		    	if(color == "waiting"){
+		    		// Hok params
+		    		if(devClass == "hokuyo")
+		    			newDiv.innerHTML += "<select id='rc_hok_nbrobots'> <option value='4' default>4</option> <option value='3'>3</option> <option value='2'>2</option> <option value='1'>1</option> </select> <select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
+
+			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button><br>";
+			    } else
+			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button><br>";
 		    }
 		    
 		    if(ip)
@@ -111,7 +164,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					    if(!!client.children)
 					        for(var j=0; j<client.children.length; j++) {
 					        	randId = Math.round(Math.random()*1000);
-					            addDiv("children", (client.children[j]+randId).replace(/\s+/g,''), "hok", "", client.children[j], null);
+					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "hok", "", client.children[j], null);
 					            links.push({
 					            	start: i,
 					            	end: client.children[j]+randId
@@ -125,7 +178,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					    if(!!client.children)
 					        for(var j=0; j<client.children.length; j++) {
 					        	randId = Math.round(Math.random()*1000);
-					            addDiv("children", (client.children[j]+randId).replace(/\s+/g,''), "arduino", "", client.children[j], null);
+					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "arduino", "", client.children[j], null);
 					            links.push({
 					            	start: i,
 					            	end: client.children[j]+randId
@@ -141,7 +194,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					    if(!!client.children)
 					        for(var j=0; j<client.children.length; j++) {
 					        	randId = Math.round(Math.random()*1000);
-					            addDiv("children", (client.children[j]+randId).replace(/\s+/g,''), "arduino", "", client.children[j], null);
+					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "arduino", "", client.children[j], null);
 					            links.push({
 					            	start: i,
 					            	end: client.children[j]+randId
@@ -175,7 +228,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		}
 
 		function linkDivsArc (div1Id, div2Id, colId) {
-			console.log(div1Id + " > " + div2Id);
+			// console.log(div1Id + " > " + div2Id);
 			var div1OffsetTop = $("#"+div1Id).offset().top - $("#"+div1Id).parent().offset().top;
 			var div2OffsetTop = $("#"+div2Id).offset().top - $("#"+div2Id).parent().offset().top;
 		    var middleDiv1 =  div1OffsetTop + parseFloat($("#"+div1Id).parent().css("margin-top")) + $("#"+div1Id).outerHeight()/2;

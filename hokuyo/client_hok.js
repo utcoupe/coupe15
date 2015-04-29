@@ -46,6 +46,8 @@
 				case "start":
 					if(!!params.color && !!params.nbrobots)
 						start(params.color, params.nbrobots);
+					else
+						logger.error("Missing parameters !");
 					break;
 				case "stop":
 					quitC("stop");
