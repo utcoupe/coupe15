@@ -22,17 +22,17 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 	$(document).on("click", ".pr", function(e) {
 		if(e.target.innerHTML == "Start"){
-			Client.send("hokuyo", "start", {});
+			Client.send("pr", "start", {});
 		} else {
-			Client.send("hokuyo", "stop", {});
+			Client.send("pr", "stop", {});
 		}
 	});
 
 	$(document).on("click", ".gr", function(e) {
 		if(e.target.innerHTML == "Start"){
-			Client.send("hokuyo", "start", {});
+			Client.send("gr", "start", {});
 		} else {
-			Client.send("hokuyo", "stop", {});
+			Client.send("gr", "stop", {});
 		}
 	});
 
@@ -151,7 +151,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		        // IA(s)
 					for(i in status.ia) {
 					    client = status.ia[i];
-					    addDiv("brain", i, "ia", "", "IA", ""); // /!\ color !!!
+					    addDiv("brain", i, "ia", (client.color || ""), "IA", "");
 
 					}
 

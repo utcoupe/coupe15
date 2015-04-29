@@ -4,8 +4,7 @@
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('gr');
 
-	logger.info("Started NodeJS client with pid " + process.pid);
-
+	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = "127.0.0.1:3128"; // server adress
@@ -20,29 +19,53 @@
 	sendChildren(lastStatus);
 
 	var acts = new (require('./actuators.class.js'))(client);
-	var detect = new (require('./detect.class.js'))(devicesDetected);
+	var detect = null; // new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];
 	var orderInProgress = null;
 
+	start();
+
 	// On message
 	client.order(function (from, name, params){
-		// if flush the queue
-		if(name == "queue_flush"){
-			queue = [];
-			return;
+		// logger.info("Recieved an order "+name);
+		switch (name){
+			case "queue_flush":
+				queue = [];
+				break;
+			case "start":
+				queue = [];
+				start();
+				break;
+			case "stop":
+				// TODO send stop to actuators
+				queue = [];
+				// quitC("stop");
+				stop();
+				break;
+			default:
+				addOrder2Queue(from, name, params);
 		}
-
-		// if end of match, empty the queue and stop the current action
-		if(name == "stop"){
-			queue = [];
-			// TODO : stopper les actions dans toutes les classes !
-			this.emit('stopAll');
-			return;
-		}
-
-		addOrder2Queue(from, name, params);
 	});
+
+	function start(){
+		logger.info("Starting  :)");
+		sendChildren({
+			status: "starting", 
+			children:[]
+		});
+		detect = new (require('./detect.class.js'))(devicesDetected);
+	}
+
+	function stop(){
+		acts.quit();
+
+		// Send struct to server
+		sendChildren({
+			status: "waiting", 
+			children:[]
+		});
+	}
 
 	function devicesDetected(struct){
 		// Verify content
@@ -75,7 +98,7 @@
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		if(queue.length < 10) {
+		if(queue.length < 50) {
 			// Adds the order to the queue
 			queue.push({
 				from: f,
@@ -94,7 +117,7 @@
 			var order = queue.shift();
 			orderInProgress = order.name;
 			
-			logger.info("Going to do '" + orderInProgress + "'...");
+			logger.info("Going to do '" + orderInProgress + "' "+order.params.toString());
 			acts.orderHandler(order.from, order.name, order.params, actionFinished);
 			
 			executeNextOrder();

@@ -1,5 +1,5 @@
 module.exports = (function () {
-	var logger = require('log4js').getLogger('gr.asserv');
+	var logger = require('log4js').getLogger('asserv');
 
 	// For simu
 	var SIMU_FACTOR_VIT = 0.5;
@@ -12,6 +12,7 @@ module.exports = (function () {
 
 	function Asserv(client, who) {
 		this.client = client;
+		this.who = who;
 		this.pos = {
 			x:0,y:0,a:0
 		};
@@ -34,10 +35,10 @@ module.exports = (function () {
 		callback();
 	}
 	Asserv.prototype.getPos = function(pos) {
-		this.client.send('ia', 'gr.getpos');
+		this.client.send('ia', this.who+'.getpos');
 	}
 	Asserv.prototype.sendPos = function() {
-		this.client.send('ia', 'gr.pos', this.pos);
+		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
 	Asserv.prototype.clean = function(callback){

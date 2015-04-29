@@ -10,4 +10,3 @@ hokuyo/bin/hokuyo
 CMakeCache*
 CMakeFiles*
 cmake_install*
-libusb2ax.so

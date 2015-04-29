@@ -1,7 +1,6 @@
 module.exports = (function () {
 	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.pr');
+	var logger = require('log4js').getLogger('ia.pr');
 
 	function Pr(ia, color) {
 		this.ia = ia;
@@ -20,9 +19,30 @@ module.exports = (function () {
 
 		if (color == "green"){
 			this.pos.x = 3000 - this.pos.x;
-			this.pos.a = 180;
+			this.pos.a = 3.1416;
 		}
 	}
+
+	Pr.prototype.start = function () {
+		this.sendOrders();
+	};
+
+	Pr.prototype.sendPos = function () {
+		this.ia.client.send("pr", "setpos", this.pos);
+	};
+
+	Pr.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'pr.pos':
+				this.pos = params;
+			break;
+			case 'pr.getpos':
+				this.sendPos();
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.pr: '+name);
+		}
+	};
 
 	Pr.prototype.onColision = function () {
 		logger.warn("Collision du petit robot");

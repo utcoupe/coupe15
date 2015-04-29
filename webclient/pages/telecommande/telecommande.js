@@ -1,6 +1,8 @@
 angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'Client',
 	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'telecommande';
+
+	// GR
 	$scope.gr_pwm_gauche = 50;
 	$scope.gr_pwm_droite = 50;
 	$scope.gr_pwm_ms = 1000;
@@ -9,15 +11,12 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.gr_y = 0;
 	$scope.gr_v = 500;
 	$scope.gr_r = 0.3;
-
 	$scope.grAcheter = function() {
 		Client.send("gr", "acheter", {});
 	};
-
 	$scope.grVendre = function() {
 		Client.send("gr", "vendre", {});
 	};
-
 	$scope.grPWM = function() {
 		Client.send("gr", "pwm", {
 			left: $scope.gr_pwm_droite,
@@ -25,7 +24,6 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 			ms: $scope.gr_pwm_ms
 		});
 	};
-
 	$scope.grGoa = function() {
 		Client.send("gr", "goa", {a: parseFloat($scope.gr_a)*Math.PI/180});
 	};
@@ -38,6 +36,62 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	};
 	$scope.grSetVit = function() {
 		Client.send("gr", "setvit", {v: parseInt($scope.gr_v), r: parseFloat($scope.gr_r) });
+	};
+	// PR
+	$scope.pr_pwm_gauche = 50;
+	$scope.pr_pwm_droite = 50;
+	$scope.pr_pwm_ms = 1000;
+	$scope.pr_a = 0;
+	$scope.pr_x = 0;
+	$scope.pr_y = 0;
+	$scope.pr_set_x = 0;
+	$scope.pr_set_y = 0;
+	$scope.pr_set_a = 0;
+	$scope.pr_v = 500;
+	$scope.pr_r = 0.3;
+	$scope.pr_PID_P = 1.5;
+	$scope.pr_PID_I = 1;
+	$scope.pr_PID_D = 0;
+	$scope.pr_acc = 300;
+	$scope.prPWM = function() {
+		Client.send("pr", "pwm", {
+			left: $scope.pr_pwm_droite,
+			right: $scope.pr_pwm_gauche,
+			ms: $scope.pr_pwm_ms
+		});
+	};
+	$scope.prGoa = function() {
+		Client.send("pr", "goa", {a: parseFloat($scope.pr_a)*Math.PI/180});
+	};
+	$scope.prGoxy = function() {
+		Client.send("pr", "goxy", {x: parseInt($scope.pr_x), y: parseInt($scope.pr_y)});
+	};
+	$scope.prGoxya = function() {
+		$scope.prGoxy();
+		$scope.prGoa();
+	};
+	$scope.prSetVit = function() {
+		Client.send("pr", "setvit", {v: parseInt($scope.pr_v), r: parseFloat($scope.pr_r) });
+	};
+	$scope.prClean = function() {
+		Client.send("pr", "clean");
+	};
+	$scope.prSetPos = function() {
+		Client.send("pr", "setpos", {
+			x: parseInt($scope.pr_set_x),
+			y: parseInt($scope.pr_set_y), 
+			a: parseFloat($scope.pr_set_a)*Math.PI/180
+		});
+	};
+	$scope.prSetPID = function() {
+		Client.send("pr", "setpid", {
+			p: parseFloat($scope.pr_PID_P),
+			i: parseFloat($scope.pr_PID_I), 
+			d: parseFloat($scope.pr_PID_D)
+		});
+	};
+	$scope.prSetAcc = function() {
+		Client.send("pr", "setacc", { acc: parseInt($scope.pr_acc) });
 	};
 
 

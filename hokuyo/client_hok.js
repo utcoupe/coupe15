@@ -88,7 +88,7 @@
 		//do something when app is closing
 		process.on('exit', quitC);
 		// catches ctrl+c event
-		process.on('SIGINT', quitC);
+		// process.on('SIGINT', quitC);
 		//catches uncaught exceptions
 		//process.on('uncaughtException', uException);
 
@@ -114,8 +114,8 @@
 		}
 
 		function parseInfo(string) {
-			logger.info("/string2");
-			logger.info(string);
+			// logger.info("/string2");
+			// logger.info(string);
 
 			var prev_n_a_h = nb_active_hokuyos;
 
@@ -164,11 +164,11 @@
 							parseRobots(inputAr[i].substring(6));
 							break;
 						case "INFO":
-							logger.info('C Hokuyo software sends a info');
+							logger.info('C Hokuyo software sends information :'+inputAr[i].substring(6));
 							parseInfo(inputAr[i].substring(6));
 							break;
 						case "WARN":
-							logger.info('C Hokuyo software sends a warning');
+							logger.warn('C Hokuyo software sends a warning :'+inputAr[i].substring(6));
 							parseInfo(inputAr[i].substring(6));
 							break;
 						default:

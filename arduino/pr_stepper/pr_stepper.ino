@@ -1,8 +1,11 @@
 #include <AFMotor.h> // AdaFruit Motor shield lib
+#include <Servo.h>
 #include "orders.h"
 #include "constants.h"
-
+Servo servo;
 AF_Stepper motor1(MOTOR_STEP_PER_REVOLUTION, 1); // M1 & M2
+
+
 
 void setup() {
 	motor1.setSpeed(MOTOR_SPEED);
@@ -14,6 +17,7 @@ void setup() {
 char order = 0;
 
 void loop() {
+        servo.write(170);
 	if (Serial.available() > 0) {
 		// read the incoming byte:
 		order = Serial.read();

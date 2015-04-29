@@ -1,13 +1,14 @@
 module.exports = (function () {
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('pr.acts');
+	var logger = require('log4js').getLogger('pr.acts');
+	var serialPort = require("serialport");
+	var SerialPort = serialPort.SerialPort;
 
-	var elevator = null;
-	var servos = null;
+	var others = null;
 	var asserv = null;
 	var ax12 = null;
 
-	function Acts() {
+	function Acts(client) {
+		this.client = client;
 		this.start();
 	}
 
@@ -16,27 +17,33 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.connectTo = function(struct){
-		if (!!struct.stepper) {
-			elevator = new (require('./elevator.class.js'))(
-				new SerialPort(struct.stepper, { baudrate: 57600 })
+		if (!struct.others) {
+			logger.fatal("Lancement de others pr en mode simu !");
+			others = new (require('./others.simu.class.js'))();
+		} else {
+			others = new (require('./others.class.js'))(
+				new SerialPort(struct.others, { baudrate: 57600 })
 			);
 		}
 
-		if (!!struct.servos) {
-			servos = new (require('./servos.class.js'))(struct.servos);
-		}
-
-		if (!!struct.asserv) {
-			asserv = new (require('./asserv.class.js'))(
-				new SerialPort(struct.asserv, { baudrate: 57600 })
+		if (!struct.asserv) {
+			logger.fatal("Lancement de l'asserv pr en mode simu !");
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'pr');
+		} else {
+			asserv = new (require('../shared/asserv.class.js'))(
+				new SerialPort(struct.asserv, {
+					baudrate: 57600,
+					parser:serialPort.parsers.readline('\n')
+				}), this.client, 'pr'
 			);
 		}
 
-		if (!!struct.ax12) {
+		if (!struct.ax12) {
+			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
+			ax12 = new (require('./ax12.simu.class.js'))();
+		} else {
 			ax12 = new (require('./ax12.class.js'))(struct.ax12);
 		}
-
-
 	};
 
 	Acts.prototype.getStatus = function(){
@@ -47,23 +54,17 @@ module.exports = (function () {
 
 		data.status = "everythingIsAwesome";
 
-
-		if(elevator)
-			data.children.push("Arduino steppers");
+		if(others)
+			data.children.push("Arduino others");
 		else
 			data.status = "ok";
 
-		if(servos)
-			data.children.push("Arduino servos");
-		else
-			data.status = "ok";
-
-		if(ax12)
+		if(ax12 && asserv.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv)
+		if(asserv && ax12.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -72,16 +73,13 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.quit = function(){
-		if (elevator)
-			elevator.disconnect();
+		if (others)
+			others.disconnect();
 
-		if (servos)
-			servos.disconnect();
-
-		if (asserv)
+		if (asserv && asserv.ready)
 			asserv.disconnect();
 
-		if (ax12)
+		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
 
@@ -92,53 +90,81 @@ module.exports = (function () {
 
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
-			case "servo_goto":
-				// logger.info(!!params.servo && !!params.position);
-				// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
-					servos.servo_goto(params.servo, params.position, callback);
-				// }
-				break;
-			case "stabs_close":
-				servos.fermerStabilisateur(callback);
-				break;
-			case "stabs_open_chouilla":
-				servos.ouvrirChouillaStabilisateur(callback);
-				break;
-			case "stabs_open":
-				servos.ouvrirStabilisateur(callback);
-				break;
-			case "arm_close":
-				servos.fermerBras(callback);
-				break;
-			case "arm_open_chouilla":
-				servos.ouvrirChouillaBras(callback);
-				break;
-			case "arm_open":
-				servos.ouvrirBras(callback);
-				break;
+			// Asserv
+			case "pwm":
+				asserv.pwm(callback, params.left, params.right, params.ms);
+			break;
+			case "setvit":
+				asserv.setVitesse(callback, params.v, params.r);
+			break;
+			case "clean":
+				asserv.clean(callback);
+			break;
+			case "goa":
+				asserv.goa(callback, params.a);
+			break;
+			case "goxy":
+				asserv.goxy(callback, params.x, params.y);
+			break;
+			case "setpos":
+				asserv.setPos(callback, params);
+			break;
+			case "setacc":
+				asserv.setAcc(callback, params.acc);
+			break;
+			case "setpid":
+				asserv.setPid(callback, params.p, params.i, params.d);
+			break;
+			default:
+				logger.warn("Order name " + name + " " + from + " not understood");
+				callback();
+			// case "servo_goto":
+			// 	// logger.info(!!params.servo && !!params.position);
+			// 	// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
+			// 		servos.servo_goto(params.servo, params.position, callback);
+			// 	// }
+			// 	break;
+			// case "stabs_close":
+			// 	servos.fermerStabilisateur(callback);
+			// 	break;
+			// case "stabs_open_chouilla":
+			// 	servos.ouvrirChouillaStabilisateur(callback);
+			// 	break;
+			// case "stabs_open":
+			// 	servos.ouvrirStabilisateur(callback);
+			// 	break;
+			// case "arm_close":
+			// 	servos.fermerBras(callback);
+			// 	break;
+			// case "arm_open_chouilla":
+			// 	servos.ouvrirChouillaBras(callback);
+			// 	break;
+			// case "arm_open":
+			// 	servos.ouvrirBras(callback);
+			// 	break;
 			// case "AX12_goto":
 			// 	AX12_goto(params.position);
 			// 	break;
-			case "AX12_close":
-				ax12.closeAx12Down(callback);
-				break;
-			case "AX12_open":
-				ax12.openAx12Down(callback);
-				break;
-			case "steppers_move":
-				stepper_do(params.move, params.direction);
-				break;
-			case "steppers_toogle":
-				stepper_toogle();
-				break;
-			case "steppers_set_bottom":
-				stepper_setBottom();
-				break;
-			case "send_message":
-				client.send("pr", params.name, {action_name: params.action_name});
-				break;
-			default:
-				logger.warn("Order name " + name + " " + from + " not understood");
+
+
+			// case "AX12_close":
+			// 	ax12.closeAx12Down(callback);
+			// 	break;
+			// case "AX12_open":
+			// 	ax12.openAx12Down(callback);
+			// 	break;
+			// case "steppers_move":
+			// 	stepper_do(params.move, params.direction);
+			// 	break;
+			// case "steppers_toogle":
+			// 	stepper_toogle();
+			// 	break;
+			// case "steppers_set_bottom":
+			// 	stepper_setBottom();
+			// 	break;
+			// case "send_message":
+			// 	client.send("pr", params.name, {action_name: params.action_name});
+			// 	break;
 		}
 	};
 
