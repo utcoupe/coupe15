@@ -48,7 +48,7 @@ module.exports = (function () {
 					data = data.toString();
 					console.log(ports[i].comName, data);
 					if (data == 'O' && !this.devicesFound.others){ // Stepper
-						this.devicesFound.stepper = ports[i].comName;
+						this.devicesFound.others = ports[i].comName;
 						clearTimeout(timeout);
 						this.sendSP();
 					}
@@ -60,7 +60,7 @@ module.exports = (function () {
 		}.bind(this));
 
 		// On check tous les ports qui ne sont pas enregistrés
-		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 2000);
+		timeout = setTimeout(function(){this.sendSP(); }.bind(this), 3000);
 	};
 
 	return Detect;
