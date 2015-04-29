@@ -90,11 +90,28 @@ module.exports = (function () {
 		}
 	};
 
+	Actions.prototype.isDone = function (action_name){
+		// Return true if action done
+		// If no action given (ie no dependency) -> that's ok return true
+
+		if(!action_name)
+			return true;
+
+		Object.keys(this.done).forEach(function(a_n) {
+			if ((action_name == a_n))
+				return true;
+		});
+
+		return false;
+	};
+
 	Actions.prototype.getNearestAction = function (pos, color){
 		var action_name = "";
 		// Begin with first possible action
 		Object.keys(this.todo).forEach(function(a_n) {
-			if ((action_name === "") && (this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none"))
+			if ((action_name === "") && 
+				(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
+				isDone(this.todo[a_n].dependency))
 				action_name = a_n;
 		});
 
@@ -107,7 +124,8 @@ module.exports = (function () {
 				var temp_dist = getActionDistance(pos,a_n);
 
 				if ((this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") && // suitable for us
-					(this.todo[a_n].object.status != "lost")){ // and status initial,...
+					(this.todo[a_n].object.status != "lost") &&  // and status initial
+					isDone(this.todo[a_n].dependency)){ // and dependency done (if any)
 
 					if (this.todo[a_n].priority < action_priority){ // more important
 						action_name = a_n;

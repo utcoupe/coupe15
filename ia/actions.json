@@ -1,16 +1,17 @@
 {
-	"__comment": "\nAdd durations, priority\nPriorities :\n- balles après le plot middle 3\n- claps 1 et 6 après plots et gobelet empiler_front\n- prio plots entre eux\n",
+	"__comment": "\nAdd durations, priority\nAdd actions without objects",
 	"actions":{
 		"prendre_balle_gauche":{
 			"type": "balle",
 			"owner": "pr",
 			"objectname": "balle__gauche",
 			"startpoints": [{
-				"x": 1100,
-				"y": 1800,
+				"x": 1150,
+				"y": 1850,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_balle",
@@ -23,11 +24,12 @@
 			"owner": "pr",
 			"objectname": "balle__droite",
 			"startpoints": [{
-				"x": 120,
-				"y": 200,
+				"x": 1850,
+				"y": 1850,
 				"a": -135
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_middle_right3",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_balle",
@@ -45,6 +47,7 @@
 				"a": 0
 			}],
 			"priority": 1,
+			"dependency": "prendre_gobelet_front_left",
 			"duration": 1,
 			"orders":[{
 				"name": "ouvrir_baton_droit",
@@ -86,6 +89,7 @@
 				"a": 0
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "ouvrir_baton_droit",
@@ -111,6 +115,7 @@
 				"a": 180
 			}],
 			"priority": 1,
+			"dependency": "prendre_gobelet_front_right",
 			"duration": 1,
 			"orders":[{
 				"name": "ouvrir_baton_gauche",
@@ -152,6 +157,7 @@
 				"a": 180
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "ouvrir_baton_gauche",
@@ -177,8 +183,8 @@
 				"a": -90
 			},
 			{
-				"x": 321,
-				"y": 1679,
+				"x": 285,
+				"y": 1715,
 				"a": -135
 			},
 			{
@@ -187,16 +193,17 @@
 				"a": 180
 			},
 			{
-				"x": 321,
-				"y": 1821,
+				"x": 285,
+				"y": 1785,
 				"a": 135
 			},
 			{
-				"x": 179,
-				"y": 1679,
+				"x": 215,
+				"y": 1715,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -214,8 +221,8 @@
 				"a": 180
 			},
 			{
-				"x": 981,
-				"y": 901,
+				"x": 945,
+				"y": 865,
 				"a": 135
 			},
 			{
@@ -224,8 +231,8 @@
 				"a": 90
 			},
 			{
-				"x": 839,
-				"y": 901,
+				"x": 875,
+				"y": 865,
 				"a": 45
 			},
 			{
@@ -234,11 +241,12 @@
 				"a": 0
 			},
 			{
-				"x": 839,
-				"y": 759,
+				"x": 875,
+				"y": 795,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -256,8 +264,8 @@
 				"a": -90
 			},
 			{
-				"x": 1571,
-				"y": 1579,
+				"x": 1535,
+				"y": 1615,
 				"a": -135
 			},
 			{
@@ -266,13 +274,13 @@
 				"a": 180
 			},
 			{
-				"x": 1571,
-				"y": 1721,
+				"x": 1535,
+				"y": 1685,
 				"a": 135
 			},
 			{
-				"x": 1429,
-				"y": 1721,
+				"x": 1465,
+				"y": 1685,
 				"a": 45
 			},
 			{
@@ -281,11 +289,12 @@
 				"a": 0
 			},
 			{
-				"x": 1429,
-				"y": 1579,
+				"x": 1465,
+				"y": 1615,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -298,8 +307,8 @@
 			"owner": "pr",
 			"objectname": "gobelet__middle_right",
 			"startpoints": [{
-				"x": 2161,
-				"y": 759,
+				"x": 2125,
+				"y": 795,
 				"a": -135
 			},
 			{
@@ -308,8 +317,8 @@
 				"a": 180
 			},
 			{
-				"x": 2161,
-				"y": 901,
+				"x": 2125,
+				"y": 865,
 				"a": 135
 			},
 			{
@@ -318,8 +327,8 @@
 				"a": 90
 			},
 			{
-				"x": 2019,
-				"y": 901,
+				"x": 2055,
+				"y": 865,
 				"a": 45
 			},
 			{
@@ -328,6 +337,7 @@
 				"a": 0
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -345,8 +355,8 @@
 				"a": -90
 			},
 			{
-				"x": 2821,
-				"y": 1679,
+				"x": 2785,
+				"y": 1715,
 				"a": -135
 			},
 			{
@@ -355,8 +365,8 @@
 				"a": 90
 			},
 			{
-				"x": 2679,
-				"y": 1821,
+				"x": 2715,
+				"y": 1785,
 				"a": 45
 			},
 			{
@@ -365,11 +375,12 @@
 				"a": 0
 			},
 			{
-				"x": 2679,
-				"y": 1679,
+				"x": 2715,
+				"y": 1715,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -382,8 +393,8 @@
 			"owner": "pr",
 			"objectname": "cylindre__front_left1",
 			"startpoints": [{
-				"x": 161,
-				"y": 1679,
+				"x": 125,
+				"y": 1715,
 				"a": -135
 			},
 			{
@@ -392,6 +403,7 @@
 				"a": 180
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_front_left2",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -404,8 +416,8 @@
 			"owner": "pr",
 			"objectname": "cylindre__front_left2",
 			"startpoints": [{
-				"x": 161,
-				"y": 1779,
+				"x": 125,
+				"y": 1815,
 				"a": -135
 			},
 			{
@@ -414,6 +426,7 @@
 				"a": 180
 			}],
 			"priority": 1,
+			"dependency": "prendre_gobelet_front_left",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -431,8 +444,8 @@
 				"a": -90
 			},
 			{
-				"x": 941,
-				"y": 1284,
+				"x": 905,
+				"y": 1320,
 				"a": -135
 			},
 			{
@@ -441,8 +454,8 @@
 				"a": 180
 			},
 			{
-				"x": 941,
-				"y": 1426,
+				"x": 905,
+				"y": 1390,
 				"a": 135
 			},
 			{
@@ -451,8 +464,8 @@
 				"a": 90
 			},
 			{
-				"x": 799,
-				"y": 1426,
+				"x": 835,
+				"y": 1390,
 				"a": 45
 			},
 			{
@@ -461,11 +474,12 @@
 				"a": 0
 			},
 			{
-				"x": 799,
-				"y": 1284,
+				"x": 835,
+				"y": 1320,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -483,8 +497,8 @@
 				"a": -90
 			},
 			{
-				"x": 1371,
-				"y": 1329,
+				"x": 1335,
+				"y": 1365,
 				"a": -135
 			},
 			{
@@ -493,8 +507,8 @@
 				"a": 180
 			},
 			{
-				"x": 1371,
-				"y": 1471,
+				"x": 1335,
+				"y": 1435,
 				"a": 135
 			},
 			{
@@ -503,8 +517,8 @@
 				"a": 90
 			},
 			{
-				"x": 1229,
-				"y": 1471,
+				"x": 1265,
+				"y": 1435,
 				"a": 45
 			},
 			{
@@ -513,11 +527,12 @@
 				"a": 0
 			},
 			{
-				"x": 1229,
-				"y": 1329,
+				"x": 1265,
+				"y": 1365,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -535,8 +550,8 @@
 				"a": -90
 			},
 			{
-				"x": 1171,
-				"y": 1699,
+				"x": 1135,
+				"y": 1735,
 				"a": -135
 			},
 			{
@@ -545,8 +560,8 @@
 				"a": 180
 			},
 			{
-				"x": 1171,
-				"y": 1841,
+				"x": 1135,
+				"y": 1805,
 				"a": 135
 			},
 			{
@@ -555,8 +570,8 @@
 				"a": 90
 			},
 			{
-				"x": 1029,
-				"y": 1841,
+				"x": 1065,
+				"y": 1805,
 				"a": 45
 			},
 			{
@@ -565,11 +580,12 @@
 				"a": 0
 			},
 			{
-				"x": 1029,
-				"y": 1699,
+				"x": 1065,
+				"y": 1735,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -587,11 +603,12 @@
 				"a": 180
 			},
 			{
-				"x": 161,
-				"y": 271,
+				"x": 125,
+				"y": 235,
 				"a": 135
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -609,11 +626,12 @@
 				"a": 90
 			},
 			{
-				"x": 779,
-				"y": 171,
+				"x": 815,
+				"y": 135,
 				"a": 45
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_stairs_left2",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -631,11 +649,12 @@
 				"a": 90
 			},
 			{
-				"x": 779,
-				"y": 271,
+				"x": 815,
+				"y": 235,
 				"a": 45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -648,16 +667,17 @@
 			"owner": "pr",
 			"objectname": "cylindre__front_right1",
 			"startpoints": [{
-				"x": 1960,
+				"x": 2860,
 				"y": 1750,
-				"a": 180
+				"a": 0
 			},
 			{
-				"x": 1981,
-				"y": 1821,
-				"a": 135
+				"x": 2875,
+				"y": 1715,
+				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_front_right2",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -670,16 +690,17 @@
 			"owner": "pr",
 			"objectname": "cylindre__front_right2",
 			"startpoints": [{
-				"x": 1960,
+				"x": 2860,
 				"y": 1850,
-				"a": 180
+				"a": 0
 			},
 			{
-				"x": 1981,
-				"y": 1921,
-				"a": 135
+				"x": 2875,
+				"y": 1815,
+				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "prendre_gobelet_front_right",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -697,8 +718,8 @@
 				"a": -90
 			},
 			{
-				"x": 2201,
-				"y": 1284,
+				"x": 2165,
+				"y": 1320,
 				"a": -135
 			},
 			{
@@ -707,8 +728,8 @@
 				"a": 180
 			},
 			{
-				"x": 2201,
-				"y": 1426,
+				"x": 2165,
+				"y": 1390,
 				"a": 135
 			},
 			{
@@ -717,8 +738,8 @@
 				"a": 90
 			},
 			{
-				"x": 2059,
-				"y": 1426,
+				"x": 2095,
+				"y": 1390,
 				"a": 45
 			},
 			{
@@ -727,11 +748,12 @@
 				"a": 0
 			},
 			{
-				"x": 2059,
-				"y": 1284,
+				"x": 2095,
+				"y": 1320,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -749,8 +771,8 @@
 				"a": -90
 			},
 			{
-				"x": 1771,
-				"y": 1329,
+				"x": 1735,
+				"y": 1365,
 				"a": -135
 			},
 			{
@@ -759,8 +781,8 @@
 				"a": 180
 			},
 			{
-				"x": 1771,
-				"y": 1471,
+				"x": 1735,
+				"y": 1435,
 				"a": 135
 			},
 			{
@@ -769,8 +791,8 @@
 				"a": 90
 			},
 			{
-				"x": 1629,
-				"y": 1471,
+				"x": 1665,
+				"y": 1435,
 				"a": 45
 			},
 			{
@@ -779,11 +801,12 @@
 				"a": 0
 			},
 			{
-				"x": 1629,
-				"y": 1329,
+				"x": 1665,
+				"y": 1365,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -801,8 +824,8 @@
 				"a": -90
 			},
 			{
-				"x": 1971,
-				"y": 1699,
+				"x": 1935,
+				"y": 1735,
 				"a": -135
 			},
 			{
@@ -811,8 +834,8 @@
 				"a": 180
 			},
 			{
-				"x": 1971,
-				"y": 1841,
+				"x": 1935,
+				"y": 1805,
 				"a": 135
 			},
 			{
@@ -821,8 +844,8 @@
 				"a": 90
 			},
 			{
-				"x": 1829,
-				"y": 1841,
+				"x": 1865,
+				"y": 1805,
 				"a": 45
 			},
 			{
@@ -831,11 +854,12 @@
 				"a": 0
 			},
 			{
-				"x": 1829,
-				"y": 1699,
+				"x": 1865,
+				"y": 1735,
 				"a": -45
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -848,16 +872,17 @@
 			"owner": "pr",
 			"objectname": "cylindre__rear_right",
 			"startpoints": [{
-				"x": 1839,
-				"y": 271,
+				"x": 2875,
+				"y": 235,
 				"a": 45
 			},
 			{
-				"x": 1860,
+				"x": 2860,
 				"y": 200,
 				"a": 0
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -870,8 +895,8 @@
 			"owner": "pr",
 			"objectname": "cylindre__stairs_right1",
 			"startpoints": [{
-				"x": 2221,
-				"y": 171,
+				"x": 2185,
+				"y": 135,
 				"a": 135
 			},
 			{
@@ -880,6 +905,7 @@
 				"a": 90
 			}],
 			"priority": 1,
+			"dependency": "prendre_plot_stairs_right2",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -892,8 +918,8 @@
 			"owner": "pr",
 			"objectname": "cylindre__stairs_right2",
 			"startpoints": [{
-				"x": 2221,
-				"y": 271,
+				"x": 2185,
+				"y": 235,
 				"a": 135
 			},
 			{
@@ -902,6 +928,7 @@
 				"a": 90
 			}],
 			"priority": 1,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
