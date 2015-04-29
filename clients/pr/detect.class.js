@@ -20,11 +20,11 @@ module.exports = (function () {
 		// Close opened ports & detect other devices
 		serialPort.list(function (err, ports) {
 			for(var i in ports) {
-				// if(sp[i].readable){
-				// 	logger.info("Closing  "+ports[i].comName);
-				// 	this.devicesFound.ax12 = ports[i].comName;
-				// 	sp[i].close();
-				// }
+				if(sp[i].readable){
+					logger.info("Closing  "+ports[i].comName);
+					// this.devicesFound.ax12 = ports[i].comName;
+					sp[i].close();
+				}
 				if(ports[i].comName.indexOf('ttyUSB') >= 0) {
 					this.devicesFound.asserv = ports[i].comName;
 				} else if(ports[i].comName.indexOf('ttyACM') >= 0 && ports[i].comName != this.devicesFound.others) {

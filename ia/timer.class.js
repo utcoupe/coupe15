@@ -2,9 +2,10 @@ module.exports = (function () {
 	"use strict";
 
 	function Timer() {
-		this.init();
+		this.t0 = null;
+		this.match_started = false;
 	}
-	Timer.prototype.init = function() {
+	Timer.prototype.start = function() {
 		this.t0 = Date.now();
 		this.match_started = true; // le match commence
 	};
@@ -25,13 +26,13 @@ module.exports = (function () {
 		}
 	};
 
-	Timer.prototype.isStarted = function() {
-		this.t0 = Date.now();
-		this.match_started = true; // le match commence
-	};
-	Timer.prototype.isFinished = function () {
-		this.init();
-	};
+	// Timer.prototype.isStarted = function() {
+	// 	this.t0 = Date.now();
+	// 	this.match_started = true; // le match commence
+	// };
+	// Timer.prototype.isFinished = function () {
+	// 	this.init();
+	// };
 	Timer.prototype.isOk = function() {
 		return true;
 	};
