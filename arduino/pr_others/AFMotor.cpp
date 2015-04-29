@@ -15,7 +15,6 @@
 #include "AFMotor.h"
 
 
-
 static uint8_t latch_state;
 
 #if (MICROSTEPS == 8)
@@ -132,6 +131,9 @@ inline void initPWM1(uint8_t freq) {
         // If we are not using PWM for pin 11, then just do digital
         digitalWrite(11, LOW);
     #endif
+#elif defined(__AVR_ATmega32U4__)
+		pinMode(11, OUTPUT);
+        digitalWrite(11, LOW);
 #else
    #error "This chip is not supported!"
 #endif
@@ -169,6 +171,15 @@ inline void setPWM1(uint8_t s) {
             digitalWrite(11, LOW);
         }
     #endif
+#elif defined(__AVR_ATmega32U4__)
+	if (s > 127)
+	{
+		digitalWrite(11, HIGH);
+	}
+	else
+	{
+		digitalWrite(11, LOW);
+	}
 #else
    #error "This chip is not supported!"
 #endif
@@ -201,6 +212,9 @@ inline void initPWM2(uint8_t freq) {
     OC1CON = 0x8006;    // OC32 = 0, OCTSEL=0, OCM=6
     OC1RS = 0x0000;
     OC1R = 0x0000;
+#elif defined(__AVR_ATmega32U4__)
+	pinMode(3, OUTPUT);
+	digitalWrite(3, LOW);
 #else
    #error "This chip is not supported!"
 #endif
@@ -222,6 +236,15 @@ inline void setPWM2(uint8_t s) {
 #elif defined(__PIC32MX__)
     // Set the OC1 (pin3) PMW duty cycle from 0 to 255
     OC1RS = s;
+#elif defined(__AVR_ATmega32U4__)
+	if (s > 127)
+	{
+		digitalWrite(3, HIGH);
+	}
+	else
+	{
+		digitalWrite(3, LOW);
+	}
 #else
    #error "This chip is not supported!"
 #endif
@@ -255,6 +278,9 @@ inline void initPWM3(uint8_t freq) {
     OC3CON = 0x8006;    // OC32 = 0, OCTSEL=0, OCM=6
     OC3RS = 0x0000;
     OC3R = 0x0000;
+#elif defined(__AVR_ATmega32U4__)
+	pinMode(6, OUTPUT);
+	digitalWrite(6, LOW);
 #else
    #error "This chip is not supported!"
 #endif
@@ -275,6 +301,15 @@ inline void setPWM3(uint8_t s) {
 #elif defined(__PIC32MX__)
     // Set the OC3 (pin 6) PMW duty cycle from 0 to 255
     OC3RS = s;
+#elif defined(__AVR_ATmega32U4__)
+	if (s > 127)
+	{
+		digitalWrite(6, HIGH);
+	}
+	else
+	{
+		digitalWrite(6, LOW);
+	}
 #else
    #error "This chip is not supported!"
 #endif
@@ -310,6 +345,9 @@ inline void initPWM4(uint8_t freq) {
     OC2CON = 0x8006;    // OC32 = 0, OCTSEL=0, OCM=6
     OC2RS = 0x0000;
     OC2R = 0x0000;
+#elif defined(__AVR_ATmega32U4__)
+    pinMode(5, OUTPUT);
+	digitalWrite(5, LOW);
 #else
    #error "This chip is not supported!"
 #endif
@@ -330,6 +368,15 @@ inline void setPWM4(uint8_t s) {
 #elif defined(__PIC32MX__)
     // Set the OC2 (pin 5) PMW duty cycle from 0 to 255
     OC2RS = s;
+#elif defined(__AVR_ATmega32U4__)
+	if (s > 127)
+	{
+		digitalWrite(5, HIGH);
+	}
+	else
+	{
+		digitalWrite(5, LOW);
+	}
 #else
    #error "This chip is not supported!"
 #endif
