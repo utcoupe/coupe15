@@ -27,7 +27,7 @@ module.exports = (function () {
 				}
 				if(ports[i].comName.indexOf('ttyUSB') >= 0) {
 					this.devicesFound.asserv = ports[i].comName;
-				} else if(ports[i].comName.indexOf('ttyACM') >= 0 && ports[i].comName != this.devicesFound.others) {
+				} else if((ports[i].comName.indexOf('ttyACM') >= 0 || ports[i].comName.indexOf('COM') >= 0) && ports[i].comName != this.devicesFound.others) {
 					this.devicesFound.ax12 = ports[i].comName;
 				}
 			}
