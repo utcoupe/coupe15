@@ -4,7 +4,6 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 
 	// PR Luc
 	$scope.prPrendrePlot = function() {
-		Client.send("pr", "queue_flush");
 		Client.send("pr", "prendre_plot");
 	}
 
