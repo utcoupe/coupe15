@@ -43,7 +43,9 @@ module.exports = (function () {
 			var nb_found = 0;
 			for(var i in ports) {
 				sp[i] = new SerialPort(ports[i].comName, { baudrate: 57600 });
-				sp[i].write('O\n');
+				sp[i].on('open', function () {
+					sp[i].write('O\n');
+				}
 
 				sp[i].on("data", function (i, data) {
 					data = data.toString();
