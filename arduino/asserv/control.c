@@ -68,8 +68,8 @@ void ControlReset(void) {
 
 void ControlPrepareNewGoal(void) {
 	control.order_started = 0;
-	//PIDReset(&PID_left);
-	//PIDReset(&PID_right);
+	PIDReset(&PID_left);
+	PIDReset(&PID_right);
 }
 
 void ControlCompute(void) {
@@ -224,7 +224,6 @@ float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 }
 
 void stopRobot(void) {
-	// restore control and re-compute speeds
 	int sign;
 	float speed;
 

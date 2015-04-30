@@ -13,6 +13,4 @@
 	if(!we_have_hats) we_have_hats = null;
 
 	var ia = new (require('./ia.class.js'))(color, nb_erobots, we_have_hats);
-	ia.start();
-	ia.run();
 })();

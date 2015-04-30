@@ -3,9 +3,9 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.actions');
 
-	function Actions(ia, data, color) {
+	function Actions(ia) {
 		this.ia = ia;
-		this.color = color;
+		this.color = ia.color;
 
 		this.done = {};
 		this.todo = {};
@@ -13,7 +13,7 @@ module.exports = (function () {
 		this.killed = {};
 		this.errors = []; // XXX utile ?
 
-		this.todo = this.importActions(data);
+		this.todo = this.importActions(ia.data);
 	}
 
 	Actions.prototype.importActions = function (data) {
@@ -105,91 +105,120 @@ module.exports = (function () {
 		return false;
 	};
 
-	Actions.prototype.getNearestAction = function (pos, color){
+	function norm2Points(A, B) {
+		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
+	}
+	Actions.prototype.getNormAction = function(pos, an) {
+		return norm2Points(pos, this.todo[an].object.pos);
+	}
+	Actions.prototype.getPriorityAction = function(an) {
+		return this.todo[an].priority;
+	}
+	Actions.prototype.getNearestAction = function(pos) {
+		var actions_todo = [];
+		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
+			if((this.todo[an].object.color == this.color || this.todo[an].object.color == "none")
+				&& this.todo[an].object.status != "lost"
+				&& this.isDone(this.todo[an].dependency)) {
+				actions_todo.push(an);
+			}
+		}, this);
+
+		// Tri par priorité puis par norme
+		actions_todo.sort(function(a, b) {
+			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
+		}.bind(this));
+
+		// for(var i in actions_todo) {
+		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		// }
+
+		return actions_todo[0];
+	}
+
+	// <troll>
+	Actions.prototype.getFarestAction = function (pos){
+	// </troll>
 		var action_name = "";
 		// Begin with first possible action
 		Object.keys(this.todo).forEach(function(a_n) {
 			if ((action_name === "") && 
 				(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
-				isDone(this.todo[a_n].dependency))
+				this.isDone(this.todo[a_n].dependency))
 				action_name = a_n;
-		});
+		}, this);
 
 		// Find if there's a nearer one
 		if (!!action_name) {
-			var action_dist = getActionDistance(pos, action_name);
+			var action_dist = this.getActionDistance(pos, action_name);
 			var action_priority = 1000;
 
 			Object.keys(this.todo).forEach(function(a_n) {
-				var temp_dist = getActionDistance(pos,a_n);
+				var temp_dist = this.getActionDistance(pos,a_n);
 
 				if ((this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") && // suitable for us
 					(this.todo[a_n].object.status != "lost") &&  // and status initial
-					isDone(this.todo[a_n].dependency)){ // and dependency done (if any)
+					this.isDone(this.todo[a_n].dependency)){ // and dependency done (if any)
 
 					if (this.todo[a_n].priority < action_priority){ // more important
 						action_name = a_n;
 						action_dist = temp_dist;
 						action_priority = this.todo[a_n].priority;
 					} else {
-						if ((isCloser(temp_dist, action_dist)) && // closer
+						if ((this.isCloser(temp_dist, action_dist)) && // closer
 							(this.todo[a_n].priority == action_priority)){ // and as important
 							action_name = a_n;
 							action_dist = temp_dist;
 						}
 					}
 				}
-			});
+			}, this);
 		}
 
 		return action_name;
 	};
 
-	Actions.prototype.isCloser = function (dist1, dist2){
-		// Returns true if dist1 is smaller than dist2
-		// i.e. object 1 is closer than object 2
+	// Useless c'est des flottants et si la distance est équivalente (impossible avec des flottants sans marge)
+	// on va gagner que quelques centaine de milisecondes grand grand max)
+	// Actions.prototype.isCloser = function (dist1, dist2){
+	// 	// Returns true if dist1 is smaller than dist2
+	// 	// i.e. object 1 is closer than object 2
 
-		if(dist1.d < dist2.d){
-			return true;
-		} else {
-			if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
-				return true;
-			else
-				return false;
-		}
-	};
+	// 	if(dist1.d < dist2.d){
+	// 		return true;
+	// 	} else {
+	// 		if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
+	// 			return true;
+	// 		else
+	// 			return false;
+	// 	}
+	// };
 
-	Actions.prototype.getActionDistance = function (pos, action_name){
-		if (this.exists(action_name)){
-			start_pts = this.todo[action_name].startpoints;
+	// Useless de calculer pour chaque point d'entrée, autant calculer pour l'objet
+	// qui est approximativement aussi proche que ses points d'entrées
+	// Actions.prototype.getActionDistance = function (pos, action_name){
+	// 	var start_pts;
+	// 	if (this.exists(action_name)){
+	// 		start_pts = this.todo[action_name].startpoints;
 
-			var dist = {
-					d: sqrt(3000^2 + 2000^2),
-					delta_a: 181,
-					start_point: -1
-				};
+	// 		var min_dist = Infinity;
 
-			if (!start_pts.length) 
-				logger.warn("No startpoint for object "+action_name);
+	// 		if (start_pts.length == 0) 
+	// 			logger.warn("No startpoint for object "+action_name);
 
-			for (var i = 0; i < start_pts.length; i++) {
-				var temp = {
-					d: sqrt((pos.x - start_pts[i].x)^2 + (pos.y - start_pts[i].y)^2),
-					a: abs(pos.a - start_pts[i].a)
-				};
+	// 		for (var i = 0; i < start_pts.length; i++) {
+	// 			var dist = Math.sqrt(Math.pow(pos.x - start_pts[i].x, 2) + Math.pow(pos.y - start_pts[i].y, 2));
 
-				if (isCloser(tempDist, dist)){
-					dist.d = tempDist.d;
-					dist.delta_a = tempDist.a;
-					dist.start_point = i;
-				}
-			}
+	// 			if (dist < min_dist){
+	// 				min_dist = dist;
+	// 			}
+	// 		}
 
-			return dist;
-		} else {
-			return null;
-		}
-	};
+	// 		return min_dist;
+	// 	} else {
+	// 		return null;
+	// 	}
+	// };
 
 	Actions.prototype.isOk = function () { // XXX
 		if (errors.length !== 0){

@@ -114,7 +114,7 @@
 		}
 
 	},
-	"cylindre":{
+	"plot":{
 		"front_left1":{
 			"diametre": 60,
 			"color": "yellow",

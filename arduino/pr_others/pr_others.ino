@@ -10,6 +10,7 @@ Servo H_servo2;
 Servo M_servo1;
 Servo M_servo2;
 Servo G_servo;
+
 int i=0;
 char maChaine[64];
 
@@ -19,15 +20,14 @@ void annalyse_chaine();
 void setup() 
 {  
   Serial.begin(57600);
-  Serial.print('O');
+
   stepper.setSpeed(60); 
-  
   // /!\  Pour éviter les conflits, il ne faut pas utiliser les PIN deja prisent par la shield !!!
-  H_servo1.attach(24);  
-  H_servo2.attach(25);
-  M_servo1.attach(26);
-  M_servo2.attach(27);
-  G_servo.attach(28);
+  H_servo1.attach(2);  //2 5 6 9 10  OK
+  H_servo2.attach(5);  //13=led BOF BOF
+  M_servo1.attach(6);  //3 4=vibre 7 8 11 12 !OK
+  M_servo2.attach(9);
+  G_servo.attach(10);
 } 
 
 
@@ -47,9 +47,6 @@ void loop()
   }
   delay(10);
 }
-
-
-
 
 
 void annalyse_chaine(){
@@ -81,35 +78,40 @@ void annalyse_chaine(){
       sscanf(maChaine,"G;%d",&angle_gobelet);
       G_servo.write(angle_gobelet);
       Serial.print('G');  
-  }
+    }
     break;
-
+ 
+  case 'O':
+    {
+      Serial.print('O');  
+    }
+    break;
 
   case 'S':
     {
       int pas;
       sscanf(maChaine,"S;%d",&pas);
-      if(pas=0){
+      if(pas==0){
         stepper.release();
-        Serial.print('S');
       }
       if(pas<0){
         pas=-pas;
-        stepper.step(pas,FORWARD, DOUBLE);
-        Serial.print('S');
+        stepper.step(pas,FORWARD, SINGLE);
       }
       else{
-        stepper.step(pas,BACKWARD, DOUBLE);
-        Serial.print('S');
+        stepper.step(pas,BACKWARD, SINGLE);
       }
+      Serial.print("S");
+      //Serial.print("S:");
+      //Serial.println(pas);
     }
     break;
-
-
   default:
     Serial.print('U');
   }
 }
+
+
 
 
 

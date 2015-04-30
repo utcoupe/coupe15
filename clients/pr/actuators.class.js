@@ -83,6 +83,8 @@ module.exports = (function () {
 			ax12.disconnect();
 	};
 
+	function fake() {}
+
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
@@ -90,6 +92,33 @@ module.exports = (function () {
 
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
+			// others
+			case "prendre_plot":
+				//asserv.avancerDoucement()
+				setTimeout(function() {
+					others.prendreGobelet(function() {
+					others.monterAscenceur(function() {
+					others.(function() {
+
+					}); }); });
+					// others.prendreGobelet(fake);
+				}, 500); //==> appel la fonction au bout de 500ms 
+			break;
+			case "prendre_balle":
+				//
+			break;
+			case "deposer_pile":
+				//
+			break;
+			case "prendre_gobelet":
+				//
+			break;
+			case "deposer_gobelet":
+				//
+			break;
+
+
+
 			// Asserv
 			case "pwm":
 				asserv.pwm(callback, params.left, params.right, params.ms);

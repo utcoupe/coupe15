@@ -19,28 +19,30 @@ see datasheet of DEC-MODULE-24/2
 void BrushlessMotorsInit() {
 		pinMode(MOTOR1_SPD, OUTPUT);
 		pinMode(MOTOR1_EN, OUTPUT);
-		pinMode(MOTOR1_RDY, INPUT);
+		pinMode(MOTOR1_BRK, OUTPUT);
 		pinMode(MOTOR2_SPD, OUTPUT);
 		pinMode(MOTOR2_EN, OUTPUT);
-		pinMode(MOTOR2_RDY, INPUT);
+		pinMode(MOTOR2_BRK, OUTPUT);
 
+		digitalWrite(MOTOR1_BRK, HIGH);
+		digitalWrite(MOTOR2_BRK, HIGH);
 		digitalWrite(MOTOR1_EN, LOW);
 		digitalWrite(MOTOR2_EN, LOW);
 }
 
-int BrushlessMotorsReady() {
-	return (digitalRead(MOTOR1_RDY) << LEFT_READY_SHIFT) +
-		(digitalRead(MOTOR2_RDY) << RIGHT_READY_SHIFT);
-}
-
-
 void BrushlessMotorSetPwm(int motor_side, int pwm) {
-	static int last_pwm = 0;
-	if (pwm == last_pwm) {
+	static int last_pwms[2] = {0, 0};
+	int *last_pwm;
+	if (motor_side == MOTOR_LEFT) {
+		last_pwm = &last_pwms[0];
+	} else {
+		last_pwm = &last_pwms[1];
+	}
+	if (pwm == *last_pwm) {
 		return;
 	}
 	else {
-		last_pwm = pwm;
+		*last_pwm = pwm;
 	}
 	switch (motor_side) {
 		case MOTOR_LEFT:{

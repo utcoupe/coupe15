@@ -64,17 +64,19 @@ module.exports = (function () {
 		this.ready = false;
 	};
 
-	Ax12.prototype.ouvrir = function(callback) {
-		this.goTo(POS_OPENED,callback);
-	};
+	// ?
+	//
+	// Ax12.prototype.ouvrir = function(callback) {
+	// 	this.goTo(POS_OPENED,callback);
+	// };
 
-	Ax12.prototype.fermer = function(callback) {
-		this.goTo(POS_CLOSED,callback);
-	};
+	// Ax12.prototype.fermer = function(callback) {
+	// 	this.goTo(POS_CLOSED,callback);
+	// };
 
-	Ax12.prototype.goTO = function(callback) {
-		callback.call();
-	};
+	// Ax12.prototype.goTO = function(callback) {
+	// 	callback.call();
+	// };
 
 	Ax12.prototype.loopAX12 = function() {
 		var speed;
@@ -95,7 +97,11 @@ module.exports = (function () {
 			else {
 				if(!ax12s[i].arrived) {
 					ax12s[i].arrived = true;
-					logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
+					// logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
+					if(ax12s['2'].arrived && ax12s['3'].arrived) {
+						setTimeout(function(){this.callback();}.bind(this), 500);
+						this.callback = function(){};
+					}
 				}
 			}
 		}
@@ -107,16 +113,16 @@ module.exports = (function () {
 		return parseInt((deg+150)*1024/300);
 	};
 
-	Ax12.prototype.openAx12Down = function(callback) {
+	Ax12.prototype.ouvrir = function(callback) {
 		ax12s['2'].obj = this.degToAx12(0);
 		ax12s['3'].obj = this.degToAx12(0);
-		callback.call();
+		this.callback = callback;
 	};
 
-	Ax12.prototype.closeAx12Down = function(callback) {
+	Ax12.prototype.fermer = function(callback) {
 		ax12s['2'].obj = this.degToAx12(-140);
 		ax12s['3'].obj = this.degToAx12(140);
-		callback.call();
+		this.callback = callback;
 	};
 
 

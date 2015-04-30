@@ -33,26 +33,26 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case GOTOA: {
-		int x, y, a_int;
+		long x, y, a_int;
 		float a;
-		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
+		sscanf(argv, "%li;%li;%li", &x, &y, &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y));
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
 		}
 		break;
 	case ROT: {
-		int a_int;
+		long a_int;
 		float a;
-		sscanf(argv, "%i", &a_int);
+		sscanf(argv, "%li", &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
 		}
 		break;
 	case ROTNOMODULO: {
-		int a_int;
+		long a_int;
 		float a;
-		sscanf(argv, "%i", &a_int);
+		sscanf(argv, "%li", &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,0));
 		}
@@ -66,9 +66,9 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 	case PIDALL:
 	case PIDRIGHT:
 	case PIDLEFT:{
-		int p_int, i_int, d_int;
+		long p_int, i_int, d_int;
 		float p, i, d;
-		sscanf(argv, "%i;%i;%i", &p_int, &i_int, &d_int);
+		sscanf(argv, "%li;%li;%li", &p_int, &i_int, &d_int);
 		p = p_int / (float)FLOAT_PRECISION;
 		i = i_int / (float)FLOAT_PRECISION;
 		d = d_int / (float)FLOAT_PRECISION;
@@ -95,21 +95,21 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		control.last_finished_id = 0;
 		break;
 	case SET_POS:{
-		int x, y, a_int;
+		long x, y, a_int;
 		float angle;
-		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
+		sscanf(argv, "%li;%li;%li", &x, &y, &a_int);
 		angle = a_int / (float)FLOAT_PRECISION;
 		RobotStateSetPos(x, y, angle);
 		}
 		break;
 	case GET_POS:{
-		int x, y, a_int;
+		long x, y, a_int;
 		float a;
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
 		a_int = a * (float)FLOAT_PRECISION;
-		*ret_size = sprintf(ret, "%i;%i;%i", x, y, a_int);
+		*ret_size = sprintf(ret, "%li;%li;%li", x, y, a_int);
 		}
 		break;
 	case GET_SPD: {
@@ -127,13 +127,13 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case GET_POS_ID:{
-		int x, y, a_int;
+		long x, y, a_int;
 		float a;
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
 		a_int = a * (float)FLOAT_PRECISION;
-		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
+		*ret_size = sprintf(ret, "%li;%li;%li;%i", x, y, a_int, control.last_finished_id);
 		}
 		break;
 	case SPDMAX:{
@@ -143,9 +143,9 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case ACCMAX:{
-		int a, r_int;
+		long a, r_int;
 		float r;
-		sscanf(argv, "%i;%i", &a, &r_int);
+		sscanf(argv, "%li;%li", &a, &r_int);
 		r = r_int / (float)FLOAT_PRECISION;
 		control.max_acc = a;
 		control.rot_spd_ratio = r;

@@ -19,9 +19,10 @@ module.exports = (function () {
 		this.nb_erobots = nb_erobots || 2;
 
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia'});
+		this.timer = new (require('./timer.class.js'))();
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
-		this.actions = new (require('./actions.class.js'))(this, this.data, this.color);
+		this.actions = new (require('./actions.class.js'))(this);
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		this.pr = new (require('./pr.class.js'))(this, this.color);
 		this.hokuyo = new (require('./hokuyo.class.js'))(this, this.gr, this.pr, this.data, {
@@ -36,27 +37,41 @@ module.exports = (function () {
 		this.client.order(function(from, name, params) {
 			var classe = name.split('.')[0];
 				// logger.debug(this[classe]);
-			if(!!this[classe]) {
+			if(classe == 'ia') {
+				switch(name) {
+					case 'ia.jack':
+						this.jack();
+					break;
+					default:
+						logger.warn("Ordre pour l'ia inconnu : "+name);
+				}
+			} else if(!!this[classe]) {
 				// logger.debug("Order to class: "+classe);
 				if(!this[classe].parseOrder) {
 					logger.warn("Attention, pas de fonction parseOrder dans ia."+classe);
 				} else {
 					this[classe].parseOrder(from, name, params);
 				}
+			} else {
+				logger.warn("Sous client inconnu: "+classe);
 			}
 		}.bind(this));
 
 		// temp //
-		this.gr.start();
+		// this.gr.start();
+		this.jack();
 		//////////
 	}
 
-	Ia.prototype.start = function() {
-		// logger.info(this.hokuyo);
-	};
-
-	Ia.prototype.run = function() {
-		//logger.info(this.actions.do("empiler1.1"));
+	Ia.prototype.jack = function() {
+		if(!this.timer.match_started) {
+			logger.info("Démarrage de l'IA");
+			this.timer.start();
+			this.gr.start();
+			this.pr.start();
+		} else {
+			logger.warn('IA déjà lancée');
+		}
 	};
 
 	return Ia;
