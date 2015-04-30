@@ -47,7 +47,7 @@ class GUI:
 		#goto manue
 		self.goto_text = Label(self.fen, text= "Goto")
 		self.gotox_e = Entry(self.fen)
-		self.gotox_e.insert(0, '1000')
+		self.gotox_e.insert(0, '1500')
 		self.gotoy_e = Entry(self.fen)
 		self.gotoy_e.insert(0, '0')
 		self.gotoang = Entry(self.fen)
@@ -68,11 +68,11 @@ class GUI:
 		#reglages
 		self.pid_text = Label(self.fen, text="PID")
 		self.pid_p = Entry(self.fen)
-		self.pid_p.insert(0, '1.5')
+		self.pid_p.insert(0, '0.5')
 		self.pid_i = Entry(self.fen)
-		self.pid_i.insert(0, '30')
+		self.pid_i.insert(0, '50')
 		self.pid_d = Entry(self.fen)
-		self.pid_d.insert(0, '15')
+		self.pid_d.insert(0, '10')
 
 		#self.pidl_text = Label(self.fen, text="PID left")
 		#self.pidl_p = Entry(self.fen)
@@ -92,15 +92,15 @@ class GUI:
 
 		self.acc_max_text = Label(self.fen, text="Acc max")
 		self.acc_max = Entry(self.fen)
-		self.acc_max.insert(0, '1000')
+		self.acc_max.insert(0, '500')
 
 		self.spd_ratio_text = Label(self.fen, text="Spd rotation ratio")
 		self.spd_ratio = Entry(self.fen)
-		self.spd_ratio.insert(0, '1')
+		self.spd_ratio.insert(0, '0.3')
 
 		self.spd_max_text = Label(self.fen, text="Spd max")
 		self.spd_max = Entry(self.fen)
-		self.spd_max.insert(0, '1000')
+		self.spd_max.insert(0, '750')
 
 		self.send_pause = Button(self.fen, text="Pause", command=self.pause_handler)
 		self.send_resume = Button(self.fen, text="Resume", command=self.resume_handler)

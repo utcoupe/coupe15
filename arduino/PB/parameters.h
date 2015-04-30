@@ -39,16 +39,16 @@
 #define DT (1.0/HZ)
 #define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 1000 //mm/s
-#define ACC_MAX 1000  //mm/s2
+#define SPD_MAX 1500 //mm/s
+#define ACC_MAX 750  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
-#define ENC_LEFT_RADIUS 32.00 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENC_RIGHT_RADIUS 32.00 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENTRAXE_ENC 200.0 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
+#define ENC_LEFT_RADIUS 31.36 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENC_RIGHT_RADIUS 31.36 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENTRAXE_ENC 202.87 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
 
 #define ERROR_ANGLE 0.015 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
@@ -56,9 +56,9 @@
 
 #define CONE_ALIGNEMENT (120.0/180.0*3.14159) //120deg
 
-#define PID_P 1.5
-#define PID_I 1
-#define PID_D 0
+#define PID_P 0.5
+#define PID_I 50
+#define PID_D 10
 #define PID_BIAS 0
 
 #define LEFT_P (PID_P)
@@ -74,7 +74,7 @@
 #define PID_I_RATIO (1/1000.0)
 #define PID_D_RATIO (1/1000.0)
 
-#define TIME_BETWEEN_ORDERS 1 // s
+#define TIME_BETWEEN_ORDERS 0 // s
 #define KEEP_LAST_GOAL 0
 
 //DEFINES ARDUINO
