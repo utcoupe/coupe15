@@ -20,12 +20,7 @@ void annalyse_chaine();
 void setup() 
 {  
   Serial.begin(57600);
-  while (Serial.available()==0);
-  while (Serial.available()>0)
-  {
-    Serial.read();
-  }
-  Serial.print('O');
+
   stepper.setSpeed(60); 
   // /!\  Pour éviter les conflits, il ne faut pas utiliser les PIN deja prisent par la shield !!!
   H_servo1.attach(2);  //2 5 6 9 10  OK
@@ -85,6 +80,12 @@ void annalyse_chaine(){
       Serial.print('G');  
     }
     break;
+ 
+  case 'O':
+    {
+      Serial.print('O');  
+    }
+    break;
 
   case 'S':
     {
@@ -106,9 +107,10 @@ void annalyse_chaine(){
     }
     break;
   default:
-    Serial.println('U');
+    Serial.print('U');
   }
 }
+
 
 
 
