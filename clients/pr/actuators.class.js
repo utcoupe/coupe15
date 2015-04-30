@@ -10,6 +10,7 @@ module.exports = (function () {
 	function Acts(client) {
 		this.client = client;
 		this.start();
+		this.nb_plots = 0;
 	}
 
 	Acts.prototype.start = function(){
@@ -83,35 +84,56 @@ module.exports = (function () {
 			ax12.disconnect();
 	};
 
-	function fake() {}
-
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		// logger.info(params);
-
+		var that = this;
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			// others
 			case "prendre_plot":
-				//asserv.avancerDoucement()
-				setTimeout(function() {
-					others.prendreGobelet(function() {
+				if (nb_plots<2){
+					ax12.ouvrir(function() {
+					others.fermerStabilisateur(function(){
+					// asserv.avancerPlot(function(){
+					ax12.fermer(function() {
+					others.monterUnpeuAscenceur(function() {
+					others.ouvrirBloqueur(function() {
 					others.monterAscenceur(function() {
-					others.(function() {
-
-					}); }); });
-					// others.prendreGobelet(fake);
-				}, 500); //==> appel la fonction au bout de 500ms 
+					others.fermerBloqueur(function() {
+					ax12.ouvrir(function() {
+					others.descendreAscenceur(function() {
+					that.nb_plots++;
+					callback();
+					}); }); }); }); }); }); }); }); });// });
+				}
+				else {
+					ax12.ouvrir(function() {
+					others.ouvrirStabilisateurMoyen(function(){
+					//asserv.avancerPlot(function(){  TODO
+					ax12.fermer(function() {
+					others.monterUnpeuAscenceur(function() {
+					others.ouvrirBloqueur(function() {
+					others.monterAscenceur(function() {
+					others.fermerBloqueur(function() {
+					ax12.ouvrir(function() {
+					others.descendreAscenceur(function() {
+					that.nb_plots++;
+					callback();
+					}); }); }); }); }); }); }); }); }); //});					
+				}
 			break;
+
 			case "prendre_balle":
 				//
 			break;
+			
 			case "deposer_pile":
 				//
 			break;
 			case "prendre_gobelet":
-				//
+				//asserv.avancerGobelet(function(){}); TODO
 			break;
 			case "deposer_gobelet":
 				//

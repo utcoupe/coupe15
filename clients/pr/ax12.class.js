@@ -2,7 +2,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.ax12');
 	var ffi = require('ffi');
-	var libusb2ax = ffi.Library('./libs/dynamixel/src_lib/libusb2ax', {
+	var libusb2ax = ffi.Library('./libs/dynamixel/lib/libusb2ax', {
 		'dxl_initialize': ['int', ['int', 'int']],
 		'dxl_write_word': ['void', ['int', 'int', 'int']],
 		'dxl_read_word': ['int', ['int', 'int']],
@@ -124,7 +124,6 @@ module.exports = (function () {
 		ax12s['3'].obj = this.degToAx12(140);
 		this.callback = callback;
 	};
-
 
 	return Ax12;
 })();

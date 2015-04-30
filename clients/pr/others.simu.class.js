@@ -42,11 +42,15 @@ module.exports = (function () {
 	};
 
 	Others.prototype.monterAscenceur = function(callback) {
-	setTimeout(callback, 1000);
+		setTimeout(callback, 1000);
+	};
+
+	Others.prototype.monterUnPeuAscenceur = function(callback) {
+		setTimeout(callback,300);
 	};
 
 	Others.prototype.descendreAscenceur = function(callback) {
-	setTimeout(callback, 1000);
+		setTimeout(callback, 1000);
 	};
 
 	
