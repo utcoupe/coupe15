@@ -108,18 +108,19 @@ module.exports = (function () {
 	function norm2Points(A, B) {
 		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
 	}
-	Actions.prototype.getNormAction = function(pos, action_name) {
-		return norm2Points(pos, this.todo[action_name].object.pos);
+	Actions.prototype.getNormAction = function(pos, an) {
+		return norm2Points(pos, this.todo[an].object.pos);
 	}
-	Actions.prototype.getPriorityAction = function(action_name) {
-		return this.todo[action_name].priority;
+	Actions.prototype.getPriorityAction = function(an) {
+		return this.todo[an].priority;
 	}
 	Actions.prototype.getNearestAction = function(pos) {
 		var actions_todo = [];
-		Object.getOwnPropertyNames(this.todo).forEach(function(action_name) {
-			if(this.todo[action_name].object.status != "lost"
-				&& this.isDone(this.todo[action_name].dependency)) {
-				actions_todo.push(action_name);
+		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
+			if((this.todo[an].object.color == this.color || this.todo[an].object.color == "none")
+				&& this.todo[an].object.status != "lost"
+				&& this.isDone(this.todo[an].dependency)) {
+				actions_todo.push(an);
 			}
 		}, this);
 
