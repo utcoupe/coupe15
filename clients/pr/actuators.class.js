@@ -96,10 +96,12 @@ module.exports = (function () {
 			case "prendre_plot":
 				//asserv.avancerDoucement()
 				setTimeout(function() {
-					others.prendreGobelet(fake);
-					others.monterAscenceur(fake);
-					others.(fake);
-					others.prendreGobelet(fake);
+					others.prendreGobelet(function() {
+					others.monterAscenceur(function() {
+					others.(function() {
+
+					}); }); });
+					// others.prendreGobelet(fake);
 				}, 500); //==> appel la fonction au bout de 500ms 
 			break;
 			case "prendre_balle":

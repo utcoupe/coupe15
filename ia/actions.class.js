@@ -105,7 +105,45 @@ module.exports = (function () {
 		return false;
 	};
 
-	Actions.prototype.getNearestAction = function (pos){
+	function norm2Points(A, B) {
+		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
+	}
+	Actions.prototype.getNormAction = function(pos, action_name) {
+		return norm2Points(pos, this.todo[action_name].object);
+	}
+	Actions.prototype.getPriorityAction = function(action_name) {
+		return this.todo[action_name].priority;
+	}
+	Actions.prototype.getNearestAction = function(pos) {
+		var actions_todo = [];
+		Object.getOwnPropertyNames(this.todo).forEach(function(action_name) {
+			if(this.todo[action_name].object.status != "lost"
+				&& this.isDone(this.todo[action_name].dependency)) {
+				actions_todo.push(action_name);
+			}
+		}, this);
+		logger.debug(actions_todo);
+		// Tri par norme
+		actions_todo.sort(function(a, b) {
+			return (this.getNormAction(pos, a) < this.getNormAction(pos, b)) ? -1 : 1;
+		}.bind(this));
+		logger.debug(actions_todo);
+		// Tri par priorité
+		actions_todo.sort(function(a, b) {
+			return (this.getPriorityAction(a) < this.getPriorityAction(b)) ? -1 : 1;
+		}.bind(this));
+		logger.debug(actions_todo);
+
+		for(var i in actions_todo) {
+			logger.debug('[%d] %s (%d)', this.todo[action_name].priority, action_name, this.getNormAction(pos, action_name));
+		}
+
+		return actions_todo[0];
+	}
+
+	// <troll>
+	Actions.prototype.getFarestAction = function (pos){
+	// </troll>
 		var action_name = "";
 		// Begin with first possible action
 		Object.keys(this.todo).forEach(function(a_n) {
@@ -113,7 +151,7 @@ module.exports = (function () {
 				(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
 				this.isDone(this.todo[a_n].dependency))
 				action_name = a_n;
-		}.bind(this));
+		}, this);
 
 		// Find if there's a nearer one
 		if (!!action_name) {
@@ -139,58 +177,53 @@ module.exports = (function () {
 						}
 					}
 				}
-			}.bind(this));
+			}, this);
 		}
 
 		return action_name;
 	};
 
-	Actions.prototype.isCloser = function (dist1, dist2){
-		// Returns true if dist1 is smaller than dist2
-		// i.e. object 1 is closer than object 2
+	// Useless c'est des flottants et si la distance est équivalente (impossible avec des flottants sans marge)
+	// on va gagner que quelques centaine de milisecondes grand grand max)
+	// Actions.prototype.isCloser = function (dist1, dist2){
+	// 	// Returns true if dist1 is smaller than dist2
+	// 	// i.e. object 1 is closer than object 2
 
-		if(dist1.d < dist2.d){
-			return true;
-		} else {
-			if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
-				return true;
-			else
-				return false;
-		}
-	};
+	// 	if(dist1.d < dist2.d){
+	// 		return true;
+	// 	} else {
+	// 		if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
+	// 			return true;
+	// 		else
+	// 			return false;
+	// 	}
+	// };
 
-	Actions.prototype.getActionDistance = function (pos, action_name){
-		var start_pts;
-		if (this.exists(action_name)){
-			start_pts = this.todo[action_name].startpoints;
+	// Useless de calculer pour chaque point d'entrée, autant calculer pour l'objet
+	// qui est approximativement aussi proche que ses points d'entrées
+	// Actions.prototype.getActionDistance = function (pos, action_name){
+	// 	var start_pts;
+	// 	if (this.exists(action_name)){
+	// 		start_pts = this.todo[action_name].startpoints;
 
-			var dist = {
-					d: Math.sqrt(3000^2 + 2000^2),
-					delta_a: 181,
-					start_point: -1
-				};
+	// 		var min_dist = Infinity;
 
-			if (!start_pts.length) 
-				logger.warn("No startpoint for object "+action_name);
+	// 		if (start_pts.length == 0) 
+	// 			logger.warn("No startpoint for object "+action_name);
 
-			for (var i = 0; i < start_pts.length; i++) {
-				var temp = {
-					d: Math.sqrt(Math.pow(pos.x - start_pts[i].x, 2) + Math.pow(pos.y - start_pts[i].y, 2)),
-					a: Math.abs(pos.a - start_pts[i].a)
-				};
+	// 		for (var i = 0; i < start_pts.length; i++) {
+	// 			var dist = Math.sqrt(Math.pow(pos.x - start_pts[i].x, 2) + Math.pow(pos.y - start_pts[i].y, 2));
 
-				if (this.isCloser(temp, dist)){
-					dist.d = temp.d;
-					dist.delta_a = temp.a;
-					dist.start_point = i;
-				}
-			}
+	// 			if (dist < min_dist){
+	// 				min_dist = dist;
+	// 			}
+	// 		}
 
-			return dist;
-		} else {
-			return null;
-		}
-	};
+	// 		return min_dist;
+	// 	} else {
+	// 		return null;
+	// 	}
+	// };
 
 	Actions.prototype.isOk = function () { // XXX
 		if (errors.length !== 0){
