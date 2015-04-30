@@ -135,7 +135,7 @@ module.exports = (function () {
 		logger.debug(actions_todo);
 
 		for(var i in actions_todo) {
-			logger.debug('[%d] %s (%d)', this.todo[action_name].priority, action_name, this.getNormAction(pos, action_name));
+			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
 		}
 
 		return actions_todo[0];
