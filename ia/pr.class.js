@@ -23,8 +23,12 @@ module.exports = (function () {
 		}
 	}
 
+	Pr.prototype.loop = function () {
+		logger.debug(this.ia.actions.getNearestAction(this.pos));
+	};
+
 	Pr.prototype.start = function () {
-		this.sendOrders();
+		this.loop();
 	};
 
 	Pr.prototype.sendPos = function () {
@@ -33,6 +37,7 @@ module.exports = (function () {
 
 	Pr.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
+			// Asserv
 			case 'pr.pos':
 				this.pos = params;
 			break;

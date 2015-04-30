@@ -2,6 +2,11 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'telecommande';
 
+	// IA
+	$scope.iaJack = function() {
+		Client.send("ia", "ia.jack");
+	}
+
 	// GR
 	$scope.gr_pwm_gauche = 50;
 	$scope.gr_pwm_droite = 50;
