@@ -109,7 +109,7 @@ module.exports = (function () {
 		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
 	}
 	Actions.prototype.getNormAction = function(pos, action_name) {
-		return norm2Points(pos, this.todo[action_name].object);
+		return norm2Points(pos, this.todo[action_name].object.pos);
 	}
 	Actions.prototype.getPriorityAction = function(action_name) {
 		return this.todo[action_name].priority;
@@ -122,21 +122,15 @@ module.exports = (function () {
 				actions_todo.push(action_name);
 			}
 		}, this);
-		logger.debug(actions_todo);
-		// Tri par norme
-		actions_todo.sort(function(a, b) {
-			return (this.getNormAction(pos, a) < this.getNormAction(pos, b)) ? -1 : 1;
-		}.bind(this));
-		logger.debug(actions_todo);
-		// Tri par priorité
-		actions_todo.sort(function(a, b) {
-			return (this.getPriorityAction(a) < this.getPriorityAction(b)) ? -1 : 1;
-		}.bind(this));
-		logger.debug(actions_todo);
 
-		for(var i in actions_todo) {
-			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
-		}
+		// Tri par priorité puis par norme
+		actions_todo.sort(function(a, b) {
+			return (this.getPriorityAction(a) - this.getPriorityAction(b)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
+		}.bind(this));
+
+		// for(var i in actions_todo) {
+		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		// }
 
 		return actions_todo[0];
 	}
