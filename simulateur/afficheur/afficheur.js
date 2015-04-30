@@ -367,3 +367,15 @@ Simu.init = function(){
 		}
 */
 	}
+
+
+	Simu.drawLine = function(c1,c2){
+		var mat = new THREE.LineBasicMaterial( {color: 0x000000} );
+		var geo = new THREE.Geometry();
+		geo.vertices.push(
+			new THREE.Vector3( c1.x, c1.y, c1.z ),
+			new THREE.Vector3( c2.x, c2.y, c2.z)
+			);
+		var line = new THREE.Line( geo, mat);
+		Simu.scene.add(line);
+	}
