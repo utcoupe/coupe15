@@ -19,24 +19,6 @@
 				}],
 			"kill": null
 		},
-		"prendre_balle_droite":{
-			"type": "balle",
-			"owner": "pr",
-			"objectname": "balle__droite",
-			"startpoints": [{
-				"x": 1850,
-				"y": 1850,
-				"a": -135
-			}],
-			"priority": 1,
-			"dependency": "prendre_plot_middle_right3",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_balle",
-				"params": {}
-				}],
-			"kill": null
-		},
 		"faire_les_claps_1&3":{
 			"type": "clap",
 			"owner": "pr",
@@ -75,74 +57,6 @@
 				},
 				{
 				"name": "fermer_baton_droit",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"faire_les_claps_2":{
-			"type": "clap",
-			"owner": "pr",
-			"objectname": "clap__2",
-			"startpoints": [{
-				"x": 400,
-				"y": 1850,
-				"a": 0
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "ouvrir_baton_droit",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_droit",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"faire_les_claps_6&4":{
-			"type": "clap",
-			"owner": "pr",
-			"objectname": "clap__4",
-			"startpoints": [{
-				"x": 2880,
-				"y": 1850,
-				"a": 180
-			}],
-			"priority": 1,
-			"dependency": "prendre_gobelet_front_right",
-			"duration": 1,
-			"orders":[{
-				"name": "ouvrir_baton_gauche",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_gauche",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "ouvrir_baton_gauche",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_gauche",
 				"params": {}
 				}],
 			"kill": null
@@ -202,7 +116,7 @@
 				"y": 1715,
 				"a": -45
 			}],
-			"priority": 1,
+			"priority": 9,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -379,7 +293,7 @@
 				"y": 1715,
 				"a": -45
 			}],
-			"priority": 1,
+			"priority": 8,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -389,9 +303,9 @@
 			"kill": null
 		},
 		"prendre_plot_front_left1":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__front_left1",
+			"objectname": "plot__front_left1",
 			"startpoints": [{
 				"x": 125,
 				"y": 1715,
@@ -402,7 +316,7 @@
 				"y": 1750,
 				"a": 180
 			}],
-			"priority": 1,
+			"priority": 8,
 			"dependency": "prendre_plot_front_left2",
 			"duration": 1,
 			"orders":[{
@@ -412,9 +326,9 @@
 			"kill": null
 		},
 		"prendre_plot_front_left2":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__front_left2",
+			"objectname": "plot__front_left2",
 			"startpoints": [{
 				"x": 125,
 				"y": 1815,
@@ -425,7 +339,7 @@
 				"y": 1850,
 				"a": 180
 			}],
-			"priority": 1,
+			"priority": 7,
 			"dependency": "prendre_gobelet_front_left",
 			"duration": 1,
 			"orders":[{
@@ -435,9 +349,9 @@
 			"kill": null
 		},
 		"prendre_plot_middle_left1":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__middle_left1",
+			"objectname": "plot__middle_left1",
 			"startpoints": [{
 				"x": 870,
 				"y": 1305,
@@ -478,7 +392,7 @@
 				"y": 1320,
 				"a": -45
 			}],
-			"priority": 1,
+			"priority": 10,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -488,9 +402,9 @@
 			"kill": null
 		},
 		"prendre_plot_middle_left2":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__middle_left2",
+			"objectname": "plot__middle_left2",
 			"startpoints": [{
 				"x": 1300,
 				"y": 1350,
@@ -531,7 +445,7 @@
 				"y": 1365,
 				"a": -45
 			}],
-			"priority": 1,
+			"priority": 10,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -541,9 +455,9 @@
 			"kill": null
 		},
 		"prendre_plot_middle_left3":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__middle_left3",
+			"objectname": "plot__middle_left3",
 			"startpoints": [{
 				"x": 1100,
 				"y": 1720,
@@ -584,7 +498,7 @@
 				"y": 1735,
 				"a": -45
 			}],
-			"priority": 1,
+			"priority": 10,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -594,9 +508,9 @@
 			"kill": null
 		},
 		"prendre_plot_rear_left":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__rear_left",
+			"objectname": "plot__rear_left",
 			"startpoints": [{
 				"x": 140,
 				"y": 200,
@@ -617,9 +531,9 @@
 			"kill": null
 		},
 		"prendre_plot_stairs_left1":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__stairs_left1",
+			"objectname": "plot__stairs_left1",
 			"startpoints": [{
 				"x": 850,
 				"y": 150,
@@ -640,9 +554,9 @@
 			"kill": null
 		},
 		"prendre_plot_stairs_left2":{
-			"type": "cylindre",
+			"type": "plot",
 			"owner": "pr",
-			"objectname": "cylindre__stairs_left2",
+			"objectname": "plot__stairs_left2",
 			"startpoints": [{
 				"x": 850,
 				"y": 250,
@@ -652,280 +566,6 @@
 				"x": 815,
 				"y": 235,
 				"a": 45
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_front_right1":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__front_right1",
-			"startpoints": [{
-				"x": 2860,
-				"y": 1750,
-				"a": 0
-			},
-			{
-				"x": 2875,
-				"y": 1715,
-				"a": -45
-			}],
-			"priority": 1,
-			"dependency": "prendre_plot_front_right2",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_front_right2":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__front_right2",
-			"startpoints": [{
-				"x": 2860,
-				"y": 1850,
-				"a": 0
-			},
-			{
-				"x": 2875,
-				"y": 1815,
-				"a": -45
-			}],
-			"priority": 1,
-			"dependency": "prendre_gobelet_front_right",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_middle_right1":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__middle_right1",
-			"startpoints": [{
-				"x": 2130,
-				"y": 1305,
-				"a": -90
-			},
-			{
-				"x": 2165,
-				"y": 1320,
-				"a": -135
-			},
-			{
-				"x": 2180,
-				"y": 1355,
-				"a": 180
-			},
-			{
-				"x": 2165,
-				"y": 1390,
-				"a": 135
-			},
-			{
-				"x": 2130,
-				"y": 1405,
-				"a": 90
-			},
-			{
-				"x": 2095,
-				"y": 1390,
-				"a": 45
-			},
-			{
-				"x": 2080,
-				"y": 1355,
-				"a": 0
-			},
-			{
-				"x": 2095,
-				"y": 1320,
-				"a": -45
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_middle_right2":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__middle_right2",
-			"startpoints": [{
-				"x": 1700,
-				"y": 1350,
-				"a": -90
-			},
-			{
-				"x": 1735,
-				"y": 1365,
-				"a": -135
-			},
-			{
-				"x": 1750,
-				"y": 1400,
-				"a": 180
-			},
-			{
-				"x": 1735,
-				"y": 1435,
-				"a": 135
-			},
-			{
-				"x": 1700,
-				"y": 1450,
-				"a": 90
-			},
-			{
-				"x": 1665,
-				"y": 1435,
-				"a": 45
-			},
-			{
-				"x": 1650,
-				"y": 1400,
-				"a": 0
-			},
-			{
-				"x": 1665,
-				"y": 1365,
-				"a": -45
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_middle_right3":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__middle_right3",
-			"startpoints": [{
-				"x": 1900,
-				"y": 1720,
-				"a": -90
-			},
-			{
-				"x": 1935,
-				"y": 1735,
-				"a": -135
-			},
-			{
-				"x": 1950,
-				"y": 1770,
-				"a": 180
-			},
-			{
-				"x": 1935,
-				"y": 1805,
-				"a": 135
-			},
-			{
-				"x": 1900,
-				"y": 1820,
-				"a": 90
-			},
-			{
-				"x": 1865,
-				"y": 1805,
-				"a": 45
-			},
-			{
-				"x": 1850,
-				"y": 1770,
-				"a": 0
-			},
-			{
-				"x": 1865,
-				"y": 1735,
-				"a": -45
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_rear_right":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__rear_right",
-			"startpoints": [{
-				"x": 2875,
-				"y": 235,
-				"a": 45
-			},
-			{
-				"x": 2860,
-				"y": 200,
-				"a": 0
-			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_stairs_right1":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__stairs_right1",
-			"startpoints": [{
-				"x": 2185,
-				"y": 135,
-				"a": 135
-			},
-			{
-				"x": 2150,
-				"y": 150,
-				"a": 90
-			}],
-			"priority": 1,
-			"dependency": "prendre_plot_stairs_right2",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_stairs_right2":{
-			"type": "cylindre",
-			"owner": "pr",
-			"objectname": "cylindre__stairs_right2",
-			"startpoints": [{
-				"x": 2185,
-				"y": 235,
-				"a": 135
-			},
-			{
-				"x": 2150,
-				"y": 250,
-				"a": 90
 			}],
 			"priority": 1,
 			"dependency": "",

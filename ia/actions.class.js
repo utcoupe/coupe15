@@ -126,7 +126,7 @@ module.exports = (function () {
 
 		// Tri par priorité puis par norme
 		actions_todo.sort(function(a, b) {
-			return (this.getPriorityAction(a) - this.getPriorityAction(b)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
+			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
 		// for(var i in actions_todo) {
