@@ -104,7 +104,7 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "prendre_plot":
-				if (that.nb_plots==1){
+				if (that.nb_plots==0){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
@@ -119,7 +119,7 @@ module.exports = (function () {
 					callback();
 					}); }); }); }); }); }); }); }); });// });
 				}
-				else if(that.nb_plots==2){
+				else if(that.nb_plots==1){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					// asserv.avancerPlot(function(){
@@ -199,71 +199,8 @@ module.exports = (function () {
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");
 				callback();
-			// case "servo_goto":
-			// 	// logger.info(!!params.servo && !!params.position);
-			// 	// if(!!params.servo && !!params.position){ // /!\ problème si servo vaut 0 !!
-			// 		servos.servo_goto(params.servo, params.position, callback);
-			// 	// }
-			// 	break;
-			// case "stabs_close":
-			// 	servos.fermerStabilisateur(callback);
-			// 	break;
-			// case "stabs_open_chouilla":
-			// 	servos.ouvrirChouillaStabilisateur(callback);
-			// 	break;
-			// case "stabs_open":
-			// 	servos.ouvrirStabilisateur(callback);
-			// 	break;
-			// case "arm_close":
-			// 	servos.fermerBras(callback);
-			// 	break;
-			// case "arm_open_chouilla":
-			// 	servos.ouvrirChouillaBras(callback);
-			// 	break;
-			// case "arm_open":
-			// 	servos.ouvrirBras(callback);
-			// 	break;
-			// case "AX12_goto":
-			// 	AX12_goto(params.position);
-			// 	break;
-
-
-			// case "AX12_close":
-			// 	ax12.closeAx12Down(callback);
-			// 	break;
-			// case "AX12_open":
-			// 	ax12.openAx12Down(callback);
-			// 	break;
-			// case "steppers_move":
-			// 	stepper_do(params.move, params.direction);
-			// 	break;
-			// case "steppers_toogle":
-			// 	stepper_toogle();
-			// 	break;
-			// case "steppers_set_bottom":
-			// 	stepper_setBottom();
-			// 	break;
-			// case "send_message":
-			// 	client.send("pr", params.name, {action_name: params.action_name});
-			// 	break;
 		}
 	};
-
-	// prendre_balle (avancer + prendre)
-
-	// ouvrir_baton_droit
-	// avancer_clap
-	// fermer_baton_droit
-	// ouvrir_baton_gauche
-	// fermer_baton_gauche
-
-	// prendre_gobelet
-
-	// prendre_plot
-		// ouvrir pieds
-		// avancer
-		// fermer pieds
-		// monter...
-
+	
 	return Acts;
 })();

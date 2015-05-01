@@ -15,7 +15,7 @@ module.exports = (function () {
 	var P_POSITION = 36;
 	var P_SPEED	= 0x26;
 	var P_COUPLE = 34;
-	var MARGE_POS = 40;
+	var MARGE_POS = 80;
 	var MARGE_POS_MVT = 5;
 	var ax12s = {
 		'2':{
@@ -81,6 +81,7 @@ module.exports = (function () {
 				}
 				else {
 					ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
+					logger.debug(i, ax12s[i].pos, ax12s[i].obj);
 					if(this.type_callback == 'ouvrir') {
 						ax12s[i].arrived = true;
 						// logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
@@ -124,8 +125,9 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.fermer = function(callback) {
-		ax12s['2'].obj = this.degToAx12(-90);
-		ax12s['3'].obj = this.degToAx12(90);
+		ax12s['2'].obj = this.degToAx12(-85);
+		ax12s['3'].obj = this.degToAx12(85);
+		// logger.debug(ax12s['2'].obj);
 		ax12s['2'].arrived = false;
 		ax12s['3'].arrived = false;
 		this.callback = callback;
