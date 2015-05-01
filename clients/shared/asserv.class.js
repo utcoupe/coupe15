@@ -43,9 +43,9 @@ module.exports = (function () {
 	Asserv.prototype.setPos = function(callback, pos) {
 		this.Pos(pos);
 		this.sendCommand(callback, COMMANDS.SET_POS, [
-			this.pos.x,
-			2000-this.pos.y,
-			this.pos.a
+			parseInt(this.pos.x),
+			parseInt(2000-this.pos.y),
+			myWriteFloat(this.pos.a)
 		]);
 	}
 	Asserv.prototype.getPos = function(pos) {
@@ -172,9 +172,7 @@ module.exports = (function () {
 	};
 
 	Asserv.prototype.pwm = function(callback, left, right, ms) {
-		this.sendCommand(function(){
-			setTimeout(callback, ms);
-		}, COMMANDS.PWM, [
+		this.sendCommand(callback, COMMANDS.PWM, [
 			parseInt(left),
 			parseInt(right),
 			parseInt(ms)

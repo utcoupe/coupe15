@@ -94,7 +94,7 @@ module.exports = (function () {
 		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
-
+	function fake() {}
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
@@ -168,6 +168,15 @@ module.exports = (function () {
 				//
 				callback();
 			break;
+			case "fermer_pour_charger_balle":
+				others.ouvrirStabilisateurGrand(fake);
+				others.lacherGobelet(fake);
+				others.fermerBloqueur(fake);
+				ax12.fermer(fake);
+				setTimeout(function() {
+					others.fermerStabilisateur(callback);
+				}, 5000);
+			break;
 			case "fermer_tout":
 				others.fermerStabilisateur(function() {
 				others.lacherGobelet(function() {
@@ -179,6 +188,9 @@ module.exports = (function () {
 			break;
 			case "ouvrir_ax12":
 				ax12.ouvrir(callback);
+			break;
+			case "monter_ascenseur":
+				others.monterAscenseur(callback);
 			break;
 
 
