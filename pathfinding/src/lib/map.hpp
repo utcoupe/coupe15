@@ -37,16 +37,16 @@ class MAP {
 		MAP(const std::string &map_filename);
 		~MAP();
 		vertices_size_type length(std::size_t d) const {return map->length(d);}
-		bool has_barrier(vertex_descriptor u) const {
-			return 	(barriers.find(u) != barriers.end());
-		}
-		int get_map_w() const {return map_w;};
-		int get_map_h() const {return map_h;};
 		void add_dynamic_circle(int x, int y, float f_r);
-		void clean_dynamic_barriers();
-		bool solve(int x_source, int y_source, int x_dest, int y_dest, heuristic_type mode=EUCLIDEAN);
-		bool solved() const {return !solution.empty();}
+		void clear_dynamic_barriers();
+
+		bool solve(vertex_descriptor source, vertex_descriptor dest);
+		bool solve(int x_source, int y_source, int x_dest, int y_dest) {
+			return solve(get_vertex(x_source, y_source), 
+							get_vertex(x_dest, y_dest));
+		}
 		void solve_smooth();
+
 		bool solution_contains(vertex_descriptor u) const {
 			for (const auto &el: solution) {
 				if (el == u)
@@ -61,15 +61,35 @@ class MAP {
 			}
 			return false;
 		}
+		bool has_barrier(vertex_descriptor u) const {
+			return 	(barriers.find(u) != barriers.end());
+		}
+		
+		bool has_dynamic_barrier(vertex_descriptor u) const {
+			return 	(dynamic_barriers.find(u) != dynamic_barriers.end());
+		}
+
+		void generate_bmp(std::string path);
+		vertex_descriptor find_nearest_valid(vertex_descriptor u);
+		vertex_descriptor find_nearest_valid(int x, int y) {
+			return find_nearest_valid(get_vertex(x, y));
+		};
+
+		vertex_descriptor get_vertex(int x, int y);
 		double get_smooth_solution_length() { return smooth_solution_length; };
 		double get_solution_length() { return smooth_solution_length; };
-		void generate_bmp(std::string path);
+		int get_map_w() const {return map_w;};
+		int get_map_h() const {return map_h;};
+		std::vector<vertex_descriptor> get_solution() { return solution; };
+		std::vector<vertex_descriptor> get_smooth_solution() { return smooth_solution; };
+		bool solved() const {return !solution.empty();}
+		void set_heuristic_mode(heuristic_type mode) { h_mode = mode; };
 	private:
 		int map_w, map_h;
 		grid create_map(std::size_t x, std::size_t y);
 		filtered_grid create_barrier_map();
-		vertex_descriptor get_vertex(int x, int y);
-		bool get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, double &d);
+		bool get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, 
+									double &d);
 		void clear_solution() {
 			solution.clear();
 			solution_length = 0;
@@ -82,6 +102,7 @@ class MAP {
 		vertex_set barriers, static_barriers, dynamic_barriers;
 		std::vector<vertex_descriptor> solution, smooth_solution;
 		vertex_descriptor v_start, v_end;
+		heuristic_type h_mode;
 		double solution_length, smooth_solution_length;
 };
 

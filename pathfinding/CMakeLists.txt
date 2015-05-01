@@ -27,11 +27,11 @@ file(
 	src/test/map_test.cpp
 )
 
-#add_executable(
-#	${EXEC_NAME}
-#	${lib_files}
-# 	${executable_file}
-#)
+add_executable(
+	${EXEC_NAME}
+	${lib_files}
+ 	${executable_file}
+)
 
 add_executable(
 	${TEST_MAP_EXEC_NAME}

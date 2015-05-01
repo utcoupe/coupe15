@@ -43,22 +43,24 @@ void MAP::add_dynamic_circle(int x, int y, float f_r) {
 				continue;
 			}
 			vertex_descriptor u = get_vertex(p_x, p_y);
-			if (!has_barrier(u)) {
+			if (!has_dynamic_barrier(u)) {
 				dynamic_barriers.insert(u);
-				barriers.insert(u);
+				if (!has_barrier(u)) {
+					barriers.insert(u);
+				}
 			}
 		}
 	}
 	clear_solution();
 }
 
-void MAP::clean_dynamic_barriers() {
+void MAP::clear_dynamic_barriers() {
 	dynamic_barriers.clear();
 	barriers = static_barriers;
 	clear_solution();
 }
 
-bool MAP::solve(int x_source, int y_source, int x_dest, int y_dest, heuristic_type mode) {
+bool MAP::solve(vertex_descriptor source, vertex_descriptor dest) {
 	clear_solution();
 	boost::static_property_map<double> weight(1);
 	// The predecessor map is a vertex-to-vertex mapping.
@@ -74,20 +76,20 @@ bool MAP::solve(int x_source, int y_source, int x_dest, int y_dest, heuristic_ty
 	dist_map distance;
 	boost::associative_property_map<dist_map> dist_pmap(distance);
 
-	v_start = get_vertex(x_source, y_source);
-	v_end = get_vertex(x_dest, y_dest);
+	v_start = source; 
+	v_end = dest;
 
 	astar_goal_visitor visitor(v_end);
 
 	try {
-	if (mode == NORM1) {
+	if (h_mode == NORM1) {
 		norm1_heuristic heuristic(v_end);
 		astar_search(*map_barrier, v_start, heuristic,
 					 boost::weight_map(weight).
 					 predecessor_map(pred_pmap).
 					 distance_map(dist_pmap).
 					 visitor(visitor) );
-	} else if (mode == EUCLIDEAN) {
+	} else if (h_mode == EUCLIDEAN) {
 		euclidean_heuristic heuristic(v_end);
 		astar_search(*map_barrier, v_start, heuristic,
 					 boost::weight_map(weight).
@@ -108,7 +110,7 @@ bool MAP::solve(int x_source, int y_source, int x_dest, int y_dest, heuristic_ty
 }
 
 void MAP::solve_smooth() {
-	if (!solved()) return;
+	if (!solved());
 	double distance;
 	vertex_descriptor last = v_start;
 	smooth_solution_length = 0;
@@ -124,6 +126,30 @@ void MAP::solve_smooth() {
 			}
 		}
 	} while (last != v_end);
+}
+
+vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
+	int dist = 0;
+	vertex_descriptor nearest = u;
+	vector<vertex_descriptor> v_this_dist;
+	while (has_barrier(nearest)) {
+		if (v_this_dist.size() == 0) {
+			++dist;
+			for (int x=u[0]-dist; x<=u[0]+dist; ++x) {
+				if (x < 0 || x > length(0)) continue;
+				for (int y=u[1]-dist; y<=u[1]+dist; ++y) {
+					if (y < 0 || y > length(1)) continue;
+					vertex_descriptor v = get_vertex(x, y);
+					if (norm1_heuristic(u)(v) == dist) {
+						v_this_dist.push_back(v);
+					}
+				}
+			}
+		}
+		nearest = v_this_dist.back();
+		v_this_dist.pop_back();
+	}
+	return nearest;
 }
 
 void MAP::generate_bmp(string path) {

@@ -18,7 +18,8 @@ int main() {
 	std::cin >> y_e;
 
 	// EUCLIDEAN
-	map.solve(x_s,y_s,x_e,y_e, EUCLIDEAN);
+	map.set_heuristic_mode(EUCLIDEAN);
+	map.solve(x_s,y_s,x_e,y_e);
 	map.solve_smooth();
 	teu = clock() - t;
 
@@ -31,7 +32,8 @@ int main() {
 
 	// NORM1
 	t = clock();
-	map.solve(x_s,y_s,x_e,y_e, NORM1);
+	map.set_heuristic_mode(NORM1);
+	map.solve(x_s,y_s,x_e,y_e);
 	map.solve_smooth();
 	tn1 = clock() - t;
 
