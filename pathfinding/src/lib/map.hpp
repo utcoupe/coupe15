@@ -114,7 +114,7 @@ class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> 
 	public:
 	euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
 	double operator()(vertex_descriptor v) {
-		return sqrt(pow(double(m_goal[0] - v[0]), 2) + pow(double(m_goal[1] - v[1]), 2));
+		return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
 	}
 
 	private:

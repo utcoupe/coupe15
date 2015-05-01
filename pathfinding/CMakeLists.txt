@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(pathfinding)
 
 FIND_PACKAGE(Boost REQUIRED)
-SET(CMAKE_CXX_FLAGS "-std=c++11")
+SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Werror")
 
 set(EXECUTABLE_OUTPUT_PATH bin/)
 set(EXEC_NAME pathfinding)

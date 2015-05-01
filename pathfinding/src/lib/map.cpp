@@ -14,9 +14,10 @@ MAP::MAP(const std::string &map_filename):
 	for (int y=0; y < map_h; y++) {
 		for (int x=0; x < map_w; x++) {
 			unsigned char r, g, b;
+			int true_y = map_h - y;
 			image.get_pixel(x, y, r, g, b);
 			if (b < 127) {
-				vertex_descriptor u = get_vertex(x, y);
+				vertex_descriptor u = get_vertex(x, true_y);
 				static_barriers.insert(u);
 			}
 		}
@@ -34,12 +35,12 @@ void MAP::add_dynamic_circle(int x, int y, float f_r) {
 	int r = ceil(f_r);
 	int r2 = pow(r, 2);
 	for (int p_x=x-r; p_x <= x+r; p_x++) {
-		if (p_x < 0 || p_x >= length(0)) {
+		if (p_x < 0 || p_x >= (long)length(0)) {
 			continue;
 		}
 		int y_length = ceil(sqrt(r2 - pow(x-p_x,2))); 
 		for (int p_y=y-y_length; p_y <= y+y_length; p_y++) {
-			if (p_y < 0 || p_y >= length(1)) {
+			if (p_y < 0 || p_y >= (long)length(1)) {
 				continue;
 			}
 			vertex_descriptor u = get_vertex(p_x, p_y);
@@ -110,7 +111,7 @@ bool MAP::solve(vertex_descriptor source, vertex_descriptor dest) {
 }
 
 void MAP::solve_smooth() {
-	if (!solved());
+	if (!solved()) return;
 	double distance;
 	vertex_descriptor last = v_start;
 	smooth_solution_length = 0;
@@ -135,10 +136,10 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 	while (has_barrier(nearest)) {
 		if (v_this_dist.size() == 0) {
 			++dist;
-			for (int x=u[0]-dist; x<=u[0]+dist; ++x) {
-				if (x < 0 || x > length(0)) continue;
-				for (int y=u[1]-dist; y<=u[1]+dist; ++y) {
-					if (y < 0 || y > length(1)) continue;
+			for (int x=(long)u[0]-dist; x<=(long)u[0]+dist; ++x) {
+				if (x < 0 || x > (long)length(0)) continue;
+				for (int y=(long)u[1]-dist; y<=(long)u[1]+dist; ++y) {
+					if (y < 0 || y > (long)length(1)) continue;
 					vertex_descriptor v = get_vertex(x, y);
 					if (norm1_heuristic(u)(v) == dist) {
 						v_this_dist.push_back(v);
@@ -154,11 +155,15 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 
 void MAP::generate_bmp(string path) {
 	bitmap_image img(length(0), length(1));
-	for (int y = 0; y < length(1); y++) {
+	image_drawer draw(img);
+	draw.pen_width(3);
+	draw.pen_color(0,0,255);
+	for (int true_y = 0; true_y < (long)length(1); true_y++) {
 		for (vertices_size_type x = 0; x < length(0); x++) {
-			vertex_descriptor u = {{x, vertices_size_type(y)}};
+			int y = length(1) - true_y - 1;
+			vertex_descriptor u = {{x, vertices_size_type(true_y)}};
 			if (smooth_solution_contains(u))
-				img.set_pixel(x, y, 255, 0, 0);
+				draw.plot_pen_pixel(x, y);
 			else if (solution_contains(u))
 				img.set_pixel(x, y, 0, 255, 0);
 			else if (has_barrier(u))
@@ -166,6 +171,16 @@ void MAP::generate_bmp(string path) {
 			else
 				img.set_pixel(x, y, 255, 255, 255);
 		}
+	}
+	draw.pen_width(1);
+	draw.pen_color(255,0,0);
+	for (unsigned int i=1; i<smooth_solution.size(); i++) {
+		int x1, x2, y1, y2;
+		x1 = smooth_solution[i-1][0];
+		x2 = smooth_solution[i][0];
+		y1 = length(1) - smooth_solution[i-1][1];
+		y2 = length(1) - smooth_solution[i][1];
+		draw.line_segment(x1, y1, x2, y2);
 	}
 	img.save_image(path);
 }
@@ -175,16 +190,42 @@ void MAP::generate_bmp(string path) {
  * 			*/
 
 bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, double &d) {
-	double dx, dy, m, c;
-	dx = goal[0] - v[0];
-	dy = goal[1] - v[1];
-	m = dy / dx;
-	c = v[1] - m*v[0];
-	for (int x=v[0]; x<goal[0]; x++) {
-		int y = round(m*x+c);
-		if (has_barrier(get_vertex(x, y))) {
-			d = 0;
-			return false;
+	long dx, dy;
+	double m, c;
+	int inc;
+	dx = (long)goal[0] - (long)v[0];
+	dy = (long)goal[1] - (long)v[1];
+	if (abs(dx) > abs(dy)) {
+		// iterate over X
+		if (dx > 0) {
+			inc = 1;
+		} else {
+			inc = -1;
+		}
+		m = (double)dy / dx;
+		c = v[1] - m*v[0];
+		for (long x=v[0]; x!=(long)goal[0]; x+=inc) {
+			long y = round(m*x+c);
+			if (has_barrier(get_vertex(x, y))) {
+				d = 0;
+				return false;
+			}
+		}
+	} else {
+		// iterate over Y
+		if (dy > 0) {
+			inc = 1;
+		} else {
+			inc = -1;
+		}
+		m = (double)dx / dy;
+		c = v[0] - m*v[1];
+		for (long y=v[1]; y!=(long)goal[1]; y+=inc) {
+			long x = round(m*y+c);
+			if (has_barrier(get_vertex(x, y))) {
+				d = 0;
+				return false;
+			}
 		}
 	}
 	d = euclidean_heuristic(goal)(v);
@@ -213,7 +254,7 @@ std::ostream& operator<<(std::ostream& output, const MAP& m) {
 		output << BARRIER;
 	output << std::endl;
 	// Body
-	for (int y = 0; y < m.length(1); y++) {
+	for (int y = 0; y < (long)m.length(1); y++) {
 		// Enumerate rows in reverse order and columns in regular order so that
 		// (0,0) appears in the lower left-hand corner.  This requires that y be
 		// int and not the unsigned vertices_size_type because the loop exit
