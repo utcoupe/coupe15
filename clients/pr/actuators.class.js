@@ -157,8 +157,13 @@ module.exports = (function () {
 			break;
 			
 			case "deposer_pile":
-				//
-				callback();
+				setTimeout(function() {
+					ax12.ouvrir(function() {
+					others.ouvrirBloqueurGrand(function() {
+					others.ouvrirStabilisateurGrand(function() {
+					asserv.speed(callback, -200, 0, 1000);
+					});});});
+				}, 1000);
 			break;
 			case "prendre_gobelet":
 				//asserv.avancerGobelet(function(){}); TODO

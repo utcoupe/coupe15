@@ -157,7 +157,7 @@ module.exports = (function () {
 			parseInt(l),
 			parseInt(a),
 			parseInt(ms)
-		]);
+		], true);
 	};
 
 	Asserv.prototype.setAcc = function(callback, acc) {

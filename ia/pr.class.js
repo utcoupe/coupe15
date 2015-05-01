@@ -25,7 +25,7 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		if(this.nb < 3) {
+		if(this.nb < 4) {
 			logger.debug('loop');
 			this.nb++;
 			var action_name = this.ia.actions.getNearestAction(this.pos);
@@ -38,6 +38,10 @@ module.exports = (function () {
 	Pr.prototype.place = function () {
 		logger.debug('place');
 		this.sendPos();
+		this.ia.client.send("pr", "setpid", { p:0.2, i:5, d:5 });
+		this.ia.client.send("pr", "goxy", { x: 500, y: 1060});
+		this.ia.client.send("pr", "goa", { a: -0.62 });
+		this.ia.client.send("pr", "fermer_tout");
 		// this.ia.client.send("pr", "goxy", { x: 300, y: 1000});
 		// this.ia.client.send("pr", "goa", { a: -1.5708 });
 		// this.ia.client.send("pr", "monter_ascenseur");
@@ -48,14 +52,9 @@ module.exports = (function () {
 		// 	this.ia.client.send("pr", "goxy", { x: 250, y: 1000});
 		// 	this.ia.client.send("pr", "goa", { a: 3.1416 });
 		// 	this.ia.client.send("pr", "fermer_pour_charger_balle");
-		this.ia.client.send("pr", "goxy", { x: 500, y: 1060});
-		this.ia.client.send("pr", "goa", { a: -0.62 });
-		this.ia.client.send("pr", "fermer_tout");
-		// }.bind(this), 5000);
 	};
 
 	Pr.prototype.start = function () {
-		// this.sendPos();
 		this.ia.client.send("pr", "ouvrir_ax12");
 		this.loop();
 	};

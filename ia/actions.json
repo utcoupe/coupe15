@@ -458,6 +458,24 @@
 				"params": {}
 				}],
 			"kill": null
+		},
+		"deposer_pile_gauche":{
+			"type": "depot_pile",
+			"owner": "pr",
+			"objectname": "pile__left",
+			"startpoints": [{
+				"x": 500,
+				"y": 900,
+				"a": 2.3562
+			}],
+			"priority": 10,
+			"dependency": "prendre_plot_middle_left3",
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_pile",
+				"params": {}
+				}],
+			"kill": null
 		}
 	}
 }

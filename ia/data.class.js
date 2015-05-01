@@ -10,6 +10,7 @@ module.exports = (function () {
 		this.plot = [];
 		this.erobot = [];
 		this.gobelet = [];
+		this.pile = [];
 
 		this.importObjects();
 		
@@ -54,6 +55,7 @@ module.exports = (function () {
 		this.clap = ret.clap;
 		this.plot = ret.plot;
 		this.gobelet = ret.gobelet;
+		this.pile = ret.pile;
 		return ret;
 	};
 
