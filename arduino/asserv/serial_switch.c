@@ -63,6 +63,12 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		FifoPushGoal(id, TYPE_PWM, PWM_DATA(l, r, t));
 		}
 		break;
+	case SPD:{
+		int l, a, t;
+		sscanf(argv, "%i;%i;%i", &l, &a, &t);
+		FifoPushGoal(id, TYPE_SPD, SPD_DATA(l, a, t));
+		}
+		break;
 	case PIDALL:
 	case PIDRIGHT:
 	case PIDLEFT:{

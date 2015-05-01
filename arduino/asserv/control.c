@@ -23,6 +23,7 @@ control_t control;
 
 void goalPos(goal_t *goal);
 void goalPwm(goal_t *goal);
+void goalSpd(goal_t *goal);
 void goalAngle(goal_t *goal);
 int controlPos(float dd, float da);
 
@@ -92,6 +93,9 @@ void ControlCompute(void) {
 			case TYPE_PWM:
 				goalPwm(current_goal);
 				break;
+			case TYPE_SPD:
+				goalSpd(current_goal);
+				break;
 			default:
 				stopRobot();
 				break;
@@ -146,6 +150,35 @@ void goalPwm(goal_t *goal) {
 		control.speeds.pwm_right = 0;
 		goal->is_reached = 1;
 	}
+}
+
+void goalSpd(goal_t *goal) {
+	static long start_time;
+	long now = timeMicros();
+	if (!control.order_started){
+		start_time = now;
+		control.order_started = 1;
+	}
+	if ((now - start_time)/1000.0 <= goal->data.spd_data.time){
+		float time_left, v_dec;
+		time_left = (goal->data.spd_data.time - ((now - start_time)/1000.0)) / 1000.0;
+		v_dec = time_left * control.max_acc;
+
+		control.speeds.linear_speed = min(min(
+			control.speeds.linear_speed+DT*control.max_acc,
+			goal->data.spd_data.lin),
+			v_dec);
+		control.speeds.angular_speed = min(min(
+			control.speeds.angular_speed+DT*control.max_acc,
+			goal->data.spd_data.ang),
+			v_dec);
+	}
+	else {
+		control.speeds.linear_speed = 0;
+		control.speeds.angular_speed = 0;
+		goal->is_reached = 1;
+	}
+	applyPID();
 }
 
 void goalAngle(goal_t *goal) {
