@@ -55,10 +55,20 @@ module.exports = (function () {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
+	Asserv.prototype.avancerPlot = function(callback) {
+		// On avance de 25cm
+		var delta = 250;
+		this.setVitesse(function() {	
+			this.goxy(function(){
+				this.setVitesse(function() {}, 1500, 0.4);
+			}, this.pos.x+delta*Math.cos(this.pos.a), this.pos.y+delta*Math.sin(this.pos.a));
+		}, 100, 0.4);
+		setTimeout(callback, 500);
+	}
+
 	// For float
 	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
 	function myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
-
 	//////////////////
 	// Arduino to JS
 	//////////////////

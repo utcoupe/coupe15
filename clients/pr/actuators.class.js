@@ -108,7 +108,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
-					// asserv.avancerPlot(function(){
+					asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
@@ -170,7 +170,6 @@ module.exports = (function () {
 			break;
 
 
-
 			// Asserv
 			case "pwm":
 				asserv.pwm(callback, params.left, params.right, params.ms);
@@ -201,6 +200,6 @@ module.exports = (function () {
 				callback();
 		}
 	};
-	
+
 	return Acts;
 })();
