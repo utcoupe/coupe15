@@ -104,7 +104,22 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "prendre_plot":
-				if (that.nb_plots<2){
+				if (that.nb_plots==1){
+					ax12.ouvrir(function() {
+					others.ouvrirStabilisateurMoyen(function(){
+					others.ouvrirBloqueurMoyen(function() {
+					// asserv.avancerPlot(function(){
+					ax12.fermer(function() {
+					others.monterUnPeuAscenseur(function() {
+					others.monterAscenseur(function() {
+					others.fermerBloqueur(function() {
+					ax12.ouvrir(function() {
+					others.descendreAscenseur(function() {
+					that.nb_plots++;
+					callback();
+					}); }); }); }); }); }); }); }); });// });
+				}
+				else if(that.nb_plots==2){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					// asserv.avancerPlot(function(){
