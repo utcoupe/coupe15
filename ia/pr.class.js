@@ -5,7 +5,7 @@ module.exports = (function () {
 	function Pr(ia, color) {
 		this.ia = ia;
 		this.pos = { // if we are yellow, default, left side of the table
-			x: 445,
+			x: 142,
 			y: 1000,
 			a: 0
 		};
@@ -16,6 +16,7 @@ module.exports = (function () {
 		};
 		this.current_action = null;
 		this.path = null;
+		this.nb = 0;
 
 		if (color == "green"){
 			this.pos.x = 3000 - this.pos.x;
@@ -24,20 +25,36 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		logger.debug('loop');
-		var action_name = this.ia.actions.getNearestAction(this.pos);
-		this.ia.actions.doAction(action_name, function() {
-			this.loop();
-		}.bind(this));
+		if(this.nb < 3) {
+			logger.debug('loop');
+			this.nb++;
+			var action_name = this.ia.actions.getNearestAction(this.pos);
+			this.ia.actions.doAction(action_name, function() {
+				this.loop();
+			}.bind(this));
+		}
+	};
+
+	Pr.prototype.place = function () {
+		logger.debug('place');
+		this.sendPos();
+		this.ia.client.send("pr", "goxy", { x: 500, y: 1060});
+		this.ia.client.send("pr", "goa", { a: -0.611 });
+		this.ia.client.send("pr", "fermer_tout");
 	};
 
 	Pr.prototype.start = function () {
-		this.sendPos();
+		// this.sendPos();
+		this.ia.client.send("pr", "ouvrir_ax12");
 		this.loop();
 	};
 
 	Pr.prototype.sendPos = function () {
-		this.ia.client.send("pr", "setpos", this.pos);
+		this.ia.client.send("pr", "setpos", { // doublon !!!
+			x: 142,
+			y: 1000,
+			a: 0
+		});
 	};
 
 	Pr.prototype.parseOrder = function (from, name, params) {
@@ -48,6 +65,9 @@ module.exports = (function () {
 			break;
 			case 'pr.getpos':
 				this.sendPos();
+			break;
+			case 'pr.placer':
+				this.place();
 			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.pr: '+name);

@@ -81,7 +81,7 @@ module.exports = (function () {
 				}
 				else {
 					ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
-					logger.debug(i, ax12s[i].pos, ax12s[i].obj);
+					// logger.debug(i, ax12s[i].pos, ax12s[i].obj);
 					if(this.type_callback == 'ouvrir') {
 						ax12s[i].arrived = true;
 						// logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");

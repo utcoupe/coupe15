@@ -46,7 +46,7 @@ void ControlInit(void) {
 	control.stop_bits = 0;
 	control.speeds.angular_speed = 0,
 	control.speeds.linear_speed = 0;
-	control.last_finished_id = 0;
+	control./ = 0;
 
 	control.max_acc = ACC_MAX;
 	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
@@ -214,7 +214,7 @@ void goalPos(goal_t *goal) {
 		dd = - dd;
 	}
 
-	if (controlPos(dd, da) == REACHED) {
+	if (controlPos(dd, da) & POS_REACHED) {
 		goal->is_reached = 1;
 	}
 	applyPID();

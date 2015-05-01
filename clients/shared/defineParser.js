@@ -30,7 +30,9 @@ module.exports = (function(){
 			}
 			var nb = 0;
 			while( findings = reg.exec(data) ) {
-				parsed[findings[1]] = eval(findings[2]);
+				try {
+					parsed[findings[1]] = eval(findings[2]);
+				} catch(e) {}
 				// try to evaluate calculus...
 				nb++;
 			}
