@@ -25,12 +25,12 @@ typedef struct Hokuyo {
 } Hok_t;
 
 Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt);
-void initWizard(Hok_t *hok1, Hok_t *hok2, int symetry);
+// void initWizard(Hok_t *hok1, Hok_t *hok2, int symetry);
 void checkAndConnect(Hok_t *hok);
 Hok_t applySymetry(Hok_t hok);
 
 // IN : struct hokuyo, position (3 = côté ( -| ), 4 = coin ( _| ))
 // OUT : erreur d'assiette/tangage th (angle en rad), erreur de cap
-Angles_t frameWizard(Hok_t *hok, int hok_pos, int symetry);
+// Angles_t frameWizard(Hok_t *hok, int hok_pos, int symetry);
 
 #endif

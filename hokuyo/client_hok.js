@@ -181,7 +181,7 @@
 
 		// Execute C program
 		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
-		var args = [color, 'no_init_wizard', nbrobots];
+		var args = [color, nbrobots];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
 		child = child_process.spawn(command, args);
