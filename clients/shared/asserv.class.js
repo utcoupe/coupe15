@@ -56,14 +56,8 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
-		// On avance de 25cm
-		var delta = 250;
-		this.setVitesse(function() {	
-			this.goxy(function(){
-				this.setVitesse(function() {}, 1500, 0.4);
-			}, this.pos.x+delta*Math.cos(this.pos.a), this.pos.y+delta*Math.sin(this.pos.a));
-		}, 100, 0.4);
-		setTimeout(callback, 500);
+		this.speed(function() {}, 150, 0, 600);
+		setTimeout(callback, 400);
 	}
 
 	// For float
@@ -73,7 +67,7 @@ module.exports = (function () {
 	// Arduino to JS
 	//////////////////
 	Asserv.prototype.parseCommand = function(data){
-		logger.debug(data);
+		// logger.debug(data);
 		var datas = data.split(';');
 		var cmd = datas.shift();//, id = datas.shift();
 		if(cmd == COMMANDS.AUTO_SEND && datas.length >= 4) { // periodic position update
@@ -149,12 +143,20 @@ module.exports = (function () {
 	// 		writeAngle(pos.a);
 	// 	]);
 	// }
-
 	Asserv.prototype.setVitesse = function(callback, v, r) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(callback, COMMANDS.SPDMAX, [
 			parseInt(v),
 			myWriteFloat(r)
+		]);
+	};
+
+	Asserv.prototype.speed = function(callback, l, a, ms) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(callback, COMMANDS.SPD, [
+			parseInt(l),
+			parseInt(a),
+			parseInt(ms)
 		]);
 	};
 
@@ -170,12 +172,14 @@ module.exports = (function () {
 	};
 
 	Asserv.prototype.pwm = function(callback, left, right, ms) {
-		this.sendCommand(callback, COMMANDS.PWM, [
+		this.sendCommand(function(){
+			setTimeout(callback, ms);
+		}, COMMANDS.PWM, [
 			parseInt(left),
 			parseInt(right),
 			parseInt(ms)
 		], true);
-		// setTimeout(callback, ms);
+		
 	};
 
 	Asserv.prototype.goxy = function(callback, x, y){

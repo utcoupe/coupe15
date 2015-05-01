@@ -112,42 +112,42 @@ module.exports = (function () {
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
+					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					callback();
-					}); }); }); }); }); }); }); }); });// });
+					}); }); }); }); }); }); }); }); }); });
 				}
 				else if(that.nb_plots==1){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
-					// asserv.avancerPlot(function(){
+					asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterAscenseur(function() {
+					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					callback();
-					}); }); }); }); }); }); }); }); });// });
+					}); }); }); }); }); }); }); }); }); });
 				}
 				else {
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					//asserv.avancerPlot(function(){  TODO
+					asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterAscenseur(function() {
+					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					callback();
-					}); }); }); }); }); }); }); }); }); //});					
+					}); }); }); }); }); }); }); }); }); });					
 				}
 			break;
 
@@ -167,6 +167,18 @@ module.exports = (function () {
 			case "deposer_gobelet":
 				//
 				callback();
+			break;
+			case "fermer_tout":
+				others.fermerStabilisateur(function() {
+				others.lacherGobelet(function() {
+				others.fermerBloqueur(function() {
+				others.descendreAscenseur(function() {
+				ax12.fermer(function() {
+					callback();
+				}); }); }); }); });
+			break;
+			case "ouvrir_ax12":
+				ax12.ouvrir(callback);
 			break;
 
 

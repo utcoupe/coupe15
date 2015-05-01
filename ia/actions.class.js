@@ -15,6 +15,9 @@ module.exports = (function () {
 		this.todo = this.importActions(ia.data);
 	}
 
+	var __dist_startpoints_plot = 5;
+	var __nb_startpoints_plot = 16;
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Actions.prototype.importActions = function (data) {
 		var req = require('./actions.json');
 		var actions = req.actions;
@@ -27,6 +30,18 @@ module.exports = (function () {
 					date: Date.now(),
 					function: "importActions",
 					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
+			else if(actions[i].type == "plot") {
+				actions[i].startpoints = [];
+				var temp;
+				for(var j = 0; j < __nb_startpoints_plot; j++) {
+					temp = j*2*Math.PI/__nb_startpoints_plot;
+					actions[i].startpoints.push({
+						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+						y: actions[i].object.pos.y - __dist_startpoints_plot * Math.sin(temp),
+						a: convertA(temp+Math.PI)
+					});
+				}
+			}
 		});
 
 		return actions;
@@ -60,6 +75,9 @@ module.exports = (function () {
 		logger.debug('Action en cours %s (%d;%d;%d)', action_name, startpoint.x, startpoint.y, startpoint.a);
 
 		// // Do action
+		if(act.type == "plot") {
+			this.ia.client.send('pr', "goa", {a: -Math.atan2(startpoint.y-this.ia.pr.pos.y, startpoint.x-this.ia.pr.pos.x) });
+		}
 		this.ia.client.send('pr', "goxy", startpoint);
 		this.ia.client.send('pr', "goa", startpoint);
 		// 1 order for 1 action

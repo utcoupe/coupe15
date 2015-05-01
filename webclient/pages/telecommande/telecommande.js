@@ -57,12 +57,12 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.pr_set_x = 0;
 	$scope.pr_set_y = 0;
 	$scope.pr_set_a = 0;
-	$scope.pr_v = 500;
-	$scope.pr_r = 0.3;
-	$scope.pr_PID_P = 1.5;
-	$scope.pr_PID_I = 1;
-	$scope.pr_PID_D = 0;
-	$scope.pr_acc = 300;
+	$scope.pr_v = 1500;
+	$scope.pr_r = 0.4;
+	$scope.pr_PID_P = 0.5;
+	$scope.pr_PID_I = 50;
+	$scope.pr_PID_D = 10;
+	$scope.pr_acc = 750;
 	$scope.prPWM = function() {
 		Client.send("pr", "pwm", {
 			left: $scope.pr_pwm_droite,

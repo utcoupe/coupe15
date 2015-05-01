@@ -8,6 +8,7 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 	$scope.vueDeGauche = function() { Simu.vueDeGauche(); }
 	$scope.vueDeDroite = function() { Simu.vueDeDroite(); }
 	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
+	$scope.iaPlacerPr = function() { Client.send("ia", "pr.placer"); }
 }]);
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {

@@ -45,6 +45,9 @@ module.exports = (function () {
 		// sendCommand(null, COMMANDS.CLEANG);
 		callback();
 	};
+	Asserv.prototype.avancerPlot = function(callback) {
+		setTimeout(callback, 1200);
+	}
 
 	Asserv.prototype.setVitesse = function(callback, v) {
 		this.vitesse = parseInt(v);
@@ -97,6 +100,7 @@ module.exports = (function () {
 		}.bind(this);
 	}
 	Asserv.prototype.goa = function(callback, a){
+		a = convertA(a);
 		da = convertA(a-this.pos.a);
 
 		var tf = SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms

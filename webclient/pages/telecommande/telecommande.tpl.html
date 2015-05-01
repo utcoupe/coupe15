@@ -4,9 +4,6 @@
 <div ng-controller="TelecommandeCtrl">
 	<h1>Télécommande</h1>
 
-	<h2>PR Luc</h2>
-	<button type="button" class="btn" ng-click="prPrendrePlot()">Prendre Plot</button> <br><br>
-
 	<h2>IA</h2>
 	<button type="button" class="btn" ng-click="iaJack()">Jack</button> <br><br>
 
@@ -29,6 +26,7 @@
 	<!-- TODO set pos -->
 
 	<h2>PR</h2>
+	<button type="button" class="btn" ng-click="prPrendrePlot()">Prendre Plot</button> <br><br>
 	G <input type="number" ng-model="pr_pwm_gauche" />
 	D <input type="number" ng-model="pr_pwm_droite" />
 	<input type="number" ng-model="pr_pwm_ms" /> ms
