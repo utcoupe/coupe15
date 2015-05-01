@@ -143,18 +143,18 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case SPDMAX:{
-		int s;
-		sscanf(argv, "%i", &s);
+		long r_int, s;
+		float r;
+		sscanf(argv, "%li;%li", &s, &r_int);
+		r = r_int / (float)FLOAT_PRECISION;
 		control.max_spd = s;
+		control.rot_spd_ratio = r;
 		}
 		break;
 	case ACCMAX:{
-		long a, r_int;
-		float r;
-		sscanf(argv, "%li;%li", &a, &r_int);
-		r = r_int / (float)FLOAT_PRECISION;
+		long a;
+		sscanf(argv, "%i", &a);
 		control.max_acc = a;
-		control.rot_spd_ratio = r;
 		}
 		break;
 	case GET_LAST_ID: {
