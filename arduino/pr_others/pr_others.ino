@@ -1,5 +1,4 @@
-#include <Servo.h> 
-#include <String.h>
+#include <Servo.h>
 #include <stdio.h>
 #include "AFMotor.h"
 
@@ -28,6 +27,11 @@ void setup()
   M_servo1.attach(6);  //3 4=vibre 7 8 11 12 !OK
   M_servo2.attach(9);
   G_servo.attach(10);
+  H_servo1.write(61);  //2 5 6 9 10  OK
+  H_servo2.write(70);  //13=led BOF BOF
+  M_servo1.write(110);  //3 4=vibre 7 8 11 12 !OK
+  M_servo2.write(80);
+  G_servo.write(2);
 } 
 
 
@@ -96,10 +100,10 @@ void annalyse_chaine(){
       }
       if(pas<0){
         pas=-pas;
-        stepper.step(pas,FORWARD, SINGLE);
+        stepper.step(pas,FORWARD, DOUBLE);
       }
       else{
-        stepper.step(pas,BACKWARD, SINGLE);
+        stepper.step(pas,BACKWARD, DOUBLE);
       }
       Serial.print("S");
       //Serial.print("S:");

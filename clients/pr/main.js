@@ -124,15 +124,20 @@
 
 	// Execute order
 	function executeNextOrder(){
-		if ((queue.length > 0) && (!orderInProgress)){
+		if ((queue.length > 0) && (!orderInProgress)) {
 			var order = queue.shift();
-			orderInProgress = order.name;
-			
-			logger.info("Going to do '" + orderInProgress);
-			logger.debug(order.params);
-			acts.orderHandler(order.from, order.name, order.params, actionFinished);
-			
-			executeNextOrder();
+			if(order.name == "send_message") {
+				// logger.debug("Send message %s", order.params.name);
+				client.send('ia', order.params.name, order.params);
+			} else {
+				orderInProgress = order.name;
+				
+				logger.info("Going to do '" + orderInProgress);
+				logger.debug(order.params);
+				acts.orderHandler(order.from, order.name, order.params, actionFinished);
+				
+				executeNextOrder();
+			}
 		}
 	}
 

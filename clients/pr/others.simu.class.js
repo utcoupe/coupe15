@@ -10,46 +10,46 @@ module.exports = (function () {
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 	
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
 	Others.prototype.lacherGobelet = function(callback) {
-		setTimeout(callback, 300);
+		setTimeout(callback, 200);
 	};
 
-	Others.prototype.monterAscenceur = function(callback) {
+	Others.prototype.monterAscenseur = function(callback) {
 		setTimeout(callback, 1000);
 	};
 
-	Others.prototype.monterUnPeuAscenceur = function(callback) {
-		setTimeout(callback,300);
+	Others.prototype.monterUnPeuAscenseur = function(callback) {
+		setTimeout(callback, 300);
 	};
 
-	Others.prototype.descendreAscenceur = function(callback) {
+	Others.prototype.descendreAscenseur = function(callback) {
 		setTimeout(callback, 1000);
 	};
 

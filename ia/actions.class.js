@@ -2,7 +2,6 @@ module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.actions');
-
 	function Actions(ia) {
 		this.ia = ia;
 		this.color = ia.color;
@@ -33,41 +32,60 @@ module.exports = (function () {
 		return actions;
 	};
 
-	Actions.prototype.do = function (action_name, numero_startpoint) {
-		// Call the function passing the action name + the choosen startpoint as parameter, for eg.    actions.do("empiler1.1", 2);
+	Actions.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'actions.action_finished':
+				this.actionFinished(params.action_name);
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.gr: '+name);
+		}
+	};
 
+	Actions.prototype.doAction = function (action_name, callback) {
 		// If action doesn't exist
 		if (!this.exists(action_name)){
 			logger.error("Trying to do an action that doesn't exist '" + action_name + "'");
 			return;
 		}
 
-		// Change action to state "in progress"
-		this.inprogress[action_name] = this.todo[action_name];
+		this.callback = callback;
+		var startpoint = this.getNearestStartpoint(this.ia.pr.pos, action_name);
+		
+		// // Change action to state "in progress"
+		var act = this.todo[action_name];
+		this.inprogress[action_name] = act;
 		delete this.todo[action_name];
 
-		// Do action
-		var act = this.inprogress[action_name];
-		this.ia.client.send(act.owner, "go_to", {
-			pos: act.startpoints[numero_startpoint]
-		});
-		act.orders.forEach(function (order, index, array){
-			this.ia.client.send(act.owner, order.name, order.params);
-		}.bind(this));
-		this.ia.client.send(act.owner, "send_message", {
-			name: "action_finished",
+		logger.debug('Action en cours %s (%d;%d;%d)', action_name, startpoint.x, startpoint.y, startpoint.a);
+
+		// // Do action
+		this.ia.client.send('pr', "goxy", startpoint);
+		this.ia.client.send('pr', "goa", startpoint);
+		// 1 order for 1 action
+		// act.orders.forEach(function (order, index, array){
+		this.ia.client.send('pr', act.orders[0].name, act.orders[0].params);
+		// }.bind(this));
+		this.ia.client.send('pr', "send_message", {
+			name: "actions.action_finished",
 			action_name: action_name
 		});
 
-		// Set object to "done" ! XXX
+		// // Set object to "done" ! XXX
 
-		// Change action and its "to be killed" actions to state done
+		// // Change action and its "to be killed" actions to state done
+
+		// console.log(this.todo);
+		// console.log(this.inprogress);
+		// console.log(this.done);
+	};
+	Actions.prototype.actionFinished = function (action_name) {
 		this.done[action_name] = this.inprogress[action_name];
 		delete this.inprogress[action_name];
-		this.kill(this.done[action_name].kill);
-		console.log(this.todo);
-		console.log(this.inprogress);
-		console.log(this.done);
+		logger.info('Action %s est finie !', action_name);
+		var temp = this.callback;
+		this.callback = function() {logger.fatal('BAZOOKA'); };
+		temp.call();
 	};
 
 	Actions.prototype.kill = function (action_name){
@@ -117,9 +135,8 @@ module.exports = (function () {
 	Actions.prototype.getNearestAction = function(pos) {
 		var actions_todo = [];
 		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
-			if((this.todo[an].object.color == this.color || this.todo[an].object.color == "none")
-				&& this.todo[an].object.status != "lost"
-				&& this.isDone(this.todo[an].dependency)) {
+			if(this.todo[an].object.status != "lost") {
+				// && this.isDone(this.todo[an].dependency)) {
 				actions_todo.push(an);
 			}
 		}, this);
@@ -134,6 +151,23 @@ module.exports = (function () {
 		// }
 
 		return actions_todo[0];
+	}
+	Actions.prototype.getNearestStartpoint = function(pos, action_name) {
+		var min_dist = Infinity;
+		var nearest = null;
+
+		var startpoints = this.todo[action_name].startpoints;
+
+		for (var i = 0; i < startpoints.length; i++) {
+			var dist = norm2Points(pos, startpoints[i]);
+
+			if (dist < min_dist){
+				min_dist = dist;
+				nearest = startpoints[i];
+			}
+		}
+
+		return nearest;
 	}
 
 	// <troll>

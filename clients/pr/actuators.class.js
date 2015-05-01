@@ -45,6 +45,17 @@ module.exports = (function () {
 		} else {
 			ax12 = new (require('./ax12.class.js'))(struct.ax12);
 		}
+
+		// Initialisation
+		setTimeout(function() {
+			others.ouvrirStabilisateurGrand(function() {
+			others.lacherGobelet(function() {
+			others.ouvrirBloqueurGrand(function() {
+			others.descendreAscenseur(function() {
+			ax12.ouvrir(function() {
+				logger.fatal('BAZOOKA');
+			}); }); }); }); });
+		}, 1000);
 	};
 
 	Acts.prototype.getStatus = function(){
@@ -93,32 +104,32 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "prendre_plot":
-				if (nb_plots<2){
+				if (that.nb_plots<2){
 					ax12.ouvrir(function() {
-					others.fermerStabilisateur(function(){
+					others.ouvrirStabilisateurMoyen(function(){
 					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
-					others.monterUnpeuAscenceur(function() {
-					others.ouvrirBloqueur(function() {
-					others.monterAscenceur(function() {
+					others.monterUnPeuAscenseur(function() {
+					others.ouvrirBloqueurMoyen(function() {
+					others.monterAscenseur(function() {
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
-					others.descendreAscenceur(function() {
+					others.descendreAscenseur(function() {
 					that.nb_plots++;
 					callback();
 					}); }); }); }); }); }); }); }); });// });
 				}
 				else {
 					ax12.ouvrir(function() {
-					others.ouvrirStabilisateurMoyen(function(){
+					others.fermerStabilisateur(function(){
 					//asserv.avancerPlot(function(){  TODO
 					ax12.fermer(function() {
-					others.monterUnpeuAscenceur(function() {
-					others.ouvrirBloqueur(function() {
-					others.monterAscenceur(function() {
+					others.monterUnPeuAscenseur(function() {
+					others.ouvrirBloqueurMoyen(function() {
+					others.monterAscenseur(function() {
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
-					others.descendreAscenceur(function() {
+					others.descendreAscenseur(function() {
 					that.nb_plots++;
 					callback();
 					}); }); }); }); }); }); }); }); }); //});					
@@ -127,16 +138,20 @@ module.exports = (function () {
 
 			case "prendre_balle":
 				//
+				callback();
 			break;
 			
 			case "deposer_pile":
 				//
+				callback();
 			break;
 			case "prendre_gobelet":
 				//asserv.avancerGobelet(function(){}); TODO
+				callback();
 			break;
 			case "deposer_gobelet":
 				//
+				callback();
 			break;
 
 

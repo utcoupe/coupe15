@@ -9,12 +9,8 @@ module.exports = (function () {
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
-			logger.debug("error", data.toString());
+			logger.debug(data.toString());
 		});
-
-		setTimeout(function() {
-			this.getPos();
-		}.bind(this), 2000);
 	}
 
 	Others.prototype.parseCommand = function(data) {
@@ -40,47 +36,53 @@ module.exports = (function () {
 	}
 
 	Others.prototype.fermerStabilisateur = function(callback) {
-		this.sendCommand(callback, 'H', [150, 150], 1000);
+		this.sendCommand(callback, 'H', [137, 5], 200);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		this.sendCommand(callback, 'H', [50, 50], 1000);
+		this.sendCommand(callback, 'H', [127, 15], 200);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
-		this.sendCommand(callback, 'H', [50, 50], 1000);
+		this.sendCommand(callback, 'H', [61, 70], 200);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
-		this.sendCommand(callback, 'M', [50, 50], 1000);
+		this.sendCommand(callback, 'M', [50, 140], 200);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback) {
-		this.sendCommand(callback, 'M', [150, 150], 1000);
+		this.sendCommand(callback, 'M', [70, 120], 200);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback) {
-		this.sendCommand(callback, 'M', [150, 150], 1000);
+		this.sendCommand(callback, 'M', [110, 80], 200);
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [50], 1000);
+		this.sendCommand(callback, 'G', [70], 200);
 	};
 
 	Others.prototype.lacherGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [150], 1000);
+		this.sendCommand(callback, 'G', [2], 200);
 	};
 
-	Others.prototype.monterAscenceur = function(callback) {
-		this.sendCommand(callback, 'S', [250], 0);
-	};
-
-	Others.prototype.monterUnPeuAscenceur = function(callback) {
-		this.sendCommand(callback, 'S', [50], 0);
-	};
-
-	Others.prototype.descendreAscenceur = function(callback) {
+	Others.prototype.monterAscenseur = function(callback) {
 		this.sendCommand(callback, 'S', [-250], 0);
+	};
+
+	Others.prototype.monterUnPeuAscenseur = function(callback) {
+		this.sendCommand(callback, 'S', [-50], 0);
+	};
+	
+	Others.prototype.relacherAscenseur = function(callback) {
+		this.sendCommand(callback, 'S', [0], 0);
+	};
+
+	Others.prototype.descendreAscenseur = function(callback) {
+		this.sendCommand(function() {
+		this.relacherAscenseur(callback);
+		}.bind(this), 'S', [250], 0);
 	};
 
 
