@@ -59,7 +59,7 @@ module.exports = (function () {
 
 		// temp //
 		// this.gr.start();
-		this.jack();
+		// this.jack();
 		//////////
 	}
 

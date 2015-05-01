@@ -7,7 +7,7 @@ module.exports = (function () {
 		this.balle = [];
 		this.chargeur = [];
 		this.clap = [];
-		this.cylindre = [];
+		this.plot = [];
 		this.erobot = [];
 		this.gobelet = [];
 
@@ -52,7 +52,7 @@ module.exports = (function () {
 		this.balle = ret.balle;
 		this.chargeur = ret.chargeur;
 		this.clap = ret.clap;
-		this.cylindre = ret.cylindre;
+		this.plot = ret.plot;
 		this.gobelet = ret.gobelet;
 		return ret;
 	};
@@ -94,9 +94,9 @@ module.exports = (function () {
 	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
 		// takes a position and the ennemy robot # to put everything in its surroundings (~ 1.2 * radius) as "lost" 
 
-		Object.keys(this.cylindre).forEach(function(c) {
-			if (getDistance(pos, this.cylindre(c).pos) < 0.6*this.cylindre(c).diametre) {
-				this.cylindre(c).status = "lost";
+		Object.keys(this.plot).forEach(function(c) {
+			if (getDistance(pos, this.plot(c).pos) < 0.6*this.plot(c).diametre) {
+				this.plot(c).status = "lost";
 			}
 		});
 

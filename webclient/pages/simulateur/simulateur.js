@@ -1,5 +1,5 @@
-angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope',
-	function($rootScope, $scope) {
+angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Client',
+	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'simulateur';
 	Simu.init();
 	$scope.vueDeFace = function() { Simu.vueDeFace(); }
@@ -7,6 +7,7 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope',
 	$scope.vueDeDerriere = function() { Simu.vueDeDerriere(); }
 	$scope.vueDeGauche = function() { Simu.vueDeGauche(); }
 	$scope.vueDeDroite = function() { Simu.vueDeDroite(); }
+	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
 }]);
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {

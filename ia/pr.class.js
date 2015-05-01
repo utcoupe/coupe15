@@ -24,10 +24,15 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		logger.debug(this.ia.actions.getNearestAction(this.pos));
+		logger.debug('loop');
+		var action_name = this.ia.actions.getNearestAction(this.pos);
+		this.ia.actions.doAction(action_name, function() {
+			this.loop();
+		}.bind(this));
 	};
 
 	Pr.prototype.start = function () {
+		this.sendPos();
 		this.loop();
 	};
 

@@ -10,11 +10,11 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.ouvrir = function(callback) {
-		setTimeout(callback, 500);
+		setTimeout(callback, 1000);
 	};
 
 	Ax12.prototype.fermer = function(callback) {
-		setTimeout(callback, 500);
+		setTimeout(callback, 1000);
 	};
 
 	return Ax12;

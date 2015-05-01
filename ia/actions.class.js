@@ -2,7 +2,6 @@ module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.actions');
-
 	function Actions(ia) {
 		this.ia = ia;
 		this.color = ia.color;
@@ -33,41 +32,60 @@ module.exports = (function () {
 		return actions;
 	};
 
-	Actions.prototype.do = function (action_name, numero_startpoint) {
-		// Call the function passing the action name + the choosen startpoint as parameter, for eg.    actions.do("empiler1.1", 2);
+	Actions.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'actions.action_finished':
+				this.actionFinished(params.action_name);
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.gr: '+name);
+		}
+	};
 
+	Actions.prototype.doAction = function (action_name, callback) {
 		// If action doesn't exist
 		if (!this.exists(action_name)){
 			logger.error("Trying to do an action that doesn't exist '" + action_name + "'");
 			return;
 		}
 
-		// Change action to state "in progress"
-		this.inprogress[action_name] = this.todo[action_name];
+		this.callback = callback;
+		var startpoint = this.getNearestStartpoint(this.ia.pr.pos, action_name);
+		
+		// // Change action to state "in progress"
+		var act = this.todo[action_name];
+		this.inprogress[action_name] = act;
 		delete this.todo[action_name];
 
-		// Do action
-		var act = this.inprogress[action_name];
-		this.ia.client.send(act.owner, "go_to", {
-			pos: act.startpoints[numero_startpoint]
-		});
-		act.orders.forEach(function (order, index, array){
-			this.ia.client.send(act.owner, order.name, order.params);
-		}.bind(this));
-		this.ia.client.send(act.owner, "send_message", {
-			name: "action_finished",
+		logger.debug('Action en cours %s (%d;%d;%d)', action_name, startpoint.x, startpoint.y, startpoint.a);
+
+		// // Do action
+		this.ia.client.send('pr', "goxy", startpoint);
+		this.ia.client.send('pr', "goa", startpoint);
+		// 1 order for 1 action
+		// act.orders.forEach(function (order, index, array){
+		this.ia.client.send('pr', act.orders[0].name, act.orders[0].params);
+		// }.bind(this));
+		this.ia.client.send('pr', "send_message", {
+			name: "actions.action_finished",
 			action_name: action_name
 		});
 
-		// Set object to "done" ! XXX
+		// // Set object to "done" ! XXX
 
-		// Change action and its "to be killed" actions to state done
+		// // Change action and its "to be killed" actions to state done
+
+		// console.log(this.todo);
+		// console.log(this.inprogress);
+		// console.log(this.done);
+	};
+	Actions.prototype.actionFinished = function (action_name) {
 		this.done[action_name] = this.inprogress[action_name];
 		delete this.inprogress[action_name];
-		this.kill(this.done[action_name].kill);
-		console.log(this.todo);
-		console.log(this.inprogress);
-		console.log(this.done);
+		logger.info('Action %s est finie !', action_name);
+		var temp = this.callback;
+		this.callback = function() {logger.fatal('BAZOOKA'); };
+		temp.call();
 	};
 
 	Actions.prototype.kill = function (action_name){
@@ -105,7 +123,56 @@ module.exports = (function () {
 		return false;
 	};
 
-	Actions.prototype.getNearestAction = function (pos){
+	function norm2Points(A, B) {
+		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
+	}
+	Actions.prototype.getNormAction = function(pos, an) {
+		return norm2Points(pos, this.todo[an].object.pos);
+	}
+	Actions.prototype.getPriorityAction = function(an) {
+		return this.todo[an].priority;
+	}
+	Actions.prototype.getNearestAction = function(pos) {
+		var actions_todo = [];
+		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
+			if(this.todo[an].object.status != "lost") {
+				// && this.isDone(this.todo[an].dependency)) {
+				actions_todo.push(an);
+			}
+		}, this);
+
+		// Tri par priorité puis par norme
+		actions_todo.sort(function(a, b) {
+			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
+		}.bind(this));
+
+		// for(var i in actions_todo) {
+		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		// }
+
+		return actions_todo[0];
+	}
+	Actions.prototype.getNearestStartpoint = function(pos, action_name) {
+		var min_dist = Infinity;
+		var nearest = null;
+
+		var startpoints = this.todo[action_name].startpoints;
+
+		for (var i = 0; i < startpoints.length; i++) {
+			var dist = norm2Points(pos, startpoints[i]);
+
+			if (dist < min_dist){
+				min_dist = dist;
+				nearest = startpoints[i];
+			}
+		}
+
+		return nearest;
+	}
+
+	// <troll>
+	Actions.prototype.getFarestAction = function (pos){
+	// </troll>
 		var action_name = "";
 		// Begin with first possible action
 		Object.keys(this.todo).forEach(function(a_n) {
@@ -113,7 +180,7 @@ module.exports = (function () {
 				(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
 				this.isDone(this.todo[a_n].dependency))
 				action_name = a_n;
-		}.bind(this));
+		}, this);
 
 		// Find if there's a nearer one
 		if (!!action_name) {
@@ -139,58 +206,53 @@ module.exports = (function () {
 						}
 					}
 				}
-			}.bind(this));
+			}, this);
 		}
 
 		return action_name;
 	};
 
-	Actions.prototype.isCloser = function (dist1, dist2){
-		// Returns true if dist1 is smaller than dist2
-		// i.e. object 1 is closer than object 2
+	// Useless c'est des flottants et si la distance est équivalente (impossible avec des flottants sans marge)
+	// on va gagner que quelques centaine de milisecondes grand grand max)
+	// Actions.prototype.isCloser = function (dist1, dist2){
+	// 	// Returns true if dist1 is smaller than dist2
+	// 	// i.e. object 1 is closer than object 2
 
-		if(dist1.d < dist2.d){
-			return true;
-		} else {
-			if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
-				return true;
-			else
-				return false;
-		}
-	};
+	// 	if(dist1.d < dist2.d){
+	// 		return true;
+	// 	} else {
+	// 		if (!!dist1.a && !!dist2.a && (dist1.d == dist2.d) && (dist1.a < dist2.a))
+	// 			return true;
+	// 		else
+	// 			return false;
+	// 	}
+	// };
 
-	Actions.prototype.getActionDistance = function (pos, action_name){
-		var start_pts;
-		if (this.exists(action_name)){
-			start_pts = this.todo[action_name].startpoints;
+	// Useless de calculer pour chaque point d'entrée, autant calculer pour l'objet
+	// qui est approximativement aussi proche que ses points d'entrées
+	// Actions.prototype.getActionDistance = function (pos, action_name){
+	// 	var start_pts;
+	// 	if (this.exists(action_name)){
+	// 		start_pts = this.todo[action_name].startpoints;
 
-			var dist = {
-					d: Math.sqrt(3000^2 + 2000^2),
-					delta_a: 181,
-					start_point: -1
-				};
+	// 		var min_dist = Infinity;
 
-			if (!start_pts.length) 
-				logger.warn("No startpoint for object "+action_name);
+	// 		if (start_pts.length == 0) 
+	// 			logger.warn("No startpoint for object "+action_name);
 
-			for (var i = 0; i < start_pts.length; i++) {
-				var temp = {
-					d: Math.sqrt(Math.pow(pos.x - start_pts[i].x, 2) + Math.pow(pos.y - start_pts[i].y, 2)),
-					a: Math.abs(pos.a - start_pts[i].a)
-				};
+	// 		for (var i = 0; i < start_pts.length; i++) {
+	// 			var dist = Math.sqrt(Math.pow(pos.x - start_pts[i].x, 2) + Math.pow(pos.y - start_pts[i].y, 2));
 
-				if (this.isCloser(temp, dist)){
-					dist.d = temp.d;
-					dist.delta_a = temp.a;
-					dist.start_point = i;
-				}
-			}
+	// 			if (dist < min_dist){
+	// 				min_dist = dist;
+	// 			}
+	// 		}
 
-			return dist;
-		} else {
-			return null;
-		}
-	};
+	// 		return min_dist;
+	// 	} else {
+	// 		return null;
+	// 	}
+	// };
 
 	Actions.prototype.isOk = function () { // XXX
 		if (errors.length !== 0){
