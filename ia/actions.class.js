@@ -15,7 +15,7 @@ module.exports = (function () {
 		this.todo = this.importActions(ia.data);
 	}
 
-	var __dist_startpoints_plot = 5;
+	var __dist_startpoints_plot = 40;
 	var __nb_startpoints_plot = 16;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Actions.prototype.importActions = function (data) {
@@ -25,13 +25,13 @@ module.exports = (function () {
 		// Link "object" with exiting thing in the Data class
 		Object.keys(actions).forEach(function(i) {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
-			if (actions[i].object === null)
+			if (actions[i].object === null) {
 				this.errors.push({
 					date: Date.now(),
 					function: "importActions",
 					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
-			else if(actions[i].type == "plot") {
-				actions[i].startpoints = [];
+			}
+			else if(actions[i].type == "plot" && actions[i].startpoints.length === 0) {
 				var temp;
 				for(var j = 0; j < __nb_startpoints_plot; j++) {
 					temp = j*2*Math.PI/__nb_startpoints_plot;
@@ -127,18 +127,19 @@ module.exports = (function () {
 	};
 
 	Actions.prototype.isDone = function (action_name){
+		return !action_name || this.done.hasOwnProperty(action_name);
 		// Return true if action done
 		// If no action given (ie no dependency) -> that's ok return true
 
-		if(!action_name)
-			return true;
+		// if(!action_name)
+		// 	return true;
 
-		Object.keys(this.done).forEach(function(a_n) {
-			if ((action_name == a_n))
-				return true;
-		});
+		// Object.keys(this.done).forEach(function(a_n) {
+		// 	if ((action_name == a_n))
+		// 		return true;
+		// });
 
-		return false;
+		// return false;
 	};
 
 	function norm2Points(A, B) {
@@ -153,8 +154,7 @@ module.exports = (function () {
 	Actions.prototype.getNearestAction = function(pos) {
 		var actions_todo = [];
 		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
-			if(this.todo[an].object.status != "lost") {
-				// && this.isDone(this.todo[an].dependency)) {
+			if(this.todo[an].object.status != "lost" && this.isDone(this.todo[an].dependency)) {
 				actions_todo.push(an);
 			}
 		}, this);
@@ -164,9 +164,9 @@ module.exports = (function () {
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
-		// for(var i in actions_todo) {
-		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
-		// }
+		for(var i in actions_todo) {
+			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		}
 
 		return actions_todo[0];
 	}
@@ -188,47 +188,44 @@ module.exports = (function () {
 		return nearest;
 	}
 
-	// <troll>
-	Actions.prototype.getFarestAction = function (pos){
-	// </troll>
-		var action_name = "";
-		// Begin with first possible action
-		Object.keys(this.todo).forEach(function(a_n) {
-			if ((action_name === "") && 
-				(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
-				this.isDone(this.todo[a_n].dependency))
-				action_name = a_n;
-		}, this);
+	// // <troll>
+	// Actions.prototype.getFarestAction = function (pos){
+	// // </troll>
+	// 	var action_name = "";
+	// 	// Begin with first possible action
+	// 	Object.keys(this.todo).forEach(function(a_n) {
+	// 		if ((action_name === "") && 
+	// 			(this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") &&
+	// 			this.isDone(this.todo[a_n].dependency))
+	// 			action_name = a_n;
+	// 	}, this);
 
-		// Find if there's a nearer one
-		if (!!action_name) {
-			var action_dist = this.getActionDistance(pos, action_name);
-			var action_priority = 1000;
+	// 	// Find if there's a nearer one
+	// 	if (!!action_name) {
+	// 		var action_dist = this.getActionDistance(pos, action_name);
+	// 		var action_priority = 1000;
 
-			Object.keys(this.todo).forEach(function(a_n) {
-				var temp_dist = this.getActionDistance(pos,a_n);
+	// 		Object.keys(this.todo).forEach(function(a_n) {
+	// 			var temp_dist = this.getActionDistance(pos,a_n);
 
-				if ((this.todo[a_n].object.color == this.color || this.todo[a_n].color == "none") && // suitable for us
-					(this.todo[a_n].object.status != "lost") &&  // and status initial
-					this.isDone(this.todo[a_n].dependency)){ // and dependency done (if any)
+	// 			if ((this.todo[a_n].object.status != "lost") && this.isDone(this.todo[a_n].dependency)) { // and dependency done (if any)
 
-					if (this.todo[a_n].priority < action_priority){ // more important
-						action_name = a_n;
-						action_dist = temp_dist;
-						action_priority = this.todo[a_n].priority;
-					} else {
-						if ((this.isCloser(temp_dist, action_dist)) && // closer
-							(this.todo[a_n].priority == action_priority)){ // and as important
-							action_name = a_n;
-							action_dist = temp_dist;
-						}
-					}
-				}
-			}, this);
-		}
+	// 				if (this.todo[a_n].priority < action_priority){ // more important
+	// 					action_name = a_n;
+	// 					action_dist = temp_dist;
+	// 					action_priority = this.todo[a_n].priority;
+	// 				} else {
+	// 					if ((this.isCloser(temp_dist, action_dist)) &&  (this.todo[a_n].priority == action_priority)){ // and as important
+	// 						action_name = a_n;
+	// 						action_dist = temp_dist;
+	// 					}
+	// 				}
+	// 			}
+	// 		}, this);
+	// 	}
 
-		return action_name;
-	};
+	// 	return action_name;
+	// };
 
 	// Useless c'est des flottants et si la distance est équivalente (impossible avec des flottants sans marge)
 	// on va gagner que quelques centaine de milisecondes grand grand max)

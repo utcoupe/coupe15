@@ -306,5 +306,15 @@
 				"y":1750
 			}
 		}
+	},
+	"pile": {
+		"left": {
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":450,
+				"y":850
+			}
+		}
 	}
 }

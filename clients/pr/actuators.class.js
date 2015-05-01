@@ -94,7 +94,7 @@ module.exports = (function () {
 		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
-
+	function fake() {}
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
@@ -157,8 +157,13 @@ module.exports = (function () {
 			break;
 			
 			case "deposer_pile":
-				//
-				callback();
+				setTimeout(function() {
+					ax12.ouvrir(function() {
+					others.ouvrirBloqueurGrand(function() {
+					others.ouvrirStabilisateurGrand(function() {
+					asserv.speed(callback, -200, 0, 1000);
+					});});});
+				}, 1000);
 			break;
 			case "prendre_gobelet":
 				//asserv.avancerGobelet(function(){}); TODO
@@ -167,6 +172,15 @@ module.exports = (function () {
 			case "deposer_gobelet":
 				//
 				callback();
+			break;
+			case "fermer_pour_charger_balle":
+				others.ouvrirStabilisateurGrand(fake);
+				others.lacherGobelet(fake);
+				others.fermerBloqueur(fake);
+				ax12.fermer(fake);
+				setTimeout(function() {
+					others.fermerStabilisateur(callback);
+				}, 5000);
 			break;
 			case "fermer_tout":
 				others.fermerStabilisateur(function() {
@@ -179,6 +193,9 @@ module.exports = (function () {
 			break;
 			case "ouvrir_ax12":
 				ax12.ouvrir(callback);
+			break;
+			case "monter_ascenseur":
+				others.monterAscenseur(callback);
 			break;
 
 
