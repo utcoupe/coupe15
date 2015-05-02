@@ -7,7 +7,7 @@ module.exports = (function () {
 	var FPS = 30;
 
 	function convertX(x) { return (x-1500)/1000; }
-	function convertY(y) { return (y-1000)/1000; }
+	function convertY(y) { return (1000-y)/1000; }
 	function convertA(a) { return a; }
 
 	function ExportSimulator(ia) {

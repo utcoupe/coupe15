@@ -6,7 +6,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1250,
-				"y":1950
+				"y":50
 			}
 		},
 		"droite":{
@@ -15,7 +15,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1750,
-				"y":1950
+				"y":50
 			}
 		}
 	},
@@ -26,7 +26,7 @@
 			"status": "initial",
 			"pos": {
 				"x":300,
-				"y":35
+				"y":1965
 			}
 		},
 		"2":{
@@ -35,7 +35,7 @@
 			"status": "initial",
 			"pos": {
 				"x":600,
-				"y":35
+				"y":1965
 			}
 		},
 		"3":{
@@ -44,7 +44,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2400,
-				"y":35
+				"y":1965
 			}
 		},
 		"4":{
@@ -53,7 +53,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2700,
-				"y":35
+				"y":1965
 			}
 		}
 	},
@@ -64,7 +64,7 @@
 			"status": "initial",
 			"pos": {
 				"x":320,
-				"y":2000
+				"y":0
 			}
 		},
 		"2":{
@@ -73,7 +73,7 @@
 			"status": "initial",
 			"pos": {
 				"x":620,
-				"y":2000
+				"y":0
 			}
 		},
 		"3":{
@@ -82,7 +82,7 @@
 			"status": "initial",
 			"pos": {
 				"x":920,
-				"y":2000
+				"y":0
 			}
 		},
 		"4":{
@@ -91,7 +91,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2080,
-				"y":2000
+				"y":0
 			}
 		},
 		"5":{
@@ -100,7 +100,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2380,
-				"y":2000
+				"y":0
 			}
 		},
 		"6":{
@@ -109,7 +109,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2680,
-				"y":35
+				"y":1965
 			}
 		}
 
@@ -121,7 +121,7 @@
 			"status": "initial",
 			"pos": {
 				"x":90,
-				"y":1750
+				"y":250
 			}
 		},
 		"front_left2":{
@@ -130,7 +130,7 @@
 			"status": "initial",
 			"pos": {
 				"x":90,
-				"y":1850
+				"y":150
 			}
 		},
 		"middle_left1":{
@@ -139,7 +139,7 @@
 			"status": "initial",
 			"pos": {
 				"x":870,
-				"y":1355
+				"y":645
 			}
 		},
 		"middle_left2":{
@@ -148,7 +148,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1300,
-				"y":1400
+				"y":600
 			}
 		},
 		"middle_left3":{
@@ -157,7 +157,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1100,
-				"y":1770
+				"y":230
 			}
 		},
 		"rear_left":{
@@ -166,7 +166,7 @@
 			"status": "initial",
 			"pos": {
 				"x":90,
-				"y":200
+				"y":1800
 			}
 		},
 		"stairs_left1":{
@@ -175,7 +175,7 @@
 			"status": "initial",
 			"pos": {
 				"x":850,
-				"y":100
+				"y":1900
 			}
 		},
 		"stairs_left2":{
@@ -184,7 +184,7 @@
 			"status": "initial",
 			"pos": {
 				"x":850,
-				"y":200
+				"y":1800
 			}
 		},
 		"front_right1":{
@@ -193,7 +193,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2910,
-				"y":1750
+				"y":250
 			}
 		},
 		"front_right2":{
@@ -202,7 +202,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2910,
-				"y":1850
+				"y":150
 			}
 		},
 		"middle_right1":{
@@ -211,7 +211,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2130,
-				"y":1355
+				"y":645
 			}
 		},
 		"middle_right2":{
@@ -220,7 +220,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1700,
-				"y":1400
+				"y":600
 			}
 		},
 		"middle_right3":{
@@ -229,7 +229,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1900,
-				"y":1770
+				"y":230
 			}
 		},
 		"rear_right":{
@@ -238,7 +238,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2910,
-				"y":200
+				"y":1800
 			}
 		},
 		"stairs_right1":{
@@ -247,7 +247,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2150,
-				"y":100
+				"y":1900
 			}
 		},
 		"stairs_right2":{
@@ -256,7 +256,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2150,
-				"y":200
+				"y":1800
 			}
 		}
 	},
@@ -267,7 +267,7 @@
 			"status": "initial",
 			"pos": {
 				"x":250,
-				"y":1750
+				"y":250
 			}
 		},
 		"middle_left":{
@@ -276,7 +276,7 @@
 			"status": "initial",
 			"pos": {
 				"x":910,
-				"y":830
+				"y":1170
 			}
 		},
 		"middle":{
@@ -285,7 +285,7 @@
 			"status": "initial",
 			"pos": {
 				"x":1500,
-				"y":1650
+				"y":350
 			}
 		},
 		"middle_right":{
@@ -294,7 +294,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2090,
-				"y":830
+				"y":1170
 			}
 		},
 		"front_right":{
@@ -303,7 +303,7 @@
 			"status": "initial",
 			"pos": {
 				"x":2750,
-				"y":1750
+				"y":250
 			}
 		}
 	},
@@ -313,7 +313,7 @@
 			"status": "initial",
 			"pos": {
 				"x":450,
-				"y":850
+				"y":1150
 			}
 		}
 	}

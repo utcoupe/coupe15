@@ -58,7 +58,7 @@ module.exports = (function () {
 		return function() {
 			this.pos = {
 				x: x + Math.cos(a) * vit*dt/1000,
-				y: y - Math.sin(a) * vit*dt/1000,
+				y: y + Math.sin(a) * vit*dt/1000,
 				a: a
 			}
 			this.sendPos();
@@ -77,7 +77,7 @@ module.exports = (function () {
 		return function() {
 			this.pos = {
 				x: x + Math.cos(a) * SIMU_DIST(pwm, dt/1000, this.vitesse),
-				y: y - Math.sin(a) * SIMU_DIST(pwm, dt/1000, this.vitesse),
+				y: y + Math.sin(a) * SIMU_DIST(pwm, dt/1000, this.vitesse),
 				a: a
 			}
 			this.sendPos();
@@ -110,7 +110,7 @@ module.exports = (function () {
 			}
 			setTimeout(this.simu_goxy(x, y), tf);
 			setTimeout(callback, tf);
-		}.bind(this), -Math.atan2(dy,dx));
+		}.bind(this), Math.atan2(dy,dx));
 	};
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {

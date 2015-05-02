@@ -37,7 +37,7 @@ module.exports = (function () {
 					temp = j*2*Math.PI/__nb_startpoints_plot;
 					actions[i].startpoints.push({
 						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-						y: actions[i].object.pos.y - __dist_startpoints_plot * Math.sin(temp),
+						y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
 						a: convertA(temp+Math.PI)
 					});
 				}
@@ -76,7 +76,7 @@ module.exports = (function () {
 
 		// // Do action
 		if(act.type == "plot") {
-			this.ia.client.send('pr', "goa", {a: -Math.atan2(startpoint.y-this.ia.pr.pos.y, startpoint.x-this.ia.pr.pos.x) });
+			this.ia.client.send('pr', "goa", {a: Math.atan2(startpoint.y-this.ia.pr.pos.y, startpoint.x-this.ia.pr.pos.x) });
 		}
 		this.ia.client.send('pr', "goxy", startpoint);
 		this.ia.client.send('pr', "goa", startpoint);

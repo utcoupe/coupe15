@@ -5,8 +5,8 @@ module.exports = (function () {
 	function Pr(ia, color) {
 		this.ia = ia;
 		this.pos = { // if we are yellow, default, left side of the table
-			x: 142,
-			y: 1000,
+			x: 0,
+			y: 0,
 			a: 0
 		};
 		this.size = {
@@ -37,11 +37,13 @@ module.exports = (function () {
 
 	Pr.prototype.place = function () {
 		logger.debug('place');
-		this.sendPos();
+		this.sendInitialPos();
 		this.ia.client.send("pr", "setpid", { p:0.2, i:5, d:5 });
-		this.ia.client.send("pr", "goxy", { x: 500, y: 1060});
+		this.ia.client.send("pr", "goxy", { x: 500, y: 940});
 		this.ia.client.send("pr", "goa", { a: -0.62 });
 		this.ia.client.send("pr", "fermer_tout");
+
+		// Calage auto, fonctionne pas
 		// this.ia.client.send("pr", "goxy", { x: 300, y: 1000});
 		// this.ia.client.send("pr", "goa", { a: -1.5708 });
 		// this.ia.client.send("pr", "monter_ascenseur");
@@ -59,18 +61,12 @@ module.exports = (function () {
 		this.loop();
 	};
 
-	Pr.prototype.sendPos = function () {
+	Pr.prototype.sendInitialPos = function () {
 		this.ia.client.send("pr", "setpos", { // doublon !!!
 			x: 142,
 			y: 1000,
 			a: 0
 		});
-	};
-	Pr.prototype.sendCalageX = function (x, a) {
-		this.ia.client.send("pr", "setpos", { x: x, y: this.pos.y, a: a });
-	};
-	Pr.prototype.sendCalageY = function (y, a) {
-		this.ia.client.send("pr", "setpos", { x: this.pos.x, y: y, a: a });
 	};
 
 	Pr.prototype.parseOrder = function (from, name, params) {
@@ -80,7 +76,7 @@ module.exports = (function () {
 				this.pos = params;
 			break;
 			case 'pr.getpos':
-				this.sendPos();
+				this.sendInitialPos();
 			break;
 			case 'pr.placer':
 				this.place();
