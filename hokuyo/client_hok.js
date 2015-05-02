@@ -51,7 +51,7 @@
 					break;
 				case "shutdown":
 					quitC("stop");
-					spawn('sudo', ['node', './clients/gr/main.js']);
+					spawn('sudo', ['halt']);
 					break;
 				case "stop":
 					quitC("stop");

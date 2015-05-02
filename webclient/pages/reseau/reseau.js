@@ -106,11 +106,11 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button><br>";
 			    } else{
-			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button>";
+			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button>  ";
 
 		    		if(devClass == "hokuyo")
 		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button>";
-		    		
+
 		    		newDiv.innerHTML += "<br/>";
 		    	}
 		    }
