@@ -314,23 +314,23 @@ int isIn(int e, int *tab, int tab_size) {
 }
 
 
-Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
-	int i, found = -1;
-	Cluster_simple_t result;
+// Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){
+// 	int i, found = -1;
+// 	Cluster_simple_t result;
 
-	for(i=0; i<n; i++){ // on cherche notre cône
-		if ((dist_squared(clusters[i].center, coneCenter) < 6*3600) && (clusters[i].size < CONE_DIAM_MAX)){ // (3% * 2m)² = 3600 mm² + 600% "d'erreur" (à la louche)
-			found = i;
-		}
-		// fprintf(logfile, "%d %d, size : %d\n", clusters[i].center.x, clusters[i].center.y, clusters[i].size);
-	}
+// 	for(i=0; i<n; i++){ // on cherche notre cône
+// 		if ((dist_squared(clusters[i].center, coneCenter) < 6*3600) && (clusters[i].size < CONE_DIAM_MAX)){ // (3% * 2m)² = 3600 mm² + 600% "d'erreur" (à la louche)
+// 			found = i;
+// 		}
+// 		// fprintf(logfile, "%d %d, size : %d\n", clusters[i].center.x, clusters[i].center.y, clusters[i].size);
+// 	}
 
-	if(found != -1){ // si cône trouvé
-		result.size = clusters[found].size; // c'est bizarre, clusters[found].center vaut 0
-		result.center = clusters[found].center;
-	} else { // si cône pas trouvé
-		result.center.x=-1;
-		result.center.y=-1;
-	}
-	return result;
-}
+// 	if(found != -1){ // si cône trouvé
+// 		result.size = clusters[found].size; // c'est bizarre, clusters[found].center vaut 0
+// 		result.center = clusters[found].center;
+// 	} else { // si cône pas trouvé
+// 		result.center.x=-1;
+// 		result.center.y=-1;
+// 	}
+// 	return result;
+// }

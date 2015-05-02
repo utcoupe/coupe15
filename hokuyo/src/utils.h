@@ -38,7 +38,7 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find);
 	IN: nb de clusters, tableau des clusters, cone
 	OUT: cluster du cône (en cas d'erreur, le centre est -1 -1)
 */
-Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter);
+// Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter);
 
 /* 
 	IN: nombre de clusters et tab de clusters de chaque hok, nb_robots à trouver (>= n1 et >=n2)

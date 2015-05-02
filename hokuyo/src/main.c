@@ -16,7 +16,7 @@
 
 void frame(int nb_robots_to_find);
 
-static int use_protocol = 0, symetry = 0;
+static int symetry = 0;
 static long timeStart = 0;
 static Hok_t hok1, hok2;
 FILE* logfile;
@@ -63,7 +63,7 @@ int main(int argc, char **argv){
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} {use|no}_init_wizard [nbr_robots]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow} [nbr_robots]\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -72,8 +72,8 @@ int main(int argc, char **argv){
 		exit(EXIT_FAILURE);
 	 }
 
-	if (argc >= 4) {
-		nb_robots_to_find = atoi(argv[3]);
+	if (argc >= 3) {
+		nb_robots_to_find = atoi(argv[2]);
 	} else {
 		nb_robots_to_find = MAX_ROBOTS;
 	}
@@ -89,9 +89,9 @@ int main(int argc, char **argv){
 		hok2 = applySymetry(hok2);
 	}
 
-	if (strcmp(argv[2], "use_init_wizard") == 0){
-		initWizard(&hok1, &hok2, symetry);
-	}
+	// if (strcmp(argv[2], "use_init_wizard") == 0){
+	// 	initWizard(&hok1, &hok2, symetry);
+	// }
 
 	checkAndConnect(&hok1);
 	checkAndConnect(&hok2);
@@ -99,10 +99,6 @@ int main(int argc, char **argv){
 	#ifdef SDL
 	initSDL();
 	#endif
-
-	// if (use_protocol) {
-	// 	 init_protocol(path); // Attente de l'ordre de départ du match
-	// }
 
 	fprintf(logfile, "%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);
 	fflush(stdout);
@@ -189,26 +185,7 @@ void frame(int nb_robots_to_find){
 		waitScreen();
 		#endif
 
-		// if (use_protocol){
-			pushResults(robots, nRobots, timestamp);
-		// }
-		// else{
-			// fprintf(logfile, "%sHOK2 - %li;%i\n", PREFIX, timestamp, nRobots2);
-			// for(int i=0; i<nRobots2; i++){
-			// 	fprintf(logfile, ";;%i:%i", robots2[i].center.x, robots2[i].center.y);
-			// }
-			// fprintf(logfile, "\n");
-			// fprintf(logfile, "%sHOK1 - %li;%i\n", PREFIX, timestamp, nRobots1);
-			// for(int i=0; i<nRobots1; i++){
-			// 	fprintf(logfile, ";;%i:%i", robots1[i].center.x, robots1[i].center.y);
-			// }
-			// fprintf(logfile, "\n");
-			// fprintf(logfile, "%sALL  - %li;%i\n", PREFIX, timestamp, nRobots);
-			// for(int i=0; i<nRobots; i++){
-			// 	fprintf(logfile, ";;%i:%i", robots[i].center.x, robots[i].center.y);
-			// }
-			// fprintf(logfile, "\n");
-		// }
+		pushResults(robots, nRobots, timestamp);
 	} else {
 		pushInfo('0');
 		sleep(1);
