@@ -49,6 +49,10 @@
 					else
 						logger.error("Missing parameters !");
 					break;
+				case "shutdown":
+					quitC("stop");
+					spawn('sudo', ['node', './clients/gr/main.js']);
+					break;
 				case "stop":
 					quitC("stop");
 					break;

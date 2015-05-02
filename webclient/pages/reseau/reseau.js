@@ -11,12 +11,20 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 	/* ------------- Page reactions ------------- */
 
 	$(document).on("click", ".hokuyo", function(e) {
-		if(e.target.innerHTML == "Start"){
-			Client.send("hokuyo", "start", {
-				"color": $("#rc_hok_color").val(),
-				"nbrobots": parseInt($("#rc_hok_nbrobots").val())});
-		} else {
-			Client.send("hokuyo", "stop", {});
+		switch(e.target.innerHTML){
+			case "Start":
+				Client.send("hokuyo", "start", {
+					"color": $("#rc_hok_color").val(),
+					"nbrobots": parseInt($("#rc_hok_nbrobots").val())});
+				break;
+			case "Stop":
+				Client.send("hokuyo", "stop", {});
+				break;
+			case "Shutdown":
+			Client.send("hokuyo", "shutdown", {});
+				break;
+			default:
+				console.warn("Unknown click content");
 		}
 	});
 
@@ -97,8 +105,14 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    			newDiv.innerHTML += "<select id='rc_hok_nbrobots'> <option value='4' default>4</option> <option value='3'>3</option> <option value='2'>2</option> <option value='1'>1</option> </select> <select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
 
 			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button><br>";
-			    } else
-			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button><br>";
+			    } else{
+			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button>";
+
+		    		if(devClass == "hokuyo")
+		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button>";
+		    		
+		    		newDiv.innerHTML += "<br/>";
+		    	}
 		    }
 		    
 		    if(ip)
