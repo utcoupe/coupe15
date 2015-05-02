@@ -45,6 +45,7 @@
 #define RESET_ID 	's' 	// no args, reset last finished id to 0
 #define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
+#define SETEMERGENCYSTOP 'A'// enable(int)
 // END_ORDERS - Do not remove this comment
 
 #define AUTO_SEND	'~'		// x(int);y(int);a(decimal)

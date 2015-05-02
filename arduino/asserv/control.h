@@ -11,10 +11,11 @@
 
 #define PAUSE_BIT (1<<0)
 #define EMERGENCY_BIT (1<<1)
+#define SLOWGO_BIT (1<<2)
 
 #define ANY 0
 #define FORWARD 1
-#define BACKWARD 1
+#define BACKWARD -1
 
 typedef struct control {
 	struct speeds {
@@ -24,7 +25,7 @@ typedef struct control {
 	float max_acc, max_spd, rot_spd_ratio;
 	int reset, last_finished_id;
 	int order_started;
-	int stop_bits;
+	int status_bits;
 } control_t;
 
 extern control_t control;

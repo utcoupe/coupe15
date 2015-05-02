@@ -13,6 +13,7 @@
 #include "compat.h"
 #include "pins.h"
 #include "goals.h"
+#include "emergency.h"
 
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
@@ -171,6 +172,12 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 	case WHOAMI:
 		*ret_size = sprintf(ret, ARDUINO_ID);
+		break;
+	case SETEMERGENCYSTOP: {
+		int enable;
+		sscanf(argv, "%i", &enable);
+		EmergencySetStatus(enable);
+		}
 		break;
 	default:
 		return -1;//commande inconnue

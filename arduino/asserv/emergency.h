@@ -4,6 +4,9 @@
 #define EMERGENCY_WAIT_TIME 10 // seconds
 #define EMERGENCY_SLOW_GO_RATIO 0.3 // spd = 0.3*max_spd in slow_go mode
 
+#define EM_FORWARD 0
+#define EM_BACKWARD 1
+
 typedef enum emergency_phase {
 	NO_EMERGENCY,
 	FIRST_STOP,
@@ -11,14 +14,18 @@ typedef enum emergency_phase {
 } emergency_phase_t;
 
 typedef struct emergency_status {
-	float old_max_spd;
+	int in_use;
 	long start_time, start_detection_time;
 	emergency_phase_t phase;
 } emergency_status_t;
 
+extern emergency_status_t emergency_status[2];
+
 #ifdef __cplusplus
+extern "C" void EmergencySetStatus(int enable);
 extern "C" void ComputeEmergency(void);
 #else
+void EmergencySetStatus(int enable);
 void ComputeEmergency(void);
 #endif
 

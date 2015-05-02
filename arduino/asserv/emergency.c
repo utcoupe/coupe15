@@ -1,56 +1,73 @@
 #include "emergency.h"
 #include "pins.h"
-#include "control.h"
 #include "compat.h"
 #include "parameters.h"
 #include "Arduino.h"
 
-emergency_status_t emergency_status = {.phase = NO_EMERGENCY};
+emergency_status_t emergency_status[2] = {
+	{.phase = NO_EMERGENCY, .in_use = USE_SHARP},
+	{.phase = NO_EMERGENCY, .in_use = USE_SHARP},
+};
+
+void ComputeEmergencyOnPin(int pin, emergency_status_t *status);
+
+void EmergencySetStatus(int enable) {
+	emergency_status[EM_FORWARD].in_use = enable;
+	emergency_status[EM_BACKWARD].in_use = enable;
+	if (!enable) {
+		emergency_status[EM_FORWARD].phase = NO_EMERGENCY;
+		emergency_status[EM_BACKWARD].phase = NO_EMERGENCY;
+	}
+}
 
 void ComputeEmergency(void) {
-#if USE_SHARP
+#ifdef PIN_SHARP_FORWARD
+	ComputeEmergencyOnPin(PIN_SHARP_FORWARD, &emergency_status[EM_FORWARD]);
+#endif
+#ifdef PIN_SHARP_BACKWARD
+	ComputeEmergencyOnPin(PIN_SHARP_BACKWARD, &emergency_status[EM_BACKWARD]);
+#endif
+}
+
+void ComputeEmergencyOnPin(int pin, emergency_status_t *status) {
 	float analog, distance, voltage;
 	long now;
+
+	if (!status->in_use)
+		return;
+
 	now = timeMillis();
-	analog = analogRead(PIN_SHARP);
+	analog = analogRead(pin);
 	voltage = 5.0*analog/1023.0;
 	if (voltage == 0) {
 		distance = 1000;
 	} else {
 		distance = 0.123/voltage;
 	}
-	switch (emergency_status.phase) {
+	switch (status->phase) {
 		case NO_EMERGENCY:
 			if (distance < EMERGENCY_STOP_DISTANCE) {
-				if (emergency_status.start_detection_time < 0) {
-					emergency_status.start_detection_time = now;
-				} else if (now - emergency_status.start_detection_time > 300) {
-					emergency_status.start_time = now;
-					emergency_status.start_detection_time = -1;
-					emergency_status.phase = FIRST_STOP;
-					ControlSetStop(EMERGENCY_BIT);
+				if (status->start_detection_time < 0) {
+					status->start_detection_time = now;
+				} else if (now - status->start_detection_time > 300) {
+					status->start_time = now;
+					status->start_detection_time = -1;
+					status->phase = FIRST_STOP;
 				}
 			}
 			break;
 		case FIRST_STOP:
 			if (distance > EMERGENCY_STOP_DISTANCE) {
-				emergency_status.phase = NO_EMERGENCY;
-				ControlUnsetStop(EMERGENCY_BIT);
+				status->phase = NO_EMERGENCY;
 			}
-			if ((now - emergency_status.start_time) > (EMERGENCY_WAIT_TIME*1000)) {
-				emergency_status.phase = SLOW_GO;
-				emergency_status.old_max_spd = control.max_spd;
-				control.max_spd *= EMERGENCY_SLOW_GO_RATIO;
-				ControlUnsetStop(EMERGENCY_BIT);
+			if ((now - status->start_time) > (EMERGENCY_WAIT_TIME*1000)) {
+				status->phase = SLOW_GO;
 			}
 			break;
 		case SLOW_GO:
 			if (distance > EMERGENCY_STOP_DISTANCE) {
-				emergency_status.phase = NO_EMERGENCY;
-				control.max_spd = emergency_status.old_max_spd;
-				ControlUnsetStop(EMERGENCY_BIT);
+				status->phase = NO_EMERGENCY;
 			}
 			break;
 	}
-#endif
 }
