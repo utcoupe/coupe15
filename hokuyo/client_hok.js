@@ -11,6 +11,7 @@
 
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Client');
+	var spawn = require('child_process').spawn;
 	var child_process = require('child_process');
 	var child;
 	var SocketClient = require('../server/socket_client.class.js');

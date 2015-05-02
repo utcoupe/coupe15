@@ -105,13 +105,11 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    			newDiv.innerHTML += "<select id='rc_hok_nbrobots'> <option value='4' default>4</option> <option value='3'>3</option> <option value='2'>2</option> <option value='1'>1</option> </select> <select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
 
 			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button><br>";
-			    } else{
-			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button>  ";
 
 		    		if(devClass == "hokuyo")
-		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button>";
-
-		    		newDiv.innerHTML += "<br/>";
+		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button><br>";
+			    } else{
+			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button><br>";
 		    	}
 		    }
 		    
