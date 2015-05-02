@@ -44,7 +44,7 @@ module.exports = (function () {
 		this.Pos(pos);
 		this.sendCommand(callback, COMMANDS.SET_POS, [
 			parseInt(this.pos.x),
-			parseInt(2000-this.pos.y),
+			parseInt(this.pos.y),
 			myWriteFloat(this.pos.a)
 		]);
 	}
@@ -74,7 +74,7 @@ module.exports = (function () {
 			var lastFinishedId = parseInt(datas.shift()); // TODO
 			this.Pos({
 				x: parseInt(datas.shift()),
-				y: 2000-parseInt(datas.shift()),
+				y: parseInt(datas.shift()),
 				a: myParseFloat(datas.shift())
 			});
 
@@ -184,7 +184,7 @@ module.exports = (function () {
 		// this.clean();
 		this.sendCommand(callback, COMMANDS.GOTO, [
 			parseInt(x),
-			parseInt(2000-y)
+			parseInt(y)
 		], true);
 	};
 	Asserv.prototype.goa = function(callback, a){

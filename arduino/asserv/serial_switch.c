@@ -13,6 +13,7 @@
 #include "compat.h"
 #include "pins.h"
 #include "goals.h"
+#include "emergency.h"
 
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){ 
@@ -27,24 +28,26 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		*ret_size = sprintf(ret, "%li;%li", left_ticks, right_ticks);
 		break;
 	case GOTO: {
-		int x, y;
-		sscanf(argv, "%i;%i", &x, &y);
-		FifoPushGoal(id, TYPE_POS, POS_DATA(x, y));
+		int x, y, direction;
+		direction = 0;
+		sscanf(argv, "%i;%i;%i", &x, &y, &direction);
+		FifoPushGoal(id, TYPE_POS, POS_DATA(x, y, direction));
 		}
 		break;
 	case GOTOA: {
-		long x, y, a_int;
+		int x, y, a_int, direction;
 		float a;
-		sscanf(argv, "%li;%li;%li", &x, &y, &a_int);
+		direction = 0;
+		sscanf(argv, "%i;%i;%i;%i", &x, &y, &a_int, &direction);
 		a = a_int / (float)FLOAT_PRECISION;
-		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y));
+		FifoPushGoal(id, TYPE_POS, POS_DATA(x,y,direction));
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
 		}
 		break;
 	case ROT: {
-		long a_int;
+		int a_int;
 		float a;
-		sscanf(argv, "%li", &a_int);
+		sscanf(argv, "%i", &a_int);
 		a = a_int / (float)FLOAT_PRECISION;
 		FifoPushGoal(id, TYPE_ANG, ANG_DATA(a,1));
 		}
@@ -101,21 +104,21 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		control.last_finished_id = 0;
 		break;
 	case SET_POS:{
-		long x, y, a_int;
+		int x, y, a_int;
 		float angle;
-		sscanf(argv, "%li;%li;%li", &x, &y, &a_int);
+		sscanf(argv, "%i;%i;%i", &x, &y, &a_int);
 		angle = a_int / (float)FLOAT_PRECISION;
 		RobotStateSetPos(x, y, angle);
 		}
 		break;
 	case GET_POS:{
-		long x, y, a_int;
+		int x, y, a_int;
 		float a;
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
 		a_int = a * (float)FLOAT_PRECISION;
-		*ret_size = sprintf(ret, "%li;%li;%li", x, y, a_int);
+		*ret_size = sprintf(ret, "%i;%i;%i", x, y, a_int);
 		}
 		break;
 	case GET_SPD: {
@@ -133,26 +136,26 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		}
 		break;
 	case GET_POS_ID:{
-		long x, y, a_int;
+		int x, y, a_int;
 		float a;
 		a = current_pos.angle;
 	       	x = round(current_pos.x);
 		y = round(current_pos.y);
 		a_int = a * (float)FLOAT_PRECISION;
-		*ret_size = sprintf(ret, "%li;%li;%li;%i", x, y, a_int, control.last_finished_id);
+		*ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
 		}
 		break;
 	case SPDMAX:{
-		long r_int, s;
+		int r_int, s;
 		float r;
-		sscanf(argv, "%li;%li", &s, &r_int);
+		sscanf(argv, "%i;%i", &s, &r_int);
 		r = r_int / (float)FLOAT_PRECISION;
 		control.max_spd = s;
 		control.rot_spd_ratio = r;
 		}
 		break;
 	case ACCMAX:{
-		long a;
+		int a;
 		sscanf(argv, "%i", &a);
 		control.max_acc = a;
 		}
@@ -169,6 +172,12 @@ int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 		break;
 	case WHOAMI:
 		*ret_size = sprintf(ret, ARDUINO_ID);
+		break;
+	case SETEMERGENCYSTOP: {
+		int enable;
+		sscanf(argv, "%i", &enable);
+		EmergencySetStatus(enable);
+		}
 		break;
 	default:
 		return -1;//commande inconnue

@@ -35,12 +35,12 @@ void MAP::add_dynamic_circle(int x, int y, float f_r) {
 	int r = ceil(f_r);
 	int r2 = pow(r, 2);
 	for (int p_x=x-r; p_x <= x+r; p_x++) {
-		if (p_x < 0 || p_x >= (long)length(0)) {
+		if (p_x < 0 || p_x >= map_w) {
 			continue;
 		}
 		int y_length = ceil(sqrt(r2 - pow(x-p_x,2))); 
 		for (int p_y=y-y_length; p_y <= y+y_length; p_y++) {
-			if (p_y < 0 || p_y >= (long)length(1)) {
+			if (p_y < 0 || p_y >= map_h) {
 				continue;
 			}
 			vertex_descriptor u = get_vertex(p_x, p_y);
@@ -137,9 +137,9 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 		if (v_this_dist.size() == 0) {
 			++dist;
 			for (int x=(long)u[0]-dist; x<=(long)u[0]+dist; ++x) {
-				if (x < 0 || x > (long)length(0)) continue;
+				if (x < 0 || x > map_w) continue;
 				for (int y=(long)u[1]-dist; y<=(long)u[1]+dist; ++y) {
-					if (y < 0 || y > (long)length(1)) continue;
+					if (y < 0 || y > map_h) continue;
 					vertex_descriptor v = get_vertex(x, y);
 					if (norm1_heuristic(u)(v) == dist) {
 						v_this_dist.push_back(v);
@@ -154,17 +154,12 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 }
 
 void MAP::generate_bmp(string path) {
-	bitmap_image img(length(0), length(1));
-	image_drawer draw(img);
-	draw.pen_width(3);
-	draw.pen_color(0,0,255);
-	for (int true_y = 0; true_y < (long)length(1); true_y++) {
-		for (vertices_size_type x = 0; x < length(0); x++) {
-			int y = length(1) - true_y - 1;
-			vertex_descriptor u = {{x, vertices_size_type(true_y)}};
-			if (smooth_solution_contains(u))
-				draw.plot_pen_pixel(x, y);
-			else if (solution_contains(u))
+	bitmap_image img(map_w, map_h);
+	for (int true_y = 0; true_y < map_h; true_y++) {
+		for (int x = 0; x < map_w; x++) {
+			int y = map_h - true_y - 1;
+			vertex_descriptor u = {{(vertices_size_type)x, (vertices_size_type)true_y}};
+			if (solution_contains(u))
 				img.set_pixel(x, y, 0, 255, 0);
 			else if (has_barrier(u))
 				img.set_pixel(x, y, 0, 0, 0);
@@ -172,14 +167,20 @@ void MAP::generate_bmp(string path) {
 				img.set_pixel(x, y, 255, 255, 255);
 		}
 	}
+	image_drawer draw(img);
+	draw.pen_width(3);
+	draw.pen_color(50,50,255);
+	for (auto &p: smooth_solution) {
+		draw.plot_pen_pixel(p[0], map_h - p[1]);
+	}
 	draw.pen_width(1);
 	draw.pen_color(255,0,0);
 	for (unsigned int i=1; i<smooth_solution.size(); i++) {
 		int x1, x2, y1, y2;
 		x1 = smooth_solution[i-1][0];
 		x2 = smooth_solution[i][0];
-		y1 = length(1) - smooth_solution[i-1][1];
-		y2 = length(1) - smooth_solution[i][1];
+		y1 = map_h - smooth_solution[i-1][1];
+		y2 = map_h - smooth_solution[i][1];
 		draw.line_segment(x1, y1, x2, y2);
 	}
 	img.save_image(path);
@@ -190,8 +191,8 @@ void MAP::generate_bmp(string path) {
  * 			*/
 
 bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, double &d) {
-	long dx, dy;
 	double m, c;
+	long dx, dy;
 	int inc;
 	dx = (long)goal[0] - (long)v[0];
 	dy = (long)goal[1] - (long)v[1];
@@ -204,8 +205,8 @@ bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, dou
 		}
 		m = (double)dy / dx;
 		c = v[1] - m*v[0];
-		for (long x=v[0]; x!=(long)goal[0]; x+=inc) {
-			long y = round(m*x+c);
+		for (int x=v[0]; x!=(long)goal[0]; x+=inc) {
+			int y = round(m*x+c);
 			if (has_barrier(get_vertex(x, y))) {
 				d = 0;
 				return false;
@@ -220,8 +221,8 @@ bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, dou
 		}
 		m = (double)dx / dy;
 		c = v[0] - m*v[1];
-		for (long y=v[1]; y!=(long)goal[1]; y+=inc) {
-			long x = round(m*y+c);
+		for (int y=v[1]; y!=(long)goal[1]; y+=inc) {
+			int x = round(m*y+c);
 			if (has_barrier(get_vertex(x, y))) {
 				d = 0;
 				return false;
@@ -248,23 +249,19 @@ filtered_grid MAP::create_barrier_map() {
 #define BARRIER "#"
 // Print the maze as an ASCII map.
 std::ostream& operator<<(std::ostream& output, const MAP& m) {
-	output << "Grid size : " << m.length(0) << "x" <<  m.length(1) << std::endl;
+	output << "Grid size : " << m.get_map_w() << "x" <<  m.get_map_h() << std::endl;
 	// Header
-	for (vertices_size_type i = 0; i < m.length(0)+2; i++)
+	for (int i = 0; i < m.get_map_w()+2; i++)
 		output << BARRIER;
 	output << std::endl;
 	// Body
-	for (int y = 0; y < (long)m.length(1); y++) {
-		// Enumerate rows in reverse order and columns in regular order so that
-		// (0,0) appears in the lower left-hand corner.  This requires that y be
-		// int and not the unsigned vertices_size_type because the loop exit
-		// condition is y==-1.
-		for (vertices_size_type x = 0; x < m.length(0); x++) {
+	for (int y = 0; y < m.get_map_h(); y++) {
+		for (int x = 0; x < m.get_map_w(); x++) {
 			// Put a barrier on the left-hand side.
 			if (x == 0)
 				output << BARRIER;
 			// Put the character representing this point in the maze grid.
-			vertex_descriptor u = {{x, vertices_size_type(y)}};
+			vertex_descriptor u = {{(vertices_size_type)x, (vertices_size_type)y}};
 			if (m.smooth_solution_contains(u))
 				output << "O";
 			else if (m.solution_contains(u))
@@ -274,14 +271,14 @@ std::ostream& operator<<(std::ostream& output, const MAP& m) {
 			else
 				output << " ";
 			// Put a barrier on the right-hand side.
-			if (x == m.length(0)-1)
+			if (x == m.get_map_w()-1)
 				output << BARRIER;
 		}
 		// Put a newline after every row except the last one.
 		output << std::endl;
 	}
 	// Footer
-	for (vertices_size_type i = -1; i < m.length(0)+2; i++)
+	for (int i = -1; i < m.get_map_w()+2; i++)
 		output << BARRIER;
 	return output;
 }

@@ -11,6 +11,7 @@
 #include "compat.h"
 #include "motor.h"
 #include "local_math.h"
+#include "emergency.h"
 #include <math.h>
 
 #define ANG_REACHED (0x1)
@@ -34,19 +35,19 @@ void allStop(void);
 void stopRobot(void);
 
 void ControlSetStop(int mask) {
-	control.stop_bits |= mask;
+	control.status_bits |= mask;
 }
 
 void ControlUnsetStop(int mask) {
-	control.stop_bits &= ~mask;
+	control.status_bits &= ~mask;
 }
 
 void ControlInit(void) {
 	control.reset = 1;
-	control.stop_bits = 0;
+	control.status_bits = 0;
 	control.speeds.angular_speed = 0,
 	control.speeds.linear_speed = 0;
-	control./ = 0;
+	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
 	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
@@ -80,7 +81,27 @@ void ControlCompute(void) {
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
 
-	if (control.stop_bits) {
+	// clear emergency everytime, it will be reset if necessary
+	control.status_bits &= ~EMERGENCY_BIT;
+	control.status_bits &= ~SLOWGO_BIT;
+	
+	if (abs(control.speeds.linear_speed) > 1) {
+		int direction;
+		if (control.speeds.linear_speed > 0) {
+			direction = EM_FORWARD;
+		} else {
+			direction = EM_BACKWARD;
+		}
+
+		if (emergency_status[direction].phase == FIRST_STOP) {
+			control.status_bits |= EMERGENCY_BIT;
+		} else if (emergency_status[direction].phase == SLOW_GO) {
+			control.status_bits |= SLOWGO_BIT;
+		}
+	}
+
+
+	if (control.status_bits) {
 		stopRobot();
 	} else {
 		switch (current_goal->type) {
@@ -209,9 +230,14 @@ void goalPos(goal_t *goal) {
 	da = moduloTwoPI(da);
 	dd = sqrt(pow(dx, 2.0)+pow(dy, 2.0));
 
-	if (abs(da) > CONE_ALIGNEMENT) {
-		da = moduloPI(da);
+	if (goal->data.pos_data.d == ANY) {
+		if (abs(da) > CONE_ALIGNEMENT) {
+			da = moduloPI(da);
+			dd = - dd;
+		}
+	} else if (goal->data.pos_data.d == BACKWARD) {
 		dd = - dd;
+		da = moduloTwoPI(da+M_PI);
 	}
 
 	if (controlPos(dd, da) & POS_REACHED) {
@@ -222,15 +248,19 @@ void goalPos(goal_t *goal) {
 
 int controlPos(float dd, float da) {
 	int ret;
-	float dda, ddd;
+	float dda, ddd, max_speed;
 
 	dda = da * (ENTRAXE_ENC/2);
 	ddd = dd * exp(-abs(K_DISTANCE_REDUCTION*da));
 
+	max_speed = control.max_spd;
+	if (control.status_bits & SLOWGO_BIT) {
+		max_speed *= EMERGENCY_SLOW_GO_RATIO;
+	}
 	control.speeds.angular_speed = calcSpeed(control.speeds.angular_speed, dda, 
-			control.max_spd * control.rot_spd_ratio, 0);
+			max_speed * control.rot_spd_ratio, 0);
 	control.speeds.linear_speed = calcSpeed(control.speeds.linear_speed, ddd,
-			control.max_spd, 0);
+			max_speed, 0);
 
 	ret = 0;
 	if (abs(dd) < ERROR_POS) {
