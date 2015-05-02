@@ -33,6 +33,22 @@ void command_add_dynamic(string& command, MAP &map) {
 	}
 }
 
+/*
+ * INPUT : 	
+ * 		command : x_start;y_start;x_end;y_end\n
+ *
+ * OUTPUT: 	
+ * 		if valid:
+ * 	 		x_start;y_start;x1;y1;...;xn;xy;x_end;y_end;path_length\n
+ * 			all coordinates are integers, path_length is a float 		
+ * 		if invalid (no path found or parsing error):
+ * 			\n
+ *
+ * if start point is not valid, find the nearest valid point
+ * if end point is not valid, do the same, except if
+ * 		the end point is in a dynamic barrier (aka a robot)
+ * 		then return \n immediatly
+ */
 string command_calc_path(string& command, MAP &map) {
 	int x_s, y_s, x_e, y_e;
 	vertex_descriptor start, end, start_valid, end_valid;
@@ -41,21 +57,32 @@ string command_calc_path(string& command, MAP &map) {
 	stringstream answer;
 
 	command = command.substr(2);
-	sscanf(command.c_str(), "%i;%i;%i;%i", &x_s, &y_s, &x_e, &y_e);
+	if (sscanf(command.c_str(), "%i;%i;%i;%i", &x_s, &y_s, &x_e, &y_e) < 4) {
+		cerr << "Did not parse the input correctly" << endl;
+		return "\n";
+	}
+
 	end = map.get_vertex(x_e, y_e);
-	if (map.has_dynamic_barrier(end)) return "\n";
+	if (map.has_dynamic_barrier(end))
+		return "\n";
 	end_valid = map.find_nearest_valid(end);
+
 	start = map.get_vertex(x_s, y_s);
 	start_valid = map.find_nearest_valid(start);
+
 #if DEBUG
 	cerr << "Start : " << start_valid[0] << ":" << start_valid[1] << endl;
 	cerr << "End : " << end_valid[0] << ":" << end_valid[1] << endl;
 	clock_t t = clock();
 #endif
+
 	map.solve(start_valid, end_valid);
+	if (!map.solved())
+		return "\n";
 	map.solve_smooth();
 	path = map.get_smooth_solution();
 	distance = map.get_smooth_solution_length();
+
 	if (start != start_valid) {
 		path.insert(path.begin(), start);
 		distance += euclidean_heuristic(start)(start_valid);
@@ -64,6 +91,7 @@ string command_calc_path(string& command, MAP &map) {
 		path.push_back(end);
 		distance += euclidean_heuristic(end)(end_valid);
 	}
+
 	for (auto &point: path) {
 		answer << point[0] << ";" << point[1] << ";";
 	}

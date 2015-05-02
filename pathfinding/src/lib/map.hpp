@@ -36,12 +36,14 @@ class MAP {
 	public:
 		MAP(const std::string &map_filename);
 		~MAP();
-		vertices_size_type length(std::size_t d) const {return map->length(d);}
+		int get_map_h() const { return map_h; };
+		int get_map_w() const { return map_w; };
 		void add_dynamic_circle(int x, int y, float f_r);
 		void clear_dynamic_barriers();
 
 		bool solve(vertex_descriptor source, vertex_descriptor dest);
-		bool solve(int x_source, int y_source, int x_dest, int y_dest) {
+		bool solve(int x_source, int y_source,
+					int x_dest, int y_dest) {
 			return solve(get_vertex(x_source, y_source), 
 							get_vertex(x_dest, y_dest));
 		}
@@ -78,8 +80,6 @@ class MAP {
 		vertex_descriptor get_vertex(int x, int y);
 		double get_smooth_solution_length() { return smooth_solution_length; };
 		double get_solution_length() { return smooth_solution_length; };
-		int get_map_w() const {return map_w;};
-		int get_map_h() const {return map_h;};
 		std::vector<vertex_descriptor> get_solution() { return solution; };
 		std::vector<vertex_descriptor> get_smooth_solution() { return smooth_solution; };
 		bool solved() const {return !solution.empty();}
