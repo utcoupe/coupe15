@@ -125,6 +125,14 @@ int main(int argc, char **argv) {
 
 #if DEBUG
 	cerr << "Loading map " << argv[1] << endl;
+	switch (mode) {
+		case EUCLIDEAN:
+		cerr << "Using euclidean heuristic" << endl;
+		break;
+		case NORM1:
+		cerr << "Using norm1 heuristic" << endl;
+		break;
+	}
 #endif
 	string path = string(argv[1]);
 	MAP map(path);
