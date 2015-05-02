@@ -85,7 +85,7 @@ void ControlCompute(void) {
 	control.status_bits &= ~EMERGENCY_BIT;
 	control.status_bits &= ~SLOWGO_BIT;
 	
-	if (control.speeds.linear_speed != 0) {
+	if (abs(control.speeds.linear_speed) > 1) {
 		int direction;
 		if (control.speeds.linear_speed > 0) {
 			direction = EM_FORWARD;
