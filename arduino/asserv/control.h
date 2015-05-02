@@ -12,6 +12,10 @@
 #define PAUSE_BIT (1<<0)
 #define EMERGENCY_BIT (1<<1)
 
+#define ANY 0
+#define FORWARD 1
+#define BACKWARD 1
+
 typedef struct control {
 	struct speeds {
 		int pwm_left, pwm_right;

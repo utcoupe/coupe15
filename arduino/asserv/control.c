@@ -46,7 +46,7 @@ void ControlInit(void) {
 	control.stop_bits = 0;
 	control.speeds.angular_speed = 0,
 	control.speeds.linear_speed = 0;
-	control./ = 0;
+	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
 	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
@@ -209,9 +209,14 @@ void goalPos(goal_t *goal) {
 	da = moduloTwoPI(da);
 	dd = sqrt(pow(dx, 2.0)+pow(dy, 2.0));
 
-	if (abs(da) > CONE_ALIGNEMENT) {
-		da = moduloPI(da);
+	if (goal->data.pos_data.d == ANY) {
+		if (abs(da) > CONE_ALIGNEMENT) {
+			da = moduloPI(da);
+			dd = - dd;
+		}
+	} else if (goal->data.pos_data.d == BACKWARD) {
 		dd = - dd;
+		da = moduloTwoPI(da+M_PI);
 	}
 
 	if (controlPos(dd, da) & POS_REACHED) {
