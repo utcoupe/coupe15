@@ -161,7 +161,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.speed(callback, -200, 0, 1000);
+					asserv.speed(callback, -200, 0, 1500);
 					});});});
 				}, 1000);
 			break;
