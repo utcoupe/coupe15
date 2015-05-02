@@ -41,7 +41,7 @@
 #define PIN_ENC_RIGHT_A 20
 #define PIN_ENC_RIGHT_B 21
 
-#define PIN_SHARP 15
+#define PIN_SHARP_FORWARD 15
 
 #define INTERRUPT_ENC_LEFT_A 4
 #define INTERRUPT_ENC_LEFT_B 5

@@ -54,7 +54,7 @@
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
 #define SPD_TO_STOP 10
 
-#define CONE_ALIGNEMENT (120.0/180.0*3.14159) //120deg
+#define CONE_ALIGNEMENT (M_PI/2.0) 
 
 #define PID_P 0.5
 #define PID_I 50

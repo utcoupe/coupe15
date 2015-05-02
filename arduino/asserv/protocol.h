@@ -20,8 +20,8 @@
 //  multiplied by FLOAT_PRECISION
 
 // BEGIN_ORDERS - Do not remove this comment
-#define	GOTOA 		'c' 	// x(int);y(int);a(decimal) - (mm and radian)
-#define	GOTO 		'd' 	// x(int);y(int) - (mm)
+#define	GOTOA 		'c' 	// x(int);y(int);a(decimal);direction(int) - (mm and radian), direction is optionnal : 1 is forward, -1 is backward, 0 is any
+#define	GOTO 		'd' 	// x(int);y(int);direction(int) - (mm), direction is optionnal : 1 is forward, -1 is backward, 0 is any
 #define	ROT 		'e' 	// a(decimal) - (radian), can't turn more than 1 turn
 #define ROTNOMODULO	'a' 	// a(decimal) - radian, can turn more than 1 turn
 #define	KILLG 		'f' 	// no args, go to next order
@@ -37,7 +37,7 @@
 #define	SET_POS		'm' 	// x(int);y(int);a(decimal) - set pos (mm / radians)
 #define	GET_POS		'n' 	// no args, response : x(int);y(int);a(decimal) - get current pos (mm and radians)
 #define GET_SPD 	'y' 	// no args, respond : l(int);r(int) - get wheels speed (mm/s)
-#define GET_TARGET_SPD 	'v' 	// no args, respond : l(int);r(int) - get target wheels speed (mm/s)
+#define GET_TARGET_SPD 	'v'	// no args, respond : l(int);r(int) - get target wheels speed (mm/s)
 #define	GET_POS_ID 	'o'		// no args, response : x(int);y(int);a(decimal);id(int) - get current pos and last id (mm and radians)
 #define GET_LAST_ID	't' 	// no args, response : id(int)
 #define	PAUSE 		'q' 	// no args, pauses control
@@ -45,6 +45,7 @@
 #define RESET_ID 	's' 	// no args, reset last finished id to 0
 #define PINGPING 	'z'		// no args, switch led state
 #define WHOAMI 		'w' 	// no args, answers 'ASSERV' or 'PAP'
+#define SETEMERGENCYSTOP 'A'// enable(int)
 // END_ORDERS - Do not remove this comment
 
 #define AUTO_SEND	'~'		// x(int);y(int);a(decimal)

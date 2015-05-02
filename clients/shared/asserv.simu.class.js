@@ -16,7 +16,7 @@ module.exports = (function () {
 		this.pos = {
 			x:0,y:0,a:0
 		};
-		this.vitesse = 800
+		this.vitesse = 800;
 		this.getPos();
 	}
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
@@ -54,11 +54,30 @@ module.exports = (function () {
 		callback();
 	};
 
+	Asserv.prototype.simu_speed = function(vit, x, y, a, dt) {
+		return function() {
+			this.pos = {
+				x: x + Math.cos(a) * vit*dt/1000,
+				y: y + Math.sin(a) * vit*dt/1000,
+				a: a
+			}
+			this.sendPos();
+		}.bind(this);
+	}
+	Asserv.prototype.speed = function(callback, l, a, ms) {
+		// this.simu.pwm(callback, l/3, l/3, ms);
+		for(var t = 0; t < ms; t += 1000/FPS) {
+			setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t);
+		}
+		setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms);
+		setTimeout(callback, ms);
+	};
+
 	Asserv.prototype.simu_pwm = function(pwm, x, y, a, dt) {
 		return function() {
 			this.pos = {
-				x: x + Math.cos(a) * SIMU_DIST(pwm, dt, this.vitesse),
-				y: y + Math.sin(a) * SIMU_DIST(pwm, dt, this.vitesse),
+				x: x + Math.cos(a) * SIMU_DIST(pwm, dt/1000, this.vitesse),
+				y: y + Math.sin(a) * SIMU_DIST(pwm, dt/1000, this.vitesse),
 				a: a
 			}
 			this.sendPos();
@@ -91,7 +110,7 @@ module.exports = (function () {
 			}
 			setTimeout(this.simu_goxy(x, y), tf);
 			setTimeout(callback, tf);
-		}.bind(this), -Math.atan2(dy,dx));
+		}.bind(this), Math.atan2(dy,dx));
 	};
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {
