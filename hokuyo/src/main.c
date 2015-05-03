@@ -22,7 +22,6 @@ static Hok_t hok1, hok2;
 FILE* logfile;
 
 void exit_handler() {
-	int status;
 	fprintf(logfile, "\n%sClosing lidar(s), please wait...\n", PREFIX);
 	if (hok1.urg != 0)
 		urg_disconnect(hok1.urg);
@@ -47,7 +46,7 @@ int main(int argc, char **argv){
 	// Disable buffering on stdout
 	setvbuf(stdout, NULL, _IOLBF, 0);
 
-	int calib = 1, nb_robots_to_find = 4;
+	int nb_robots_to_find = 4;
 	hok1.urg = 0;
 	hok2.urg = 0;
 
@@ -78,9 +77,15 @@ int main(int argc, char **argv){
 		nb_robots_to_find = MAX_ROBOTS;
 	}
 
+	char paths[2][SERIAL_STR_LEN];
 
-	hok1 = initHokuyo("/dev/ttyACM0", HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y} );
-	hok2 = initHokuyo("/dev/ttyACM1", HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
+	if (detectHokuyos(paths, 2)) {
+		fprintf(stderr, "Failed to detect hokuyos paths\n");
+		exit(EXIT_FAILURE);
+	}
+
+	hok1 = initHokuyo(paths[0], HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y} );
+	hok2 = initHokuyo(paths[1], HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
 
 	if (strcmp(argv[1], "yellow") == 0) {
 		// si on est jaune, on inverse les positions ! (au lieu de changer les cst)
@@ -120,7 +125,7 @@ int main(int argc, char **argv){
 
 void frame(int nb_robots_to_find){
 	long timestamp;
-	static long lastTime = 0;
+	//static long lastTime = 0;
 	Pt_t pts1[MAX_DATA], pts2[MAX_DATA];
 	Cluster_t robots1[MAX_CLUSTERS], robots2[MAX_CLUSTERS], robots[MAX_ROBOTS];
 	int nPts1 = 0, nPts2 = 0, nRobots1 = 0, nRobots2 = 0, nRobots;
@@ -141,7 +146,7 @@ void frame(int nb_robots_to_find){
 	}
 
 	if (hok1.isWorking || hok2.isWorking) {
-		long start_t = timeMillis();
+		//long start_t = timeMillis();
 
 		if (hok1.isWorking) {
 			nPts1 = getPoints(hok1, pts1);
@@ -190,6 +195,6 @@ void frame(int nb_robots_to_find){
 		pushInfo('0');
 		sleep(1);
 	}
-	lastTime = timestamp;
+	//lastTime = timestamp;
 }
 

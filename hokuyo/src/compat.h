@@ -8,15 +8,9 @@ typedef enum bool
 
 long timeMillis();
 
+char serial_read(int serial);
+int nonblocking_read(int serial, char *data);
+int set_interface_attribs (int fd, int speed, int parity);
+void set_blocking (int fd, int should_block);
 
-//Segfault on printf(<int>)
-#ifdef DEBUG
-#define PDEBUGLN(x) /*printf(x);printf("\n");*/
-#define PDEBUG(x) /*printf(x);*/
-#else
-
-#define PDEBUGLN(x)
-#define PDEBUG(x)
-
-#endif
 #endif
