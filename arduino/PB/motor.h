@@ -6,12 +6,16 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#define NO_PWM 0
+#include "brushlessMotor.h"
+
 #define MOTOR_LEFT 1
 #define MOTOR_RIGHT 2
 
 void set_pwm(int side, int pwm);
 
+inline void MotorsInit(void) {
+	BrushlessMotorsInit();
+}
 
 inline void set_pwm_left(int pwm){
 	set_pwm(MOTOR_LEFT, pwm);

@@ -47,7 +47,7 @@ void BrushlessMotorSetPwm(int motor_side, int pwm) {
 	switch (motor_side) {
 		case MOTOR_LEFT:{
 			analogWrite(MOTOR1_SPD, pwm);
-			if (pwm == NO_PWM) {
+			if (pwm == 0) {
 				digitalWrite(MOTOR1_EN,LOW); //disable motor when pwm = 0
 			}
 			else {
@@ -57,7 +57,7 @@ void BrushlessMotorSetPwm(int motor_side, int pwm) {
 		}
 		case MOTOR_RIGHT:{
 			analogWrite(MOTOR2_SPD, pwm);
-			if (pwm == NO_PWM) {
+			if (pwm == 0) {
 				digitalWrite(MOTOR2_EN,LOW); //disable motor when pwm = 0
 			}
 			else {

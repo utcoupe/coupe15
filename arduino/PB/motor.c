@@ -21,7 +21,7 @@ void set_pwm(int side, int pwm) {
 		//il faut qu'il tournent dans un sens différent
 		pwm = -pwm;
 	}
-	if (pwm != NO_PWM) {
+	if (pwm != 0) {
 		if (pwm > 0)
 			pwm += PWM_MIN;
 		else if (pwm < 0)
