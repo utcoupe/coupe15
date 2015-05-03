@@ -6,10 +6,9 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#define NO_PWM 0
-
 void set_pwm(int side, int pwm);
 
+inline void MotorsInit(void) {};
 
 void set_pwm_left(int pwm);
 

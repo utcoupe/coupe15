@@ -17,8 +17,6 @@
 #define LEFT_READY (1<<LEFT_READY_SHIFT)
 #define RIGHT_READY (1<<RIGHT_READY_SHIFT)
 
-#define NO_PWM 666
-
 void BrushlessMotorsInit();
 int BrushlessMotorsReady();
 void BrushlessMotorSetPwm(int motor_side, int pwm);
