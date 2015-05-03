@@ -21,7 +21,7 @@ char expected_serial[2][20] = {
 };
 
 #define NR_ACM_TRY 4
-#define VVCOMMAND "VV\n00P\n"
+#define VVCOMMAND "VV\n"
 
 int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 	char base_path[] = "/dev/ttyACMx";
@@ -30,9 +30,9 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 		char *path = paths[i];
 		int j, found = 0;
 		for (j=0; j<NR_ACM_TRY; j++) {
-			char *answer;
+			char *answer, *serial_nr;
 			char *try_path = base_path;
-			int fd, n, size, k, serial_start;
+			int fd, n, size, k;
 			try_path[11] = '0' + j;
 
 			// open serial
@@ -63,19 +63,18 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 				answer[++size] = serial_read(fd);
 			} while (!(answer[size] == '\n' && answer[size-1] == '\n'));
 			answer[size] = '\0';
-			serial_start = 0;
 
-			// skip 6 \n
-			for (k=0; k<6; k++) {
-				while (answer[serial_start++] != '\n');
-			}
+			serial_nr = strstr(answer, "SERI:") + sizeof("SERI:");
+			k = 0;
+			while (serial_nr[++k] != ';');
+			serial_nr[k] = '\0';
 
 #if DEBUG
-			fprintf(stderr, "Found serial %s on port %s\n", &answer[serial_start], path);
+			fprintf(stderr, "Found serial %s on port %s\n", serial_nr, try_path);
 #endif
 
 			// check if it is the right hokuyo
-			if (strcmp(&answer[serial_start], expected_serial[i]) == 0) {
+			if (strcmp(serial_nr, expected_serial[i]) == 0) {
 				strcpy(path, try_path);
 				found = 1;
 				break;

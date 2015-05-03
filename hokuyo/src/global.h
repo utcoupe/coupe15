@@ -31,14 +31,14 @@
 #define CALIB_Y (TABLE_Y/2)
 // #define CALIB_PT (Pt_t) { CALIB_X, CALIB_Y } // inutilisé ! XXX
 
-#define HOK1_SERIAL "SERI: H0508486; T\n"
+#define HOK1_SERIAL "1102605"
 #define HOK1_X -40 // old : 25
 #define HOK1_Y -40  // old : 25
 #define HOK1_A 0 // orientation
 #define HOK1_CONE_MIN 0
 #define HOK1_CONE_MAX (M_PI/2)
 
-#define HOK2_SERIAL "SERI: H0508486; T\n"
+#define HOK2_SERIAL "1320252"
 #define HOK2_X 3040 // old 3025
 #define HOK2_Y 1000 
 #define HOK2_A M_PI

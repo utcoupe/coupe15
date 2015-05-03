@@ -51,7 +51,7 @@ int main(int argc, char **argv){
 	hok2.urg = 0;
 
 	// Open log file
-	logfile = fopen("/tmp/hokuyo.log", "a+");
+	logfile = fopen("/var/log/hokuyo.log", "a+");
 	if (logfile == NULL) {
 		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
 		exit(EXIT_FAILURE);
@@ -83,6 +83,9 @@ int main(int argc, char **argv){
 		fprintf(stderr, "Failed to detect hokuyos paths\n");
 		exit(EXIT_FAILURE);
 	}
+	fprintf(logfile, "Hokuyo 1 (corner) detected on port %s\n", paths[0]);
+	fprintf(logfile, "Hokuyo 2 (ennemy side) detected on port %s\n", paths[1]);
+	fflush(logfile);
 
 	hok1 = initHokuyo(paths[0], HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y} );
 	hok2 = initHokuyo(paths[1], HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
@@ -115,9 +118,16 @@ int main(int argc, char **argv){
 			fprintf(logfile, "%sChecking hokuyos\n", PREFIX);
 			checkAndConnect(&hok1);
 			checkAndConnect(&hok2);
+			if (!hok1.isWorking) {
+				fprintf(logfile, "%sHokuyo 1 not working\n", PREFIX);
+			}
+			if (!hok2.isWorking) {
+				fprintf(logfile, "%sHokuyo 2 not working\n", PREFIX);
+			}
 			time_last_try = now;
 		}
 		frame(nb_robots_to_find);
+		fflush(logfile);
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -132,7 +142,6 @@ void frame(int nb_robots_to_find){
 
 	if (hok1.isWorking && hok2.isWorking) {
 		pushInfo('2');
-		fprintf(logfile, "Both hokuyos working\n");
 		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
 		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
 		if (symetry) {
