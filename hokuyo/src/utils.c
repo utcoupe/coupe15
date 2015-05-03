@@ -49,7 +49,7 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 			/* si le pt actuel (i) est proche en distance avec un de ses précédents,
 			 on le range dans le même cluster */
 			int j = max(0, i - CLUSTER_POINTS_BACKWARDS);
-			for (j; j<i; j++) {
+			for (j=j; j<i; j++) {
 				if (dist_squared(pt_list[j], pt_list[i]) < MAX_DIST*MAX_DIST) {
 					clusters_index[i] = clusters_index[j];
 					break;
@@ -160,7 +160,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 		//Calcul de la distance entre chaque combinaison de coords
 		int distR1R2[MAX_ROBOTS][MAX_ROBOTS], i, j;
 		struct corres dist_indexes[MAX_ROBOTS*MAX_ROBOTS]; //Tableau d'index de distR1R2, sert a trier les distances
-		struct corres merged[MAX_ROBOTS]; //Correspondances finales et retenues
+		//struct corres merged[MAX_ROBOTS]; //Correspondances finales et retenues
 		int changed = 0;
 
 		//Calcul des distaces

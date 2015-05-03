@@ -4,6 +4,8 @@
 #include "fast_math.h"
 #include <urg_ctrl.h>
 
+#define SERIAL_STR_LEN 20
+
 typedef struct ScanZone {
 	int xmin, xmax, ymin, ymax;
 } ScanZone_t;
@@ -24,6 +26,7 @@ typedef struct Hokuyo {
 	struct fastmathTrigo fm; // enregistre les cos et sin pour les n angles
 } Hok_t;
 
+int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr);
 Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt);
 // void initWizard(Hok_t *hok1, Hok_t *hok2, int symetry);
 void checkAndConnect(Hok_t *hok);

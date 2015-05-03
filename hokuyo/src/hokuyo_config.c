@@ -1,17 +1,99 @@
 #include "hokuyo_config.h"
 #include "utils.h"
 #include "fast_math.h"
+#include "global.h"
+#include "compat.h"
 
 #include <urg_ctrl.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h> // pour sleep() uniquement
+#include <string.h>
+#include <unistd.h>     // UNIX standard function definitions
+#include <fcntl.h>      // File control definitions
+#include <errno.h>      // Error number definitions
+#include <termios.h>
 
 extern FILE* logfile;
 
+char expected_serial[2][20] = {
+	HOK1_SERIAL,
+	HOK2_SERIAL,
+};
+
+#define NR_ACM_TRY 4
+#define VVCOMMAND "VV\n00P\n"
+
+int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
+	char base_path[] = "/dev/ttyACMx";
+	int i;
+	for (i=0; i<nr; i++) {
+		char *path = paths[i];
+		int j, found = 0;
+		for (j=0; j<NR_ACM_TRY; j++) {
+			char *answer;
+			char *try_path = base_path;
+			int fd, n, size, k, serial_start;
+			try_path[11] = '0' + j;
+
+			// open serial
+			fd = open(try_path, O_RDWR | O_NOCTTY | O_NDELAY);
+			if (fd == -1) {
+				fprintf(stderr, "open_port: Unable to open serial port %s\n", try_path);
+				continue;
+			}
+			set_interface_attribs(fd, B115200, 0);  
+			set_blocking(fd, 1);
+
+			// ask for serial number
+			n = write(fd, VVCOMMAND, sizeof(VVCOMMAND));
+			if (n < 0) {
+				fprintf(stderr, "Failed to write on serial port %s\n", try_path);
+				continue;
+			}
+			answer = malloc(200*sizeof(char));
+			if (!answer) {
+				fprintf(stderr, "Failed to allocate answer buffer\n");
+				exit(EXIT_FAILURE);
+			}
+			size = 0;
+			answer[size] = serial_read(fd);
+
+			// read until \n\n
+			do {
+				answer[++size] = serial_read(fd);
+			} while (!(answer[size] == '\n' && answer[size-1] == '\n'));
+			answer[size] = '\0';
+			serial_start = 0;
+
+			// skip 6 \n
+			for (k=0; k<6; k++) {
+				while (answer[serial_start++] != '\n');
+			}
+
+#if DEBUG
+			fprintf(stderr, "Found serial %s on port %s\n", &answer[serial_start], path);
+#endif
+
+			// check if it is the right hokuyo
+			if (strcmp(&answer[serial_start], expected_serial[i]) == 0) {
+				strcpy(path, try_path);
+				found = 1;
+				break;
+#if DEBUG
+				fprintf(stderr, "Found hokuyo %d (%s) on port %s\n", i, expected_serial[i], path);
+#endif
+			}
+
+			free(answer);
+		}
+		if (!found) {
+			return -1;
+		}
+	}
+	return 0;
+}
 
 Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt) {
-	int error, i;
 	Hok_t hok;
 	hok.urg = malloc(sizeof(urg_t));
 	hok.path = path;
