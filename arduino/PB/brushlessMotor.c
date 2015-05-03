@@ -29,10 +29,13 @@ void BrushlessMotorsInit() {
 		digitalWrite(MOTOR2_BRK, HIGH);
 		digitalWrite(MOTOR1_EN, LOW);
 		digitalWrite(MOTOR2_EN, LOW);
+
+		analogWrite(MOTOR1_SPD, NO_PWM);
+		analogWrite(MOTOR2_SPD, NO_PWM;
 }
 
 void BrushlessMotorSetPwm(int motor_side, int pwm) {
-	static int last_pwms[2] = {0, 0};
+	static int last_pwms[2] = {NO_PWM, NO_PWM};
 	int *last_pwm;
 	if (motor_side == MOTOR_LEFT) {
 		last_pwm = &last_pwms[0];
