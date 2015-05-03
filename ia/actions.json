@@ -10,6 +10,7 @@
 				"y": 150,
 				"a": -45
 			}],
+			"sens": "avant",
 			"priority": 1,
 			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,
@@ -28,6 +29,7 @@
 				"y": 150,
 				"a": 0
 			}],
+			"sens": "osef",
 			"priority": 1,
 			"dependency": "prendre_gobelet_front_left",
 			"duration": 1,
@@ -70,6 +72,7 @@
 				"y": 150,
 				"a": 180
 			}],
+			"sens": "osef",
 			"priority": 1,
 			"dependency": "",
 			"duration": 1,
@@ -87,40 +90,22 @@
 				}],
 			"kill": null
 		},
-		"prendre_gobelet_front_left":{
+		"prendre_gobelet_et_2_plots_front_left":{
 			"type": "gobelet",
 			"owner": "pr",
 			"objectname": "gobelet__front_left",
-			"startpoints": [{
-				"x": 250,
-				"y": 300,
-				"a": -90
-			},
-			{
-				"x": 285,
-				"y": 275,
-				"a": -135
-			},
-			{
-				"x": 300,
-				"y": 250,
-				"a": 180
-			},
-			{
-				"x": 285,
-				"y":215,
-				"a": 135
-			},
+			"startpoints": [
 			{
 				"x": 215,
 				"y": 275,
-				"a": -45
+				"a": -0.7854
 			}],
+			"sens": "arriere",
 			"priority": 9,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_gobelet",
+				"name": "prendre_gobelet_et_2_plots_front",
 				"params": {}
 				}],
 			"kill": null
@@ -159,6 +144,7 @@
 				"y": 1205,
 				"a": -45
 			}],
+			"sens": "arriere",
 			"priority": 1,
 			"dependency": "",
 			"duration": 1,
@@ -207,6 +193,7 @@
 				"y": 375,
 				"a": -45
 			}],
+			"sens": "arriere",
 			"priority": 1,
 			"dependency": "",
 			"duration": 1,
@@ -250,6 +237,7 @@
 				"y": 1170,
 				"a": 0
 			}],
+			"sens": "arriere",
 			"priority": 1,
 			"dependency": "",
 			"duration": 1,
@@ -293,6 +281,7 @@
 				"y": 275,
 				"a": -45
 			}],
+			"sens": "arriere",
 			"priority": 8,
 			"dependency": "",
 			"duration": 1,
@@ -302,57 +291,12 @@
 				}],
 			"kill": null
 		},
-		"prendre_plot_front_left1":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__front_left1",
-			"startpoints": [{
-				"x": 125,
-				"y": 275,
-				"a": -135
-			},
-			{
-				"x": 140,
-				"y": 250,
-				"a": 180
-			}],
-			"priority": 8,
-			"dependency": "prendre_plot_front_left2",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_front_left2":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__front_left2",
-			"startpoints": [{
-				"x": 125,
-				"y": 175,
-				"a": -135
-			},
-			{
-				"x": 140,
-				"y": 150,
-				"a": 180
-			}],
-			"priority": 7,
-			"dependency": "prendre_gobelet_front_left",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
 		"prendre_plot_middle_left1":{
 			"type": "plot",
 			"owner": "pr",
 			"objectname": "plot__middle_left1",
 			"startpoints": [],
+			"sens": "avant",
 			"priority": 10,
 			"dependency": "",
 			"duration": 1,
@@ -367,6 +311,7 @@
 			"owner": "pr",
 			"objectname": "plot__middle_left2",
 			"startpoints": [],
+			"sens": "avant",
 			"priority": 10,
 			"dependency": "",
 			"duration": 1,
@@ -381,6 +326,7 @@
 			"owner": "pr",
 			"objectname": "plot__middle_left3",
 			"startpoints": [],
+			"sens": "avant",
 			"priority": 10,
 			"dependency": "",
 			"duration": 1,
@@ -404,52 +350,7 @@
 				"y": 1765,
 				"a": 135
 			}],
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_stairs_left1":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__stairs_left1",
-			"startpoints": [{
-				"x": 850,
-				"y": 1850,
-				"a": 90
-			},
-			{
-				"x": 815,
-				"y": 1865,
-				"a": 45
-			}],
-			"priority": 1,
-			"dependency": "prendre_plot_stairs_left2",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_stairs_left2":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__stairs_left2",
-			"startpoints": [{
-				"x": 850,
-				"y": 1750,
-				"a": 90
-			},
-			{
-				"x": 815,
-				"y": 1765,
-				"a": 45
-			}],
+			"sens": "avant",
 			"priority": 1,
 			"dependency": "",
 			"duration": 1,
@@ -468,6 +369,7 @@
 				"y": 1100,
 				"a": 2.3562
 			}],
+			"sens": "avant",
 			"priority": 10,
 			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,

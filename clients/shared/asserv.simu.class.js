@@ -99,18 +99,24 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
-	Asserv.prototype.goxy = function(callback, x, y){
+	Asserv.prototype.goxy = function(callback, x, y, sens){
+
 		var dx = x-this.pos.x;
 		var dy = y-this.pos.y;
 		var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
 		var tf = (dist / (this.vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
+
+		if(sens == "avant") angle_depart = Math.atan2(dy,dx);
+		else if(sens == "arrirere") angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
+		else angle_depart = Math.min(Math.atan2(dy,dx), convertA(Math.atan2(dy,dx)+Math.PI));
+
 		this.goa(function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
 			}
 			setTimeout(this.simu_goxy(x, y), tf);
 			setTimeout(callback, tf);
-		}.bind(this), Math.atan2(dy,dx));
+		}.bind(this), angle_depart);
 	};
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {

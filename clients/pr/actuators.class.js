@@ -157,13 +157,13 @@ module.exports = (function () {
 			break;
 			
 			case "deposer_pile":
-				setTimeout(function() {
+				// setTimeout(function() {
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
 					asserv.speed(callback, -200, 0, 1000);
 					});});});
-				}, 1000);
+				// }, 1000);
 			break;
 			case "prendre_gobelet":
 				//asserv.avancerGobelet(function(){}); TODO
@@ -213,7 +213,7 @@ module.exports = (function () {
 				asserv.goa(callback, params.a);
 			break;
 			case "goxy":
-				asserv.goxy(callback, params.x, params.y);
+				asserv.goxy(callback, params.x, params.y, params.sens);
 			break;
 			case "setpos":
 				asserv.setPos(callback, params);

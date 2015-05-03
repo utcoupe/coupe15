@@ -83,7 +83,7 @@ module.exports = (function () {
 
 			// logger.debug(lastFinishedId);
 			if(this.currentId != lastFinishedId) {
-				// logger.debug('finish id', lastFinishedId);
+				// logger.fatal('finish id', lastFinishedId);
 				this.currentId = lastFinishedId;
 				this.callback();
 			}
@@ -180,11 +180,15 @@ module.exports = (function () {
 		
 	};
 
-	Asserv.prototype.goxy = function(callback, x, y){
-		// this.clean();
+	Asserv.prototype.goxy = function(callback, x, y, sens){
+		if(sens == "avant") sens = 1;
+		else if(sens == "arrirere") sens = -1;
+		else sens = 0;
+		
 		this.sendCommand(callback, COMMANDS.GOTO, [
 			parseInt(x),
-			parseInt(y)
+			parseInt(y),
+			sens
 		], true);
 	};
 	Asserv.prototype.goa = function(callback, a){

@@ -74,12 +74,14 @@ module.exports = (function () {
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action_name, startpoint.x, startpoint.y, startpoint.a);
 
-		// // Do action
-		if(act.type == "plot") {
-			this.ia.client.send('pr', "goa", {a: Math.atan2(startpoint.y-this.ia.pr.pos.y, startpoint.x-this.ia.pr.pos.x) });
-		}
-		this.ia.client.send('pr', "goxy", startpoint);
-		this.ia.client.send('pr', "goa", startpoint);
+		this.ia.client.send('pr', "goxy", {
+			x: startpoint.x,
+			y: startpoint.y,
+			sens: act.sens
+		});
+		this.ia.client.send('pr', "goa", {
+			a: startpoint.a
+		});
 		// 1 order for 1 action
 		// act.orders.forEach(function (order, index, array){
 		this.ia.client.send('pr', act.orders[0].name, act.orders[0].params);
@@ -164,9 +166,9 @@ module.exports = (function () {
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
-		for(var i in actions_todo) {
-			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
-		}
+		// for(var i in actions_todo) {
+		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		// }
 
 		return actions_todo[0];
 	}
