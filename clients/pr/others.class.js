@@ -74,7 +74,11 @@ module.exports = (function () {
 	Others.prototype.monterUnPeuAscenseur = function(callback) {
 		this.sendCommand(callback, 'S', [-30], 0);
 	};
-	
+
+	Others.prototype.descendreUnPeuAscenseur = function(callback) {
+		this.sendCommand(callback, 'S', [30], 0);
+	};
+
 	Others.prototype.relacherAscenseur = function(callback) {
 		this.sendCommand(callback, 'S', [0], 0);
 	};

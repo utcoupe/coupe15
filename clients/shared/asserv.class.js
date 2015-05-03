@@ -56,7 +56,7 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(function() {}, 150, 0, 600);
+		this.speed(function() {}, 200, 0, 600);
 		setTimeout(callback, 400);
 	}
 

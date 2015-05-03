@@ -49,6 +49,10 @@ module.exports = (function () {
 		setTimeout(callback, 300);
 	};
 
+	Others.prototype.descendreUnPeuAscenseur = function(callback) {
+		setTimeout(callback, 300);
+	};
+
 	Others.prototype.descendreAscenseur = function(callback) {
 		setTimeout(callback, 1000);
 	};

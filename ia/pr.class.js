@@ -38,7 +38,7 @@ module.exports = (function () {
 	Pr.prototype.place = function () {
 		logger.debug('place');
 		this.sendInitialPos();
-		this.ia.client.send("pr", "setpid", { p:0.1, i:150, d:8 });
+		this.ia.client.send("pr", "setpid", { p:0.2, i:300, d:16 });
 		this.ia.client.send("pr", "goxy", { x: 500, y: 940});
 		this.ia.client.send("pr", "goa", { a: -0.62 });
 		this.ia.client.send("pr", "fermer_tout");

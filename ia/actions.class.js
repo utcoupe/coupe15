@@ -15,7 +15,7 @@ module.exports = (function () {
 		this.todo = this.importActions(ia.data);
 	}
 
-	var __dist_startpoints_plot = 40;
+	var __dist_startpoints_plot = 20;
 	var __nb_startpoints_plot = 32;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Actions.prototype.importActions = function (data) {

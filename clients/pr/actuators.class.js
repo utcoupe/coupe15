@@ -134,6 +134,18 @@ module.exports = (function () {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); }); });
 				}
+				else if (that.nb_plots>=2){
+					ax12.ouvrir(function() {
+					others.fermerStabilisateur(function(){
+					asserv.avancerPlot(function(){
+					ax12.fermer(function() {
+					others.monterUnPeuAscenseur(function() {
+					others.ouvrirBloqueurMoyen(function() {
+					callback();
+					others.fermerBloqueur(function() {
+					that.nb_plots++;
+					}); }); }); }); }); }); });
+				}
 				else {
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
@@ -158,12 +170,13 @@ module.exports = (function () {
 			
 			case "deposer_pile":
 				// setTimeout(function() {
+					others.descendreUnPeuAscenseur(function() {	
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
 					asserv.speed(callback, -200, 0, 1000);
-					});});});
-				// }, 1000);
+					});});});});
+				// }, 300);
 			break;
 			case "prendre_gobelet":
 				//asserv.avancerGobelet(function(){}); TODO
