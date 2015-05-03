@@ -168,14 +168,35 @@ module.exports = (function () {
 				callback();
 			break;
 			
-			case "deposer_pile":
+			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
 					others.descendreUnPeuAscenseur(function() {	
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.speed(callback, -200, 0, 1000);
-					});});});});
+					asserv.speed(function() {
+					asserv.goxy(function() {
+					others.monterUnPeuAscenseur(function() {
+					asserv.pwm(function() {
+					ax12.fermer(function() {
+					asserv.pwm(function() {
+					ax12.ouvrir(function() {
+					asserv.pwm(function() {
+					ax12.fermer(function() {
+					asserv.goxy(function() {
+					asserv.goa(function() {
+					asserv.goxy(callback, 650, 1000, "avant");
+					}, 0);
+					}, 250, 1000, "arriere");
+					});
+					}, 20, 20, 1000);
+					});
+					}, -20, -20, 1000);
+					});
+					}, 20, 20, 1000);
+					}, 250, 1000, "avant");
+					}, -100, 0, 2500);
+					});});});});});
 				// }, 300);
 			break;
 			case "prendre_gobelet":

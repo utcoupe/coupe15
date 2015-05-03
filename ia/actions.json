@@ -360,7 +360,7 @@
 				}],
 			"kill": null
 		},
-		"deposer_pile_gauche":{
+		"deposer_pile_gobelet_prendre_balle_gauche":{
 			"type": "depot_pile",
 			"owner": "pr",
 			"objectname": "pile__left",
@@ -370,11 +370,11 @@
 				"a": 2.3562
 			}],
 			"sens": "avant",
-			"priority": 10,
-			"dependency": "prendre_plot_middle_left3",
+			"priority": 12,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "deposer_pile",
+				"name": "deposer_pile_gobelet_prendre_balle_gauche",
 				"params": {}
 				}],
 			"kill": null

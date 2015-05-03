@@ -42,7 +42,7 @@
 #define SPD_MAX 1500 //mm/s
 #define ACC_MAX 750  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
-#define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
+#define K_DISTANCE_REDUCTION 30 // réduction de la vitesse linéaire quand on tourne
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
