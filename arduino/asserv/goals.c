@@ -49,6 +49,7 @@ goal_t* FifoNextGoal() {
 	if (current_goal->type != NO_GOAL) {
 #endif
 		current_goal->type = NO_GOAL;
+		current_goal->is_reached = 0;
 		fifo.current_goal = (fifo.current_goal + 1) % MAX_GOALS;
 		fifo.nb_goals--;
 	}
