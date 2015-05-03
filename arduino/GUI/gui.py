@@ -183,9 +183,9 @@ class GUI:
 		self.com.sendOrderSafe('CLEANG')
 
 	def val_reg(self):
-		arguments = [int(self.acc_max.get()), int(float(self.spd_ratio.get())*1000)]
+		arguments = [int(self.acc_max.get())]
 		self.com.sendOrderSafe('ACCMAX', args=arguments)
-		arguments = [int(self.spd_max.get())]
+		arguments = [int(self.spd_max.get()), int(float(self.spd_ratio.get())*1000)]
 		self.com.sendOrderSafe('SPDMAX', args=arguments)
 		arguments = [int(1000*float(self.pid_p.get())),
 				int(1000*float(self.pid_i.get())),

@@ -56,9 +56,9 @@
 
 #define CONE_ALIGNEMENT (M_PI/2.0) 
 
-#define PID_P 0.5
+#define PID_P 0.2
 #define PID_I 50
-#define PID_D 10
+#define PID_D 7
 #define PID_BIAS 0
 
 #define LEFT_P (PID_P)

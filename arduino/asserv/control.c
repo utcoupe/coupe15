@@ -249,6 +249,7 @@ void goalPos(goal_t *goal) {
 int controlPos(float dd, float da) {
 	int ret;
 	float dda, ddd, max_speed;
+	float ang_spd, lin_spd;
 
 	dda = da * (ENTRAXE_ENC/2);
 	ddd = dd * exp(-abs(K_DISTANCE_REDUCTION*da));
@@ -257,9 +258,13 @@ int controlPos(float dd, float da) {
 	if (control.status_bits & SLOWGO_BIT) {
 		max_speed *= EMERGENCY_SLOW_GO_RATIO;
 	}
-	control.speeds.angular_speed = calcSpeed(control.speeds.angular_speed, dda, 
+
+	ang_spd = control.speeds.angular_speed;
+	lin_spd = control.speeds.linear_speed;
+
+	control.speeds.angular_speed = calcSpeed(ang_spd, dda, 
 			max_speed * control.rot_spd_ratio, 0);
-	control.speeds.linear_speed = calcSpeed(control.speeds.linear_speed, ddd,
+	control.speeds.linear_speed = calcSpeed(lin_spd, ddd,
 			max_speed, 0);
 
 	ret = 0;
@@ -281,7 +286,7 @@ float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 
 	init_spd *= d_sign;
 	acc_spd = init_spd + (control.max_acc*DT);
-	dec_spd = sqrt(2*control.max_acc*dd_abs) - (control.max_acc*DT) + final_speed;
+	dec_spd = sqrt(2*control.max_acc*dd_abs) + final_speed;
 	target_spd = min(max_spd, min(acc_spd, dec_spd))*d_sign;
 	return target_spd;
 }
