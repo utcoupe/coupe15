@@ -31,7 +31,7 @@ void BrushlessMotorsInit() {
 		digitalWrite(MOTOR2_EN, LOW);
 
 		analogWrite(MOTOR1_SPD, NO_PWM);
-		analogWrite(MOTOR2_SPD, NO_PWM;
+		analogWrite(MOTOR2_SPD, NO_PWM);
 }
 
 void BrushlessMotorSetPwm(int motor_side, int pwm) {
@@ -52,20 +52,20 @@ void BrushlessMotorSetPwm(int motor_side, int pwm) {
 		case MOTOR_LEFT:{
 			analogWrite(MOTOR1_SPD, pwm);
 			if (pwm == NO_PWM) {
-				digitalWrite(MOTOR1_EN,LOW); //disable motor when pwm = 0
+				digitalWrite(MOTOR1_EN,LOW);
 			}
 			else {
-				digitalWrite(MOTOR1_EN,HIGH); //enable motor when pwm != 0
+				digitalWrite(MOTOR1_EN,HIGH);
 			}
 		    	break;
 		}
 		case MOTOR_RIGHT:{
 			analogWrite(MOTOR2_SPD, pwm);
 			if (pwm == NO_PWM) {
-				digitalWrite(MOTOR2_EN,LOW); //disable motor when pwm = 0
+				digitalWrite(MOTOR2_EN,LOW); 
 			}
 			else {
-				digitalWrite(MOTOR2_EN,HIGH); //enable motor when pwm != 0
+				digitalWrite(MOTOR2_EN,HIGH);
 			}
 			break;
 		}
