@@ -16,6 +16,12 @@ module.exports = (function () {
 	Ax12.prototype.fermer = function(callback) {
 		setTimeout(callback, 1000);
 	};
+	Ax12.prototype.fermerBalle = function(callback) {
+		setTimeout(callback, 800);
+	};
+	Ax12.prototype.fermerBalle2 = function(callback) {
+		setTimeout(callback, 900);
+	};
 
 	return Ax12;
 })();

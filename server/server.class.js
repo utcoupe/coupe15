@@ -12,12 +12,8 @@ module.exports = (function () {
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
-		var currentInterface = networkInterfaces["wlan0"] || networkInterfaces["Wi-Fi"];
-		if(!currentInterface){
-			logger.error("No valid wireless lan interace :\n"+Arrays.toString(Object.keys(networkInterfaces)));
-			process.exit();
-		}
-		this.ip = currentInterface[0].address;
+		// this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+		this.ip = "127.0.0.1";
 		this.ip_port = this.ip+':'+this.server_port;
 		this.webclient_url = this.ip+'/webclient/webclient.html';
 

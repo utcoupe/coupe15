@@ -55,8 +55,8 @@ module.exports = (function () {
 		this.ax12s = {};
 		this.type_callback = null;
 
-		libusb2ax.dxl_write_word(2, P_COUPLE, 800);
-		libusb2ax.dxl_write_word(3, P_COUPLE, 800);
+		libusb2ax.dxl_write_word(2, P_COUPLE, 650);
+		libusb2ax.dxl_write_word(3, P_COUPLE, 650);
 
 		this.ouvrir(function(){});
 		this.loopAX12();
@@ -127,6 +127,24 @@ module.exports = (function () {
 	Ax12.prototype.fermer = function(callback) {
 		ax12s['2'].obj = this.degToAx12(-85);
 		ax12s['3'].obj = this.degToAx12(85);
+		// logger.debug(ax12s['2'].obj);
+		ax12s['2'].arrived = false;
+		ax12s['3'].arrived = false;
+		this.callback = callback;
+		this.type_callback = 'fermer';
+	};
+	Ax12.prototype.fermerBalle = function(callback) {
+		ax12s['2'].obj = this.degToAx12(-50);
+		ax12s['3'].obj = this.degToAx12(50);
+		// logger.debug(ax12s['2'].obj);
+		ax12s['2'].arrived = false;
+		ax12s['3'].arrived = false;
+		this.callback = callback;
+		this.type_callback = 'fermer';
+	};
+	Ax12.prototype.fermerBalle2 = function(callback) {
+		ax12s['2'].obj = this.degToAx12(-75);
+		ax12s['3'].obj = this.degToAx12(75);
 		// logger.debug(ax12s['2'].obj);
 		ax12s['2'].arrived = false;
 		ax12s['3'].arrived = false;

@@ -59,6 +59,9 @@ module.exports = (function () {
 		this.speed(function() {}, 200, 0, 600);
 		setTimeout(callback, 400);
 	}
+	Asserv.prototype.calageY = function(callback, y, a) {
+		this.setPos(callback, {x: this.pos.x, y: y, a: a});
+	}
 
 	// For float
 	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }

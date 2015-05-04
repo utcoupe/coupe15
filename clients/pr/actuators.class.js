@@ -174,29 +174,52 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.speed(function() {
 					asserv.goxy(function() {
+					others.ouvrirBloqueurMoyen(function() {
 					others.monterUnPeuAscenseur(function() {
-					asserv.pwm(function() {
-					ax12.fermer(function() {
-					asserv.pwm(function() {
-					ax12.ouvrir(function() {
-					asserv.pwm(function() {
-					ax12.fermer(function() {
+					others.monterUnPeuAscenseur(function() {
+
 					asserv.goxy(function() {
 					asserv.goa(function() {
-					asserv.goxy(callback, 650, 1000, "avant");
+					asserv.pwm(function() {
+					asserv.calageY(function() {
+					asserv.goxy(function() {
+					asserv.goa(function() {
+
+					asserv.goxy(function() {
+					asserv.goa(function() {
+					ax12.fermerBalle(function() {
+					asserv.goxy(function() {
+					others.descendreUnPeuAscenseur(function() {
+					others.descendreUnPeuAscenseur(function() {
+					ax12.ouvrir(function() {
+					asserv.goxy(function() {
+					ax12.fermerBalle2(function() {
+					asserv.goxy(function() {
+					asserv.goa(function() {
+					others.monterAscenseur(fake);
+					asserv.goxy(callback, 600, 900, "avant");
 					}, 0);
 					}, 250, 1000, "arriere");
 					});
-					}, 20, 20, 1000);
+					}, 220, 1000, "arriere");
+					});});
 					});
-					}, -20, -20, 1000);
+					}, 260, 1000, "arriere");
 					});
-					}, 20, 20, 1000);
-					}, 250, 1000, "avant");
-					}, -100, 0, 2500);
-					});});});});});
+					}, 3.1416);
+					}, 160, 1000, "arriere");
+
+					}, 3.1416);
+					}, 260, 1000, "arriere");
+					}, 874, -3.1416/2);
+					}, 30, 30, 2000);
+					}, -3.1416/2);
+					}, 260, 1000, "arriere");
+
+					});});});
+					}, 600, 950, 2500);
+					});});});});
 				// }, 300);
 			break;
 			case "prendre_gobelet":

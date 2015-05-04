@@ -25,7 +25,7 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		if(this.nb < 1) {
+		if(this.nb < 4) {
 			logger.debug('loop');
 			this.nb++;
 			var action_name = this.ia.actions.getNearestAction(this.pos);
