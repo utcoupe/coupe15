@@ -25,10 +25,10 @@ module.exports = (function () {
 		this.actions = new (require('./actions.class.js'))(this);
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		this.pr = new (require('./pr.class.js'))(this, this.color);
-		this.hokuyo = new (require('./hokuyo.class.js'))(this, this.gr, this.pr, this.data, {
+		this.hokuyo = new (require('./hokuyo.class.js'))(this, {
 			color: this.color,
-			nb_erobots: this.nb_erobots,
-			we_have_hats: this.we_have_hats
+			nb_erobots: parseInt(this.nb_erobots),
+			we_have_hats: (we_have_hats === "true")
 		});
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 

@@ -179,7 +179,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "hok", "", client.children[j], null);
 					            links.push({
 					            	start: i,
-					            	end: client.children[j]+randId
+					            	end: (client.children[j]+randId).replace(/\s+/g,'')
 					            });
 					        }
 					}
@@ -193,7 +193,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "arduino", "", client.children[j], null);
 					            links.push({
 					            	start: i,
-					            	end: client.children[j]+randId
+					            	end: (client.children[j]+randId).replace(/\s+/g,'')
 					            });
 					        }
 					}
@@ -209,7 +209,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "arduino", "", client.children[j], null);
 					            links.push({
 					            	start: i,
-					            	end: client.children[j]+randId
+					            	end: (client.children[j]+randId).replace(/\s+/g,'')
 					            });
 					        }
 					}
@@ -232,6 +232,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 		function linkDivs (div1Id, div2Id, colId) {
 			var div1OffsetTop = $("#"+div1Id).offset().top - $("#"+div1Id).parent().offset().top;
+			console.log("#"+div2Id);
 			var div2OffsetTop = $("#"+div2Id).offset().top - $("#"+div2Id).parent().offset().top;
 		    var middleDiv1 =  div1OffsetTop + parseFloat($("#"+div1Id).parent().css("margin-top")) + $("#"+div1Id).outerHeight()/2;
 		    var middleDiv2 = div2OffsetTop + parseFloat($("#"+div2Id).parent().css("margin-top")) + $("#"+div2Id).outerHeight()/2;
