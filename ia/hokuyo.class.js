@@ -4,17 +4,19 @@ module.exports = (function () {
 	var gaussian = require('gaussian');
 	var logger = log4js.getLogger('ia.hokuyo');
 
-	function Hokuyo(ia, gr, pr, data, params) {
-		params = params || {};
+	var GR_OFFSET = 110;
+	var PR_GR_COEF = 1;
+	var lastUpdate = 0;
+
+	function Hokuyo(ia, params) {
+		this.params = params || {};
 		this.nb_hokuyo = 0;
-		this.pr = pr;
-		this.gr = gr;
-		this.data = data; // data class
+		this.ia = ia;
 		this.lastNow = 0;
 	}
 
 	Hokuyo.prototype.getDistance = function (spot1, spot2) {
-		return sqrt((spot1.x - spot2.x)^2 + (spot1.y - spot2.y)^2);
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
 	};
 
 	Hokuyo.prototype.isOnTheStairs = function (spot){
@@ -33,62 +35,83 @@ module.exports = (function () {
 		return distribution.pdf(getDistance(spot, estimatedPos));
 	};
 
+	Hokuyo.prototype.deleteOurRobots = function (dots){
+		var pr_dist = this.getDistance({x: 0, y:0}, {x: 3000, y:2000});
+		var pr_i = -1;
+		var gr_dist = this.getDistance({x: 0, y:0}, {x: 3000, y:2000});
+		var gr_i = -1;
+
+		var gr_pos_with_offset = {
+			x: this.ia.gr.pos.x + GR_OFFSET*Math.cos(this.ia.gr.pos.a),
+			y: this.ia.gr.pos.y + GR_OFFSET*Math.sin(this.ia.gr.pos.a)
+		};
+
+		for (var i = 0; i < dots.length; i++) {
+			var pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
+			var gr_temp_dist = this.getDistance(dots[i], gr_pos_with_offset);
+
+			if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
+				pr_dist = pr_temp_dist;
+				pr_i = i;
+			}
+
+			if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.ia.gr.size.d * PR_GR_COEF)){
+				gr_dist = gr_temp_dist;
+				gr_i = i;
+			}
+		}
+		
+		if (pr_i != -1) {
+			// logger.debug("Deleting PR:");
+			// logger.debug(dots[pr_i]);
+			// logger.debug(this.ia.pr.pos);
+
+			dots.splice(pr_i,1);
+		}
+
+		if (gr_i != -1) {
+			// logger.debug("Deleting GR:");
+			// logger.debug(dots[gr_i]);
+			// logger.debug(gr_pos_with_offset);
+			// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
+
+			dots.splice(gr_i,1);
+		}
+	};
+
 	Hokuyo.prototype.updatePos = function (dots) {
 		// we have a ref of our and the ennemy robots (position + speed)
+		// logger.info(dots);
 
 		if (dots.length === 0)
 			logger.warn("On a reçu un message vide (pas de spots dedans)");
 		else {
-			if (dots.length != 2*this.params.we_have_hats + this.params.nb_erobots) {
+			if (dots.length != ((this.params.we_have_hats?2:0) + this.params.nb_erobots)) {
 				logger.info("On a pas le meme nombre de spots ("+dots.length+") que de robots à détecter ("+
-					(2*this.params.we_have_hats + this.params.nb_erobots) + ").");
+					((this.params.we_have_hats?2:0) + this.params.nb_erobots) + ").");
 			}
 
 			// takes a timestamp to be able to compute speeds
-			now = this.ia.timer.get(); // retourne le temps depuis le début du match en ms
+			// var now = this.ia.timer.get(); // retourne le temps depuis le début du match en ms XXXXXXXX à réactiver !!!!!!!!!!!!!!!!!
+			var now = lastUpdate = lastUpdate+1;
 
 			// if we have hats, kill ourselves (virtualy, of course)
-			if (this.params.we_have_hats) {
-				var pr_dist = getDistance({x: 0, y:0}, {x: 3000, y:2000});
-				var pr_i = -1;
-				var gr_dist = getDistance({x: 0, y:0}, {x: 3000, y:2000});
-				var gr_i = -1;
-
-				for (var i = 0; i < dots.length; i++) {
-					var pr_temp_dist = getDistance(dots[i], this.pr.pos);
-					var gr_temp_dist = getDistance(dots[i], this.gr.pos);
-
-					if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.pr.size.d)){
-						pr_dist = pr_temp_dist;
-						pr_i = i;
-					}
-
-					if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.gr.size.d)){
-						gr_dist = gr_temp_dist;
-						gr_i = i;
-					}
-				}
-				
-				if (pr_i != -1) {
-					dots.splice(pr_i,1);
-				}
-
-				if (gr_i != -1) {
-					dots.splice(gr_i,1);
-				}
-			}
+			if (this.params.we_have_hats)
+				this.deleteOurRobots(dots);
 
 			// until there are dots left to be matched with ennmies
 			while (dots.length > 0){
 				// if some robots aren't already matched
 				var e_r2Bmatched = [];
 
-				for (var i = 0; i < this.data.erobot.length; i++) {
-					if(this.data.erobot[i].lastUpdate < now)
-						e_r2Bmatched.push(this.data.erobot[i]);
+				for (var i = 0; i < this.ia.data.erobot.length; i++) {
+					if(this.ia.data.erobot[i].lastUpdate < now){
+						logger.debug(this.ia.data.erobot[i].lastUpdate);
+						e_r2Bmatched.push(this.ia.data.erobot[i]);
+					}
 				}
 
-				if (e_r2Bmatched > 0) {
+				if (e_r2Bmatched.length > 0) {
 					var matching_coef = [];
 					var best_coef = {
 						value: 1,
@@ -96,12 +119,16 @@ module.exports = (function () {
 						e_robot: -1
 					};
 
+					logger.debug("On s'occupe de :");
+					logger.debug(e_r2Bmatched);
+
+
 					// for each eatimated position of the robots
 					for (var d = 0; d < dots.length; d++){
 						// for each real point
 						for (var i = 0; i < e_r2Bmatched.length; i++) {
 							// we make a matching coefficient
-							matching_coef[d][i] = getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now, e_r2Bmatched[i].status);
+							matching_coef[d][i] = this.getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now, e_r2Bmatched[i].status);
 
 							if (best_coef.value < matching_coef[d][i]) {
 								best_coef.value = matching_coef[d][i];
@@ -136,7 +163,7 @@ module.exports = (function () {
 						y: dots[dot].y,
 					};
 
-					this.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
+					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
 
 
 					// if it's climbing the stairs, set the correct status
@@ -151,6 +178,8 @@ module.exports = (function () {
 					// if all the robots are tidied up, ouw, that's strange ^^
 					logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
 					logger.warn(dots);
+					logger.warn("e_r2Bmatched");
+					logger.warn(e_r2Bmatched);
 					break;
 				}
 
@@ -161,18 +190,18 @@ module.exports = (function () {
 
 			// if there's some robots to be matched (but no real point left :/), they're lost...
 			// we estimate their position and tag them with "lost"
-			for (var i = 0; i < this.data.erobot.length; i++) {
-				if ((this.data.erobot[i].lastUpdate < now) && (this.data.erobot[i].status == "moving")){
-					this.data.erobot[i].pos = {
-						x: this.data.erobot[i].pos.x +  this.data.erobot[i].pos.speed.x*Math.abs(this.data.erobot[i].lastUpdate - now),
-						y: this.data.erobot[i].pos.y +  this.data.erobot[i].pos.speed.y*Math.abs(this.data.erobot[i].lastUpdate - now)
+			for (var i = 0; i < this.ia.data.erobot.length; i++) {
+				if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "moving")){
+					this.ia.data.erobot[i].pos = {
+						x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].pos.speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
+						y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].pos.speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
 					};
-					this.data.erobot[i].speed = {
+					this.ia.data.erobot[i].speed = {
 						x:0,
 						y:0,
 					};
-					this.data.erobot[i].status = "lost";
-					this.data.erobot[i].lastUpdate = now;
+					this.ia.data.erobot[i].status = "lost";
+					this.ia.data.erobot[i].lastUpdate = now;
 				}
 			}
 
@@ -199,21 +228,22 @@ module.exports = (function () {
 		}
 	};
 
-	Hokuyo.prototype.inputMessageHandler = function (data) {
-		switch (data.name){
+	Hokuyo.prototype.parseOrder = function (from, name, params) {
+		var orderName = name.split('.')[1];
+		switch (orderName){
 			case "position_tous_robots":
-				this.updatePos(data.params.dots);
+				this.updatePos(params.dots);
 				break;
 			case "nb_hokuyo":
-				this.updateNumberOfRobots(data.params.nb);
+				this.updateNumberOfRobots(params.nb);
 				break;
 			default:
-				logger.warn("Message name " + data.name + " not understood");
+				logger.warn("Message name " + name + " not understood");
 		}
 	};
 
 	Hokuyo.prototype.isOk = function () {
-		if (this.nb_hokuyo == 0)
+		if (this.nb_hokuyo === 0)
 			return false;
 		else
 			return true;

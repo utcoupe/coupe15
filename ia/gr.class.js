@@ -7,9 +7,9 @@ module.exports = (function () {
 		this.ia = ia;
 		this.pos = this.orders = require('./gr.json')['pos'];
 		this.size = {
-			l: 0,
-			L: 0,
-			d: 0
+			l: 290,
+			L: 290,
+			d: 420
 		};
 		if(!color) color = "yellow";
 		this.orders = require('./gr.json')['script_'+color];

@@ -287,7 +287,7 @@ float calcSpeed(float init_spd, float dd, float max_spd, float final_speed) {
 
 	init_spd *= d_sign;
 	acc_spd = init_spd + (control.max_acc*DT);
-	dec_spd = sqrt(2*control.max_acc*dd_abs) + final_speed;
+	dec_spd = sqrt(pow(final_speed, 2) + 2*control.max_acc*dd_abs);
 	target_spd = min(max_spd, min(acc_spd, dec_spd))*d_sign;
 	return target_spd;
 }

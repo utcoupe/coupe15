@@ -5,14 +5,14 @@ module.exports = (function () {
 	function Pr(ia, color) {
 		this.ia = ia;
 		this.pos = { // if we are yellow, default, left side of the table
-			x: 0,
-			y: 0,
+			x: 910,
+			y: 1200,
 			a: 0
 		};
 		this.size = {
-			l: 0,
-			L: 0,
-			d: 0
+			l: 170,
+			L: 220,
+			d: 280
 		};
 		this.current_action = null;
 		this.path = null;

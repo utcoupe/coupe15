@@ -119,9 +119,11 @@ int main(int argc, char **argv){
 			checkAndConnect(&hok1);
 			checkAndConnect(&hok2);
 			if (!hok1.isWorking) {
+				pushInfo('1');
 				fprintf(logfile, "%sHokuyo 1 not working\n", PREFIX);
 			}
 			if (!hok2.isWorking) {
+				pushInfo('1');
 				fprintf(logfile, "%sHokuyo 2 not working\n", PREFIX);
 			}
 			time_last_try = now;

@@ -19,6 +19,9 @@
 	var date = new Date();
 	var lastT = date.getTime();
 
+	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
+	var nth = 0;
+
 	var server = config.server || "";
 	var command = config.command || "";
 
@@ -106,7 +109,7 @@
 					temp[i] = temp[i].split(",");
 					dots.push({x: 0, y: 0});
 					dots[i].x = parseInt(temp[i][0]);
-					dots[i].y = 2000-parseInt(temp[i][1]); // Conversion repère math en repère bitmap
+					dots[i].y = parseInt(temp[i][1]); // Conversion repère math en repère bitmap
 				}
 				logger.info('[J-HOK] Robots');
 				logger.info(dots);
@@ -115,11 +118,11 @@
 			}
 
 			// Send all robots
-			client.send("ia", "position_tous_robots", {dots: dots});
+			client.send("ia", "hokuyo.position_tous_robots", {dots: dots});
 		}
 
 		function parseInfo(string) {
-			// logger.info("/string2");
+			logger.info("Read info...");
 			// logger.info(string);
 
 			var prev_n_a_h = nb_active_hokuyos;
@@ -145,9 +148,13 @@
 					return;
 			}
 
-			if(prev_n_a_h != nb_active_hokuyos)
+			if ((prev_n_a_h != nb_active_hokuyos) || (nth == FREQ_ENVOI_INFO)){
+				logger.info("Info sent to server");
 				sendChildren(getStatus());
+				nth = 0;
+			}
 
+			nth += 1;
 		}
 
 		function dataFromCHandler(input) {
@@ -240,6 +247,7 @@
 		lastStatus = status;
 
 		client.send("server", "server.childrenUpdate", lastStatus);
+		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 
 	function isOk(){
@@ -248,5 +256,6 @@
 		
 		client.send("ia", "isOkAnswer", lastStatus);
 		client.send("server", "server.childrenUpdate", lastStatus);
+		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 })();
