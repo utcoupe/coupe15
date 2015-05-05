@@ -29,7 +29,7 @@ module.exports = (function () {
 		this.pos.y = pos.y;
 		this.setA(pos.a);
 	}
-	Asserv.prototype.setPos = function(callback, pos) {
+	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
 		this.sendPos();
 		callback();
@@ -42,17 +42,22 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.clean = function(callback){
-		// sendCommand(null, COMMANDS.CLEANG);
 		callback();
 	};
 	Asserv.prototype.avancerPlot = function(callback) {
 		setTimeout(callback, 1200);
 	}
 
-	Asserv.prototype.setVitesse = function(callback, v) {
+	Asserv.prototype.setVitesse = function(v, r, callback) {
 		this.vitesse = parseInt(v);
 		callback();
 	};
+	Asserv.prototype.calageX = function(x, a, callback) {
+		this.setPos({x: x, y: this.pos.y, a: a}, callback);
+	}
+	Asserv.prototype.calageY = function(y, a, callback) {
+		this.setPos({x: this.pos.x, y: y, a: a}, callback);
+	}
 
 	Asserv.prototype.simu_speed = function(vit, x, y, a, dt) {
 		return function() {
@@ -64,7 +69,7 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
-	Asserv.prototype.speed = function(callback, l, a, ms) {
+	Asserv.prototype.speed = function(l, a, ms,callback) {
 		// this.simu.pwm(callback, l/3, l/3, ms);
 		for(var t = 0; t < ms; t += 1000/FPS) {
 			setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t);
@@ -83,7 +88,7 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
-	Asserv.prototype.pwm = function(callback, left, right, ms) {
+	Asserv.prototype.pwm = function(left, right, ms, callback) {
 		var pwm = (left+right)/2;
 		for(var t = 0; t < ms; t += 1000/FPS) {
 			setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t);
@@ -99,7 +104,7 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
-	Asserv.prototype.goxy = function(callback, x, y, sens){
+	Asserv.prototype.goxy = function(x, y, sens, callback){
 
 		var dx = x-this.pos.x;
 		var dy = y-this.pos.y;
@@ -107,16 +112,18 @@ module.exports = (function () {
 		var tf = (dist / (this.vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
 
 		if(sens == "avant") angle_depart = Math.atan2(dy,dx);
-		else if(sens == "arrirere") angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
-		else angle_depart = Math.min(Math.atan2(dy,dx), convertA(Math.atan2(dy,dx)+Math.PI));
+		else if(sens == "arriere") angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
+		else if (Math.abs(Math.atan2(dy,dx)) < Math.abs(convertA(Math.atan2(dy,dx)+Math.PI))) angle_depart = Math.atan2(dy,dx);
+		else angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
 
-		this.goa(function() {
+
+		this.goa(angle_depart, function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
 			}
 			setTimeout(this.simu_goxy(x, y), tf);
 			setTimeout(callback, tf);
-		}.bind(this), angle_depart);
+		}.bind(this));
 	};
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {
@@ -124,7 +131,7 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
-	Asserv.prototype.goa = function(callback, a){
+	Asserv.prototype.goa = function(a,callback){
 		a = convertA(a);
 		da = convertA(a-this.pos.a);
 
@@ -137,7 +144,7 @@ module.exports = (function () {
 		setTimeout(callback, tf);
 	};
 
-	Asserv.prototype.setPid = function(callback, p, i, d){
+	Asserv.prototype.setPid = function(p, i, d, callback){
 		callback();
 	};
 
