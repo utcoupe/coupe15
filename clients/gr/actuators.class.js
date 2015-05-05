@@ -78,25 +78,25 @@ module.exports = (function () {
 			break;
 			// Asserv
 			case "pwm":
-				asserv.pwm(callback, params.left, params.right, params.ms);
+				asserv.pwm(params.left, params.right, params.ms,callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(callback, params.v, params.r);
+				asserv.setVitesse(params.v, params.r,callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
 			break;
 			case "goa":
-				asserv.goa(callback, params.a);
+				asserv.goa(params.a,callback);
 			break;
 			case "goxy":
-				asserv.goxy(callback, params.x, params.y);
+				asserv.goxy(params.x, params.y, "avant",callback);
 			break;
 			case "setpos":
-				asserv.setPos(callback, params);
+				asserv.setPos(params,callback);
 			break;
 			case "setpid":
-				asserv.setPid(callback, params.p, params.i, params.d);
+				asserv.setPid(params.p, params.i, params.d,callback);
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

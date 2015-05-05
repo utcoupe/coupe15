@@ -174,52 +174,32 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.goxy(function() {
+					asserv.goxy(600, 950, "arriere", function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterUnPeuAscenseur(function() {
 
-					asserv.goxy(function() {
-					asserv.goa(function() {
-					asserv.pwm(function() {
-					asserv.calageY(function() {
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(260, 1000, "osef", function() {
+					asserv.goa(-3.1416/2, function() {
+					asserv.pwm(30, 30, 2000,function() {
+					asserv.calageY(874, -3.1416/2,function() {
+					asserv.goxy(260, 1000, "arriere",function() {
+					asserv.goa( 3.1416, function() {
 
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(160, 1000, "arriere",function() {
+					asserv.goa(3.1416,function() {
 					ax12.fermerBalle(function() {
-					asserv.goxy(function() {
+					asserv.goxy(260, 1000, "arriere",function() {
 					others.descendreUnPeuAscenseur(function() {
 					others.descendreUnPeuAscenseur(function() {
 					ax12.ouvrir(function() {
-					asserv.goxy(function() {
+					asserv.goxy(250, 1000, "arriere", function() {
 					ax12.fermerBalle2(function() {
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(220, 1000, "arriere", function() {
+					asserv.goa(0,function() {
 					others.monterAscenseur(fake);
-					asserv.goxy(callback, 600, 900, "avant");
-					}, 0);
-					}, 250, 1000, "arriere");
-					});
-					}, 220, 1000, "arriere");
-					});});
-					});
-					}, 260, 1000, "arriere");
-					});
-					}, 3.1416);
-					}, 160, 1000, "arriere");
-
-					}, 3.1416);
-					}, 260, 1000, "arriere");
-					}, 874, -3.1416/2);
-					}, 30, 30, 2000);
-					}, -3.1416/2);
-					}, 260, 1000, "arriere");
-
-					});});});
-					}, 600, 950, 2500);
-					});});});});
+					asserv.goxy( 600, 900, "avant",callback);
+					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
 				// }, 300);
 			break;
 			case "prendre_gobelet":
@@ -258,28 +238,28 @@ module.exports = (function () {
 
 			// Asserv
 			case "pwm":
-				asserv.pwm(callback, params.left, params.right, params.ms);
+				asserv.pwm(params.left, params.right, params.ms,callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(callback, params.v, params.r);
+				asserv.setVitesse(params.v, params.r,callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
 			break;
 			case "goa":
-				asserv.goa(callback, params.a);
+				asserv.goa(params.a,callback);
 			break;
 			case "goxy":
-				asserv.goxy(callback, params.x, params.y, params.sens);
+				asserv.goxy(params.x, params.y, params.sens,callback);
 			break;
 			case "setpos":
-				asserv.setPos(callback, params);
+				asserv.setPos(params,callback);
 			break;
 			case "setacc":
-				asserv.setAcc(callback, params.acc);
+				asserv.setAcc(params.acc,callback);
 			break;
 			case "setpid":
-				asserv.setPid(callback, params.p, params.i, params.d);
+				asserv.setPid(params.p, params.i, params.d,callback);
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");
