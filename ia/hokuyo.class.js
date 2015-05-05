@@ -1,7 +1,7 @@
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
-	var gaussian = require('gaussian');
+	// var gaussian = require('gaussian');
 	var logger = log4js.getLogger('ia.hokuyo');
 
 	var GR_OFFSET = 110;
@@ -20,7 +20,7 @@ module.exports = (function () {
 	};
 
 	Hokuyo.prototype.isOnTheStairs = function (spot){
-		return (spot.x>967) && (spot.x < 2033) && (spot.y < 580);
+		return (spot.x>967) && (spot.x < 2033) && (spot.y > 2000-580);
 	};
 
 	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt, status){
@@ -31,8 +31,11 @@ module.exports = (function () {
 			y: eRobot.pos.y + eRobot.speed.y*dt
 		};
 
-		var distribution = gaussian(0,eRobot.d);
-		return distribution.pdf(getDistance(spot, estimatedPos));
+		// var distribution = gaussian(0,eRobot.d);
+		var distance = this.getDistance(spot, estimatedPos);
+		// logger.debug(distance);
+		// return 10*distribution.pdf(distance/10);
+		return distance;
 	};
 
 	Hokuyo.prototype.deleteOurRobots = function (dots){
@@ -46,9 +49,19 @@ module.exports = (function () {
 			y: this.ia.gr.pos.y + GR_OFFSET*Math.sin(this.ia.gr.pos.a)
 		};
 
+		// logger.debug("Pos PR");
+		// logger.debug(this.ia.pr.pos);
+		// logger.debug("Pos GR");
+		// logger.debug(gr_pos_with_offset);
+
 		for (var i = 0; i < dots.length; i++) {
 			var pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
 			var gr_temp_dist = this.getDistance(dots[i], gr_pos_with_offset);
+			// logger.debug("Pr le pt :");
+			// logger.debug(dots[i]);
+			// logger.debug(pr_temp_dist);
+			// logger.debug(gr_temp_dist);
+
 
 			if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
 				pr_dist = pr_temp_dist;
@@ -65,8 +78,13 @@ module.exports = (function () {
 			// logger.debug("Deleting PR:");
 			// logger.debug(dots[pr_i]);
 			// logger.debug(this.ia.pr.pos);
-
 			dots.splice(pr_i,1);
+
+			if (pr_i < gr_i) {
+				gr_i = gr_i -1;
+			}
+		} else {
+			logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
 		}
 
 		if (gr_i != -1) {
@@ -76,7 +94,42 @@ module.exports = (function () {
 			// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
 
 			dots.splice(gr_i,1);
+		} else {
+			logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
 		}
+		// logger.debug(dots);
+	};
+
+	Hokuyo.prototype.getBestMatchingCoef = function(dots, robots, now) {
+		// Return the couple of ennemy robot and dot that matches the best
+
+		var matching_coef = [];
+		var best_coef = {
+			value: this.getDistance({x: 0, y:0}, {x: 3000, y:2000}),
+			dot: -1,
+			e_robot: -1
+		};
+
+		for (var d = 0; d < dots.length; d++){
+			// for each real point
+			matching_coef[d] = [];
+			for (var i = 0; i < robots.length; i++) {
+				// we make a matching coefficient
+
+				matching_coef[d][i] = this.getMatchingCoef(dots[d], robots[i], robots[i].lastUpdate - now, robots[i].status);
+
+				if (best_coef.value > matching_coef[d][i]) {
+					best_coef.value = matching_coef[d][i];
+					best_coef.dot = d;
+					best_coef.e_robot = i;
+				}
+			}
+		}
+
+		logger.debug("Coefficients de matching");
+		logger.debug(matching_coef);
+
+		return best_coef;
 	};
 
 	Hokuyo.prototype.updatePos = function (dots) {
@@ -106,74 +159,76 @@ module.exports = (function () {
 
 				for (var i = 0; i < this.ia.data.erobot.length; i++) {
 					if(this.ia.data.erobot[i].lastUpdate < now){
-						logger.debug(this.ia.data.erobot[i].lastUpdate);
+						// logger.debug(this.ia.data.erobot[i].name + " last update :");
+						// logger.debug(this.ia.data.erobot[i].lastUpdate);
 						e_r2Bmatched.push(this.ia.data.erobot[i]);
 					}
 				}
 
 				if (e_r2Bmatched.length > 0) {
-					var matching_coef = [];
-					var best_coef = {
-						value: 1,
-						dot: -1,
-						e_robot: -1
-					};
-
-					logger.debug("On s'occupe de :");
-					logger.debug(e_r2Bmatched);
+					// logger.debug("On s'occupe des robots :");
+					// logger.debug(e_r2Bmatched);
+					// logger.debug("Avec les points :");
+					// logger.debug(dots);
 
 
 					// for each eatimated position of the robots
-					for (var d = 0; d < dots.length; d++){
-						// for each real point
-						for (var i = 0; i < e_r2Bmatched.length; i++) {
-							// we make a matching coefficient
-							matching_coef[d][i] = this.getMatchingCoef(dots[d], e_r2Bmatched[i], e_r2Bmatched[i].lastUpdate - now, e_r2Bmatched[i].status);
-
-							if (best_coef.value < matching_coef[d][i]) {
-								best_coef.value = matching_coef[d][i];
-								best_coef.dot = d;
-								best_coef.e_robot = i;
-							}
-						}
-					}
+					var best_coef = this.getBestMatchingCoef(dots, e_r2Bmatched, now);
+					// logger.debug(best_coef);
 
 					// if the bigger coefficient is under the arbitrary threshold
-					// XXXX
+					// XXX
 
 					// we take the best/bigger coefficient (well named best_coef :P )
 
 					// if it isn't, set the new position, speed, status, call the "ennemy went there" function
+					// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
+					// logger.debug(dots[best_coef.dot]);
+
+					if (best_coef.e_robot == -1){
+						logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
+						logger.warn(e_r2Bmatched);
+						logger.warn(dots);
+						break;
+					}
+
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
-					if (deltaT !== 0)
+					if (deltaT !== 0){
 						e_r2Bmatched[best_coef.e_robot].speed = {
-							x: (dots[dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT,
-							y: (dots[dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT,
+							x: (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT,
+							y: (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT
 						};
-					else
+					} else {
 						logger.warn("Tiens, deltaT = 0, c'est bizarre...");
 						e_r2Bmatched[best_coef.e_robot].speed = {
 							x:0,
-							y:0,
+							y:0
 						};
+					}
 
 					e_r2Bmatched[best_coef.e_robot].pos = {
-						x: dots[dot].x,
-						y: dots[dot].y,
+						x: dots[best_coef.dot].x,
+						y: dots[best_coef.dot].y,
 					};
 
-					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
+					// logger.debug("Position et vitesse du robot :");
+					logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
+					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
+
+
+					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot); // XXXX
 
 
 					// if it's climbing the stairs, set the correct status
-					if (isOnTheStairs(dots[best_coef.dot]))
+					if (this.isOnTheStairs(dots[best_coef.dot]))
 						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
 					else
 						e_r2Bmatched[best_coef.e_robot].status = "moving";
+					logger.warn(e_r2Bmatched[best_coef.e_robot].status); // XXXX
 					
 					// and delete the dot
-					dots.splice(dot,1);
+					dots.splice(best_coef.dot,1);
 				} else {
 					// if all the robots are tidied up, ouw, that's strange ^^
 					logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
@@ -193,8 +248,8 @@ module.exports = (function () {
 			for (var i = 0; i < this.ia.data.erobot.length; i++) {
 				if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "moving")){
 					this.ia.data.erobot[i].pos = {
-						x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].pos.speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
-						y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].pos.speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
+						x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
+						y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
 					};
 					this.ia.data.erobot[i].speed = {
 						x:0,
