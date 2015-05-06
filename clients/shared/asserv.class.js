@@ -123,7 +123,7 @@ module.exports = (function () {
 		// var id = this.currentId; // saved to be sure it hasn't changed ( even after write )
 		// this.sentCommands[id] = callback;
 		this.order_sent = cmd;
-		this.wait_for_id = !!wait_for_id;
+		this.wait_for_id = wait_for_id;
 		// logger.debug(this.wait_for_id);
 		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");

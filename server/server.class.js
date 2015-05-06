@@ -28,7 +28,6 @@ module.exports = (function () {
 			},
 			webclient: {},
 			ia: {},
-			simulator: {},
 			hokuyo: {},
 			pr: {},
 			gr: {}
@@ -50,11 +49,13 @@ module.exports = (function () {
 		this.server.on('connection', function (client) {
 			// When the client is disconnected
 			client.on('disconnect', function() {
-				if(this.network[client.type][client.id] !== undefined) {
+				logger.info(client.type+" is disconnected!");
+				try {
 					delete this.network[client.type][client.id];
+				}
+				finally {
 					this.sendNetwork();
 				}
-				logger.info(client.type+" is disconnected!");
 			}.bind(this));
 
 			// When the client send his type

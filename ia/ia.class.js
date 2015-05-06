@@ -18,7 +18,7 @@ module.exports = (function () {
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
 
-		this.client = new (require('../server/socket_client.class.js'))({type: 'ia'});
+		this.client = new (require('../server/socket_client.class.js'))({server_ip: "192.168.0.100:3128", type: 'ia'});
 		this.timer = new (require('./timer.class.js'))();
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
