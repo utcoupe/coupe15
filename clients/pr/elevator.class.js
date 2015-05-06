@@ -12,14 +12,17 @@ module.exports = (function () {
 	var ELEV_RELEASE =			'r';
 	var ELEV_CHOUILLA =			'c';
 
-	function Elevator(sp) {
+	function Elevator(sp, sendStatus) {
 		// sp is Serial Port OBJECT
 		this.sp = sp;
-		this.ready = true;
+		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.pos = 'down';
 		this.orders_sent = [];
 
 		this.sp.on("data", function(data) {
+			this.ready = true;
+			this.sendStatus();
 			this.parseOrder(data.toString());
 		}.bind(this));
 	}
@@ -33,6 +36,7 @@ module.exports = (function () {
 	Elevator.prototype.disconnect = function() {
 		this.sp.close();
 		this.ready = false;
+		this.sendStatus();
 	};
 
 

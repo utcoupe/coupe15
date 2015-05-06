@@ -12,7 +12,9 @@ module.exports = (function () {
 	// 	this.currentId = 0;
 	// }
 
-	function Asserv(sp, client, who) {
+	function Asserv(sp, client, who, sendStatus) {
+		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.sp = sp;
 		this.client = client;
 		this.pos = {};
@@ -20,9 +22,13 @@ module.exports = (function () {
 		this.currentId = 0;
 
 		this.sp.on("data", function(data){
+			this.ready = true;
+			this.sendStatus();
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
 			logger.debug("error", data.toString());
 		});
 
@@ -40,13 +46,13 @@ module.exports = (function () {
 		this.pos.y = pos.y;
 		this.setA(pos.a);
 	}
-	Asserv.prototype.setPos = function(callback, pos) {
+	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
-		this.sendCommand(callback, COMMANDS.SET_POS, [
+		this.sendCommand(COMMANDS.SET_POS, [
 			parseInt(this.pos.x),
 			parseInt(this.pos.y),
 			myWriteFloat(this.pos.a)
-		]);
+		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
@@ -56,11 +62,14 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(function() {}, 200, 0, 600);
+		this.speed(200, 0, 600, function(){});
 		setTimeout(callback, 400);
 	}
-	Asserv.prototype.calageY = function(callback, y, a) {
-		this.setPos(callback, {x: this.pos.x, y: y, a: a});
+	Asserv.prototype.calageX = function(x, a, callback) {
+		this.setPos({x: x, y: this.pos.y, a: a}, callback);
+	}
+	Asserv.prototype.calageY = function(y, a, callback) {
+		this.setPos({x: this.pos.x, y: y, a: a}, callback);
 	}
 
 	// For float
@@ -111,7 +120,7 @@ module.exports = (function () {
 	//////////////////
 	// JS to Arduino
 	//////////////////
-	Asserv.prototype.sendCommand = function(callback, cmd, args, wait_for_id){
+	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback){
 		if(typeof callback !== "function")
 			callback = function(){};
 		this.callback = callback;
@@ -146,68 +155,68 @@ module.exports = (function () {
 	// 		writeAngle(pos.a);
 	// 	]);
 	// }
-	Asserv.prototype.setVitesse = function(callback, v, r) {
+	Asserv.prototype.setVitesse = function(v, r, callback) {
 		// logger.debug(myWriteFloat(r));
-		this.sendCommand(callback, COMMANDS.SPDMAX, [
+		this.sendCommand(COMMANDS.SPDMAX, [
 			parseInt(v),
 			myWriteFloat(r)
-		]);
+		], false, callback);
 	};
 
-	Asserv.prototype.speed = function(callback, l, a, ms) {
+	Asserv.prototype.speed = function(l, a, ms, callback) {
 		// logger.debug(myWriteFloat(r));
-		this.sendCommand(callback, COMMANDS.SPD, [
+		this.sendCommand(COMMANDS.SPD, [
 			parseInt(l),
 			parseInt(a),
 			parseInt(ms)
-		], true);
+		], true, callback);
 	};
 
-	Asserv.prototype.setAcc = function(callback, acc) {
+	Asserv.prototype.setAcc = function(acc,callback) {
 		// logger.debug(myWriteFloat(r));
-		this.sendCommand(callback, COMMANDS.ACCMAX, [
+		this.sendCommand(COMMANDS.ACCMAX, [
 			parseInt(acc)
-		]);
+		], false, callback);
 	};
 
 	Asserv.prototype.clean = function(callback){
-		this.sendCommand(callback, COMMANDS.CLEANG);
+		this.sendCommand(COMMANDS.CLEANG,false,callback);
 	};
 
-	Asserv.prototype.pwm = function(callback, left, right, ms) {
-		this.sendCommand(callback, COMMANDS.PWM, [
+	Asserv.prototype.pwm = function(left, right, ms, callback) {
+		this.sendCommand(COMMANDS.PWM, [
 			parseInt(left),
 			parseInt(right),
 			parseInt(ms)
-		], true);
+		], true,callback);
 		
 	};
 
-	Asserv.prototype.goxy = function(callback, x, y, sens){
+	Asserv.prototype.goxy = function(x, y, sens, callback){
 		if(sens == "avant") sens = 1;
-		else if(sens == "arrirere") sens = -1;
+		else if(sens == "arriere") sens = -1;
 		else sens = 0;
 		
-		this.sendCommand(callback, COMMANDS.GOTO, [
+		this.sendCommand(COMMANDS.GOTO, [
 			parseInt(x),
 			parseInt(y),
 			sens
-		], true);
+		], true,callback);
 	};
-	Asserv.prototype.goa = function(callback, a){
+	Asserv.prototype.goa = function(a, callback){
 		// this.clean();
-		this.sendCommand(callback, COMMANDS.ROT, [
+		this.sendCommand(COMMANDS.ROT, [
 			myWriteFloat(a)
-		], true);
+		], true,callback);
 	};
 
-	Asserv.prototype.setPid = function(callback, p, i, d){
+	Asserv.prototype.setPid = function(p, i, d, callback){
 		// this.clean();
-		this.sendCommand(callback, COMMANDS.PIDALL, [
+		this.sendCommand(COMMANDS.PIDALL, [
 			myWriteFloat(p),
 			myWriteFloat(i),
 			myWriteFloat(d)
-		]);
+		],false,callback);
 	};
 
 	// Asserv.prototype.gotoPath = function(callback, path){

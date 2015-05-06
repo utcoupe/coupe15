@@ -5,9 +5,12 @@ module.exports = (function () {
 
 	var servos = null;
 	var asserv = null;
+	var date = new Date();
+	var lastSendStatus =  date.getTime();
 
-	function Acts(client) {
+	function Acts(client, sendChildren) {
 		this.client = client;
+		this.sendChildren = sendChildren;
 		this.start();
 	}
 
@@ -20,7 +23,7 @@ module.exports = (function () {
 			logger.fatal("Lancement des servos gr en mode simu !");
 			servos = new (require('./servos.simu.class.js'))();
 		} else {
-			servos = new (require('./servos.class.js'))(struct.servos);
+			servos = new (require('./servos.class.js'))(struct.servos, this.sendStatus);
 		}
 		if (!struct.asserv) {
 			logger.fatal("Lancement de l'asserv gr en mode simu !");
@@ -30,8 +33,15 @@ module.exports = (function () {
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n'),
-				}), this.client, 'gr'
+				}), this.client, 'gr', this.sendStatus
 			);
+		}
+	};
+
+	Acts.prototype.sendStatus = function() {
+		if(lastSendStatus <  date.getTime()-1000){
+			this.sendChildren(this.getStatus);
+			lastSendStatus =  date.getTime();
 		}
 	};
 
@@ -43,12 +53,12 @@ module.exports = (function () {
 
 		data.status = "everythingIsAwesome";
 
-		if(servos && !servos.client && servos.ready){
+		if(servos && servos.ready){
 			data.children.push("Arduino servos");
 		}else
 			data.status = "ok";
 
-		if(asserv && !asserv.client && asserv.ready){
+		if(asserv && asserv.ready){
 			data.children.push("Arduino asserv");
 		}else
 			data.status = "error";
@@ -78,25 +88,25 @@ module.exports = (function () {
 			break;
 			// Asserv
 			case "pwm":
-				asserv.pwm(callback, params.left, params.right, params.ms);
+				asserv.pwm(params.left, params.right, params.ms,callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(callback, params.v, params.r);
+				asserv.setVitesse(params.v, params.r,callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
 			break;
 			case "goa":
-				asserv.goa(callback, params.a);
+				asserv.goa(params.a,callback);
 			break;
 			case "goxy":
-				asserv.goxy(callback, params.x, params.y);
+				asserv.goxy(params.x, params.y, "avant",callback);
 			break;
 			case "setpos":
-				asserv.setPos(callback, params);
+				asserv.setPos(params,callback);
 			break;
 			case "setpid":
-				asserv.setPid(callback, params.p, params.i, params.d);
+				asserv.setPid(params.p, params.i, params.d,callback);
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

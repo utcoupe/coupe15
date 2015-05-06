@@ -99,10 +99,11 @@ void annalyse_chaine(){
         stepper.release();
       }
       if(pas<0){
-        pas=-pas;
-        stepper.step(pas,FORWARD, DOUBLE);
+        stepper.setSpeed(60);
+        stepper.step(-pas,FORWARD, DOUBLE);
       }
       else{
+        stepper.setSpeed(120);
         stepper.step(pas,BACKWARD, DOUBLE);
       }
       Serial.print("S");

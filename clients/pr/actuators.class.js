@@ -6,9 +6,12 @@ module.exports = (function () {
 	var others = null;
 	var asserv = null;
 	var ax12 = null;
+	var date = new Date();
+	var lastSendStatus =  date.getTime();
 
-	function Acts(client) {
+	function Acts(client, sendChildren) {
 		this.client = client;
+		this.sendChildren = sendChildren;
 		this.start();
 		this.nb_plots = 0;
 	}
@@ -23,7 +26,8 @@ module.exports = (function () {
 			others = new (require('./others.simu.class.js'))();
 		} else {
 			others = new (require('./others.class.js'))(
-				new SerialPort(struct.others, { baudrate: 57600 })
+				new SerialPort(struct.others, { baudrate: 57600 }),
+				sendStatus
 			);
 		}
 
@@ -35,7 +39,7 @@ module.exports = (function () {
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n')
-				}), this.client, 'pr'
+				}), this.client, 'pr', sendStatus
 			);
 		}
 
@@ -43,7 +47,7 @@ module.exports = (function () {
 			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
 			ax12 = new (require('./ax12.simu.class.js'))();
 		} else {
-			ax12 = new (require('./ax12.class.js'))(struct.ax12);
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, sendStatus);
 		}
 
 		// Initialisation
@@ -56,6 +60,13 @@ module.exports = (function () {
 				logger.fatal('BAZOOKA');
 			}); }); }); }); });
 		}, 1000);
+	};
+
+	Acts.prototype.sendStatus = function() {
+		if(lastSendStatus <  date.getTime()-1000){
+			this.sendChildren(this.getStatus);
+			lastSendStatus =  date.getTime();
+		}
 	};
 
 	Acts.prototype.getStatus = function(){
@@ -71,12 +82,12 @@ module.exports = (function () {
 		else
 			data.status = "ok";
 
-		if(ax12 && asserv.ready)
+		if(ax12 && ax12.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv && ax12.ready)
+		if(asserv && asserv.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -108,7 +119,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
@@ -117,12 +128,12 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if(that.nb_plots==1){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -132,24 +143,24 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if (that.nb_plots>=2){
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
+					callback();
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); });
+					}); }); }); }); }); });// });
 				}
 				else {
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -159,7 +170,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });					
+					}); }); }); }); }); }); }); }); }); //});					
 				}
 			break;
 
@@ -170,56 +181,36 @@ module.exports = (function () {
 			
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
+					asserv.goa(2.3562, function() {
 					others.descendreUnPeuAscenseur(function() {	
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.goxy(function() {
+					asserv.goxy(650, 950, "arriere", function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterUnPeuAscenseur(function() {
 
-					asserv.goxy(function() {
-					asserv.goa(function() {
-					asserv.pwm(function() {
-					asserv.calageY(function() {
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(260, 1000, "osef", function() {
+					asserv.goa(-3.1416/2, function() {
+					asserv.pwm(50, 50, 1500,function() {
+					asserv.calageY(874, -3.1416/2,function() {
+					asserv.goxy(260, 1000, "arriere",function() {
+					asserv.goa(3.1416, function() {
 
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(160, 1000, "avant",function() {
+					asserv.goa(3.1416,function() {
 					ax12.fermerBalle(function() {
-					asserv.goxy(function() {
+					asserv.goxy(260, 1000, "arriere",function() {
 					others.descendreUnPeuAscenseur(function() {
 					others.descendreUnPeuAscenseur(function() {
 					ax12.ouvrir(function() {
-					asserv.goxy(function() {
+					asserv.goxy(220, 1000, "avant", function() {
 					ax12.fermerBalle2(function() {
-					asserv.goxy(function() {
-					asserv.goa(function() {
+					asserv.goxy(260, 1000, "arriere", function() {
 					others.monterAscenseur(fake);
-					asserv.goxy(callback, 600, 900, "avant");
-					}, 0);
-					}, 250, 1000, "arriere");
-					});
-					}, 220, 1000, "arriere");
-					});});
-					});
-					}, 260, 1000, "arriere");
-					});
-					}, 3.1416);
-					}, 160, 1000, "arriere");
-
-					}, 3.1416);
-					}, 260, 1000, "arriere");
-					}, 874, -3.1416/2);
-					}, 30, 30, 2000);
-					}, -3.1416/2);
-					}, 260, 1000, "arriere");
-
-					});});});
-					}, 600, 950, 2500);
-					});});});});
+					asserv.goxy(600, 900, "avant", callback);
+					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
 				// }, 300);
 			break;
 			case "prendre_gobelet":
@@ -258,28 +249,28 @@ module.exports = (function () {
 
 			// Asserv
 			case "pwm":
-				asserv.pwm(callback, params.left, params.right, params.ms);
+				asserv.pwm(params.left, params.right, params.ms,callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(callback, params.v, params.r);
+				asserv.setVitesse(params.v, params.r,callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
 			break;
 			case "goa":
-				asserv.goa(callback, params.a);
+				asserv.goa(params.a,callback);
 			break;
 			case "goxy":
-				asserv.goxy(callback, params.x, params.y, params.sens);
+				asserv.goxy(params.x, params.y, params.sens,callback);
 			break;
 			case "setpos":
-				asserv.setPos(callback, params);
+				asserv.setPos(params,callback);
 			break;
 			case "setacc":
-				asserv.setAcc(callback, params.acc);
+				asserv.setAcc(params.acc,callback);
 			break;
 			case "setpid":
-				asserv.setPid(callback, params.p, params.i, params.d);
+				asserv.setPid(params.p, params.i, params.d,callback);
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

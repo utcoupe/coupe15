@@ -16,7 +16,7 @@ module.exports = (function () {
 	}
 
 	var __dist_startpoints_plot = 20;
-	var __nb_startpoints_plot = 32;
+	var __nb_startpoints_plot = 128;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Actions.prototype.importActions = function (data) {
 		var req = require('./actions.json');
@@ -32,17 +32,21 @@ module.exports = (function () {
 					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
 			}
 			else if(actions[i].type == "plot" && actions[i].startpoints.length === 0) {
-				var temp;
-				for(var j = 0; j < __nb_startpoints_plot; j++) {
-					temp = j*2*Math.PI/__nb_startpoints_plot;
-					actions[i].startpoints.push({
-						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-						y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
-						a: convertA(temp+Math.PI)
-					});
-				}
+				// var temp;
+				// for(var j = 0; j < __nb_startpoints_plot; j++) {
+				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
+				// 	actions[i].startpoints.push({
+				// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+				// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+				// 		a: convertA(temp+Math.PI)
+				// 	});
+				// }
+				actions[i].startpoints.push({
+					x: actions[i].object.pos.x,
+					y: actions[i].object.pos.y
+				});
 			}
-		});
+		}.bind(this));
 
 		return actions;
 	};
@@ -79,9 +83,11 @@ module.exports = (function () {
 			y: startpoint.y,
 			sens: act.sens
 		});
-		this.ia.client.send('pr', "goa", {
-			a: startpoint.a
-		});
+		if(!!startpoint.a) {
+			this.ia.client.send('pr', "goa", {
+				a: startpoint.a
+			});
+		}
 		// 1 order for 1 action
 		// act.orders.forEach(function (order, index, array){
 		this.ia.client.send('pr', act.orders[0].name, act.orders[0].params);
