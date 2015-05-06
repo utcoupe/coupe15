@@ -7,7 +7,7 @@
 	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = "127.0.0.1:3128"; // server adress
+	var server = "192.168.0.100:3128"; // server adress
 	var client = new SocketClient({
 		server_ip: server,
 		type: "pr"
