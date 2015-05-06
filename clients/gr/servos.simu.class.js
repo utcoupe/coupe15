@@ -3,7 +3,6 @@ module.exports = (function () {
 	var logger = log4js.getLogger('gr.servos');
 
 	function Servos(sp) {
-		this.client = "rien"; // j'ai mis ça pour différencier cette classe de la vraie classe servos (pr Webclient > Réseau)
 
 	}
 

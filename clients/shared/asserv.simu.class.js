@@ -11,6 +11,7 @@ module.exports = (function () {
 	var FPS = 30;
 
 	function Asserv(client, who) {
+		this.ready = true;
 		this.client = client;
 		this.who = who;
 		this.pos = {

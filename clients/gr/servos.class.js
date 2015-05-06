@@ -5,7 +5,9 @@ module.exports = (function () {
 	var board = null;
 	var servo_gauche, servo_droit;
 
-	function Servos(sp) {
+	function Servos(sp, sendStatus) {
+		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.connect(sp);
 	}
 
@@ -19,6 +21,8 @@ module.exports = (function () {
 			logger.info("Board servos Ready");
 			servo_gauche = new five.Servo(2);
 			servo_droit = new five.Servo(3);
+			this.ready = true;
+			this.sendStatus();
 			this.acheter();
 		}.bind(this));
 	};

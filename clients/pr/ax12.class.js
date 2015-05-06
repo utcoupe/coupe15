@@ -28,9 +28,10 @@ module.exports = (function () {
 		}
 	};
 
-	function Ax12(sp) {
+	function Ax12(sp, sendStatus) {
 		// sp is Serial Port NAME
 		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.orders_sent = [];
 
 		this.connect(sp);
@@ -52,6 +53,7 @@ module.exports = (function () {
 			logger.info("Connecté à l'USB2AX !");
 		}
 		this.ready = true;
+		this.sendStatus();
 		this.ax12s = {};
 		this.type_callback = null;
 
@@ -65,6 +67,7 @@ module.exports = (function () {
 	Ax12.prototype.disconnect = function(x) {
 		this.sp.close();
 		this.ready = false;
+		this.sendStatus();
 	};
 
 	Ax12.prototype.loopAX12 = function() {
