@@ -46,7 +46,7 @@ module.exports = (function () {
 			parseInt(this.pos.x),
 			parseInt(this.pos.y),
 			myWriteFloat(this.pos.a)
-		],false, callback);
+		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
@@ -56,7 +56,7 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(function() {}, 200, 0, 600);
+		this.speed(200, 0, 600, function(){});
 		setTimeout(callback, 400);
 	}
 	Asserv.prototype.calageX = function(x, a, callback) {
@@ -149,7 +149,7 @@ module.exports = (function () {
 	// 		writeAngle(pos.a);
 	// 	]);
 	// }
-	Asserv.prototype.setVitesse = function(v, r,callback) {
+	Asserv.prototype.setVitesse = function(v, r, callback) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(COMMANDS.SPDMAX, [
 			parseInt(v),
@@ -157,7 +157,7 @@ module.exports = (function () {
 		], false, callback);
 	};
 
-	Asserv.prototype.speed = function(l, a, ms,callback) {
+	Asserv.prototype.speed = function(l, a, ms, callback) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(COMMANDS.SPD, [
 			parseInt(l),
@@ -204,7 +204,7 @@ module.exports = (function () {
 		], true,callback);
 	};
 
-	Asserv.prototype.setPid = function(p, i, d,callback){
+	Asserv.prototype.setPid = function(p, i, d, callback){
 		// this.clean();
 		this.sendCommand(COMMANDS.PIDALL, [
 			myWriteFloat(p),

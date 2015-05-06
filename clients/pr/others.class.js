@@ -40,7 +40,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		this.sendCommand(callback, 'H', [127, 15], 200);
+		this.sendCommand(callback, 'H', [127, 15], 50);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {

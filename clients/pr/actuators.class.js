@@ -108,7 +108,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
@@ -117,12 +117,12 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if(that.nb_plots==1){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -132,24 +132,24 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if (that.nb_plots>=2){
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
+					callback();
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); });
+					}); }); }); }); }); });// });
 				}
 				else {
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -159,7 +159,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });					
+					}); }); }); }); }); }); }); }); }); //});					
 				}
 			break;
 
@@ -170,35 +170,35 @@ module.exports = (function () {
 			
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
+					asserv.goa(2.3562, function() {
 					others.descendreUnPeuAscenseur(function() {	
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.goxy(600, 950, "arriere", function() {
+					asserv.goxy(650, 950, "arriere", function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterUnPeuAscenseur(function() {
 
 					asserv.goxy(260, 1000, "osef", function() {
 					asserv.goa(-3.1416/2, function() {
-					asserv.pwm(30, 30, 2000,function() {
+					asserv.pwm(50, 50, 1500,function() {
 					asserv.calageY(874, -3.1416/2,function() {
 					asserv.goxy(260, 1000, "arriere",function() {
-					asserv.goa( 3.1416, function() {
+					asserv.goa(3.1416, function() {
 
-					asserv.goxy(160, 1000, "arriere",function() {
+					asserv.goxy(160, 1000, "avant",function() {
 					asserv.goa(3.1416,function() {
 					ax12.fermerBalle(function() {
 					asserv.goxy(260, 1000, "arriere",function() {
 					others.descendreUnPeuAscenseur(function() {
 					others.descendreUnPeuAscenseur(function() {
 					ax12.ouvrir(function() {
-					asserv.goxy(250, 1000, "arriere", function() {
+					asserv.goxy(220, 1000, "avant", function() {
 					ax12.fermerBalle2(function() {
-					asserv.goxy(220, 1000, "arriere", function() {
-					asserv.goa(0,function() {
+					asserv.goxy(260, 1000, "arriere", function() {
 					others.monterAscenseur(fake);
-					asserv.goxy( 600, 900, "avant",callback);
+					asserv.goxy(600, 900, "avant", callback);
 					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
 				// }, 300);
 			break;
