@@ -18,9 +18,9 @@ module.exports = (function () {
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
 
-		this.client = new (require('../server/socket_client.class.js'))({type: 'ia'});
+		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
 		this.timer = new (require('./timer.class.js'))();
-		this.pathfinding = new (require('./pathfinding.class.js'))(this);
+		this.pathfinding = new (require('./pathfinding.class.js'))(this.color);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
 		this.actions = new (require('./actions.class.js'))(this);
 		this.gr = new (require('./gr.class.js'))(this, this.color);

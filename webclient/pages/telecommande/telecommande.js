@@ -7,6 +7,14 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		Client.send("pr", "prendre_plot");
 	}
 
+	$scope.prSyncGit = function() {
+		var spawn = require('child_process').spawn,
+		grep  = spawn('/root/sync_git.sh', [], {
+			detached: true,
+			stdio: [ 'ignore', out, err ]
+		});
+	}
+
 	// IA
 	$scope.iaJack = function() {
 		Client.send("ia", "ia.jack");
