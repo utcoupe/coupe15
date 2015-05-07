@@ -49,8 +49,9 @@
 // END_ORDERS - Do not remove this comment
 
 #define AUTO_SEND	'~'		// x(int);y(int);a(decimal)
+#define JACK 	'J'
 
-
+#define JACK_SEND_NR 5
 #define FLOAT_PRECISION 1000.0
 #define FAILED_MSG "FAILED"
 #define MAX_COMMAND_LEN 60

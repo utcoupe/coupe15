@@ -59,6 +59,9 @@ extern inline void initPins(){
 	attachInterrupt(INTERRUPT_ENC_LEFT_A,leftInterruptA,RISING);
 	attachInterrupt(INTERRUPT_ENC_RIGHT_A,rightInterruptA,RISING);
 #endif
+#ifdef PIN_JACK
+	pinMode(PIN_JACK,INPUT_PULLUP);
+#endif
 }
 
 #endif
