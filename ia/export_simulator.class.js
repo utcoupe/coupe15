@@ -39,7 +39,7 @@ module.exports = (function () {
 				})
 			}
 		}
-		logger.debug(data.robots.pr.path);
+		//logger.debug(data.robots.pr.path);
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);
