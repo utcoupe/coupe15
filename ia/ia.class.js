@@ -65,12 +65,12 @@ module.exports = (function () {
 
 	Ia.prototype.jack = function() {
 		if(!this.timer.match_started) {
-			logger.info("Démarrage de l'IA");
+			logger.info("Démarrage du match");
 			this.timer.start();
 			this.gr.start();
 			this.pr.start();
 		} else {
-			logger.warn('IA déjà lancée');
+			logger.warn("Match déjà lancé");
 		}
 	};
 

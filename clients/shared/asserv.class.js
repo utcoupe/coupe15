@@ -105,7 +105,8 @@ module.exports = (function () {
 			if(!this.wait_for_id)
 				this.callback();
 		} else if (cmd == COMMANDS.JACK) {
-			Client.send("ia", "ia.jack");
+			logger.info("JACK !");
+			this.client.send("ia", "ia.jack");
 		} else {
 			// logger.warn(datas);
 			// logger.warn("Command return from Arduino to unknown cmd="+cmd);

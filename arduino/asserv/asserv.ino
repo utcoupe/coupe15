@@ -22,9 +22,9 @@ int JackCheck(void) {
 	if (last_jack_status == 0 && jack_status == 1) {
 		for (i=0; i<JACK_SEND_NR; i++) {
 			Serial.write(JACK);
-			sent_bytes++;
+			Serial.write('\n');
+			sent_bytes += 2;
 		}
-		Serial.write('\n');
 	}
 	last_jack_status = jack_status;
 	return sent_bytes;
