@@ -118,6 +118,9 @@ Simu.init = function(){
 		
 		t = data.robots.pr;
 		Simu.afficherPR(t.x,t.y,t.z,t.yrot,t.coul);
+		
+		//afficherPath PR
+		Simu.initPath();
 
 		t = data.robots.ge;
 		Simu.afficherGE(t.x,t.y,t.z,t.coul);
@@ -171,7 +174,6 @@ Simu.init = function(){
 	Simu.RAYON_ENNEMIS_PETITS = 0.0875;
 	Simu.RAYON_ENNEMIS_GRANDS = 0.126; //0.15
 
-	Simu.GR,Simu.PR,Simu.GE,Simu.PE;
 	Simu.ampoules = [], Simu.clapets = [],Simu.gobelets = [];
 	Simu.pieds = [], Simu.popcorns = [];
 
@@ -314,6 +316,13 @@ Simu.init = function(){
 		var t = data.robots.pr;
 		Simu.PR.position.set(t.x,0.185,t.y);
 		Simu.PR.rotation.y = t.a;
+
+
+		Simu.updatePath(data.robots.pr.path.map(function(pos){
+			return new THREE.Vector3(pos[0], 0.01, pos[1]);
+		}));
+
+
 /* TEMP on n'update que les robots
 		var t = data.robots.ge;
 		Simu.GE.position.set(t.x,0.185,t.y);

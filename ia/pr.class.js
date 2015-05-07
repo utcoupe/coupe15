@@ -15,7 +15,8 @@ module.exports = (function () {
 			d: 280
 		};
 		this.current_action = null;
-		this.path = null;
+		//this.path = null;
+		this.path = [[1000,1000], [200,200], [500,200]];
 		this.nb = 0;
 
 		if (color == "green"){
