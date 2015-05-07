@@ -91,7 +91,7 @@ module.exports = (function () {
 				asserv.pwm(params.left, params.right, params.ms,callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(params.v, params.r,callback);
+				asserv.setVitesse(params.v, params.r, callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
