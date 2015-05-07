@@ -13,6 +13,10 @@ typedef struct dynamic_object {
 	int x, y, r;
 } dynamic_object;
 
+inline bool is_valid(int x, int y, MAP &map) {
+	return x >= 0 && x < map.get_map_w() && y >= 0 && y < map.get_map_h();
+}
+
 void command_add_dynamic(string& command, MAP &map) {
 	vector<dynamic_object> objs;
 	command = command.substr(2);
@@ -59,6 +63,10 @@ string command_calc_path(string& command, MAP &map) {
 	command = command.substr(2);
 	if (sscanf(command.c_str(), "%i;%i;%i;%i", &x_s, &y_s, &x_e, &y_e) < 4) {
 		cerr << "Did not parse the input correctly" << endl;
+		return "\n";
+	}
+	if (!(is_valid(x_s, y_s, map) && is_valid(x_e, y_e, map))) {
+		cerr << "Start or end point is not in the map" << endl;
 		return "\n";
 	}
 

@@ -1,11 +1,15 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('Others');
 
-	function Others(sp, client) {
+	function Others(sp, client, sendStatus) {
 		this.sp = sp;
 		this.client = client;
+		this.ready = false;
+		this.sendStatus = sendStatus;
 
 		this.sp.on("data", function(data){
+			this.ready = true;
+			this.sendStatus();
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
@@ -22,7 +26,7 @@ module.exports = (function () {
 		} else {
 			logger.warn("Arduino others unknown: "+data);
 		}
-	}
+	};
 
 	Others.prototype.sendCommand = function(callback, cmd, args, callback_delay){
 		if(typeof callback !== "function")
@@ -33,7 +37,7 @@ module.exports = (function () {
 
 		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		this.sp.write([cmd].concat(args).join(";")+"\n");
-	}
+	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
 		this.sendCommand(callback, 'H', [137, 5], 200);

@@ -6,9 +6,12 @@ module.exports = (function () {
 	var others = null;
 	var asserv = null;
 	var ax12 = null;
+	var date = new Date();
+	var lastSendStatus =  date.getTime();
 
-	function Acts(client) {
+	function Acts(client, sendChildren) {
 		this.client = client;
+		this.sendChildren = sendChildren;
 		this.start();
 		this.nb_plots = 0;
 	}
@@ -23,7 +26,8 @@ module.exports = (function () {
 			others = new (require('./others.simu.class.js'))();
 		} else {
 			others = new (require('./others.class.js'))(
-				new SerialPort(struct.others, { baudrate: 57600 })
+				new SerialPort(struct.others, { baudrate: 57600 }),
+				sendStatus
 			);
 		}
 
@@ -35,7 +39,7 @@ module.exports = (function () {
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n')
-				}), this.client, 'pr'
+				}), this.client, 'pr', sendStatus
 			);
 		}
 
@@ -43,7 +47,7 @@ module.exports = (function () {
 			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
 			ax12 = new (require('./ax12.simu.class.js'))();
 		} else {
-			ax12 = new (require('./ax12.class.js'))(struct.ax12);
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, sendStatus);
 		}
 
 		// Initialisation
@@ -56,6 +60,13 @@ module.exports = (function () {
 				logger.fatal('BAZOOKA');
 			}); }); }); }); });
 		}, 1000);
+	};
+
+	Acts.prototype.sendStatus = function() {
+		if(lastSendStatus <  date.getTime()-1000){
+			this.sendChildren(this.getStatus);
+			lastSendStatus =  date.getTime();
+		}
 	};
 
 	Acts.prototype.getStatus = function(){
@@ -71,12 +82,12 @@ module.exports = (function () {
 		else
 			data.status = "ok";
 
-		if(ax12 && asserv.ready)
+		if(ax12 && ax12.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv && ax12.ready)
+		if(asserv && asserv.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";

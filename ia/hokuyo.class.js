@@ -4,8 +4,10 @@ module.exports = (function () {
 	// var gaussian = require('gaussian');
 	var logger = log4js.getLogger('ia.hokuyo');
 
-	var GR_OFFSET = 110;
-	var PR_GR_COEF = 1;
+	var GR_OFFSET = 110; // (mm) distance between our robot origin and the robot's center
+	var PR_GR_COEF = 1; // security coeff to bind our robots with the dots
+	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
 	var lastUpdate = 0;
 
 	function Hokuyo(ia, params) {
@@ -257,19 +259,79 @@ module.exports = (function () {
 					};
 					this.ia.data.erobot[i].status = "lost";
 					this.ia.data.erobot[i].lastUpdate = now;
+				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost")){
+					// Si le robot était déjà perdu à l'itération d'avant
+					this.mayday("On a perdu le "+this.ia.data.erobot[i].name + " ennemi");
 				}
 			}
 
 			this.lastNow = now;
+
+
+			this.detectCollision();
 		}
 
+	};
+
+	Hokuyo.prototype.detectCollision = function() {
+		var collision = false;
+		var pf = this.ia.pr.path;
+		var ebots = [{ // estimated positions
+				x:this.ia.data.erobot[0].pos.x +  this.ia.data.erobot[0].speed.x*DELTA_T,
+				y:this.ia.data.erobot[0].pos.y +  this.ia.data.erobot[0].speed.y*DELTA_T
+			}];
+
+		if (this.ia.data.nb_erobots == 2) {
+			ebots.push = {
+				x:this.ia.data.erobot[1].pos.x +  this.ia.data.erobot[1].speed.x*DELTA_T,
+				y:this.ia.data.erobot[1].pos.y +  this.ia.data.erobot[1].speed.y*DELTA_T
+			};
+		}
+
+		// for each path segment
+		for (var i = 0; i < this.ia.pr.path.length-1; (i++) && !collision) {
+			var segment = [this.ia.pr.path[i], this.ia.pr.path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+			var segLength = this.getDistance({x:segment[0][0] , y:segment[0][1] }, {x:segment[1][0] , y:segment[1][1] });
+			var nthX = (segment[1][0]-segment[0][0])*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+			var nthY = (segment[1][1]-segment[0][1])*SEGMENT_DELTA_D/segLength;
+
+			// for each X cm of the segment
+			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength; (j++) && !collision) {
+
+				var segPoint = {
+					x: segment[0][0] + nthX*k,
+					y: segment[0][1] + nthY*k
+				};
+
+				// distance to each estimated position of the ennemi robots
+				var minDist = getDistance(ebots[0], segPoint);
+
+				if (ebots.length == 2) {
+					var tmp = getDistance(ebots[0], segPoint);
+					if (tmp < minDist) {
+						minDist = tmp;
+					}
+				}
+
+				// if one of the dist < security diameter, there will be a collision
+				if (minDist < SECURITY_COEF) {
+					collision = true;
+				}
+				
+			}
+		}
+
+		if (collision) {
+			this.ia.pr.onColision();
+		}
 	};
 
 	Hokuyo.prototype.updateNumberOfRobots = function (nb) {
 		switch (nb){
 			case 0:
 				this.nb_hokuyo = 0;
-				// XXX TODO: Fatal error ! throw stopEverything !
+				// Fatal error
+				this.mayday("On plus d'hokuyo");
 				break;
 			case 1:
 				this.nb_hokuyo = 1;
@@ -281,6 +343,13 @@ module.exports = (function () {
 			default:
 				logger.info("Invalid number of robots received :" + nb);
 		}
+	};
+
+	Hokuyo.prototype.mayday = function(reason) {
+		logger.error("Mayday called, the given reason is :");
+		logger.error(reason);
+
+		// XXX 
 	};
 
 	Hokuyo.prototype.parseOrder = function (from, name, params) {

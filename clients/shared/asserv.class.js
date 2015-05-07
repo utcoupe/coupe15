@@ -12,7 +12,9 @@ module.exports = (function () {
 	// 	this.currentId = 0;
 	// }
 
-	function Asserv(sp, client, who) {
+	function Asserv(sp, client, who, sendStatus) {
+		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.sp = sp;
 		this.client = client;
 		this.pos = {};
@@ -20,9 +22,13 @@ module.exports = (function () {
 		this.currentId = 0;
 
 		this.sp.on("data", function(data){
+			this.ready = true;
+			this.sendStatus();
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
 			logger.debug("error", data.toString());
 		});
 
