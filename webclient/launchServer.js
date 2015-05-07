@@ -8,7 +8,7 @@ app.all('*', function(req, res, next){
 	next();
 });
 
-app.use('*', express.static(path.join(__dirname, "..")));
+app.use('/', express.static(path.join(__dirname, "..")));
 
 app.all('*', function(req, res){ //index
 	res.redirect('/webclient/webclient.html');
