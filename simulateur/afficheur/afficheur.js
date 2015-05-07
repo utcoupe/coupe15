@@ -174,6 +174,7 @@ Simu.init = function(){
 	Simu.RAYON_ENNEMIS_PETITS = 0.0875;
 	Simu.RAYON_ENNEMIS_GRANDS = 0.126; //0.15
 
+	//Simu.GR,Simu.PR,Simu.GE,Simu.PE, Simu.pathPR; //commented: useless ?
 	Simu.ampoules = [], Simu.clapets = [],Simu.gobelets = [];
 	Simu.pieds = [], Simu.popcorns = [];
 
