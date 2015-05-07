@@ -2,6 +2,7 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('pr.acts');
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
+	var spawn = require('child_process').spawn;
 
 	var others = null;
 	var asserv = null;
@@ -271,6 +272,11 @@ module.exports = (function () {
 			break;
 			case "setpid":
 				asserv.setPid(params.p, params.i, params.d,callback);
+			break;
+			case "sync_git":
+				spawn('/root/sync_git.sh', [], {
+					detached: true
+				});
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

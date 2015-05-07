@@ -18,6 +18,7 @@
 	var config = require('./config.js');
 	var date = new Date();
 	var lastT = date.getTime();
+	var spawn = require('child_process').spawn;
 
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
@@ -59,6 +60,11 @@
 					break;
 				case "stop":
 					quitC("stop");
+					break;
+				case "sync_git":
+					spawn('/root/sync_git.sh', [], {
+						detached: true
+					});
 					break;
 				default:
 					logger.warn("Name not understood : " + data);

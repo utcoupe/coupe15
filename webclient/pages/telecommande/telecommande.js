@@ -2,17 +2,23 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'telecommande';
 
+	// GIT
+	$scope.prSyncGit = function() {
+		Client.send("pr", "sync_git");
+	}
+
+	$scope.hokSyncGit = function() {
+		Client.send("hokuyo", "sync_git");
+	}
+
+	$scope.serverSyncAllGit = function() {
+		Client.send("server", "server.sync_all_git");
+	}
+
+
 	// PR Luc
 	$scope.prPrendrePlot = function() {
 		Client.send("pr", "prendre_plot");
-	}
-
-	$scope.prSyncGit = function() {
-		var spawn = require('child_process').spawn,
-		grep  = spawn('/root/sync_git.sh', [], {
-			detached: true,
-			stdio: [ 'ignore', out, err ]
-		});
 	}
 
 	// IA
