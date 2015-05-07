@@ -75,7 +75,7 @@ module.exports = (function () {
 			}
 
 			var ret = null;
-			if(path.length > 0) ret = new Path(path);
+			if(path.length > 0) ret = path;
 
 			var callback = fifo.shift();
 			if(typeof callback === "function") callback(ret);
