@@ -153,7 +153,7 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);
 				break;
 				case 'gr':
-					this.progs[prog] = spawn('sudo', ['node', './clients/gr/main.js']);
+					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
 					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);

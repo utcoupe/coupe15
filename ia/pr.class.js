@@ -5,8 +5,8 @@ module.exports = (function () {
 	function Pr(ia, color) {
 		this.ia = ia;
 		this.pos = { // if we are yellow, default, left side of the table
-			x: 910,
-			y: 1200,
+			x: 0,
+			y: 0,
 			a: 0
 		};
 		this.size = {
@@ -16,7 +16,7 @@ module.exports = (function () {
 		};
 		this.current_action = null;
 		//this.path = null;
-		this.path = [[1000,1000], [200,200], [500,200]];
+		this.path = [];
 		this.nb = 0;
 
 		if (color == "green"){
@@ -29,8 +29,7 @@ module.exports = (function () {
 		if(this.nb < 4) {
 			logger.debug('loop');
 			this.nb++;
-			var action_name = this.ia.actions.getNearestAction(this.pos);
-			this.ia.actions.doAction(action_name, function() {
+			this.ia.actions.doNextAction(function() {
 				this.loop();
 			}.bind(this));
 		}

@@ -3,10 +3,10 @@ module.exports = (function () {
 
 	var Path = require('path');
 
-	var programm = Path.normalize("../pathfinding/bin/pathfinding");
+	var programm = Path.normalize("./pathfinding/bin/pathfinding");
 	var command = {
-		green :		Path.normalize("../pathfinding/img/map-20mm-green.bmp"),
-		yellow :	Path.normalize("../pathfinding/img/map-20mm-yellow.bmp")
+		green :		Path.normalize("./pathfinding/img/map-20mm-green.bmp"),
+		yellow :	Path.normalize("./pathfinding/img/map-20mm-yellow.bmp")
 	};
 	var RATIO = 20;
 	var SEPARATOR = ";";
@@ -50,7 +50,7 @@ module.exports = (function () {
 		}
 
 		this.sendQuery = function(start, end, cb){
-			fifo.push(cb || "");
+			fifo.push(cb || true);
 
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
@@ -63,7 +63,7 @@ module.exports = (function () {
 			var str = ["D"].concat(objects.reduce(function(acc, obj){
 				return acc.concat( vecMultiply(obj, 1/RATIO) );
 			}, [])).join(SEPARATOR);
-			instance.stdin.wrtie( str );
+			instance.stdin.write(str);
 		}
 
 		function parse (data) {
@@ -84,11 +84,25 @@ module.exports = (function () {
 	}
 
 	Pathfinding.prototype.getPath = function (start, end, callback) {
-		this.sendQuery(start, end, callback);
+		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
+			if(path !== null) {
+				path.shift();
+				path.map(function(val, i, p) {
+					p[i] = {
+						x: val[0],
+						y: val[1]
+					};
+				});
+			}
+			callback(path);
+		});
 	};
 	
 	//[ [x, y, r], ... ]
 	Pathfinding.prototype.updateMap = function (objects) {
+		objects.map(function(val, i, o) {
+			o[i] = [val.x, val.y, val.R];
+		});
 		this.sendDynamic(objects);
 	};
 
