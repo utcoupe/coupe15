@@ -122,26 +122,27 @@ int main(int argc, char **argv){
 			// If an Hokuyo isn't connected, we scan the ports and try to reconect
 			if (!hok1.isWorking) {
 				if (detectHokuyos(paths, 2)) {
-					fprintf(stderr, "Failed to detect hokuyos paths\n");
+					fprintf(stderr, "Failed to detect hokuyos paths (looking for Hokuyo 1)\n");
 				} else {
 					strcpy(hok1.path, paths[0]);
+					
+					checkAndConnect(&hok1);
+					if (!hok1.isWorking) {
+						pushInfo('1');
+						fprintf(logfile, "%sHokuyo 1 not working\n", PREFIX);
 				}
-				checkAndConnect(&hok1);
-				if (!hok1.isWorking) {
-					pushInfo('1');
-					fprintf(logfile, "%sHokuyo 1 not working\n", PREFIX);
 				}
 			}
 			if (!hok2.isWorking) {
 				if (detectHokuyos(paths, 2)) {
-					fprintf(stderr, "Failed to detect hokuyos paths\n");
+					fprintf(stderr, "Failed to detect hokuyos paths (looking for Hokuyo 2)\n");
 				} else {
 					strcpy(hok1.path, paths[1]);
-				}
-				checkAndConnect(&hok2);
-				if (!hok2.isWorking) {
-					pushInfo('1');
-					fprintf(logfile, "%sHokuyo 2 not working\n", PREFIX);
+					checkAndConnect(&hok2);
+					if (!hok2.isWorking) {
+						pushInfo('1');
+						fprintf(logfile, "%sHokuyo 2 not working\n", PREFIX);
+					}
 				}
 			}
 			time_last_try = now;

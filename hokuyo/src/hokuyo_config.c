@@ -85,9 +85,9 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 
 			free(answer);
 		}
-		if (!found) {
-			return -1;
-		}
+		// if (!found) {
+		// 	return -1;
+		// }
 	}
 	return 0;
 }
