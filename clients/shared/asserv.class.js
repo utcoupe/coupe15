@@ -12,7 +12,9 @@ module.exports = (function () {
 	// 	this.currentId = 0;
 	// }
 
-	function Asserv(sp, client, who) {
+	function Asserv(sp, client, who, sendStatus) {
+		this.ready = false;
+		this.sendStatus = sendStatus;
 		this.sp = sp;
 		this.client = client;
 		this.pos = {};
@@ -20,9 +22,13 @@ module.exports = (function () {
 		this.currentId = 0;
 
 		this.sp.on("data", function(data){
+			this.ready = true;
+			this.sendStatus();
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
 			logger.debug("error", data.toString());
 		});
 
@@ -46,7 +52,7 @@ module.exports = (function () {
 			parseInt(this.pos.x),
 			parseInt(this.pos.y),
 			myWriteFloat(this.pos.a)
-		],false, callback);
+		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
@@ -56,7 +62,7 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(function() {}, 200, 0, 600);
+		this.speed(200, 0, 600, function(){});
 		setTimeout(callback, 400);
 	}
 	Asserv.prototype.calageX = function(x, a, callback) {
@@ -98,6 +104,9 @@ module.exports = (function () {
 			// logger.debug('finish', datas.shift());
 			if(!this.wait_for_id)
 				this.callback();
+		} else if (cmd == COMMANDS.JACK) {
+			logger.info("JACK !");
+			this.client.send("ia", "ia.jack");
 		} else {
 			// logger.warn(datas);
 			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
@@ -123,7 +132,7 @@ module.exports = (function () {
 		// var id = this.currentId; // saved to be sure it hasn't changed ( even after write )
 		// this.sentCommands[id] = callback;
 		this.order_sent = cmd;
-		this.wait_for_id = !!wait_for_id;
+		this.wait_for_id = wait_for_id;
 		// logger.debug(this.wait_for_id);
 		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
@@ -149,7 +158,7 @@ module.exports = (function () {
 	// 		writeAngle(pos.a);
 	// 	]);
 	// }
-	Asserv.prototype.setVitesse = function(v, r,callback) {
+	Asserv.prototype.setVitesse = function(v, r, callback) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(COMMANDS.SPDMAX, [
 			parseInt(v),
@@ -157,7 +166,7 @@ module.exports = (function () {
 		], false, callback);
 	};
 
-	Asserv.prototype.speed = function(l, a, ms,callback) {
+	Asserv.prototype.speed = function(l, a, ms, callback) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(COMMANDS.SPD, [
 			parseInt(l),
@@ -204,7 +213,7 @@ module.exports = (function () {
 		], true,callback);
 	};
 
-	Asserv.prototype.setPid = function(p, i, d,callback){
+	Asserv.prototype.setPid = function(p, i, d, callback){
 		// this.clean();
 		this.sendCommand(COMMANDS.PIDALL, [
 			myWriteFloat(p),

@@ -18,7 +18,7 @@
 	};
 	sendChildren(lastStatus);
 
-	var acts = new (require('./actuators.class.js'))(client);
+	var acts = new (require('./actuators.class.js'))(client, sendChildren);
 	var detect = null; // new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];

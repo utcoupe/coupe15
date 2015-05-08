@@ -11,21 +11,22 @@ module.exports = (function () {
 		this.erobot = [];
 		this.gobelet = [];
 		this.pile = [];
+		this.nb_erobots = nb_erobots;
 
 		this.importObjects();
 		
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:2805,
-					y:0
+					x:1500,
+					y:1000
 				},
 				speed:{ // in mm/sec
 					x:0,
 					y:0,
 				},
 				lastUpdate: 0, // time in ms from the beining of the match
-				d:200, // en mm, penser à la modifier !!
+				d:320, // en mm, penser à la modifier !!
 				status: "lost"
 			}];
 
@@ -90,23 +91,25 @@ module.exports = (function () {
 	};
 
 	Data.prototype.getDistance = function (pos1, pos2){
-		return sqrt((pos1.x - pos2.x)^2 + (pos1.y - pos2.y)^2);
+		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 	};
 
 	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
-		// takes a position and the ennemy robot # to put everything in its surroundings (~ 1.2 * radius) as "lost" 
+		// takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost" 
 
 		Object.keys(this.plot).forEach(function(c) {
-			if (getDistance(pos, this.plot(c).pos) < 0.6*this.plot(c).diametre) {
-				this.plot(c).status = "lost";
+			if (this.getDistance(pos, this.plot[c].pos) < 0.55*this.plot[c].diametre) {
+				logger.info("Le plot " + c + " est marqué lost");
+				this.plot[c].status = "lost";
 			}
-		});
+		}.bind(this));
 
 		Object.keys(this.gobelet).forEach(function(g) {
-			if (getDistance(pos, this.gobelet(g).pos).d < 0.6*this.gobelet(g).diametre) {
-				this.gobelet(g).status = "lost";
+			if (this.getDistance(pos, this.gobelet[g].pos).d < 0.55*this.gobelet[g].diametre) {
+				logger.info("Le gobelet" + g + " est marqué lost");
+				this.gobelet[g].status = "lost";
 			}
-		});
+		}.bind(this));
 	};
 
 	Data.prototype.isOk = function () { // XXX

@@ -5,6 +5,7 @@ module.exports = (function () {
 	var spawn = require('child_process').spawn;
 	var Convert = require('ansi-to-html');
 	var convert = new Convert({newLine: true});
+	var spawn = require('child_process').spawn;
 
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
@@ -12,8 +13,12 @@ module.exports = (function () {
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
-		// this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
-		this.ip = "127.0.0.1";
+		try {
+			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+		}
+		catch(e) {
+			this.ip = "127.0.0.1";
+		}
 		this.ip_port = this.ip+':'+this.server_port;
 		this.webclient_url = this.ip+'/webclient/webclient.html';
 
@@ -28,7 +33,6 @@ module.exports = (function () {
 			},
 			webclient: {},
 			ia: {},
-			simulator: {},
 			hokuyo: {},
 			pr: {},
 			gr: {}
@@ -50,11 +54,13 @@ module.exports = (function () {
 		this.server.on('connection', function (client) {
 			// When the client is disconnected
 			client.on('disconnect', function() {
-				if(this.network[client.type][client.id] !== undefined) {
+				logger.info(client.type+" is disconnected!");
+				try {
 					delete this.network[client.type][client.id];
+				}
+				finally {
 					this.sendNetwork();
 				}
-				logger.info(client.type+" is disconnected!");
 			}.bind(this));
 
 			// When the client send his type
@@ -105,6 +111,16 @@ module.exports = (function () {
 				} else if (data.name == 'server.iaColor') {
 					this.network[client.type][client.id].color = data.params.color || "";
 					this.sendNetwork();
+				} else if (data.name == 'server.sync_all_git') {
+					logger.info("Starting to sync all git repositories");
+					spawn('/root/sync_all_git.sh', [], {
+						detached: true
+					});
+				} else if (data.name == 'server.flash_arduinos') {
+					logger.info("Starting to flash all arduinos");
+					spawn('/root/flash_all_arduinos.sh', [], {
+						detached: true
+					});
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
@@ -142,7 +158,7 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);
 				break;
 				case 'gr':
-					this.progs[prog] = spawn('sudo', ['node', './clients/gr/main.js']);
+					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
 					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);

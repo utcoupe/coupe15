@@ -2,6 +2,24 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'telecommande';
 
+	// GIT
+	$scope.prSyncGit = function() {
+		Client.send("pr", "sync_git");
+	}
+
+	$scope.hokSyncGit = function() {
+		Client.send("hokuyo", "sync_git");
+	}
+
+	$scope.serverSyncAllGit = function() {
+		Client.send("server", "server.sync_all_git");
+	}
+
+	// Arduinos
+	$scope.serverFlashArduinos = function() {
+		Client.send("server", "server.flash_arduinos");
+	}
+
 	// PR Luc
 	$scope.prPrendrePlot = function() {
 		Client.send("pr", "prendre_plot");

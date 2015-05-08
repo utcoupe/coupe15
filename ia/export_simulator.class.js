@@ -33,10 +33,13 @@ module.exports = (function () {
 			pr: {
 				x: convertX(this.ia.pr.pos.x),
 				y: convertY(this.ia.pr.pos.y),
-				a: convertA(this.ia.pr.pos.a)
+				a: convertA(this.ia.pr.pos.a),
+				path: [this.ia.pr.pos].concat(this.ia.pr.path).map(function(pos){
+					return [convertX(pos.x), convertY(pos.y)];
+				})
 			}
 		}
-		// logger.debug(data);
+		// logger.debug(data.robots.pr.path);
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);

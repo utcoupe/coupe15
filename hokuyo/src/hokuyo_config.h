@@ -21,13 +21,13 @@ typedef struct Hokuyo {
 	ScanZone_t zone;
 	double orientation, cone_min, cone_max; //Scanne dans ori-cone;ori+cone
 	int imin, imax, nb_data, isWorking;
-	const char *path;
+	char *path;
 	double error; // non utilisé coupe14, utilisé pour l'erreur de cap maintenant
 	struct fastmathTrigo fm; // enregistre les cos et sin pour les n angles
 } Hok_t;
 
 int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr);
-Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt);
+Hok_t initHokuyo(char *path, double ori, double cone_min, double cone_max, Pt_t pt);
 // void initWizard(Hok_t *hok1, Hok_t *hok2, int symetry);
 void checkAndConnect(Hok_t *hok);
 Hok_t applySymetry(Hok_t hok);

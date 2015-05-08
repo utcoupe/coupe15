@@ -2,13 +2,17 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('pr.acts');
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
+	var spawn = require('child_process').spawn;
 
 	var others = null;
 	var asserv = null;
 	var ax12 = null;
+	var date = new Date();
+	var lastSendStatus =  date.getTime();
 
-	function Acts(client) {
+	function Acts(client, sendChildren) {
 		this.client = client;
+		this.sendChildren = sendChildren;
 		this.start();
 		this.nb_plots = 0;
 	}
@@ -23,7 +27,8 @@ module.exports = (function () {
 			others = new (require('./others.simu.class.js'))();
 		} else {
 			others = new (require('./others.class.js'))(
-				new SerialPort(struct.others, { baudrate: 57600 })
+				new SerialPort(struct.others, { baudrate: 57600 }),
+				sendStatus
 			);
 		}
 
@@ -35,7 +40,7 @@ module.exports = (function () {
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n')
-				}), this.client, 'pr'
+				}), this.client, 'pr', sendStatus
 			);
 		}
 
@@ -43,7 +48,7 @@ module.exports = (function () {
 			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
 			ax12 = new (require('./ax12.simu.class.js'))();
 		} else {
-			ax12 = new (require('./ax12.class.js'))(struct.ax12);
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, sendStatus);
 		}
 
 		// Initialisation
@@ -56,6 +61,13 @@ module.exports = (function () {
 				logger.fatal('BAZOOKA');
 			}); }); }); }); });
 		}, 1000);
+	};
+
+	Acts.prototype.sendStatus = function() {
+		if(lastSendStatus <  date.getTime()-1000){
+			this.sendChildren(this.getStatus);
+			lastSendStatus =  date.getTime();
+		}
 	};
 
 	Acts.prototype.getStatus = function(){
@@ -71,12 +83,12 @@ module.exports = (function () {
 		else
 			data.status = "ok";
 
-		if(ax12 && asserv.ready)
+		if(ax12 && ax12.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv && ax12.ready)
+		if(asserv && asserv.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -103,7 +115,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
@@ -112,12 +124,12 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if(that.nb_plots==1){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -127,24 +139,24 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });
+					}); }); }); }); }); }); }); }); });// });
 				}
 				else if (that.nb_plots>=2){
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
+					callback();
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); });
+					}); }); }); }); }); });// });
 				}
 				else {
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
-					asserv.avancerPlot(function(){
+					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
@@ -154,7 +166,7 @@ module.exports = (function () {
 					ax12.ouvrir(function() {
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); });					
+					}); }); }); }); }); }); }); }); }); //});					
 				}
 	}
 
@@ -200,35 +212,35 @@ module.exports = (function () {
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
+					asserv.goa(2.3562, function() {
 					others.descendreUnPeuAscenseur(function() {	
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurGrand(function() {
 					others.ouvrirStabilisateurGrand(function() {
-					asserv.goxy(600, 950, "arriere", function() {
+					asserv.goxy(650, 950, "arriere", function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterUnPeuAscenseur(function() {
 
 					asserv.goxy(260, 1000, "osef", function() {
 					asserv.goa(-3.1416/2, function() {
-					asserv.pwm(30, 30, 2000,function() {
+					asserv.pwm(50, 50, 1500,function() {
 					asserv.calageY(874, -3.1416/2,function() {
 					asserv.goxy(260, 1000, "arriere",function() {
-					asserv.goa( 3.1416, function() {
+					asserv.goa(3.1416, function() {
 
-					asserv.goxy(160, 1000, "arriere",function() {
+					asserv.goxy(160, 1000, "avant",function() {
 					asserv.goa(3.1416,function() {
 					ax12.fermerBalle(function() {
 					asserv.goxy(260, 1000, "arriere",function() {
 					others.descendreUnPeuAscenseur(function() {
 					others.descendreUnPeuAscenseur(function() {
 					ax12.ouvrir(function() {
-					asserv.goxy(250, 1000, "arriere", function() {
+					asserv.goxy(220, 1000, "avant", function() {
 					ax12.fermerBalle2(function() {
-					asserv.goxy(220, 1000, "arriere", function() {
-					asserv.goa(0,function() {
+					asserv.goxy(260, 1000, "arriere", function() {
 					others.monterAscenseur(fake);
-					asserv.goxy( 600, 900, "avant",callback);
+					asserv.goxy(600, 900, "avant", callback);
 					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
 				// }, 300);
 			break;
@@ -290,6 +302,11 @@ module.exports = (function () {
 			break;
 			case "setpid":
 				asserv.setPid(params.p, params.i, params.d,callback);
+			break;
+			case "sync_git":
+				spawn('/root/sync_git.sh', [], {
+					detached: true
+				});
 			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");

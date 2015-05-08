@@ -11,6 +11,7 @@ module.exports = (function () {
 	var FPS = 30;
 
 	function Asserv(client, who) {
+		this.ready = true;
 		this.client = client;
 		this.who = who;
 		this.pos = {
@@ -111,13 +112,22 @@ module.exports = (function () {
 		var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
 		var tf = (dist / (this.vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
 
-		if(sens == "avant") angle_depart = Math.atan2(dy,dx);
-		else if(sens == "arriere") angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
-		else if (Math.abs(Math.atan2(dy,dx)) < Math.abs(convertA(Math.atan2(dy,dx)+Math.PI))) angle_depart = Math.atan2(dy,dx);
-		else angle_depart = convertA(Math.atan2(dy,dx)+Math.PI);
+		angle_avant = convertA(Math.atan2(dy,dx)-this.pos.a);
+		angle_arriere = convertA(angle_avant+Math.PI);
 
+		if(sens == "avant") angle_depart = angle_avant
+		else if(sens == "arriere") angle_depart = angle_arriere;
+		else if (Math.abs(angle_avant) < Math.abs(angle_arriere)) angle_depart = angle_avant;
+		else angle_depart = angle_arriere;
 
-		this.goa(angle_depart, function() {
+		logger.debug("dx: ", dx);
+		logger.debug("dy: ", dy);
+		logger.debug("angle: ", this.pos.a);
+		logger.debug("angle avant: ", angle_avant);
+		logger.debug("angle arriere: ", angle_arriere);
+		logger.debug("angle depart: ", angle_depart);
+
+		this.goa(angle_depart+this.pos.a, function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
 			}
@@ -134,6 +144,9 @@ module.exports = (function () {
 	Asserv.prototype.goa = function(a,callback){
 		a = convertA(a);
 		da = convertA(a-this.pos.a);
+		logger.debug("depart:", this.pos.a);
+		logger.debug("arrivee:", a);
+		logger.debug("delta:", da);
 
 		var tf = SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms
 		for(var t = 0; t < tf; t += 1000/FPS) {

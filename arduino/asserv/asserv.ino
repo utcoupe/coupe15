@@ -14,6 +14,23 @@
 
 unsigned long nextTime = 0;
 
+#ifdef PIN_JACK
+int JackCheck(void) {
+	static int last_jack_status = 0;
+	int i, jack_status, sent_bytes = 0;
+	jack_status = digitalRead(PIN_JACK);
+	if (last_jack_status == 0 && jack_status == 1) {
+		for (i=0; i<JACK_SEND_NR; i++) {
+			Serial.write(JACK);
+			Serial.write('\n');
+			sent_bytes += 2;
+		}
+	}
+	last_jack_status = jack_status;
+	return sent_bytes;
+}
+#endif
+
 void setup() {
 	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 #ifdef __AVR_ATmega2560__
@@ -38,7 +55,12 @@ void loop(){
 #endif
 
 	nextTime = nextTime + DT*1000000;
+	sent_bytes = 0;
 	digitalWrite(LED_MAINLOOP, HIGH);
+
+#ifdef PIN_JACK
+	sent_bytes += JackCheck();
+#endif
 
 	//Action asserv
 	ComputeEmergency();
@@ -48,10 +70,9 @@ void loop(){
 	Serial.flush();
 	// zone programmation libre
 	available = SERIAL_MAIN.available();
-	sent_bytes = 0;
 	for(int i = 0; i < available; i++) {
 		// recuperer l'octet courant
-		sent_bytes = ProtocolExecuteCmd(generic_serial_read());
+		sent_bytes += ProtocolExecuteCmd(generic_serial_read());
 	}
 	// Auto send status if necessary
 	ProtocolAutoSendStatus(MAX_BYTES_PER_IT - sent_bytes);
@@ -68,5 +89,5 @@ void loop(){
 		digitalWrite(LED_DEBUG, HIGH);
 	}
 #endif
-	while (micros() < nextTime) {}
+	while (micros() < nextTime);
 }

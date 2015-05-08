@@ -67,30 +67,12 @@
 				"y":0
 			}
 		},
-		"2":{
-			"diametre": 0,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":620,
-				"y":0
-			}
-		},
 		"3":{
 			"diametre": 0,
 			"color": "yellow",
 			"status": "initial",
 			"pos": {
 				"x":920,
-				"y":0
-			}
-		},
-		"4":{
-			"diametre": 0,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2080,
 				"y":0
 			}
 		},
@@ -101,15 +83,6 @@
 			"pos": {
 				"x":2380,
 				"y":0
-			}
-		},
-		"6":{
-			"diametre": 0,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2680,
-				"y":1965
 			}
 		}
 
@@ -184,78 +157,6 @@
 			"status": "initial",
 			"pos": {
 				"x":850,
-				"y":1800
-			}
-		},
-		"front_right1":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2910,
-				"y":250
-			}
-		},
-		"front_right2":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2910,
-				"y":150
-			}
-		},
-		"middle_right1":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2130,
-				"y":645
-			}
-		},
-		"middle_right2":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":1700,
-				"y":600
-			}
-		},
-		"middle_right3":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":1900,
-				"y":230
-			}
-		},
-		"rear_right":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2910,
-				"y":1800
-			}
-		},
-		"stairs_right1":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2150,
-				"y":1900
-			}
-		},
-		"stairs_right2":{
-			"diametre": 60,
-			"color": "green",
-			"status": "initial",
-			"pos": {
-				"x":2150,
 				"y":1800
 			}
 		}

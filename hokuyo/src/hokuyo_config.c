@@ -85,14 +85,14 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 
 			free(answer);
 		}
-		if (!found) {
-			return -1;
-		}
+		// if (!found) {
+		// 	return -1;
+		// }
 	}
 	return 0;
 }
 
-Hok_t initHokuyo(const char *path, double ori, double cone_min, double cone_max, Pt_t pt) {
+Hok_t initHokuyo(char *path, double ori, double cone_min, double cone_max, Pt_t pt) {
 	Hok_t hok;
 	hok.urg = malloc(sizeof(urg_t));
 	hok.path = path;

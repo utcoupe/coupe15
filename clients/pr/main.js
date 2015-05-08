@@ -7,7 +7,7 @@
 	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = "127.0.0.1:3128"; // server adress
+	var server = "192.168.0.100:3128";// "127.0.0.1:3128" // server adress
 	var client = new SocketClient({
 		server_ip: server,
 		type: "pr"
@@ -18,7 +18,7 @@
 	};
 	sendChildren(lastStatus);
 
-	var acts = new (require('./actuators.class.js'))(client);
+	var acts = new (require('./actuators.class.js'))(client, sendChildren);
 	var detect = null;
 
 	var queue = [];

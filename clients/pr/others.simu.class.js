@@ -34,6 +34,14 @@ module.exports = (function () {
 		setTimeout(callback, 200);
 	};
 
+	Others.prototype.sortirClap = function(callback) {
+		setTimeout(callback, 200);
+	};
+
+	Others.prototype.rangerClap = function(callback) {
+		setTimeout(callback, 200);
+	};
+
 	Others.prototype.prendreGobelet = function(callback) {
 		setTimeout(callback, 200);
 	};
