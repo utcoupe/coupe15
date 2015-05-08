@@ -349,7 +349,7 @@ module.exports = (function () {
 		logger.error("Mayday called, the given reason is :");
 		logger.error(reason);
 
-		// XXX 
+		// XXX ? -> en fait on bloque peut-être pas ! : si le robot s'est vautré, c'est son soucis
 	};
 
 	Hokuyo.prototype.parseOrder = function (from, name, params) {

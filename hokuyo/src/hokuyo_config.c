@@ -28,7 +28,8 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 	int i;
 	for (i=0; i<nr; i++) {
 		char *path = paths[i];
-		int j, found = 0;
+		int j;
+		// int found = 0;
 		for (j=0; j<NR_ACM_TRY; j++) {
 			char *answer, *serial_nr;
 			char *try_path = base_path;
