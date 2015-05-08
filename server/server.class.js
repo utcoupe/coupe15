@@ -116,6 +116,11 @@ module.exports = (function () {
 					spawn('/root/sync_all_git.sh', [], {
 						detached: true
 					});
+				} else if (data.name == 'server.flash_arduinos') {
+					logger.info("Starting to flash all arduinos");
+					spawn('/root/flash_all_arduinos.sh', [], {
+						detached: true
+					});
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
