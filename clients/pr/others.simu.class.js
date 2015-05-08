@@ -9,6 +9,7 @@ module.exports = (function () {
 
 	};
 
+
 	Others.prototype.fermerStabilisateur = function(callback) {
 		setTimeout(callback, 200);
 	};
