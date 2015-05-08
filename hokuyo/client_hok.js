@@ -236,7 +236,7 @@
 				break;
 			case 1:
 				data.status = "ok";
-				data.children =  ["Lonesome hokuyo :/"];
+				data.children =  ["Lonesome hokuyo"];
 				break;
 			case 2:
 				data.status = "everythingIsAwesome";
