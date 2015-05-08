@@ -4,11 +4,13 @@
 
 
 AF_Stepper stepper(200, 1);
-Servo H_servo1;  
-Servo H_servo2;
-Servo M_servo1;
-Servo M_servo2;
+Servo H_servo1; //vue de face ==> gauche 
+Servo H_servo2; //vue de face ==> droite
+Servo M_servo1; //vue de face ==> gauche
+Servo M_servo2; //vue de face ==> droite
 Servo G_servo;
+Servo C_servo;
+
 
 int i=0;
 char maChaine[64];
@@ -27,11 +29,14 @@ void setup()
   M_servo1.attach(6);  //3 4=vibre 7 8 11 12 !OK
   M_servo2.attach(9);
   G_servo.attach(10);
-  H_servo1.write(61);  //2 5 6 9 10  OK
-  H_servo2.write(70);  //13=led BOF BOF
-  M_servo1.write(110);  //3 4=vibre 7 8 11 12 !OK
-  M_servo2.write(80);
-  G_servo.write(2);
+  C_servo.attach(13);
+
+  H_servo1.write(136); 
+  H_servo2.write(1); 
+  M_servo1.write(80);
+  M_servo2.write(150);
+  G_servo.write(20);
+  C_servo.write(40);
 } 
 
 
@@ -91,6 +96,16 @@ void annalyse_chaine(){
     }
     break;
 
+
+  case 'C':
+    {
+      int angle_clap;
+      sscanf(maChaine,"C;%d",&angle_clap);
+      C_servo.write(angle_clap);
+      Serial.print('C');  
+    }
+    break;
+ 
   case 'S':
     {
       int pas;

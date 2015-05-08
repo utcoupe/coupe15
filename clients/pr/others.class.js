@@ -40,35 +40,43 @@ module.exports = (function () {
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
-		this.sendCommand(callback, 'H', [137, 5], 200);
+		this.sendCommand(callback, 'H', [136, 1], 200);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		this.sendCommand(callback, 'H', [127, 15], 50);
+		this.sendCommand(callback, 'H', [126, 11], 50);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
-		this.sendCommand(callback, 'H', [61, 70], 200);
+		this.sendCommand(callback, 'H', [60, 66], 200);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
-		this.sendCommand(callback, 'M', [50, 140], 200);
+		this.sendCommand(callback, 'M', [80, 150], 200);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback) {
-		this.sendCommand(callback, 'M', [70, 120], 200);
+		this.sendCommand(callback, 'M', [100, 130], 200);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback) {
-		this.sendCommand(callback, 'M', [110, 80], 200);
+		this.sendCommand(callback, 'M', [140, 90], 200);
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [70], 200);
+		this.sendCommand(callback, 'G', [100], 200);
 	};
 
 	Others.prototype.lacherGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [2], 200);
+		this.sendCommand(callback, 'G', [20], 200);
+	};
+
+	Others.prototype.sortirClap = function(callback) {
+		this.sendCommand(callback, 'C', [125], 200);
+	};
+
+	Others.prototype.rangerClap = function(callback) {
+		this.sendCommand(callback, 'C', [40], 200);
 	};
 
 	Others.prototype.monterAscenseur = function(callback) {
