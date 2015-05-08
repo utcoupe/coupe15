@@ -96,9 +96,9 @@
 			"objectname": "gobelet__front_left",
 			"startpoints": [
 			{
-				"x": 215,
-				"y": 275,
-				"a": -0.7854
+				"x": 450,
+				"y": 250,
+				"a": 0
 			}],
 			"sens": "arriere",
 			"priority": 9,
@@ -282,7 +282,7 @@
 				"a": -45
 			}],
 			"sens": "arriere",
-			"priority": 8,
+			"priority": 1,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -297,7 +297,7 @@
 			"objectname": "plot__middle_left1",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10,
+			"priority": 10, 
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -312,7 +312,7 @@
 			"objectname": "plot__middle_left2",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10,
+			"priority": 10, 
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -327,7 +327,7 @@
 			"objectname": "plot__middle_left3",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10,
+			"priority": 10,  
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -370,7 +370,7 @@
 				"a": 2.3562
 			}],
 			"sens": "avant",
-			"priority": 10,
+			"priority": 8,
 			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,
 			"orders":[{

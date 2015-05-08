@@ -106,16 +106,11 @@ module.exports = (function () {
 		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
+
 	function fake() {}
-	// Order switch
-	Acts.prototype.orderHandler = function (from, name, params, callback) {
-		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
-		// logger.info(params);
+
+	Acts.prototype.prendre_plot = function(callback){
 		var that = this;
-		// TODO : add a callback parameter to all functions (and call it)
-		switch (name){
-			// others
-			case "prendre_plot":
 				if (that.nb_plots==0){
 					ax12.ouvrir(function() {
 					others.ouvrirStabilisateurMoyen(function(){
@@ -173,13 +168,48 @@ module.exports = (function () {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); }); //});					
 				}
+	}
+
+	// Order switch
+	Acts.prototype.orderHandler = function (from, name, params, callback) {
+		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
+		// logger.info(params);
+		var that = this;
+		// TODO : add a callback parameter to all functions (and call it)
+		switch (name){
+			// others
+			case "prendre_plot":
+				this.prendre_plot(callback);
+			break;
+
+			case "prendre_gobelet_et_2_plots_front":
+				others.lacherGobelet(function(){
+				asserv.goxy(250, 250, "arriere", function() {
+				others.prendreGobelet(function(){
+				asserv.goa(3.1416, function() {
+
+				asserv.goxy(100, 250, "avant", function() { //100 au lieu de 90 pos plot
+				that.prendre_plot(fake)
+
+				asserv.goxy(100,250, "arriere", function(){
+				asserv.goa(4.612388, function() {				
+				asserv.goxy(90,160, "avant", function(){		//160 au lieu de 150
+				that.prendre_plot(fake);
+				callback();
+				}); }); }); }); }); }); }); });
 			break;
 
 			case "prendre_balle":
-				//
+				callback();
+			break;
+
+
+
+			case "prendre_balle":
 				callback();
 			break;
 			
+
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
 					asserv.goa(2.3562, function() {
