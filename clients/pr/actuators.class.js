@@ -28,7 +28,7 @@ module.exports = (function () {
 		} else {
 			others = new (require('./others.class.js'))(
 				new SerialPort(struct.others, { baudrate: 57600 }),
-				sendStatus
+				this.sendStatus
 			);
 		}
 
@@ -40,7 +40,7 @@ module.exports = (function () {
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n')
-				}), this.client, 'pr', sendStatus
+				}), this.client, 'pr', this.sendStatus
 			);
 		}
 
@@ -48,7 +48,7 @@ module.exports = (function () {
 			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
 			ax12 = new (require('./ax12.simu.class.js'))();
 		} else {
-			ax12 = new (require('./ax12.class.js'))(struct.ax12, sendStatus);
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, this.sendStatus);
 		}
 
 		// Initialisation
@@ -141,7 +141,7 @@ module.exports = (function () {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); });// });
 				}
-				else if (that.nb_plots>=2){
+				else if (that.nb_plots>=4){
 					ax12.ouvrir(function() {
 					others.fermerStabilisateur(function(){
 					// asserv.avancerPlot(function(){

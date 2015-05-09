@@ -1,10 +1,11 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('Others');
 
-	function Others(sp, client, sendStatus) {
+	function Others(sp, sendStatus) {
 		this.sp = sp;
-		this.client = client;
+		// this.client = client;
 		this.ready = false;
+			logger.debug(sendStatus);
 		this.sendStatus = sendStatus;
 
 		this.sp.on("data", function(data){
