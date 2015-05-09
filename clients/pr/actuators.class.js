@@ -197,19 +197,17 @@ module.exports = (function () {
 				}); }); }); }); }); }); });
 			break;
 
-			case "prendre_2_plots_stairs": // XXXX
-				others.lacherGobelet(function(){
-				asserv.goxy(270, 250, "arriere", function() {
-				others.prendreGobelet(function(){
-				asserv.goxy(130, 250, "avant", function() { //100 au lieu de 90 pos plot
-				that.prendre_plot(fake)
-				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
+			case "prendre_2_plots_stairs":
+				asserv.goxy(850, 1800, "avant", function() {
+				that.prendre_plot(function(){
+				// asserv.goxy(100, 250, "arriere", function() {
+				asserv.goa(1.5707, function() {
 
-				asserv.goxy(130,160, "avant", function(){		//160 au lieu de 150
+				asserv.goxy(850,1900, "avant", function(){
 				that.prendre_plot(fake);
-				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
+				asserv.goxy(850, 1800, "arriere", function() {
 				callback();
-				}); }); }); }); }); }); });
+				}); }); }); }); });
 			break;
 
 			case "prendre_gobelet":
