@@ -26,8 +26,6 @@ module.exports = (function () {
 	};
 
 	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt, status){
-		// XXX : add a status coefficient
-
 		var estimatedPos = {
 			x: eRobot.pos.x + eRobot.speed.x*dt,
 			y: eRobot.pos.y + eRobot.speed.y*dt
@@ -220,13 +218,13 @@ module.exports = (function () {
 					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
 
 
-					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot); // XXXX
+					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
 
 
 					// if it's climbing the stairs, set the correct status
 					if (this.isOnTheStairs(dots[best_coef.dot])){
 						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
-						logger.info(e_r2Bmatched[best_coef.e_robot].status); // XXXX
+						logger.info(e_r2Bmatched[best_coef.e_robot].status);
 					} else {
 						e_r2Bmatched[best_coef.e_robot].status = "moving";
 						logger.debug(e_r2Bmatched[best_coef.e_robot].status);
@@ -338,7 +336,7 @@ module.exports = (function () {
 				break;
 			case 1:
 				this.nb_hokuyo = 1;
-				// XXX TODO : bigger security zone ? throw startAgain ?
+				// bigger security zone ? throw startAgain ?
 				break;
 			case 2:
 				this.nb_hokuyo = 2;

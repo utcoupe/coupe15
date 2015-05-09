@@ -112,10 +112,6 @@ module.exports = (function () {
 		}.bind(this));
 	};
 
-	Data.prototype.isOk = function () { // XXX
-		return true;
-	};
-
 	var data = new Data();
 	
 	return Data;

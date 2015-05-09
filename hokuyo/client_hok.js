@@ -198,10 +198,9 @@
 				if (!!inputAr[i]){
 					switch (inputAr[i].substring(1,5)){
 						case "HI:)":
-							// XXX send "C started" to server
+							// send "C started" to server
 							logger.info('C Hokuyo software says "Hi !" :)');
-							// client.send("IA", "nb_hokuyo", {nb: 2});
-							sendChildren({"status": "error"});
+							sendChildren({"status": "starting"});
 							break;
 						case "DATA":
 							logger.info('C Hokuyo software sends datas');

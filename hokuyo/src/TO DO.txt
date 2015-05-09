@@ -4,6 +4,3 @@ TO DO :
 
 À améliorer :
 - correction du cap dans le programme
-- faire du tracking
-	- ignorer les clusters trop loin des précédents trackés (sauf si timestamp trop important ? ou alors on le retourne sous le nom d'obstacle inconnu ?)
-	- ignorer les marches (si monte les marches, on retourne -1 1 par exemple) + les zones de départ ?

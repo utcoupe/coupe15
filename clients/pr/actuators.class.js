@@ -197,6 +197,29 @@ module.exports = (function () {
 				}); }); }); }); }); }); });
 			break;
 
+			case "prendre_2_plots_stairs": // XXXX
+				others.lacherGobelet(function(){
+				asserv.goxy(270, 250, "arriere", function() {
+				others.prendreGobelet(function(){
+				asserv.goxy(130, 250, "avant", function() { //100 au lieu de 90 pos plot
+				that.prendre_plot(fake)
+				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
+
+				asserv.goxy(130,160, "avant", function(){		//160 au lieu de 150
+				that.prendre_plot(fake);
+				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
+				callback();
+				}); }); }); }); }); }); });
+			break;
+
+			case "prendre_gobelet":
+				others.lacherGobelet(function(){
+				asserv.pwm(50, 50, 500,function() {
+				others.prendreGobelet(function(){
+				callback();
+				}); }); });
+			break;
+
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
 					asserv.goa(2.3562, function() {

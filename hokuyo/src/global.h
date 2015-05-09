@@ -25,11 +25,8 @@
 #define CONE_X_LEFT 967
 #define CONE_X_RIGHT 2033
 #define CONE_Y 1420
-// #define DIST_CALIB 100 // inutilisé ! XXX
-// #define CALIB_MEASURES 10 // inutilisé ! XXX
 #define CALIB_X (TABLE_X/2)
 #define CALIB_Y (TABLE_Y/2)
-// #define CALIB_PT (Pt_t) { CALIB_X, CALIB_Y } // inutilisé ! XXX
 
 #define HOK1_SERIAL "1102605"
 #define HOK1_X -40 // old : 25
