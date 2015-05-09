@@ -21,6 +21,7 @@ void annalyse_chaine();
 void setup() 
 {  
   Serial.begin(57600);
+  Serial.write('O');
 
   stepper.setSpeed(60); 
   // /!\  Pour éviter les conflits, il ne faut pas utiliser les PIN deja prisent par la shield !!!
@@ -35,7 +36,7 @@ void setup()
   H_servo2.write(1); 
   M_servo1.write(80);
   M_servo2.write(150);
-  G_servo.write(20);
+  G_servo.write(40);
   C_servo.write(40);
 } 
 
@@ -45,13 +46,13 @@ void loop()
   if (Serial.available()) {
     maChaine[i]= Serial.read(); 
 
-    if (maChaine[i]=='\n'){
+    if (maChaine[i]=='\n' || maChaine[i]=='\r'){
       maChaine[i]='\0';
       annalyse_chaine();
       i=0;
     }
     else{
-      i++;
+      i = ++i % 64;
     }
   }
   delay(10);
@@ -67,6 +68,7 @@ void annalyse_chaine(){
       sscanf(maChaine,"H;%d;%d",&H_angle1,&H_angle2);
       H_servo1.write(H_angle1);
       H_servo2.write(H_angle2);
+      delay(50); 
       Serial.print('H');
     }
     break;  
@@ -76,7 +78,8 @@ void annalyse_chaine(){
       int M_angle1, M_angle2;
       sscanf(maChaine,"M;%d;%d",&M_angle1,&M_angle2);
       M_servo1.write(M_angle1);
-      M_servo2.write(M_angle2);  
+      M_servo2.write(M_angle2);
+      delay(300); 
       Serial.print('M');
     }
     break;
@@ -86,6 +89,7 @@ void annalyse_chaine(){
       int angle_gobelet;
       sscanf(maChaine,"G;%d",&angle_gobelet);
       G_servo.write(angle_gobelet);
+      delay(300); 
       Serial.print('G');  
     }
     break;
@@ -102,6 +106,7 @@ void annalyse_chaine(){
       int angle_clap;
       sscanf(maChaine,"C;%d",&angle_clap);
       C_servo.write(angle_clap);
+      delay(300); 
       Serial.print('C');  
     }
     break;
@@ -121,7 +126,7 @@ void annalyse_chaine(){
         stepper.setSpeed(120);
         stepper.step(pas,BACKWARD, DOUBLE);
       }
-      Serial.print("S");
+      Serial.print('S');
       //Serial.print("S:");
       //Serial.println(pas);
     }

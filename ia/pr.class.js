@@ -26,7 +26,7 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		if(this.nb < 4) {
+		if(this.nb < 99) {
 			logger.debug('loop');
 			this.nb++;
 			this.ia.actions.doNextAction(function() {
@@ -38,7 +38,7 @@ module.exports = (function () {
 	Pr.prototype.place = function () {
 		logger.debug('place');
 		this.sendInitialPos();
-		this.ia.client.send("pr", "setpid", { p:0.2, i:150, d:14 });
+		this.ia.client.send("pr", "setpid", { p:0.25, i:200, d:14 });
 		this.ia.client.send("pr", "goxy", { x: 500, y: 940});
 		this.ia.client.send("pr", "goa", { a: -0.62 });
 		this.ia.client.send("pr", "fermer_tout");

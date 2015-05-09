@@ -108,20 +108,23 @@ module.exports = (function () {
 	};
 
 	function fake() {}
+	Acts.prototype.delay = function(ms, callback){
+		setTimeout(callback, ms);
+	}
 
 	Acts.prototype.prendre_plot = function(callback){
 		var that = this;
 				if (that.nb_plots==0){
 					ax12.ouvrir(function() {
-					others.ouvrirStabilisateurMoyen(function(){
 					others.ouvrirBloqueurMoyen(function() {
 					// asserv.avancerPlot(function(){
 					ax12.fermer(function() {
 					others.monterUnPeuAscenseur(function() {
 					others.monterAscenseur(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
+					callback();
+					others.ouvrirStabilisateurMoyen(function(){
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); });// });
@@ -134,9 +137,9 @@ module.exports = (function () {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterAscenseur(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
+					callback();
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); });// });
@@ -161,9 +164,9 @@ module.exports = (function () {
 					others.monterUnPeuAscenseur(function() {
 					others.ouvrirBloqueurMoyen(function() {
 					others.monterAscenseur(function() {
-					callback();
 					others.fermerBloqueur(function() {
 					ax12.ouvrir(function() {
+					callback();
 					others.descendreAscenseur(function() {
 					that.nb_plots++;
 					}); }); }); }); }); }); }); }); }); //});					
@@ -184,17 +187,17 @@ module.exports = (function () {
 
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(function(){
-				asserv.goxy(270, 250, "arriere", function() {
+				asserv.goxy(280, 259, "arriere", function() {
 				others.prendreGobelet(function(){
-				asserv.goxy(130, 250, "avant", function() { //100 au lieu de 90 pos plot
-				that.prendre_plot(fake)
-				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
-
-				asserv.goxy(130,160, "avant", function(){		//160 au lieu de 150
-				that.prendre_plot(fake);
-				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
+				asserv.speed(500, 0, 500, function() { 
+				asserv.goxy(175, 250, "avant", function() { //100 au lieu de 90 pos plot
+				that.prendre_plot(function() {
+				asserv.speed(-500, 0, 500, function() { 
+				asserv.goxy(180,160, "avant", function(){		//160 au lieu de 150
+				that.prendre_plot(function() {
+				asserv.speed(-500, 0, 500, function() { 
 				callback();
-				}); }); }); }); }); }); });
+				}); }); }); }); }); }); }); }); }); });
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
@@ -216,19 +219,23 @@ module.exports = (function () {
 					asserv.goxy(260, 1000, "arriere",function() {
 					asserv.goa(3.1416, function() {
 
-					asserv.goxy(160, 1000, "avant",function() {
+					asserv.goxy(200, 1000, "avant",function() {
 					asserv.goa(3.1416,function() {
+					asserv.pwm(50, 50, 1500,function() {
+					asserv.calageX(142, 3.1416, function() {
 					ax12.fermerBalle(function() {
 					asserv.goxy(260, 1000, "arriere",function() {
 					others.descendreUnPeuAscenseur(function() {
 					others.descendreUnPeuAscenseur(function() {
-					ax12.ouvrir(function() {
-					asserv.goxy(220, 1000, "avant", function() {
 					ax12.fermerBalle2(function() {
 					asserv.goxy(260, 1000, "arriere", function() {
 					others.monterAscenseur(fake);
-					asserv.goxy(600, 900, "avant", callback);
-					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
+					asserv.goxy(330, 1000, "avant", function() {
+					asserv.goa(0, function() {
+					others.lacherGobelet(function() {
+					asserv.goxy(600, 1000, "avant", callback);
+					});	});	});	});	}); });	}); });	});	}); });	}); }); }); 
+					}); }); });	}); });	}); }); });	}); }); }); }); }); });
 				// }, 300);
 			break;
 			case "fermer_pour_charger_balle":
@@ -256,23 +263,23 @@ module.exports = (function () {
 				others.monterAscenseur(callback);
 			break;
 			case "clap_1":
-				asserv.goa(0, function() {
+				asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
-				asserv.goxy(400, 170, function() {
+				asserv.goxy(400, 140, "osef", function() {
 				others.rangerClap(callback);
 				}); }); });
 			break;
 			case "clap_3":
-				asserv.goa(0, function() {
+				asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
-				asserv.goxy(1000, 170, function() {
+				asserv.goxy(1000, 140, "osef", function() {
 				others.rangerClap(callback);
 				}); }); });
 			break;
 			case "clap_5":
-				asserv.goa(3.1416, function() {
+				asserv.goa(0, function() {
 				others.sortirClap(function() {
-				asserv.goxy(2300, 170, function() {
+				asserv.goxy(2300, 140, "osef", function() {
 				others.rangerClap(callback);
 				}); }); });
 			break;

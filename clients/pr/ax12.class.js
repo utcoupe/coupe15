@@ -11,6 +11,7 @@ module.exports = (function () {
 	});
 
 	// Constants
+	var AX12_COUPLE = 800;
 	var P_GOAL_POSITION_L = 30;
 	var P_POSITION = 36;
 	var P_SPEED	= 0x26;
@@ -57,8 +58,8 @@ module.exports = (function () {
 		this.ax12s = {};
 		this.type_callback = null;
 
-		libusb2ax.dxl_write_word(2, P_COUPLE, 800);
-		libusb2ax.dxl_write_word(3, P_COUPLE, 800);
+		libusb2ax.dxl_write_word(2, P_COUPLE, 400);
+		libusb2ax.dxl_write_word(3, P_COUPLE, 400);
 
 		this.ouvrir(function(){});
 		this.loopAX12();
@@ -73,40 +74,29 @@ module.exports = (function () {
 	Ax12.prototype.loopAX12 = function() {
 		var speed;
 		for(var i in ax12s) {
-			// Si il est pas à la bonne position
-			if(ax12s[i].pos < ax12s[i].obj - MARGE_POS || ax12s[i].pos > ax12s[i].obj + MARGE_POS) {
-				// ax12s[i].arrived = false;
-				speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
-				// Si il bouge pas, on renvoie l'ordre
-				if(speed === 0) {
-					// console.log("ordre"+i);
-					libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
+			// S'il n'est pas à la bonne position
+			ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
+			speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
+
+			if (!ax12s[i].started) {
+				libusb2ax.dxl_write_word(ax12s[i].id, P_COUPLE, AX12_COUPLE);
+				libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
+				if (Math.abs(speed) > MARGE_POS_MVT) {
+					ax12s[i].started = true;
 				}
-				else {
-					ax12s[i].pos = libusb2ax.dxl_read_word(ax12s[i].id, P_POSITION);
-					// logger.debug(i, ax12s[i].pos, ax12s[i].obj);
-					if(this.type_callback == 'ouvrir') {
-						ax12s[i].arrived = true;
-						// logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
-						// this.callback.call();
-						// this.type_callback = null;
-					}
+			} else {
+				speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
+				if (Math.abs(speed) < MARGE_POS_MVT) {
+					ax12s[i].arrived = true;
 				}
 			}
-			else {
-				if(this.type_callback) {
-					ax12s[i].arrived = true;
-					// logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
-					// if(ax12s['2'].arrived && ax12s['3'].arrived) {
-					// 	var temp = this.callback;
-					// 	setTimeout(temp, 500);
-					// 	this.callback = function(){};
-					// }
-				}
+			if(Math.abs(ax12s[i].pos - ax12s[i].obj) < MARGE_POS) {
+				ax12s[i].arrived = true;
 			}
 		}
 
-		if(ax12s['2'].arrived && ax12s['3'].arrived && this.type_callback) {
+		if(ax12s['2'].started && ax12s['3'].started && this.type_callback == "ouvrir" ||
+		   ax12s['2'].arrived && ax12s['3'].arrived && this.type_callback) {
 			this.type_callback = null;
 			this.callback.call();
 		}
@@ -122,7 +112,9 @@ module.exports = (function () {
 		ax12s['2'].obj = this.degToAx12(0);
 		ax12s['3'].obj = this.degToAx12(0);
 		ax12s['2'].arrived = false;
+		ax12s['2'].started = false;
 		ax12s['3'].arrived = false;
+		ax12s['3'].started = false;
 		this.callback = callback;
 		this.type_callback = 'ouvrir';
 	};
@@ -132,7 +124,9 @@ module.exports = (function () {
 		ax12s['3'].obj = this.degToAx12(85);
 		// logger.debug(ax12s['2'].obj);
 		ax12s['2'].arrived = false;
+		ax12s['2'].started = false;
 		ax12s['3'].arrived = false;
+		ax12s['3'].started = false;
 		this.callback = callback;
 		this.type_callback = 'fermer';
 	};
@@ -141,7 +135,9 @@ module.exports = (function () {
 		ax12s['3'].obj = this.degToAx12(50);
 		// logger.debug(ax12s['2'].obj);
 		ax12s['2'].arrived = false;
+		ax12s['2'].started = false;
 		ax12s['3'].arrived = false;
+		ax12s['3'].started = false;
 		this.callback = callback;
 		this.type_callback = 'fermer';
 	};
@@ -150,7 +146,9 @@ module.exports = (function () {
 		ax12s['3'].obj = this.degToAx12(75);
 		// logger.debug(ax12s['2'].obj);
 		ax12s['2'].arrived = false;
+		ax12s['2'].started = false;
 		ax12s['3'].arrived = false;
+		ax12s['3'].started = false;
 		this.callback = callback;
 		this.type_callback = 'fermer';
 	};

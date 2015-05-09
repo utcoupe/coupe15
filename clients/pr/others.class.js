@@ -77,7 +77,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.rangerClap = function(callback) {
-		this.sendCommand(callback, 'C', [40], 200);
+		this.sendCommand(callback, 'C', [40], 100);
 	};
 
 	Others.prototype.monterAscenseur = function(callback) {

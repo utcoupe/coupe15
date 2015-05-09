@@ -26,8 +26,8 @@
 			"objectname": "clap__1",
 			"startpoints": [{
 				"x": 140,
-				"y": 170,
-				"a": 0
+				"y": 140,
+				"a": 3.1416
 			}],
 			"sens": "osef",
 			"priority": 7,
@@ -45,8 +45,8 @@
 			"objectname": "clap__3",
 			"startpoints": [{
 				"x": 740,
-				"y": 170,
-				"a": 0
+				"y": 140,
+				"a": 3.1416
 			}],
 			"sens": "osef",
 			"priority": 6,
@@ -64,8 +64,8 @@
 			"objectname": "clap__5",
 			"startpoints": [{
 				"x": 2550,
-				"y": 170,
-				"a": 3.1416
+				"y": 140,
+				"a": 0
 			}],
 			"sens": "osef",
 			"priority": 1,
@@ -91,8 +91,8 @@
 			"objectname": "gobelet__front_left",
 			"startpoints": [
 			{
-				"x": 300,
-				"y": 280,
+				"x": 450,
+				"y": 350,
 				"a": 0
 			}],
 			"sens": "arriere",
