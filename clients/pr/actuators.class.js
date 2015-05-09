@@ -200,6 +200,27 @@ module.exports = (function () {
 				}); }); }); }); }); }); }); }); }); });
 			break;
 
+			case "prendre_2_plots_stairs":
+				asserv.goxy(850, 1800, "avant", function() {
+				that.prendre_plot(function(){
+				// asserv.goxy(100, 250, "arriere", function() {
+				asserv.goa(1.5707, function() {
+
+				asserv.goxy(850,1900, "avant", function(){
+				that.prendre_plot(fake);
+				asserv.goxy(850, 1800, "arriere", function() {
+				callback();
+				}); }); }); }); });
+			break;
+
+			case "prendre_gobelet":
+				others.lacherGobelet(function(){
+				asserv.pwm(50, 50, 500,function() {
+				others.prendreGobelet(function(){
+				callback();
+				}); }); });
+			break;
+
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
 					asserv.goa(2.3562, function() {

@@ -10,7 +10,6 @@ module.exports = (function () {
 		this.todo = {};
 		this.inprogress = {};
 		this.killed = {};
-		this.errors = []; // XXX utile ?
 
 		this.todo = this.importActions(ia.data);
 	}
@@ -18,6 +17,7 @@ module.exports = (function () {
 	var __dist_startpoints_plot = 20;
 	var __nb_startpoints_plot = 128;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+
 	Actions.prototype.importActions = function (data) {
 		var req = require('./actions.json');
 		var actions = req.actions;
@@ -27,13 +27,7 @@ module.exports = (function () {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
 			actions[i].name = i;
 
-			if (actions[i].object === null) {
-				this.errors.push({
-					date: Date.now(),
-					function: "importActions",
-					mess: "getObjectRef n'a pas trouvé l'objet associé à l'action "+i});
-			}
-			else if(actions[i].type == "plot" && actions[i].startpoints.length === 0) {
+			if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
 				// var temp;
 				// for(var j = 0; j < __nb_startpoints_plot; j++) {
 				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
@@ -93,10 +87,12 @@ module.exports = (function () {
 	}
 	Actions.prototype.getNormAction = function(pos, an) {
 		return norm2Points(pos, this.todo[an].object.pos);
-	}
+	};
+	
 	Actions.prototype.getPriorityAction = function(an) {
 		return this.todo[an].priority;
-	}
+	};
+	
 	Actions.prototype.doNextAction = function(callback) {
 		var actions_todo = [];
 		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
@@ -116,7 +112,8 @@ module.exports = (function () {
 		// }
 
 		this.pathDoAction(callback, actions_todo);
-	}
+	};
+
 	Actions.prototype.getNearestStartpoint = function(pos, startpoints) {
 		var min_dist = Infinity;
 		var nearest = null;
@@ -131,7 +128,8 @@ module.exports = (function () {
 		}
 
 		return nearest;
-	}
+	};
+
 	Actions.prototype.pathDoAction = function(callback, actions) {
 		if(actions.length > 0) {
 			var action = this.todo[actions.shift()];
@@ -147,7 +145,8 @@ module.exports = (function () {
 		} else {
 			this.doNextAction();
 		}
-	}
+	};
+
 	Actions.prototype.doAction = function (callback, action, startpoint) {
 		this.callback = callback;
 		
@@ -186,6 +185,7 @@ module.exports = (function () {
 		// console.log(this.inprogress);
 		// console.log(this.done);
 	};
+
 	Actions.prototype.actionFinished = function (action_name) {
 		this.done[action_name] = this.inprogress[action_name];
 		delete this.inprogress[action_name];
