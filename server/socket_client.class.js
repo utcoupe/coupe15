@@ -15,6 +15,7 @@ module.exports = (function () {
 
 		// When the client is connected to the server
 		this.client.on('connect', function(){
+			logger.info('Client connected from server');
 			this.client.emit('type', {
 				type: this.type,
 				options: {
@@ -28,6 +29,8 @@ module.exports = (function () {
 
 		// When the client is disconnected to the server
 		this.client.on('disconnect', function(){
+			logger.info('Client disconnected from server');
+			this.callbacks.order("socket_client.class.js", "reseau", {network: null});
 			this.errorServerTimeout();
 		}.bind(this));
 

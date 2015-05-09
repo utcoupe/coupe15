@@ -190,7 +190,8 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: '[CLOSE]['+prog+'] '+data.toString(),
+					// params: '[CLOSE]['+prog+'] '+data.toString(),
+					params: '[CLOSE]['+prog+']',
 					from: 'server'
 				});
 				this.stop(prog);

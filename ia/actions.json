@@ -20,45 +20,40 @@
 				}],
 			"kill": null
 		},
-		"faire_les_claps_1&3":{
+		"faire_les_claps_1":{
 			"type": "clap",
 			"owner": "pr",
 			"objectname": "clap__1",
 			"startpoints": [{
-				"x": 120,
-				"y": 150,
+				"x": 140,
+				"y": 170,
 				"a": 0
 			}],
 			"sens": "osef",
-			"priority": 1,
-			"dependency": "prendre_gobelet_front_left",
+			"priority": 7,
+			"dependency": "prendre_gobelet_et_2_plots_front_left",
 			"duration": 1,
 			"orders":[{
-				"name": "ouvrir_baton_droit",
+				"name": "clap_1",
 				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_droit",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "ouvrir_baton_droit",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_droit",
+				}],
+			"kill": null
+		},
+		"faire_les_claps_3":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "clap__3",
+			"startpoints": [{
+				"x": 740,
+				"y": 170,
+				"a": 0
+			}],
+			"sens": "osef",
+			"priority": 6,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "clap_3",
 				"params": {}
 				}],
 			"kill": null
@@ -68,8 +63,8 @@
 			"owner": "pr",
 			"objectname": "clap__5",
 			"startpoints": [{
-				"x": 2600,
-				"y": 150,
+				"x": 2550,
+				"y": 170,
 				"a": 3.1416
 			}],
 			"sens": "osef",
@@ -96,8 +91,8 @@
 			"objectname": "gobelet__front_left",
 			"startpoints": [
 			{
-				"x": 450,
-				"y": 250,
+				"x": 300,
+				"y": 280,
 				"a": 0
 			}],
 			"sens": "arriere",

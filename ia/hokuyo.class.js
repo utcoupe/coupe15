@@ -128,8 +128,8 @@ module.exports = (function () {
 			}
 		}
 
-		logger.debug("Coefficients de matching");
-		logger.debug(matching_coef);
+		// logger.debug("Coefficients de matching");
+		// logger.debug(matching_coef);
 
 		return best_coef;
 	};
@@ -186,6 +186,7 @@ module.exports = (function () {
 					// if it isn't, set the new position, speed, status, call the "ennemy went there" function
 					// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
 					// logger.debug(dots[best_coef.dot]);
+					logger.debug("Le"+e_r2Bmatched[best_coef.e_robot].name+" est passé de"+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					if (best_coef.e_robot == -1){
 						logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
@@ -223,11 +224,13 @@ module.exports = (function () {
 
 
 					// if it's climbing the stairs, set the correct status
-					if (this.isOnTheStairs(dots[best_coef.dot]))
+					if (this.isOnTheStairs(dots[best_coef.dot])){
 						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
-					else
+						logger.info(e_r2Bmatched[best_coef.e_robot].status); // XXXX
+					} else {
 						e_r2Bmatched[best_coef.e_robot].status = "moving";
-					logger.warn(e_r2Bmatched[best_coef.e_robot].status); // XXXX
+						logger.debug(e_r2Bmatched[best_coef.e_robot].status);
+					}
 					
 					// and delete the dot
 					dots.splice(best_coef.dot,1);

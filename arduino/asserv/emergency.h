@@ -1,9 +1,6 @@
 #ifndef EMERGENCY_H
 #define EMERGENCY_H
 
-#define EMERGENCY_WAIT_TIME 10 // seconds
-#define EMERGENCY_SLOW_GO_RATIO 0.3 // spd = 0.3*max_spd in slow_go mode
-
 #define EM_FORWARD 0
 #define EM_BACKWARD 1
 

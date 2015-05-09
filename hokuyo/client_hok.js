@@ -12,13 +12,14 @@
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('Client');
 	var spawn = require('child_process').spawn;
+	var fs = require('fs');
+	var match_name  = "";
 	var child_process = require('child_process');
 	var child;
 	var SocketClient = require('../server/socket_client.class.js');
 	var config = require('./config.js');
-	var date = new Date();
-	var lastT = date.getTime();
-	var spawn = require('child_process').spawn;
+	var lastT = Date.now();
+	var startingT = lastT;
 
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
@@ -27,8 +28,8 @@
 	var command = config.command || "";
 
 	var client = new SocketClient({
-		server_ip: server,
-		type: "hokuyo"
+		server_ip: process.argv[2] || server,
+		type: "hokuyo",
 	});
 
 	var nb_active_hokuyos = 0;
@@ -40,13 +41,13 @@
 	logger.info("Starting with pid " + process.pid);
 
 	client.order(function(from, name, params){
-		date = new Date();
-		logger.info(date.getTime() - lastT);
-		if (date.getTime() - lastT > 500) { // half a second between two orders
+		var now = Date.now();
+		logger.info(now - lastT - startingT);
+		if (now - lastT > 500) { // half a second between two orders
 			logger.info("Just received an order `" + name + "` from " + from + " with params :");
 			logger.info(params);
 
-			lastT = date.getTime();
+			lastT = now;
 			switch (name){
 				case "start":
 					if(!!params.color && !!params.nbrobots)
@@ -74,6 +75,13 @@
 		}
 	});
 
+	function matchLogger(name, line){
+		fs.appendFile('/var/log/utcoupe/'+name+'.log', line+'\n', function (err) {
+			if (err) logger.error('Ecriture dans le fichier de log de match impossible');
+			// logger.debug('The "data to append" was appended to file!');
+		});
+	}
+
 	function quitC(code){
 		if(!!child){
 			logger.info("Closing child "+child.pid);
@@ -95,6 +103,13 @@
 
 		sendChildren({"status": "starting"});
 
+		// Generates the match name (for the log file)
+		var tmp = new Date();
+		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
+		var now = Date.now() - lastT;
+		matchLogger(match_name, now+"; color:"+color+"; nbrobots:"+nbrobots);
+		now = lastT;
+
 		// If there's a child, kill it
 		quitC("start");
 
@@ -109,19 +124,26 @@
 		// Functions
 		function parseRobots(string) {
 			var dots = [];
+			now = Date.now() - lastT;
+
 			if(!!string){
 				var temp = string.split("#");
 				for (var i = 0; i <= temp.length - 1; i++) {
 					temp[i] = temp[i].split(",");
 					dots.push({x: 0, y: 0});
 					dots[i].x = parseInt(temp[i][0]);
-					dots[i].y = parseInt(temp[i][1]); // Conversion repère math en repère bitmap
+					dots[i].y = parseInt(temp[i][1]);
+
+					// Log them :
+					matchLogger(match_name, now+"; dotx:"+dots[i].x+"; doty:"+dots[i].y);
 				}
 				logger.info('[J-HOK] Robots');
 				logger.info(dots);
 			} else {
 				logger.info('[J-HOK] No robot detected !');
 			}
+
+			now = lastT;
 
 			// Send all robots
 			client.send("ia", "hokuyo.position_tous_robots", {dots: dots});
@@ -132,6 +154,8 @@
 			// logger.info(string);
 
 			var prev_n_a_h = nb_active_hokuyos;
+
+			now = Date.now() - lastT;
 
 			switch (string.substring(0,1)){
 				case "0":
@@ -160,6 +184,8 @@
 				nth = 0;
 			}
 
+			matchLogger(match_name, now+"; nb_hokuyo:"+nb_active_hokuyos);
+			now = lastT;
 			nth += 1;
 		}
 

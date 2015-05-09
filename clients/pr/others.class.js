@@ -65,11 +65,11 @@ module.exports = (function () {
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [100], 200);
+		this.sendCommand(callback, 'G', [115], 200);
 	};
 
 	Others.prototype.lacherGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [20], 200);
+		this.sendCommand(callback, 'G', [40], 200);
 	};
 
 	Others.prototype.sortirClap = function(callback) {
