@@ -308,6 +308,15 @@ module.exports = (function () {
 					detached: true
 				});
 			break;
+
+
+			// Debug
+			case "AX12_close":
+				ax12.fermer(callback);
+			break;
+			case "AX12_open":
+				ax12.ouvrir(callback);
+			break;
 			default:
 				logger.warn("Order name " + name + " " + from + " not understood");
 				callback();

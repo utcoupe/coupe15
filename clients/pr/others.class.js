@@ -36,7 +36,7 @@ module.exports = (function () {
 		this.callback_delay = callback_delay;
 		this.order_sent = cmd;
 
-		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
+		logger.debug([cmd].concat(args).join(";")+"\n");
 		this.sp.write([cmd].concat(args).join(";")+"\n");
 	};
 

@@ -57,8 +57,8 @@ module.exports = (function () {
 		this.ax12s = {};
 		this.type_callback = null;
 
-		libusb2ax.dxl_write_word(2, P_COUPLE, 650);
-		libusb2ax.dxl_write_word(3, P_COUPLE, 650);
+		libusb2ax.dxl_write_word(2, P_COUPLE, 800);
+		libusb2ax.dxl_write_word(3, P_COUPLE, 800);
 
 		this.ouvrir(function(){});
 		this.loopAX12();
