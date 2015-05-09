@@ -77,7 +77,7 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 			// check if it is the right hokuyo
 			if (strcmp(serial_nr, expected_serial[i]) == 0) {
 				strcpy(path, try_path);
-				found = 1;
+				// found = 1;
 				break;
 #if DEBUG
 				fprintf(stderr, "Found hokuyo %d (%s) on port %s\n", i, expected_serial[i], path);

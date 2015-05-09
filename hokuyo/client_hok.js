@@ -76,9 +76,9 @@
 	});
 
 	function matchLogger(name, line){
-		fs.appendFile('/var/log/utcoupe/'+name+'.log', line, function (err) {
+		fs.appendFile('/var/log/utcoupe/'+name+'.log', line+'\n', function (err) {
 			if (err) logger.error('Ecriture dans le fichier de log de match impossible');
-			logger.debug('The "data to append" was appended to file!');
+			// logger.debug('The "data to append" was appended to file!');
 		});
 	}
 
@@ -106,7 +106,7 @@
 		// Generates the match name (for the log file)
 		var tmp = new Date();
 		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
-		now = Date.now() - lastT;
+		var now = Date.now() - lastT;
 		matchLogger(match_name, now+"; color:"+color+"; nbrobots:"+nbrobots);
 		now = lastT;
 
