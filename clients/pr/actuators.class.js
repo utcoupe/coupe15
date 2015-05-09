@@ -184,31 +184,18 @@ module.exports = (function () {
 
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(function(){
-				asserv.goxy(250, 250, "arriere", function() {
+				asserv.goxy(270, 250, "arriere", function() {
 				others.prendreGobelet(function(){
-				asserv.goa(3.1416, function() {
-
-				asserv.goxy(100, 250, "avant", function() { //100 au lieu de 90 pos plot
+				asserv.goxy(130, 250, "avant", function() { //100 au lieu de 90 pos plot
 				that.prendre_plot(fake)
+				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
 
-				asserv.goxy(100,250, "arriere", function(){
-				asserv.goa(4.612388, function() {				
-				asserv.goxy(90,160, "avant", function(){		//160 au lieu de 150
+				asserv.goxy(130,160, "avant", function(){		//160 au lieu de 150
 				that.prendre_plot(fake);
+				asserv.goxy(180, 250, "arriere", function() { //100 au lieu de 90 pos plot
 				callback();
-				}); }); }); }); }); }); }); });
+				}); }); }); }); }); }); });
 			break;
-
-			case "prendre_balle":
-				callback();
-			break;
-
-
-
-			case "prendre_balle":
-				callback();
-			break;
-			
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
@@ -244,14 +231,6 @@ module.exports = (function () {
 					});	});	});	});	}); });	}); });	});	}); });	}); }); }); });	});	});	}); }); });	}); }); }); }); });
 				// }, 300);
 			break;
-			case "prendre_gobelet":
-				//asserv.avancerGobelet(function(){}); TODO
-				callback();
-			break;
-			case "deposer_gobelet":
-				//
-				callback();
-			break;
 			case "fermer_pour_charger_balle":
 				others.ouvrirStabilisateurGrand(fake);
 				others.lacherGobelet(fake);
@@ -276,8 +255,27 @@ module.exports = (function () {
 			case "monter_ascenseur":
 				others.monterAscenseur(callback);
 			break;
-
-
+			case "clap_1":
+				asserv.goa(0, function() {
+				others.sortirClap(function() {
+				asserv.goxy(400, 170, function() {
+				others.rangerClap(callback);
+				}); }); });
+			break;
+			case "clap_3":
+				asserv.goa(0, function() {
+				others.sortirClap(function() {
+				asserv.goxy(1000, 170, function() {
+				others.rangerClap(callback);
+				}); }); });
+			break;
+			case "clap_5":
+				asserv.goa(3.1416, function() {
+				others.sortirClap(function() {
+				asserv.goxy(2300, 170, function() {
+				others.rangerClap(callback);
+				}); }); });
+			break;
 			// Asserv
 			case "pwm":
 				asserv.pwm(params.left, params.right, params.ms,callback);
