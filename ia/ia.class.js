@@ -69,6 +69,7 @@ module.exports = (function () {
 			this.timer.start();
 			this.gr.start();
 			this.pr.start();
+			this.hokuyo.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}

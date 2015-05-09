@@ -8,14 +8,18 @@ module.exports = (function () {
 	var PR_GR_COEF = 1; // security coeff to bind our robots with the dots
 	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
 	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
-	var lastUpdate = 0;
 
 	function Hokuyo(ia, params) {
 		this.params = params || {};
 		this.nb_hokuyo = 0;
 		this.ia = ia;
-		this.lastNow = 0;
+		this.lastNow = 0; // dernier timestamp où on a update (changé à la fin de l'update)
+		this.matchStarted = false;
 	}
+
+	Hokuyo.prototype.start = function () {
+		this.matchStarted = true;
+	};
 
 	Hokuyo.prototype.getDistance = function (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
@@ -136,6 +140,11 @@ module.exports = (function () {
 		// we have a ref of our and the ennemy robots (position + speed)
 		// logger.info(dots);
 
+		if (!this.matchStarted){
+			logger.warn("Le match n'a pas commencé");
+			return;
+		}
+
 		if (dots.length === 0)
 			logger.warn("On a reçu un message vide (pas de spots dedans)");
 		else {
@@ -145,8 +154,8 @@ module.exports = (function () {
 			}
 
 			// takes a timestamp to be able to compute speeds
-			// var now = this.ia.timer.get(); // retourne le temps depuis le début du match en ms XXXXXXXX à réactiver !!!!!!!!!!!!!!!!!
-			var now = lastUpdate = lastUpdate+1;
+			var now = this.ia.timer.get();
+			// var now = this.lastNow = this.lastNow+1;
 
 			// if we have hats, kill ourselves (virtualy, of course)
 			if (this.params.we_have_hats)
