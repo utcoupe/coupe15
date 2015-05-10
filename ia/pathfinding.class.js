@@ -93,8 +93,8 @@ module.exports = (function () {
 		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
 			if(path !== null) {
 				path.shift();
-				path.map(function(val, i, p) {
-					p[i] = {
+				path = path.map(function(val) {
+					return {
 						x: val[0],
 						y: val[1]
 					};
@@ -106,10 +106,9 @@ module.exports = (function () {
 	
 	//[ [x, y, r], ... ]
 	Pathfinding.prototype.updateMap = function (objects) {
-		objects.map(function(val, i, o) {
-			o[i] = [val.x, val.y, val.R];
-		});
-		this.sendDynamic(objects);
+		this.sendDynamic( objects.map(function(val){
+				return [val.x, val.y, val.R];
+		}) );
 	};
 
 	return Pathfinding;
