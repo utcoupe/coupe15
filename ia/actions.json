@@ -71,6 +71,11 @@
 			"sens": "arriere",
 			"priority": 19,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false,
+				"subPlot": 6,
+				"invPlot": 0
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet_et_2_plots_front",

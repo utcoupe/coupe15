@@ -18,6 +18,10 @@ module.exports = (function () {
 		//this.path = null;
 		this.path = [];
 		this.nb = 0;
+		this.content = {
+			nb_plots: 0,
+			gobelet:false
+		};
 
 		if (color == "green"){
 			this.pos.x = 3000 - this.pos.x;
@@ -80,6 +84,18 @@ module.exports = (function () {
 			break;
 			case 'pr.placer':
 				this.place();
+			break;
+			case 'pr.plot++':
+				this.content.nb_plots += 1;
+			break;
+			case 'pr.plot0':
+				this.content.nb_plots = 0;
+			break;
+			case 'pr.gobelet1':
+				this.content.gobelet = true;
+			break;
+			case 'pr.gobelet0':
+				this.content.gobelet = false;
 			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.pr: '+name);

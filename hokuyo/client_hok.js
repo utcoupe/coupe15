@@ -84,7 +84,7 @@
 
 	function quitC(code){
 		if(!!child){
-			logger.info("Closing child "+child.pid);
+			logger.info("Closing child "+child.pid+" at "+code);
 			child.kill('SIGINT');
 			child = null;
 		} else {
@@ -234,8 +234,20 @@
 			dataFromCHandler(data);
 		});
 
-		child.stderr.on('data', function(data) {
-			logger.error(data.toString());
+		child.on('error', function(data) {
+			logger.fatal('Erreur avec le process C : ' + data.toString());
+			sendChildren({"status": "error", "children":[]});
+			setTimeout(function(){
+				sendChildren({"status": "waiting", "children":[]});
+			}, 5000);
+		});
+
+		child.stderr.on('error', function(data) {
+			logger.fatal(data.toString());
+			sendChildren({"status": "error", "children":[]});
+			setTimeout(function(){
+				sendChildren({"status": "waiting", "children":[]});
+			}, 5000);
 		});
 		
 		child.on('close', function(code) {
@@ -245,7 +257,8 @@
 				logger.info('Child closed with code: ' + code);
 
 			// Send message
-			sendChildren({"status": "waiting", "children":[]});
+			if (code != -1)
+				sendChildren({"status": "waiting", "children":[]});
 		});
 	}
 

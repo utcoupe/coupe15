@@ -24,8 +24,14 @@ SocketWebclient = (function () {
 					this.callbacks.connect();
 				// this.socket.emit('order', {to:'webclient',text:'Hello!'});
 			}.bind(this));
+
+			// When the client is disconnected from the server
 			this.socket.on('disconnect', function(){
 				this.errorServerTimeout();
+				console.log('Client disconnected from server');
+				for(var i in this.callbacks.orders) {
+					this.callbacks.orders[i]("socket_client.class.js", "reseau", {network: null});
+				}
 			}.bind(this));
 
 			this.socket.on('log', function(data){

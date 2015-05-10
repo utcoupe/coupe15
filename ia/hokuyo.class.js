@@ -137,8 +137,12 @@ module.exports = (function () {
 	};
 
 	Hokuyo.prototype.updatePos = function (dots) {
-		// we have a ref of our and the ennemy robots (position + speed)
-		// logger.info(dots);
+		// Invert dots if we are green
+		if (this.ia.color == "green"){
+			for (var i = 0; i < dots.length; i++) {
+				dots[i].x = 3000 - dots[i].x;
+			}
+		}
 
 		if (!this.matchStarted){
 			logger.warn("Le match n'a pas commencé");
