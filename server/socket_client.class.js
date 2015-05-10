@@ -27,13 +27,6 @@ module.exports = (function () {
 			// this.client.emit('order', {to:'client2',text:'Hello!'});
 		}.bind(this));
 
-		// When the client is disconnected to the server
-		this.client.on('disconnect', function(){
-			logger.info('Client disconnected from server');
-			this.callbacks.order("socket_client.class.js", "reseau", {network: null});
-			this.errorServerTimeout();
-		}.bind(this));
-
 		// When the client receive log from the server
 		this.client.on('log', function(data){
 			logger.info('[Server log] '+data);

@@ -139,7 +139,7 @@ module.exports = (function () {
 	Actions.prototype.doNextAction = function(callback) {
 		var actions_todo = [];
 
-		// Get les actions possibles XXXX
+		// Get les actions possibles
 		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
 			if(this.isDoable(this.todo[an])) {
 				actions_todo.push(an);
@@ -186,7 +186,7 @@ module.exports = (function () {
 					this.ia.pr.path = path;
 					this.doAction(callback, action, startpoint);
 				} else {
-					// Tant que le pathfinding n'est pas fait, on boucle
+					// Si le pathfinding foire, on fait la deuxième action la plus importante
 					this.pathDoAction(callback, actions);
 				}
 			}.bind(this));

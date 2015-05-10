@@ -206,6 +206,14 @@
 				"x":2750,
 				"y":250
 			}
+		},
+		"depot_left": {
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x": 2750,
+				"y": 600
+			}
 		}
 	},
 	"pile": {
@@ -215,6 +223,14 @@
 			"pos": {
 				"x":450,
 				"y":1150
+			}
+		},
+		"middle": {
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":1500,
+				"y":150
 			}
 		}
 	}
