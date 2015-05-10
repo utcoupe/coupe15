@@ -13,7 +13,7 @@ module.exports = (function () {
 
 	Timer.prototype.get = function () { // permet d'obtenir le temps écoulé en ms
 		if (this.match_started)
-			return Date.now() - t0;
+			return Date.now() - this.t0;
 		else
 			return 0;
 	};

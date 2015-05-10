@@ -8,6 +8,9 @@ module.exports = (function () {
 	var PR_GR_COEF = 1; // security coeff to bind our robots with the dots
 	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
 	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
+	var DEBUG = false; // mettre à true LE TEMPS DU DEBUG !!!!!
+	var LOST_TIMEOUT = 10;
+	var timeout;
 
 	function Hokuyo(ia, params) {
 		this.params = params || {};
@@ -15,10 +18,18 @@ module.exports = (function () {
 		this.ia = ia;
 		this.lastNow = 0; // dernier timestamp où on a update (changé à la fin de l'update)
 		this.matchStarted = false;
+		this.nb_lost = 0; // nb d'itération depuis laquelle on a perdu un robot
 	}
 
 	Hokuyo.prototype.start = function () {
 		this.matchStarted = true;
+
+		logger.info("La classe hokuyo attend...");
+		timeout = setTimeout(function() {this.timedOut().bind(this);}.bind(this) , 1000);
+	};
+
+	Hokuyo.prototype.timedOut = function() {
+		this.mayday("Hokuyo timed out");
 	};
 
 	Hokuyo.prototype.getDistance = function (spot1, spot2) {
@@ -145,13 +156,16 @@ module.exports = (function () {
 		}
 
 		if (!this.matchStarted){
-			logger.warn("Le match n'a pas commencé");
+			logger.debug("Le match n'a pas commencé");
 			return;
 		}
 
 		if (dots.length === 0)
 			logger.warn("On a reçu un message vide (pas de spots dedans)");
 		else {
+
+			clearTimeout(timeout);
+
 			if (dots.length != ((this.params.we_have_hats?2:0) + this.params.nb_erobots)) {
 				logger.info("On a pas le meme nombre de spots ("+dots.length+") que de robots à détecter ("+
 					((this.params.we_have_hats?2:0) + this.params.nb_erobots) + ").");
@@ -197,7 +211,6 @@ module.exports = (function () {
 					// if it isn't, set the new position, speed, status, call the "ennemy went there" function
 					// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
 					// logger.debug(dots[best_coef.dot]);
-					logger.debug("Le"+e_r2Bmatched[best_coef.e_robot].name+" est passé de"+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					if (best_coef.e_robot == -1){
 						logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
@@ -205,6 +218,8 @@ module.exports = (function () {
 						logger.warn(dots);
 						break;
 					}
+
+					logger.debug("Le"+e_r2Bmatched[best_coef.e_robot].name+" est passé de"+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
@@ -231,16 +246,13 @@ module.exports = (function () {
 					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
 
 
-					this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
-
-
 					// if it's climbing the stairs, set the correct status
 					if (this.isOnTheStairs(dots[best_coef.dot])){
 						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
 						logger.info(e_r2Bmatched[best_coef.e_robot].status);
 					} else {
 						e_r2Bmatched[best_coef.e_robot].status = "moving";
-						logger.debug(e_r2Bmatched[best_coef.e_robot].status);
+						this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
 					}
 					
 					// and delete the dot
@@ -273,7 +285,10 @@ module.exports = (function () {
 					};
 					this.ia.data.erobot[i].status = "lost";
 					this.ia.data.erobot[i].lastUpdate = now;
-				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost")){
+					this.nb_lost = 0;
+				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost<LOST_TIMEOUT)){
+					this.nb_lost += 1;
+				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost==LOST_TIMEOUT)){
 					// Si le robot était déjà perdu à l'itération d'avant
 					this.mayday("On a perdu le "+this.ia.data.erobot[i].name + " ennemi");
 				}
@@ -283,6 +298,8 @@ module.exports = (function () {
 
 
 			this.detectCollision();
+
+			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);
 		}
 
 	};
