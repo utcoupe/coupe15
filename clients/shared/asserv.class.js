@@ -53,7 +53,7 @@ module.exports = (function () {
 		if(this.color == "yellow") {
 			return convertA(a);
 		} else {
-			return convertA(a+Math.PI);
+			return convertA(Math.PI - a);
 	}
 
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
