@@ -342,7 +342,7 @@ module.exports = (function () {
 				asserv.goxy(params.x, params.y, params.sens,callback);
 			break;
 			case "setpos":
-				asserv.setPos(params,callback);
+				asserv.setPos(params, callback);
 			break;
 			case "setacc":
 				asserv.setAcc(params.acc,callback);

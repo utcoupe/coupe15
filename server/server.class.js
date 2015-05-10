@@ -58,9 +58,8 @@ module.exports = (function () {
 				try {
 					delete this.network[client.type][client.id];
 				}
-				finally {
-					this.sendNetwork();
-				}
+				catch(e) { }
+				this.sendNetwork();
 			}.bind(this));
 
 			// When the client send his type

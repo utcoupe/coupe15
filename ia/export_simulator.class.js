@@ -5,14 +5,30 @@ module.exports = (function () {
 
 	var __timeout = null;
 	var FPS = 30;
-
-	function convertX(x) { return (x-1500)/1000; }
-	function convertY(y) { return (1000-y)/1000; }
-	function convertA(a) { return a; }
+	var color;
 
 	function ExportSimulator(ia) {
 		this.ia = ia;
 		this.start();
+		color = this.ia.color;
+	}
+
+	function convertX(x) {
+		if(color == "yellow") {
+			return (x-1500)/1000;
+		} else {
+			return (1500-x)/1000;
+		}
+	}
+	function convertY(y) {
+		return (1000-y)/1000;
+	}
+	function convertA(a) {
+		if(color == "yellow") {
+			return a;
+		} else {
+			return (a < 0) ? -Math.PI - a : Math.PI - a;
+		}
 	}
 
 	ExportSimulator.prototype.start = function() {
@@ -39,7 +55,7 @@ module.exports = (function () {
 				})
 			}
 		}
-		// logger.debug(data.robots.pr.path);
+		// logger.debug(data.robots.pr);
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);
