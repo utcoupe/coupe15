@@ -19,7 +19,14 @@ module.exports = (function () {
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 
 	Actions.prototype.importActions = function (data) {
-		var req = require('./actions.json');
+		var req;
+
+		try {
+			req = require('./actions.json');
+		}
+		catch(err) {
+		    logger.fatal("Erreur lors de l'importation des actions dans l'IA");
+		}
 		var actions = req.actions;
 
 		// Link "object" with exiting thing in the Data class
