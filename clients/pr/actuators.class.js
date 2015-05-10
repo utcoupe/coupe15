@@ -243,7 +243,7 @@ module.exports = (function () {
 			break;
 
 			case "prendre_2_plots_stairs":
-				asserv.goxy(800, 1740, "avant", function() {
+				asserv.goxy(810, 1740, "avant", function() {
 				that.prendre_plot(function(){
 				that.delay(1000, function() {
 				asserv.goxy(830, 1855, "avant", function() {
@@ -313,12 +313,12 @@ module.exports = (function () {
 				others.monterUnPeuAscenseur(function() {
 				asserv.pwm(80, 80, 1000, function() {
 				asserv.calageY(240, -1.5708, function() {
-				asserv.speed(-200, 0, 1000, fake);
+				asserv.speed(-200, 0, 1000, function() {
 				others.ouvrirBloqueurGrand(function() {
 				others.ouvrirStabilisateurMoyen(function() {
 				others.descendreUnPeuAscenseur(function() {
 				others.descendreUnPeuAscenseur(function() {
-				others.ouvrirStabilisateurGrand(function() {
+				others.ouvrirStabilisateurGrand(fake);
 				ax12.ouvrir(function() {
 				asserv.speed(-300, 0, 750, callback);
 				}); }); }); }); }); }); }); }); }); });
