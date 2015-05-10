@@ -4,7 +4,7 @@ module.exports = (function () {
 	var Path = require('path');
 
 	var programm = Path.normalize("./pathfinding/bin/pathfinding");
-	var image = Path.normalize("./pathfinding/img/map-20mm-green.bmp");
+	var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
 
@@ -13,7 +13,6 @@ module.exports = (function () {
 	var Byline = require('byline');
 
 	function Pathfinding() {
-
 		var fifo = [];
 		var instance = Child_process.spawn(programm, [ image ]);
 
