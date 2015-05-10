@@ -4,32 +4,37 @@ module.exports = (function () {
 	var Path = require('path');
 
 	var programm = Path.normalize("./pathfinding/bin/pathfinding");
-	var command = {
-		green :		Path.normalize("./pathfinding/img/map-20mm-green.bmp"),
-		yellow :	Path.normalize("./pathfinding/img/map-20mm-yellow.bmp")
-	};
+	var image = Path.normalize("./pathfinding/img/map-20mm-green.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
 
 	var logger = require('log4js').getLogger('ia.pathfinding');
-	var Path = require('./path.class.js');
 	var Child_process = require('child_process');
 	var Byline = require('byline');
 
-	function Pathfinding(color) {
-		if(!color){
-			logger.error("no color, set to yellow");
-			color = "yellow";
-		}
+	function Pathfinding() {
 
 		var fifo = [];
-		var instance = Child_process.spawn(programm, [ command[color] ]);
+		var instance = Child_process.spawn(programm, [ image ]);
 
-		instance.on('error', function(data) {
-			logger.error("Error on childProcess", data);
+		instance.on('error', function(err) {
+			if(err.code === 'ENOENT'){
+				logger.fatal("pathfinding programm executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(programm)+"\"");
+				process.exit();
+			}
+			logger.error("c++ subprocess terminated with error:", err);
+			console.log(err);
 		});
-		instance.on('exit', function(data) {
-			logger.error("childProcess exited with code", data);
+		instance.on('exit', function(code) {
+			logger.fatal("c++ subprocess terminated with code:"+code);
+		});
+
+
+
+		process.on('exit', function(){ //ensure child process is killed
+			if(instance.connected){ //and was still connected (dont kill another process)
+				instance.kill();
+			}
 		});
 
 		var stdout = Byline.createStream(instance.stdout);
@@ -42,6 +47,7 @@ module.exports = (function () {
 		instance.stderr.on('data', function(data) {
 			logger.info(data.toString());
 		});
+
 
 		function vecMultiply(arr, ratio){
 			return arr.map(function(val){
