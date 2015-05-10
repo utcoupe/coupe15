@@ -41,15 +41,15 @@ module.exports = (function () {
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
-		this.sendCommand(callback, 'H', [136, 1], 200);
+		this.sendCommand(callback, 'H', [136, 1], 100);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		this.sendCommand(callback, 'H', [126, 11], 50);
+		this.sendCommand(callback, 'H', [126, 11], 100);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
-		this.sendCommand(callback, 'H', [60, 66], 200);
+		this.sendCommand(callback, 'H', [60, 66], 400);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
@@ -61,7 +61,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback) {
-		this.sendCommand(callback, 'M', [140, 90], 200);
+		this.sendCommand(callback, 'M', [140, 90], 400);
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
@@ -77,7 +77,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.rangerClap = function(callback) {
-		this.sendCommand(callback, 'C', [40], 100);
+		this.sendCommand(callback, 'C', [40], 150);
 	};
 
 	Others.prototype.monterAscenseur = function(callback) {

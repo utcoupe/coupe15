@@ -39,7 +39,7 @@
 #define DT (1.0/HZ)
 #define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 2000 //mm/s
+#define SPD_MAX 1500 //mm/s
 #define ACC_MAX 1500  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 30 // réduction de la vitesse linéaire quand on tourne

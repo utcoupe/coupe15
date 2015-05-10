@@ -6,12 +6,12 @@
 			"owner": "pr",
 			"objectname": "clap__1",
 			"startpoints": [{
-				"x": 140,
+				"x": 150,
 				"y": 140,
 				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 17,
+			"priority": 18,
 			"dependency": "prendre_gobelet_et_2_plots_front_left",
 			"duration": 1,
 			"orders":[{
@@ -30,7 +30,7 @@
 				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 16,
+			"priority": 17,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -49,7 +49,7 @@
 				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 12,
+			"priority": 11,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -129,11 +129,11 @@
 			"objectname": "plot__rear_left",
 			"startpoints": [{
 				"x": 270,
-				"y": 1810,
+				"y": 1800,
 				"a": 3.1415
 			}],
 			"sens": "avant",
-			"priority": 14,
+			"priority": 15,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -147,13 +147,13 @@
 			"owner": "pr",
 			"objectname": "plot__stairs_left2",
 			"startpoints": [{
-				"x": 800,
-				"y": 1650,
+				"x": 760,
+				"y": 1640,
 				"a": 0
 			}],
 			"sens": "avant",
-			"priority": 15,
-			"dependency": "",
+			"priority": 14,
+			"dependency": "prendre_plot_rear_left",
 			"duration": 2,
 			"orders":[{
 				"name": "prendre_2_plots_stairs",
@@ -171,11 +171,57 @@
 				"a": 2.3562
 			}],
 			"sens": "avant",
-			"priority": 18,
+			"priority": 16,
 			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_pile_gobelet_prendre_balle_gauche",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"deposer_gobelet_front_right": {
+			"type": "depot_gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__depot_left",
+			"startpoints": [{
+				"x": 2650,
+				"y": 600,
+				"a": 0
+			}],
+			"sens": "avant",
+			"priority": 12,
+			"dependency": "prendre_gobelet_middle_left",
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_gobelet_front_right",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"deposer_pile_front": {
+			"type": "depot_pile",
+			"owner": "pr",
+			"objectname": "pile__middle",
+			"startpoints": [ {
+				"x": 1400,
+				"y": 310,
+				"a": -1.5708
+			}, {
+				"x": 1500,
+				"y": 310,
+				"a": -1.5708
+			}, {
+				"x": 1600,
+				"y": 310,
+				"a": -1.5708
+			}],
+			"sens": "avant",
+			"priority": 12.5,
+			"dependency": "prendre_2_plots_stairs_left",
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_pile_front",
 				"params": {}
 				}],
 			"kill": null
@@ -261,7 +307,7 @@
 				"a": 0
 			}],
 			"sens": "arriere",
-			"priority": 13,
+			"priority": 8,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -302,7 +348,7 @@
 			"sens": "arriere",
 			"priority": 1,
 			"dependency": "",
-			"duration": 14,
+			"duration": 10,
 			"orders":[{
 				"name": "prendre_gobelet",
 				"params": {}
@@ -330,7 +376,7 @@
 				"a": 1.5708
 			}],
 			"sens": "arriere",
-			"priority": 12,
+			"priority": 8,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
