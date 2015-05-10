@@ -22,11 +22,12 @@ module.exports = (function () {
 			nb_plots: 0,
 			gobelet:false
 		};
+		this.color = color;
 
-		if (color == "green"){
-			this.pos.x = 3000 - this.pos.x;
-			this.pos.a = 3.1416;
-		}
+		// if (this.color == "green"){
+		// 	this.pos.x = 3000 - this.pos.x;
+		// 	this.pos.a = 3.1416;
+		// }
 	}
 
 	Pr.prototype.loop = function () {
@@ -66,10 +67,11 @@ module.exports = (function () {
 	};
 
 	Pr.prototype.sendInitialPos = function () {
-		this.ia.client.send("pr", "setpos", { // doublon !!!
+		this.ia.client.send("pr", "setpos", {
 			x: 142,
 			y: 1000,
-			a: 0
+			a: 0,
+			color: this.color
 		});
 	};
 

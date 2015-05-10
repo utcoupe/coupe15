@@ -120,12 +120,12 @@ module.exports = (function () {
 		else if (Math.abs(angle_avant) < Math.abs(angle_arriere)) angle_depart = angle_avant;
 		else angle_depart = angle_arriere;
 
-		logger.debug("dx: ", dx);
-		logger.debug("dy: ", dy);
-		logger.debug("angle: ", this.pos.a);
-		logger.debug("angle avant: ", angle_avant);
-		logger.debug("angle arriere: ", angle_arriere);
-		logger.debug("angle depart: ", angle_depart);
+		// logger.debug("dx: ", dx);
+		// logger.debug("dy: ", dy);
+		// logger.debug("angle: ", this.pos.a);
+		// logger.debug("angle avant: ", angle_avant);
+		// logger.debug("angle arriere: ", angle_arriere);
+		// logger.debug("angle depart: ", angle_depart);
 
 		this.goa(angle_depart+this.pos.a, function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
@@ -144,9 +144,9 @@ module.exports = (function () {
 	Asserv.prototype.goa = function(a,callback){
 		a = convertA(a);
 		da = convertA(a-this.pos.a);
-		logger.debug("depart:", this.pos.a);
-		logger.debug("arrivee:", a);
-		logger.debug("delta:", da);
+		// logger.debug("depart:", this.pos.a);
+		// logger.debug("arrivee:", a);
+		// logger.debug("delta:", da);
 
 		var tf = SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms
 		for(var t = 0; t < tf; t += 1000/FPS) {

@@ -370,27 +370,27 @@ module.exports = (function () {
 				others.monterAscenseur(callback);
 			break;
 			case "clap_1":
-				asserv.goa(3.1416, function() {
+				// asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
 				asserv.goxy(400, 140, "osef", function() {
 				others.rangerClap(callback);
-				}); }); });
+				}); }); //});
 			break;
 			case "clap_3":
-				asserv.goa(3.1416, function() {
+				// asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
 				asserv.goxy(1000, 140, "osef", function() {
 				callback();
 				others.rangerClap();
-				}); }); });
+				}); }); //});
 			break;
 			case "clap_5":
-				asserv.goa(3.1416, function() {
+				// asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
 				asserv.goxy(2300, 140, "osef", function() {
 				callback();
 				others.rangerClap();
-				}); }); });
+				}); }); //});
 			break;
 			// Asserv
 			case "pwm":
@@ -409,7 +409,7 @@ module.exports = (function () {
 				asserv.goxy(params.x, params.y, params.sens,callback);
 			break;
 			case "setpos":
-				asserv.setPos(params,callback);
+				asserv.setPos(params, callback);
 			break;
 			case "setacc":
 				asserv.setAcc(params.acc,callback);

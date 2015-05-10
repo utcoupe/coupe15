@@ -20,6 +20,7 @@ module.exports = (function () {
 		this.pos = {};
 		this.who = who;
 		this.currentId = 0;
+		this.color = "yellow";
 
 		this.sp.on("data", function(data){
 			this.ready = true;
@@ -36,6 +37,25 @@ module.exports = (function () {
 			this.getPos();
 		}.bind(this), 2000);
 	}
+	Asserv.prototype.convertColorX = function(x) {
+		if(this.color == "yellow") {
+			return pos;
+		} else {
+			return 3000-x;
+	}
+	Asserv.prototype.convertColorY = function(y) {
+		if(this.color == "yellow") {
+			return y;
+		} else {
+			return y;
+	}
+	Asserv.prototype.convertColorA = function(a) {
+		if(this.color == "yellow") {
+			return convertA(a);
+		} else {
+			return convertA(Math.PI - a);
+	}
+
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	Asserv.prototype.setA = function(a) {
 		// logger.debug(a, convertA(a));
@@ -45,13 +65,15 @@ module.exports = (function () {
 		this.pos.x = pos.x;
 		this.pos.y = pos.y;
 		this.setA(pos.a);
+		if(pos.color !== undefined)
+			this.color = pos.color;
 	}
 	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
 		this.sendCommand(COMMANDS.SET_POS, [
-			parseInt(this.pos.x),
-			parseInt(this.pos.y),
-			myWriteFloat(this.pos.a)
+			this.convertColorX(parseInt(this.pos.x)),
+			this.convertColorY(parseInt(this.pos.y)),
+			this.convertColorA(myWriteFloat(this.pos.a))
 		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
@@ -75,20 +97,19 @@ module.exports = (function () {
 	// For float
 	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
 	function myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
-	//////////////////
-	// Arduino to JS
-	//////////////////
+
+
 	Asserv.prototype.parseCommand = function(data){
 		// logger.debug(data);
 		var datas = data.split(';');
 		var cmd = datas.shift();//, id = datas.shift();
 		if(cmd == COMMANDS.AUTO_SEND && datas.length >= 4) { // periodic position update
 			var lastFinishedId = parseInt(datas.shift()); // TODO
-			this.Pos({
-				x: parseInt(datas.shift()),
-				y: parseInt(datas.shift()),
-				a: myParseFloat(datas.shift())
-			});
+			this.Pos([
+				this.convertColorX(parseInt(datas.shift())),
+				this.convertColorY(parseInt(datas.shift())),
+				this.convertColorA(myParseFloat(datas.shift()))
+			]);
 
 			
 			this.sendPos();
@@ -111,53 +132,17 @@ module.exports = (function () {
 			// logger.warn(datas);
 			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
-		// else {
-		// 	if(this.sendCommands.hasOwnProperty(id)){
-		// 		this.sentCommands[id] (); //callback
-		// 		delete this.sendCommand[id];
-		// 	}else{
-		// 		logger.warn("Command return from Arduino to unknown id="+id);
-		// 	}
-		// }
 	}
-	//////////////////
-	// JS to Arduino
-	//////////////////
 	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback){
 		if(typeof callback !== "function")
 			callback = function(){};
 		this.callback = callback;
 		args = args || [];
-		// this.currentId = (this.currentId+1) % COMMANDS.MAX_ID_VAL;
-		// var id = this.currentId; // saved to be sure it hasn't changed ( even after write )
-		// this.sentCommands[id] = callback;
 		this.order_sent = cmd;
 		this.wait_for_id = wait_for_id;
-		// logger.debug(this.wait_for_id);
-		// logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
-
-		//Serial Timeout Detection
-		// if(DETECT_SERIAL_TIMEOUT >= 0){
-		// 	var checker = function(id){
-		// 		return function(){
-		// 			if(this.sentCommand[id]){
-		// 				logger.warn("Serial timeout on command id="+id);
-		// 			}
-		// 		}
-		// 	};
-		// 	setTimeout(checker(id), DETECT_SERIAL_TIMEOUT);
-		// }
 	}
 
-	// Asserv.prototype.setPos = function(callback, pos) {
-	// 	this.pos = pos;
-	// 	this.sendCommand(callback, COMMANDS.SET_POS, 0, [
-	// 		pos.x,
-	// 		pos.y,
-	// 		writeAngle(pos.a);
-	// 	]);
-	// }
 	Asserv.prototype.setVitesse = function(v, r, callback) {
 		// logger.debug(myWriteFloat(r));
 		this.sendCommand(COMMANDS.SPDMAX, [
@@ -183,7 +168,7 @@ module.exports = (function () {
 	};
 
 	Asserv.prototype.clean = function(callback){
-		this.sendCommand(COMMANDS.CLEANG,false,callback);
+		this.sendCommand(COMMANDS.CLEANG, false, callback);
 	};
 
 	Asserv.prototype.pwm = function(left, right, ms, callback) {
@@ -201,15 +186,15 @@ module.exports = (function () {
 		else sens = 0;
 		
 		this.sendCommand(COMMANDS.GOTO, [
-			parseInt(x),
-			parseInt(y),
+			this.convertColorX(parseInt(x)),
+			convertColorY(parseInt(y)),
 			sens
 		], true,callback);
 	};
 	Asserv.prototype.goa = function(a, callback){
 		// this.clean();
 		this.sendCommand(COMMANDS.ROT, [
-			myWriteFloat(a)
+			this.convertColorA(myWriteFloat(a))
 		], true,callback);
 	};
 
