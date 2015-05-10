@@ -15,6 +15,8 @@ module.exports = (function () {
 		this.sendChildren = sendChildren;
 		this.start();
 		this.nb_plots = 0;
+		this.new_has_ball = false;
+		this.has_gobelet = false;
 	}
 
 	Acts.prototype.start = function(){
@@ -114,7 +116,14 @@ module.exports = (function () {
 
 	Acts.prototype.prendre_plot = function(callback){
 		var that = this;
-				if (that.nb_plots==0){
+				if (that.new_has_ball) {
+					others.descendreUnPeuAscenseur(function() {
+					ax12.ouvrir(function() {
+					others.descendreAscenseur(function() {
+					that.prendre_plot(callback);
+					}); }); });
+				}
+				if (that.nb_plots==0) {
 					ax12.ouvrir(function() {
 					others.ouvrirBloqueurMoyen(function() {
 					// asserv.avancerPlot(function(){
@@ -183,12 +192,21 @@ module.exports = (function () {
 			// others
 			case "prendre_plot":
 				this.prendre_plot(callback);
+			break;	
+			case "prendre_plot_rear_left":
+				asserv.speed(300, 0, 1000, function() {
+				asserv.calageX(140, 3.1416, function() {
+				asserv.speed(-200, 0, 300, function() {
+				that.prendre_plot(function() {
+				asserv.goxy(270, 1810, "arriere", function() {
+				callback();
+				}); }); }); }); });
 			break;
-
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(function(){
-				asserv.goxy(280, 259, "arriere", function() {
+				asserv.goxy(275, 255, "arriere", function() {
 				others.prendreGobelet(function(){
+				that.has_gobelet = true;
 				asserv.speed(500, 0, 500, function() { 
 				asserv.goxy(175, 250, "avant", function() { //100 au lieu de 90 pos plot
 				that.prendre_plot(function() {
@@ -201,62 +219,65 @@ module.exports = (function () {
 			break;
 
 			case "prendre_2_plots_stairs":
-				asserv.goxy(850, 1800, "avant", function() {
+				asserv.goxy(840, 1740, "avant", function() {
 				that.prendre_plot(function(){
-				// asserv.goxy(100, 250, "arriere", function() {
-				asserv.goa(1.5707, function() {
-
-				asserv.goxy(850,1900, "avant", function(){
-				that.prendre_plot(fake);
-				asserv.goxy(850, 1800, "arriere", function() {
+				asserv.goxy(830,1780, "arriere", function() {
+				asserv.goxy(830, 1835, "avant", function() {
+				that.prendre_plot(function() {
+				asserv.goxy(760,1780, "osef", function() {
 				callback();
-				}); }); }); }); });
+				}); }); }); }); }); });
 			break;
 
 			case "prendre_gobelet":
 				others.lacherGobelet(function(){
-				asserv.pwm(50, 50, 500,function() {
+				asserv.speed(-300, 0, 500,function() {
 				others.prendreGobelet(function(){
+				that.has_gobelet = true;
 				callback();
 				}); }); });
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				// setTimeout(function() {
-					asserv.goa(2.3562, function() {
-					others.descendreUnPeuAscenseur(function() {	
-					ax12.ouvrir(function() {
-					others.ouvrirBloqueurGrand(function() {
-					others.ouvrirStabilisateurGrand(function() {
-					asserv.goxy(650, 950, "arriere", function() {
-					others.ouvrirBloqueurMoyen(function() {
-					others.monterUnPeuAscenseur(function() {
-					others.monterUnPeuAscenseur(function() {
+				asserv.goa(2.3562, function() {
+				others.descendreUnPeuAscenseur(function() {	
+				ax12.ouvrir(function() {
+				others.ouvrirBloqueurGrand(function() {
+				others.ouvrirStabilisateurGrand(function() {
+				asserv.goxy(650, 950, "arriere", function() {
+				others.ouvrirBloqueurMoyen(function() {
+				others.monterUnPeuAscenseur(function() {
+				others.monterUnPeuAscenseur(function() {
 
-					asserv.goxy(260, 1000, "osef", function() {
-					asserv.goa(-3.1416/2, function() {
-					asserv.pwm(50, 50, 1500,function() {
-					asserv.calageY(874, -3.1416/2,function() {
-					asserv.goxy(260, 1000, "arriere",function() {
-					asserv.goa(3.1416, function() {
+				asserv.goxy(260, 1000, "osef", function() {
+				asserv.goa(-3.1416/2, function() {
+				asserv.pwm(50, 50, 1500,function() {
+				asserv.calageY(874, -3.1416/2,function() {
+				asserv.goxy(260, 1000, "arriere",function() {
+				asserv.goa(3.1416, function() {
 
-					asserv.goxy(200, 1000, "avant",function() {
-					asserv.goa(3.1416,function() {
-					asserv.pwm(50, 50, 1500,function() {
-					asserv.calageX(142, 3.1416, function() {
-					ax12.fermerBalle(function() {
-					asserv.goxy(260, 1000, "arriere",function() {
-					others.descendreUnPeuAscenseur(function() {
-					others.descendreUnPeuAscenseur(function() {
-					ax12.fermerBalle2(function() {
-					asserv.goxy(260, 1000, "arriere", function() {
-					others.monterAscenseur(fake);
-					asserv.goxy(330, 1000, "avant", function() {
-					asserv.goa(0, function() {
-					others.lacherGobelet(function() {
-					asserv.goxy(600, 1000, "avant", callback);
-					});	});	});	});	}); });	}); });	});	}); });	}); }); }); 
-					}); }); });	}); });	}); }); });	}); }); }); }); }); });
+				asserv.goxy(200, 1000, "avant",function() {
+				asserv.goa(3.1416,function() {
+				asserv.pwm(50, 50, 1500,function() {
+				asserv.calageX(142, 3.1416, function() {
+				ax12.fermerBalle(function() {
+				asserv.goxy(260, 1000, "arriere",function() {
+				others.descendreUnPeuAscenseur(function() {
+				others.descendreUnPeuAscenseur(function() {
+				ax12.fermerBalle2(function() {
+				asserv.goxy(260, 1000, "arriere", function() {
+				others.monterAscenseur(fake);
+				asserv.goxy(330, 1000, "avant", function() {
+				asserv.goa(-0.1863, function() {
+				that.delay(500, function() {
+				others.lacherGobelet(function() {
+				that.new_has_ball = true;
+				that.nb_plots = 0;
+				that.has_gobelet = false;
+				asserv.goxy(600, 950, "avant", callback);
+				});	});	});	});	}); });	}); });	});	}); });	}); }); }); });
+				}); }); });	}); });	}); }); });	}); }); }); }); }); });
 				// }, 300);
 			break;
 			case "fermer_pour_charger_balle":
@@ -298,7 +319,7 @@ module.exports = (function () {
 				}); }); });
 			break;
 			case "clap_5":
-				asserv.goa(0, function() {
+				asserv.goa(3.1416, function() {
 				others.sortirClap(function() {
 				asserv.goxy(2300, 140, "osef", function() {
 				others.rangerClap(callback);

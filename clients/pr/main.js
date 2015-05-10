@@ -7,7 +7,8 @@
 	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = "192.168.0.100:3128";// "127.0.0.1:3128" // server adress
+	//var server = "127.0.0.1:3128" // server adress
+	var server = "192.168.0.100:3128" // server adress
 	var client = new SocketClient({
 		server_ip: server,
 		type: "pr"
@@ -106,7 +107,7 @@
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
 		if(n == 'clean') {
-			logger.info("Going to do '" + n);
+			logger.info(n+" : Begin");
 			acts.orderHandler(f, n, p, actionFinished);
 		} else if(queue.length < 50){
 			// Adds the order to the queue
@@ -132,8 +133,8 @@
 			} else {
 				orderInProgress = order.name;
 				
-				logger.info("Going to do '" + orderInProgress);
-				logger.debug(order.params);
+				logger.info(orderInProgress+" : Begin");
+				// logger.debug(order.params);
 				acts.orderHandler(order.from, order.name, order.params, actionFinished);
 				
 				executeNextOrder();
@@ -142,7 +143,7 @@
 	}
 
 	function actionFinished(){
-		logger.info(orderInProgress + " just finished !");
+		logger.info(orderInProgress + " : End");
 
 		orderInProgress = false;
 		executeNextOrder();

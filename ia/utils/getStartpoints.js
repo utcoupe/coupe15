@@ -20,7 +20,7 @@
 		return;
 	}
 
-	var d = 50; // mm
+	var d = 150; // mm
 	var d2 = Math.round(Math.sqrt(2)/2*d);
 
 	console.log("{\n\t\"x\": "+x+",\n\t\"y\": "+eval(y+"-"+d)+",\n\t\"a\": -90\n},"); // haut

@@ -36,7 +36,7 @@ module.exports = (function () {
 		this.callback_delay = callback_delay;
 		this.order_sent = cmd;
 
-		logger.debug([cmd].concat(args).join(";")+"\n");
+		//logger.debug([cmd].concat(args).join(";"));
 		this.sp.write([cmd].concat(args).join(";")+"\n");
 	};
 
@@ -53,7 +53,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
-		this.sendCommand(callback, 'M', [80, 150], 200);
+		this.sendCommand(callback, 'M', [75, 155], 200);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback) {

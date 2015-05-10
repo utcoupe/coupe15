@@ -1,25 +1,6 @@
 {
 	"__comment": "\nAdd durations, priority\nAdd actions without objects",
 	"actions":{
-		"prendre_balle_gauche":{
-			"type": "balle",
-			"owner": "pr",
-			"objectname": "balle__gauche",
-			"startpoints": [{
-				"x": 1150,
-				"y": 150,
-				"a": -0.7854
-			}],
-			"sens": "avant",
-			"priority": 1,
-			"dependency": "prendre_plot_middle_left3",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_balle",
-				"params": {}
-				}],
-			"kill": null
-		},
 		"faire_les_claps_1":{
 			"type": "clap",
 			"owner": "pr",
@@ -30,7 +11,7 @@
 				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 7,
+			"priority": 17,
 			"dependency": "prendre_gobelet_et_2_plots_front_left",
 			"duration": 1,
 			"orders":[{
@@ -49,7 +30,7 @@
 				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 6,
+			"priority": 16,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -65,22 +46,14 @@
 			"startpoints": [{
 				"x": 2550,
 				"y": 140,
-				"a": 0
+				"a": 3.1416
 			}],
 			"sens": "osef",
-			"priority": 1,
+			"priority": 12,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "ouvrir_baton_gauche",
-				"params": {}
-				},
-				{
-				"name": "avancer_clap",
-				"params": {}
-				},
-				{
-				"name": "fermer_baton_gauche",
+				"name": "clap_5",
 				"params": {}
 				}],
 			"kill": null
@@ -96,192 +69,11 @@
 				"a": 0
 			}],
 			"sens": "arriere",
-			"priority": 9,
+			"priority": 19,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet_et_2_plots_front",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_gobelet_middle_left":{
-			"type": "gobelet",
-			"owner": "pr",
-			"objectname": "gobelet__middle_left",
-			"startpoints": [{
-				"x": 960,
-				"y": 1170,
-				"a": 3.1415
-			},
-			{
-				"x": 945,
-				"y": 1135,
-				"a": 2.3562
-			},
-			{
-				"x": 910,
-				"y": 1120,
-				"a": 1.5708
-			},
-			{
-				"x": 875,
-				"y": 1135,
-				"a": 0.7854
-			},
-			{
-				"x": 860,
-				"y": 1170,
-				"a": 0
-			},
-			{
-				"x": 875,
-				"y": 1205,
-				"a": -0.7854
-			}],
-			"sens": "arriere",
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_gobelet",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_gobelet_middle":{
-			"type": "gobelet",
-			"owner": "pr",
-			"objectname": "gobelet__middle",
-			"startpoints": [{
-				"x": 1500,
-				"y": 400,
-				"a": -1.5708
-			},
-			{
-				"x": 1535,
-				"y": 375,
-				"a": -2.3562
-			},
-			{
-				"x": 1550,
-				"y": 350,
-				"a": 3.1415
-			},
-			{
-				"x": 1535,
-				"y": 315,
-				"a": 2.3562
-			},
-			{
-				"x": 1465,
-				"y": 315,
-				"a": 0.7854
-			},
-			{
-				"x": 1450,
-				"y": 350,
-				"a": 0
-			},
-			{
-				"x": 1465,
-				"y": 375,
-				"a": -0.7854
-			}],
-			"sens": "arriere",
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_gobelet",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_gobelet_middle_right":{
-			"type": "gobelet",
-			"owner": "pr",
-			"objectname": "gobelet__middle_right",
-			"startpoints": [{
-				"x": 2125,
-				"y": 1205,
-				"a": -2.3562
-			},
-			{
-				"x": 2140,
-				"y": 1170,
-				"a": 3.1415
-			},
-			{
-				"x": 2125,
-				"y": 1135,
-				"a": 2.3562
-			},
-			{
-				"x": 2090,
-				"y": 1120,
-				"a": 1.5708
-			},
-			{
-				"x": 2055,
-				"y": 1135,
-				"a": 0.7854
-			},
-			{
-				"x": 2040,
-				"y": 1170,
-				"a": 0
-			}],
-			"sens": "arriere",
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_gobelet",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_gobelet_front_right":{
-			"type": "gobelet",
-			"owner": "pr",
-			"objectname": "gobelet__front_right",
-			"startpoints": [{
-				"x": 2750,
-				"y": 300,
-				"a": -1.5708
-			},
-			{
-				"x": 2785,
-				"y": 275,
-				"a": -2.3562
-			},
-			{
-				"x": 2750,
-				"y": 200,
-				"a": 1.5708
-			},
-			{
-				"x": 2715,
-				"y": 225,
-				"a": 0.7854
-			},
-			{
-				"x": 2700,
-				"y": 250,
-				"a": 0
-			},
-			{
-				"x": 2715,
-				"y": 275,
-				"a": -0.7854
-			}],
-			"sens": "arriere",
-			"priority": 1,
-			"dependency": "",
-			"duration": 1,
-			"orders":[{
-				"name": "prendre_gobelet",
 				"params": {}
 				}],
 			"kill": null
@@ -292,7 +84,7 @@
 			"objectname": "plot__middle_left1",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10, 
+			"priority": 20, 
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -307,7 +99,7 @@
 			"objectname": "plot__middle_left2",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10, 
+			"priority": 20, 
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -322,7 +114,7 @@
 			"objectname": "plot__middle_left3",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 10,  
+			"priority": 20,  
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -336,21 +128,16 @@
 			"owner": "pr",
 			"objectname": "plot__rear_left",
 			"startpoints": [{
-				"x": 140,
-				"y": 1800,
+				"x": 270,
+				"y": 1810,
 				"a": 3.1415
-			},
-			{
-				"x": 125,
-				"y": 1765,
-				"a": 2.3562
 			}],
 			"sens": "avant",
-			"priority": 1,
+			"priority": 14,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_plot",
+				"name": "prendre_plot_rear_left",
 				"params": {}
 				}],
 			"kill": null
@@ -360,14 +147,14 @@
 			"owner": "pr",
 			"objectname": "plot__stairs_left2",
 			"startpoints": [{
-				"x": 850,
-				"y": 1800,
+				"x": 800,
+				"y": 1650,
 				"a": 0
 			}],
 			"sens": "avant",
-			"priority": 1,
+			"priority": 15,
 			"dependency": "",
-			"duration": 1,
+			"duration": 2,
 			"orders":[{
 				"name": "prendre_2_plots_stairs",
 				"params": {}
@@ -384,11 +171,170 @@
 				"a": 2.3562
 			}],
 			"sens": "avant",
-			"priority": 8,
+			"priority": 18,
 			"dependency": "prendre_plot_middle_left3",
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_pile_gobelet_prendre_balle_gauche",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle_left":{
+			"type": "gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__middle_left",
+			"startpoints": [
+			{
+				"x": 810,
+				"y": 1270,
+				"a": 2.3562
+			},
+			{
+				"x": 760,
+				"y": 1170,
+				"a": 3.1416
+			},
+			{
+				"x": 810,
+				"y": 1070,
+				"a": -2.3562
+			},
+			{
+				"x": 910,
+				"y": 1020,
+				"a": -1.5708
+			},
+			{
+				"x": 1010,
+				"y": 1070,
+				"a": -0.7854
+			},
+			{
+				"x": 1060,
+				"y": 1170,
+				"a": 0
+			}],
+			"sens": "arriere",
+			"priority": 15,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle_right":{
+			"type": "gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__middle_right",
+			"startpoints": [
+			{
+				"x": 2190,
+				"y": 1270,
+				"a": 0.7854
+			},
+			{
+				"x": 1940,
+				"y": 1170,
+				"a": 3.1416
+			},
+			{
+				"x": 1990,
+				"y": 1070,
+				"a": -2.3562
+			},
+			{
+				"x": 2090,
+				"y": 1020,
+				"a": -1.5708
+			},
+			{
+				"x": 2190,
+				"y": 1070,
+				"a": -0.7854
+			},
+			{
+				"x": 2240,
+				"y": 1170,
+				"a": 0
+			}],
+			"sens": "arriere",
+			"priority": 13,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_middle":{
+			"type": "gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__middle",
+			"startpoints": [{
+				"x": 1500,
+				"y": 500,
+				"a": 1.5708
+			},
+			{
+				"x": 1600,
+				"y": 450,
+				"a": 0.7854
+			},
+			{
+				"x": 1650,
+				"y": 350,
+				"a": 0
+			},
+			{
+				"x": 1350,
+				"y": 350,
+				"a": 3.1415
+			},
+			{
+				"x": 140,
+				"y": 450,
+				"a": 2.3562
+			}],
+			"sens": "arriere",
+			"priority": 1,
+			"dependency": "",
+			"duration": 14,
+			"orders":[{
+				"name": "prendre_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_front_right":{
+			"type": "gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__front_right",
+			"startpoints": [
+			{
+				"x": 2600,
+				"y": 250,
+				"a": 3.1416
+			},
+			{
+				"x": 2650,
+				"y": 350,
+				"a": 2.3562
+			},
+			{
+				"x": 2750,
+				"y": 400,
+				"a": 1.5708
+			}],
+			"sens": "arriere",
+			"priority": 12,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet",
 				"params": {}
 				}],
 			"kill": null
