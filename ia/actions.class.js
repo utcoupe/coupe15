@@ -100,10 +100,48 @@ module.exports = (function () {
 		return this.todo[an].priority;
 	};
 	
+	Actions.prototype.isDoable = function(action) {
+		// Verifies some things about the action
+
+		if (!!action.dependency && !this.isDone(action.dependency)){
+			// Depends on an action, but it hasn't already been done
+			return false;
+		}
+
+		if (action.dependencyRobotContent !== undefined){
+			// Depends on the robot content
+
+			if ((action.dependencyRobotContent.gobelet !== undefined) &&
+				(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
+				// The cup holder position isn't consistent with needed state
+				return false;
+			}
+
+			// If there's a constraint about the current number of cylinders
+			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
+				(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
+				return false;
+			}
+			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
+				(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
+				return false;
+			}
+			
+		}
+
+		if (action.object.status == "lost"){
+			return false;
+		}
+
+		return true;
+	};
+	
 	Actions.prototype.doNextAction = function(callback) {
 		var actions_todo = [];
+
+		// Get les actions possibles XXXX
 		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
-			if(this.todo[an].object.status != "lost" && this.isDone(this.todo[an].dependency)) {
+			if(this.isDoable(this.todo[an])) {
 				actions_todo.push(an);
 			}
 		}, this);
@@ -118,6 +156,7 @@ module.exports = (function () {
 		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
 		// }
 
+		// Va choisir l'action la plus proche, demander le path et faire doAction
 		this.pathDoAction(callback, actions_todo);
 	};
 
@@ -138,6 +177,7 @@ module.exports = (function () {
 	};
 
 	Actions.prototype.pathDoAction = function(callback, actions) {
+		// Va choisir l'action la plus proche, demander le path et faire doAction
 		if(actions.length > 0) {
 			var action = this.todo[actions.shift()];
 			var startpoint = this.getNearestStartpoint(this.ia.pr.pos, action.startpoints);
@@ -146,6 +186,7 @@ module.exports = (function () {
 					this.ia.pr.path = path;
 					this.doAction(callback, action, startpoint);
 				} else {
+					// Tant que le pathfinding n'est pas fait, on boucle
 					this.pathDoAction(callback, actions);
 				}
 			}.bind(this));
@@ -175,6 +216,7 @@ module.exports = (function () {
 				a: startpoint.a
 			});
 		}
+
 		// 1 order for 1 action
 		// action.orders.forEach(function (order, index, array){
 		this.ia.client.send('pr', action.orders[0].name, action.orders[0].params);
