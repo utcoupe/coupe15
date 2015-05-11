@@ -31,7 +31,7 @@ module.exports = (function () {
 			this.ready = false;
 			this.sendStatus();
 			logger.debug("error", data.toString());
-		});
+		}.bind(this));
 
 		setTimeout(function() {
 			this.getPos();
@@ -39,21 +39,24 @@ module.exports = (function () {
 	}
 	Asserv.prototype.convertColorX = function(x) {
 		if(this.color == "yellow") {
-			return pos;
+			return x;
 		} else {
 			return 3000-x;
+		}
 	}
 	Asserv.prototype.convertColorY = function(y) {
 		if(this.color == "yellow") {
 			return y;
 		} else {
 			return y;
+		}
 	}
 	Asserv.prototype.convertColorA = function(a) {
 		if(this.color == "yellow") {
 			return convertA(a);
 		} else {
 			return convertA(Math.PI - a);
+		}
 	}
 
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
@@ -73,7 +76,7 @@ module.exports = (function () {
 		this.sendCommand(COMMANDS.SET_POS, [
 			this.convertColorX(parseInt(this.pos.x)),
 			this.convertColorY(parseInt(this.pos.y)),
-			this.convertColorA(myWriteFloat(this.pos.a))
+			myWriteFloat(this.convertColorA(this.pos.a))
 		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
@@ -105,11 +108,11 @@ module.exports = (function () {
 		var cmd = datas.shift();//, id = datas.shift();
 		if(cmd == COMMANDS.AUTO_SEND && datas.length >= 4) { // periodic position update
 			var lastFinishedId = parseInt(datas.shift()); // TODO
-			this.Pos([
-				this.convertColorX(parseInt(datas.shift())),
-				this.convertColorY(parseInt(datas.shift())),
-				this.convertColorA(myParseFloat(datas.shift()))
-			]);
+			this.Pos({
+				x: this.convertColorX(parseInt(datas.shift())),
+				y: this.convertColorY(parseInt(datas.shift())),
+				a: this.convertColorA(myParseFloat(datas.shift()))
+			});
 
 			
 			this.sendPos();
@@ -186,15 +189,15 @@ module.exports = (function () {
 		else sens = 0;
 		
 		this.sendCommand(COMMANDS.GOTO, [
-			this.convertColorX(parseInt(x)),
-			convertColorY(parseInt(y)),
+			parseInt(this.convertColorX(x)),
+			parseInt(this.convertColorY(y)),
 			sens
 		], true,callback);
 	};
 	Asserv.prototype.goa = function(a, callback){
 		// this.clean();
 		this.sendCommand(COMMANDS.ROT, [
-			this.convertColorA(myWriteFloat(a))
+			myWriteFloat(this.convertColorA(a))
 		], true,callback);
 	};
 
