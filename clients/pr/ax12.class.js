@@ -99,11 +99,8 @@ module.exports = (function () {
 		if(ax12s['2'].started && ax12s['3'].started && this.type_callback == "ouvrir" ||
 		   ax12s['2'].arrived && ax12s['3'].arrived && this.type_callback) {
 			this.type_callback = null;
-			if(this.callback !== undefined) {
-				// logger.debug('AX12');
-				this.callback();
-				this.fifo.orderFinished();
-			}
+			this.callback();
+			this.fifo.orderFinished();
 		}
 
 		setTimeout(function() { this.loopAX12(); }.bind(this), 50);
