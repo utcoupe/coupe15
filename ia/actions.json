@@ -73,7 +73,7 @@
 			"dependency": "",
 			"dependencyRobotContent": {
 				"gobelet": false,
-				"subPlot": 6,
+				"subPlot": 3,
 				"invPlot": 0
 				},
 			"duration": 1,
@@ -91,6 +91,10 @@
 			"sens": "avant",
 			"priority": 20, 
 			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 4,
+				"invPlot": 0
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -106,6 +110,10 @@
 			"sens": "avant",
 			"priority": 20, 
 			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 4,
+				"invPlot": 0
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -121,6 +129,10 @@
 			"sens": "avant",
 			"priority": 20,  
 			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 4,
+				"invPlot": 0
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot",
@@ -140,6 +152,10 @@
 			"sens": "avant",
 			"priority": 15,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 4,
+				"invPlot": 0
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_plot_rear_left",
@@ -159,6 +175,10 @@
 			"sens": "avant",
 			"priority": 14,
 			"dependency": "prendre_plot_rear_left",
+			"dependencyRobotContent": {
+				"subPlot": 4,
+				"invPlot": 0
+				},
 			"duration": 2,
 			"orders":[{
 				"name": "prendre_2_plots_stairs",
@@ -178,6 +198,11 @@
 			"sens": "avant",
 			"priority": 16,
 			"dependency": "prendre_plot_middle_left3",
+			"dependencyRobotContent": {
+				"gobelet": true,
+				"subPlot": 5,
+				"invPlot": 1
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_pile_gobelet_prendre_balle_gauche",
@@ -197,6 +222,9 @@
 			"sens": "avant",
 			"priority": 12,
 			"dependency": "prendre_gobelet_middle_left",
+			"dependencyRobotContent": {
+				"gobelet": true
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_gobelet_front_right",
@@ -224,6 +252,10 @@
 			"sens": "avant",
 			"priority": 12.5,
 			"dependency": "prendre_2_plots_stairs_left",
+			"dependencyRobotContent": {
+				"subPlot": 5,
+				"invPlot": 1
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_pile_front",
@@ -269,6 +301,9 @@
 			"sens": "arriere",
 			"priority": 15,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -314,6 +349,9 @@
 			"sens": "arriere",
 			"priority": 8,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -353,6 +391,9 @@
 			"sens": "arriere",
 			"priority": 1,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false
+				},
 			"duration": 10,
 			"orders":[{
 				"name": "prendre_gobelet",
@@ -383,6 +424,9 @@
 			"sens": "arriere",
 			"priority": 8,
 			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false
+				},
 			"duration": 1,
 			"orders":[{
 				"name": "prendre_gobelet",

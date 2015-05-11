@@ -44,12 +44,20 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find);
 	IN: nombre de clusters et tab de clusters de chaque hok, nb_robots à trouver (>= n1 et >=n2)
 	OUT: retourne le nb de robot trouvés final + result (leur position)
 */
-int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find);
+// int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find);
+int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result);
+
+
+/* Dit si 2 points sont dans la même zone (escalier / pas escalier)
+	IN: 2 points
+	OUT: boolean (true = 1, false = 0)
+*/
+int sameZone(Pt_t p1, Pt_t p2);
 
 /* 
 	IN: 
 	OUT: 
 */
-int isIn(int e, int *tab, int tab_size);
+// int isIn(int e, int *tab, int tab_size);
 
 #endif

@@ -50,7 +50,7 @@ int getClustersFromPts(Pt_t *pt_list, int nb_pts, Cluster_t* clusters) {
 			 on le range dans le même cluster */
 			int j = max(0, i - CLUSTER_POINTS_BACKWARDS);
 			for (j=j; j<i; j++) {
-				if (dist_squared(pt_list[j], pt_list[i]) < MAX_DIST*MAX_DIST) {
+				if (sameZone(pt_list[j], pt_list[i]) && dist_squared(pt_list[j], pt_list[i]) < MAX_DIST*MAX_DIST) {
 					clusters_index[i] = clusters_index[j];
 					break;
 				}
@@ -134,7 +134,7 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find){
 	return i;
 }
 
-int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find) {
+int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result) {
 	Cluster_t all_bots[2*MAX_ROBOTS];
 	int i, n_tot=0;
 
@@ -205,6 +205,12 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 }
 
 
+int sameZone(Pt_t p1, Pt_t p2){
+	int p1_zone = (p1.y>STAIRS_Y_MIN) && (p1.x > STAIRS_X_MIN) && (p1.x < STAIRS_X_MAX);
+	int p2_zone = (p2.y>STAIRS_Y_MIN) && (p2.x > STAIRS_X_MIN) && (p2.x < STAIRS_X_MAX);
+	// s'ils sont dans la même zone
+	return p1_zone == p2_zone;
+};
 
 	
 /*

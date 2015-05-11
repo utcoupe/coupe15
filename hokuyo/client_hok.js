@@ -32,7 +32,7 @@
 		type: "hokuyo",
 	});
 
-	var nb_active_hokuyos = 0;
+	var nb_active_hokuyos = -1;
 	var lastStatus = {
 		"status": "waiting"
 	};
@@ -50,8 +50,8 @@
 			lastT = now;
 			switch (name){
 				case "start":
-					if(!!params.color && !!params.nbrobots)
-						start(params.color, params.nbrobots);
+					if(!!params.color)
+						start(params.color);
 					else
 						logger.error("Missing parameters !");
 					break;
@@ -98,7 +98,7 @@
 		logger.error("uException sent with code "+code);
 	}
 
-	function start(color, nbrobots){
+	function start(color){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
 		sendChildren({"status": "starting"});
@@ -107,7 +107,7 @@
 		var tmp = new Date();
 		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
 		var now = Date.now() - lastT;
-		matchLogger(match_name, now+"; color:"+color+"; nbrobots:"+nbrobots);
+		matchLogger(match_name, now+"; color:"+color);
 		now = lastT;
 
 		// If there's a child, kill it
@@ -224,7 +224,7 @@
 
 		// Execute C program
 		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
-		var args = [color, nbrobots];
+		var args = [color];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
 		child = child_process.spawn(command, args);
