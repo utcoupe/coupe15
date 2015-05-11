@@ -12,7 +12,7 @@ module.exports = (function () {
 	// 	this.currentId = 0;
 	// }
 
-	function Asserv(sp, client, who, sendStatus) {
+	function Asserv(sp, client, who, sendStatus, fifo) {
 		this.ready = false;
 		this.sendStatus = sendStatus;
 		this.sp = sp;
@@ -21,6 +21,7 @@ module.exports = (function () {
 		this.who = who;
 		this.currentId = 0;
 		this.color = "yellow";
+		this.fifo = fifo;
 
 		this.sp.on("data", function(data){
 			this.ready = true;
@@ -31,7 +32,7 @@ module.exports = (function () {
 			this.ready = false;
 			this.sendStatus();
 			logger.debug("error", data.toString());
-		});
+		}.bind(this));
 
 		setTimeout(function() {
 			this.getPos();
@@ -39,21 +40,24 @@ module.exports = (function () {
 	}
 	Asserv.prototype.convertColorX = function(x) {
 		if(this.color == "yellow") {
-			return pos;
+			return x;
 		} else {
 			return 3000-x;
+		}
 	}
 	Asserv.prototype.convertColorY = function(y) {
 		if(this.color == "yellow") {
 			return y;
 		} else {
 			return y;
+		}
 	}
 	Asserv.prototype.convertColorA = function(a) {
 		if(this.color == "yellow") {
 			return convertA(a);
 		} else {
 			return convertA(Math.PI - a);
+		}
 	}
 
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
@@ -71,9 +75,9 @@ module.exports = (function () {
 	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
 		this.sendCommand(COMMANDS.SET_POS, [
-			this.convertColorX(parseInt(this.pos.x)),
-			this.convertColorY(parseInt(this.pos.y)),
-			this.convertColorA(myWriteFloat(this.pos.a))
+			parseInt(this.convertColorX(this.pos.x)),
+			parseInt(this.convertColorY(this.pos.y)),
+			myWriteFloat(this.convertColorA(this.pos.a))
 		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
@@ -105,11 +109,11 @@ module.exports = (function () {
 		var cmd = datas.shift();//, id = datas.shift();
 		if(cmd == COMMANDS.AUTO_SEND && datas.length >= 4) { // periodic position update
 			var lastFinishedId = parseInt(datas.shift()); // TODO
-			this.Pos([
-				this.convertColorX(parseInt(datas.shift())),
-				this.convertColorY(parseInt(datas.shift())),
-				this.convertColorA(myParseFloat(datas.shift()))
-			]);
+			this.Pos({
+				x: this.convertColorX(parseInt(datas.shift())),
+				y: this.convertColorY(parseInt(datas.shift())),
+				a: this.convertColorA(myParseFloat(datas.shift()))
+			});
 
 			
 			this.sendPos();
@@ -119,12 +123,15 @@ module.exports = (function () {
 				// logger.fatal('finish id', lastFinishedId);
 				this.currentId = lastFinishedId;
 				this.callback();
+				this.fifo.orderFinished();
 			}
 		} else if(cmd == this.order_sent) {
 			this.order_sent = '';
 			// logger.debug('finish', datas.shift());
-			if(!this.wait_for_id)
+			if(!this.wait_for_id) {
 				this.callback();
+				this.fifo.orderFinished();
+			}
 		} else if (cmd == COMMANDS.JACK) {
 			logger.info("JACK !");
 			this.client.send("ia", "ia.jack");
@@ -133,14 +140,24 @@ module.exports = (function () {
 			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
 	}
-	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback){
-		if(typeof callback !== "function")
-			callback = function(){};
-		this.callback = callback;
-		args = args || [];
-		this.order_sent = cmd;
-		this.wait_for_id = wait_for_id;
-		this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
+	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
+		function nextOrder() {
+			if(callback === undefined)
+				callback = function(){};
+			this.callback = callback;
+			args = args || [];
+			this.order_sent = cmd;
+			this.wait_for_id = wait_for_id;
+			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
+		}
+
+		var use_fifo = !no_fifo;
+
+		if(use_fifo) {
+			this.fifo.newOrder(nextOrder.bind(this));
+		} else {
+			nextOrder.call(this);
+		}
 	}
 
 	Asserv.prototype.setVitesse = function(v, r, callback) {
@@ -176,26 +193,26 @@ module.exports = (function () {
 			parseInt(left),
 			parseInt(right),
 			parseInt(ms)
-		], true,callback);
+		], true, callback);
 		
 	};
 
-	Asserv.prototype.goxy = function(x, y, sens, callback){
+	Asserv.prototype.goxy = function(x, y, sens, callback, no_fifo){
 		if(sens == "avant") sens = 1;
 		else if(sens == "arriere") sens = -1;
 		else sens = 0;
 		
 		this.sendCommand(COMMANDS.GOTO, [
-			this.convertColorX(parseInt(x)),
-			convertColorY(parseInt(y)),
+			parseInt(this.convertColorX(x)),
+			parseInt(this.convertColorY(y)),
 			sens
-		], true,callback);
+		], true, callback, no_fifo);
 	};
-	Asserv.prototype.goa = function(a, callback){
+	Asserv.prototype.goa = function(a, callback, no_fifo){
 		// this.clean();
 		this.sendCommand(COMMANDS.ROT, [
-			this.convertColorA(myWriteFloat(a))
-		], true,callback);
+			myWriteFloat(this.convertColorA(a))
+		], true, callback, no_fifo);
 	};
 
 	Asserv.prototype.setPid = function(p, i, d, callback){
@@ -204,7 +221,7 @@ module.exports = (function () {
 			myWriteFloat(p),
 			myWriteFloat(i),
 			myWriteFloat(d)
-		],false,callback);
+		],false, callback);
 	};
 
 	// Asserv.prototype.gotoPath = function(callback, path){

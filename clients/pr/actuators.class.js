@@ -3,6 +3,7 @@ module.exports = (function () {
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
 	var spawn = require('child_process').spawn;
+	var fifo = new (require('./fifo.class.js'))();
 
 	var others = null;
 	var asserv = null;
@@ -20,48 +21,49 @@ module.exports = (function () {
 	}
 
 	Acts.prototype.start = function(){
-		// this.startArduino(this);
+		
 	};
 
 	Acts.prototype.connectTo = function(struct){
 		if (!struct.others) {
 			logger.fatal("Lancement de others pr en mode simu !");
-			others = new (require('./others.simu.class.js'))();
+			others = new (require('./others.simu.class.js'))(fifo);
 		} else {
 			others = new (require('./others.class.js'))(
 				new SerialPort(struct.others, { baudrate: 57600 }),
-				this.sendStatus
+				this.sendStatus,
+				fifo
 			);
 		}
 
 		if (!struct.asserv) {
 			logger.fatal("Lancement de l'asserv pr en mode simu !");
-			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'pr');
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'pr', fifo);
 		} else {
 			asserv = new (require('../shared/asserv.class.js'))(
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n')
-				}), this.client, 'pr', this.sendStatus
+				}), this.client, 'pr', this.sendStatus, fifo
 			);
 		}
 
 		if (!struct.ax12) {
 			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
-			ax12 = new (require('./ax12.simu.class.js'))();
+			ax12 = new (require('./ax12.simu.class.js'))(fifo);
 		} else {
-			ax12 = new (require('./ax12.class.js'))(struct.ax12, this.sendStatus);
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, this.sendStatus, fifo);
 		}
 
 		// Initialisation
 		setTimeout(function() {
-			others.ouvrirStabilisateurGrand(function() {
-			others.lacherGobelet(function() {
-			others.ouvrirBloqueurGrand(function() {
-			others.descendreAscenseur(function() {
+			others.ouvrirStabilisateurGrand();
+			others.lacherGobelet();
+			others.ouvrirBloqueurGrand();
+			others.descendreAscenseur();
 			ax12.ouvrir(function() {
 				logger.fatal('BAZOOKA');
-			}); }); }); }); });
+			});
 		}, 1000);
 	};
 
@@ -115,74 +117,74 @@ module.exports = (function () {
 	}
 
 	Acts.prototype.prendre_plot = function(callback){
+		if(typeof callback !== "function") {
+			logger.warn("callback qui n'est pas une fonction");
+			callback = function() {};
+		}
 		var that = this;
 				if (that.new_has_ball) {
-					others.descendreUnPeuAscenseur(function() {
-					ax12.ouvrir(function() {
-					others.descendreAscenseur(function() {
+					that.new_has_ball = false;
+					others.descendreUnPeuAscenseur();
+					ax12.ouvrir();
+					others.descendreAscenseur();
 					that.prendre_plot(callback);
-					}); }); });
 				}
-				if (that.nb_plots==0) {
-					ax12.ouvrir(function() {
-					others.ouvrirBloqueurMoyen(function() {
-					// asserv.avancerPlot(function(){
-					ax12.fermer(function() {
-					others.monterUnPeuAscenseur(function() {
+				else if (that.nb_plots==0) {
+					ax12.ouvrir();
+					others.ouvrirBloqueurMoyen();
+					ax12.fermer();
+					others.monterUnPeuAscenseur();
 					others.monterAscenseur(function() {
-					callback();
-					others.fermerBloqueur(function() {
-					ax12.ouvrir(function() {
-					others.ouvrirStabilisateurMoyen(function(){
-					others.descendreAscenseur(function() {
-					that.client.send('ia', 'pr.plot++');
-					that.nb_plots++;
-					}); }); }); }); }); }); }); }); });// });
+						that.client.send('ia', 'pr.plot++');
+						that.nb_plots++;
+						callback();
+					});
+					others.fermerBloqueur();
+					ax12.ouvrir();
+					others.ouvrirStabilisateurMoyen();
+					others.descendreAscenseur();
 				}
 				else if(that.nb_plots==1){
-					ax12.ouvrir(function() {
-					others.ouvrirStabilisateurMoyen(function(){
-					// asserv.avancerPlot(function(){
-					ax12.fermer(function() {
-					others.monterUnPeuAscenseur(function() {
-					others.ouvrirBloqueurMoyen(function() {
+					ax12.ouvrir();
+					others.ouvrirStabilisateurMoyen();
+					ax12.fermer();
+					others.monterUnPeuAscenseur();
+					others.ouvrirBloqueurMoyen();
 					others.monterAscenseur(function() {
-					callback();
-					others.fermerBloqueur(function() {
-					ax12.ouvrir(function() {
-					others.descendreAscenseur(function() {
-					that.client.send('ia', 'pr.plot++');
-					that.nb_plots++;
-					}); }); }); }); }); }); }); }); });// });
+						that.client.send('ia', 'pr.plot++');
+						that.nb_plots++;
+						callback();
+					});
+					others.fermerBloqueur();
+					ax12.ouvrir();
+					others.descendreAscenseur();
 				}
 				else if (that.nb_plots>=4){
-					ax12.ouvrir(function() {
-					others.fermerStabilisateur(function(){
-					// asserv.avancerPlot(function(){
-					ax12.fermer(function() {
-					callback();
+					ax12.ouvrir();
+					others.fermerStabilisateur();
+					ax12.fermer();
 					others.monterUnPeuAscenseur(function() {
-					others.ouvrirBloqueurMoyen(function() {
-					others.fermerBloqueur(function() {
-					that.client.send('ia', 'pr.plot++');
-					that.nb_plots++;
-					}); }); }); }); }); });// });
+						that.client.send('ia', 'pr.plot++');
+						that.nb_plots++;
+						callback();
+					});
+					others.ouvrirBloqueurMoyen();
+					others.fermerBloqueur();
 				}
 				else {
-					ax12.ouvrir(function() {
-					others.fermerStabilisateur(function(){
-					// asserv.avancerPlot(function(){
-					ax12.fermer(function() {
+					ax12.ouvrir();
+					others.fermerStabilisateur();
+					ax12.fermer();
 					others.monterUnPeuAscenseur(function() {
-					others.ouvrirBloqueurMoyen(function() {
-					others.monterAscenseur(function() {
-					callback();
-					others.fermerBloqueur(function() {
-					ax12.ouvrir(function() {
-					others.descendreAscenseur(function() {
-					that.client.send('ia', 'pr.plot++');
-					that.nb_plots++;
-					}); }); }); }); }); }); }); }); }); //});					
+						that.client.send('ia', 'pr.plot++');
+						that.nb_plots++;
+						callback();
+					});
+					others.ouvrirBloqueurMoyen();
+					others.monterAscenseur();
+					others.fermerBloqueur();
+					ax12.ouvrir();
+					others.descendreAscenseur();					
 				}
 	}
 
@@ -198,11 +200,9 @@ module.exports = (function () {
 				this.prendre_plot(callback);
 			break;	
 			case "prendre_plot_rear_left":
-				asserv.goxy(160, 1800, "avant", function() {
-				that.prendre_plot(function() {
-				callback();
-				asserv.goxy(270, 1800, "arriere", fake);
-				}); });
+				asserv.goxy(160, 1800, "avant");
+				that.prendre_plot();
+				asserv.goxy(270, 1800, "arriere", callback);
 			break;
 			case "prendre_plot_rear_left_calage":
 				var x, time;
@@ -213,155 +213,135 @@ module.exports = (function () {
 					pwm_time = 1500;
 					x = 140;
 				}
-				asserv.pwm(50, 50, pwm_time, function() {
-				asserv.calageX(x, 3.1416, function() {
-				asserv.goxy(300, 1600, "arriere", function() {
-				asserv.goxy(300, 1800, "osef", function() {
-				asserv.goxy(160, 1800, "avant", function() {
-				that.prendre_plot(function() {
-				asserv.goa(1.5708, function() {
-				asserv.pwm(50, 50, 1500, function() {
-				asserv.calageY(1860, 1.5708, function() {
-				asserv.speed(-300, 0, 750, function() {
-				callback();
-				}); }); }); }); }); }); }); }); }); });
+				asserv.pwm(50, 50, pwm_time);
+				asserv.calageX(x, 3.1416);
+				asserv.goxy(300, 1600, "arriere");
+				asserv.goxy(300, 1800, "osef");
+				asserv.goxy(160, 1800, "avant");
+				that.prendre_plot();
+				asserv.goa(1.5708);
+				asserv.pwm(50, 50, 1500);
+				asserv.calageY(1860, 1.5708);
+				asserv.speed(-300, 0, 750, callback);
 			break;
 			case "prendre_gobelet_et_2_plots_front":
-				others.lacherGobelet(function(){
-				asserv.goxy(275, 240, "arriere", function() {
-				others.prendreGobelet(function(){
+				others.lacherGobelet();
+				asserv.goxy(275, 240, "arriere");
+				others.prendreGobelet();
 				that.has_gobelet = true;
 				that.client.send('ia', 'pr.gobelet1');
-				asserv.speed(500, 0, 500, function() { 
-				asserv.goxy(175, 250, "avant", function() { //100 au lieu de 90 pos plot
-				that.prendre_plot(function() {
-				asserv.speed(-300, 0, 700, function() { 
-				asserv.goxy(180,160, "avant", function(){		//160 au lieu de 150
-				that.prendre_plot(function() {
-				callback();
-				}); }); }); }); }); }); }); }); });
+				asserv.speed(500, 0, 500); 
+				asserv.goxy(175, 250, "avant"); //100 au lieu de 90 pos plot
+				that.prendre_plot();
+				asserv.speed(-300, 0, 700); 
+				asserv.goxy(180, 160, "avant", function() {		//160 au lieu de 150
+					that.prendre_plot();
+					callback();
+				});
 			break;
 
 			case "prendre_2_plots_stairs":
-				asserv.goxy(810, 1740, "avant", function() {
-				that.prendre_plot(function(){
-				that.delay(1000, function() {
-				asserv.goxy(830, 1855, "avant", function() {
-				that.prendre_plot(function() {
-				asserv.speed(-300, -100, 1000, function() {
-				callback();
-				}); }); }); }); }); });
+				asserv.goxy(810, 1740, "avant");
+				that.prendre_plot();
+				that.delay(1000);
+				asserv.goxy(830, 1855, "avant");
+				that.prendre_plot();
+				asserv.speed(-300, -100, 1000, callback);
 			break;
 
 			case "prendre_gobelet":
-				others.lacherGobelet(function(){
-				asserv.speed(-300, 0, 500,function() {
-				others.prendreGobelet(function(){
-				that.client.send('ia', 'pr.gobelet1');
-				that.has_gobelet = true;
-				callback();
-				}); }); });
+				others.lacherGobelet();
+				asserv.speed(-300, 0, 500);
+				others.prendreGobelet(function() {
+					that.client.send('ia', 'pr.gobelet1');
+					that.has_gobelet = true;
+					callback();
+				});
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
-				asserv.goa(2.3562, function() {
-				others.descendreUnPeuAscenseur(function() {	
-				ax12.ouvrir(function() {
-				others.ouvrirBloqueurGrand(function() {
-				others.ouvrirStabilisateurMoyen(function() {
-				others.ouvrirStabilisateurGrand(function() {
-				asserv.goxy(650, 950, "arriere", function() {
-				others.ouvrirBloqueurMoyen(function() {
-				others.ouvrirStabilisateurMoyen(function() {
-				others.monterUnPeuAscenseur(function() {
-				others.monterUnPeuAscenseur(function() {
+				asserv.goa(2.3562);
+				others.descendreUnPeuAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurGrand();
+				others.ouvrirStabilisateurMoyen();
+				others.ouvrirStabilisateurGrand();
+				asserv.goxy(650, 950, "arriere");
+				others.ouvrirBloqueurMoyen();
+				others.ouvrirStabilisateurMoyen();
+				others.monterUnPeuAscenseur();
+				others.monterUnPeuAscenseur();
 
-				asserv.goxy(260, 1000, "osef", function() {
-				asserv.goa(-3.1416/2, function() {
-				asserv.pwm(50, 50, 1000,function() {
-				asserv.calageY(874, -3.1416/2,function() {
-				asserv.goxy(260, 1000, "arriere",function() {
-				asserv.goa(3.1416, function() {
+				asserv.goxy(260, 1000, "osef");
+				asserv.goa(-3.1416/2);
+				asserv.pwm(50, 50, 1000);
+				asserv.calageY(874, -3.1416/2);
+				asserv.goxy(260, 1000, "arriere");
+				asserv.goa(3.1416);
 
-				asserv.goxy(200, 1000, "avant",function() {
-				asserv.goa(3.1416,function() {
-				asserv.pwm(50, 50, 1000,function() {
-				asserv.calageX(142, 3.1416, function() {
-				ax12.fermerBalle(function() {
-				asserv.goxy(260, 1000, "arriere",function() {
-				others.descendreUnPeuAscenseur(function() {
-				others.descendreUnPeuAscenseur(function() {
-				ax12.fermerBalle2(function() {
-				asserv.goxy(260, 1000, "arriere", function() {
+				asserv.goxy(200, 1000, "avant");
+				asserv.goa(3.1416);
+				asserv.pwm(50, 50, 1000);
+				asserv.calageX(142, 3.1416);
+				ax12.fermerBalle();
+				asserv.goxy(260, 1000, "arriere");
+				others.descendreUnPeuAscenseur();
+				others.descendreUnPeuAscenseur();
+				ax12.fermerBalle2();
+				asserv.goxy(260, 1000, "arriere");
 				others.monterAscenseur(fake);
-				asserv.goxy(330, 1000, "avant", function() {
-				asserv.goa(-0.1863, function() {
-				others.lacherGobelet(function() {
+				asserv.goxy(330, 1000, "avant");
+				asserv.goa(-0.1863);
+				others.lacherGobelet();
 				that.new_has_ball = true;
 				that.client.send('ia', 'pr.plot0');
 				that.client.send('ia', 'pr.gobelet0');
 				that.nb_plots = 0;
 				that.has_gobelet = false;
 				asserv.goxy(600, 950, "avant", callback);
-				});	});	});	});	}); });	}); });	});	}); });	}); }); }); });
-				}); }); });	}); });	}); }); });	}); }); }); }); }); }); });
 			break;
 
 			case "deposer_pile_front":
 				ax12.ouvrir(fake);
-				others.monterUnPeuAscenseur(function() {
-				others.monterUnPeuAscenseur(function() {
-				asserv.pwm(80, 80, 1000, function() {
-				asserv.calageY(240, -1.5708, function() {
-				asserv.speed(-200, 0, 1000, function() {
-				others.ouvrirBloqueurGrand(function() {
-				others.ouvrirStabilisateurMoyen(function() {
-				others.descendreUnPeuAscenseur(function() {
-				others.descendreUnPeuAscenseur(function() {
+				others.monterUnPeuAscenseur();
+				others.monterUnPeuAscenseur();
+				asserv.pwm(80, 80, 1000);
+				asserv.calageY(240, -1.5708);
+				asserv.speed(-200, 0, 1000);
+				others.ouvrirBloqueurGrand();
+				others.ouvrirStabilisateurMoyen();
+				others.descendreUnPeuAscenseur();
+				others.descendreUnPeuAscenseur();
 				others.ouvrirStabilisateurGrand(fake);
-				ax12.ouvrir(function() {
+				ax12.ouvrir();
 				asserv.speed(-300, 0, 750, callback);
-				}); }); }); }); }); }); }); }); }); });
 			break;
 
 			case "deposer_gobelet_front_right":
-				asserv.goxy(2840, 600, "avant", function() {
-				asserv.goa(0, function() {
-				asserv.goa(0, function() {
-				asserv.pwm(80, 80, 1500, function() {
-				asserv.calageX(2863, 0, function() {
-				asserv.goxy(2800, 600, "arriere", function() {
-				asserv.goa(1.5708, function() {
-				others.monterUnPeuAscenseur(function() {
-				others.monterUnPeuAscenseur(function() {
-				asserv.pwm(80, 80, 1500, function() {
-				asserv.calageY(704, 1.5708, function() {
-				asserv.speed(-200, 0, 500, function() {
-				asserv.goa(3.1416, function() {
-				others.lacherGobelet(function() {
+				asserv.goxy(2840, 600, "avant");
+				asserv.goa(0);
+				asserv.goa(0);
+				asserv.pwm(80, 80, 1500);
+				asserv.calageX(2863, 0);
+				asserv.goxy(2800, 600, "arriere");
+				asserv.goa(1.5708);
+				others.monterUnPeuAscenseur();
+				others.monterUnPeuAscenseur();
+				asserv.pwm(80, 80, 1500);
+				asserv.calageY(704, 1.5708);
+				asserv.speed(-200, 0, 500);
+				asserv.goa(3.1416);
+				others.lacherGobelet();
 				that.client.send('ia', 'pr.gobelet0');
 				asserv.speed(500, 0, 800, callback);
-				});	});	});	});	}); });	}); });	});	}); }); }); }); });
-			break;
-
-			case "fermer_pour_charger_balle":
-				others.ouvrirStabilisateurGrand(fake);
-				others.lacherGobelet(fake);
-				others.fermerBloqueur(fake);
-				ax12.fermer(fake);
-				setTimeout(function() {
-					others.fermerStabilisateur(callback);
-				}, 5000);
 			break;
 			case "fermer_tout":
-				others.fermerStabilisateur(function() {
-				others.lacherGobelet(function() {
-				others.fermerBloqueur(function() {
-				others.descendreAscenseur(function() {
-				others.rangerClap(function() {
-				ax12.fermer(function() {
-					callback();
-				}); }); }); }); }); });
+				others.lacherGobelet();
+				others.fermerBloqueur();
+				others.descendreAscenseur();
+				others.rangerClap();
+				others.fermerStabilisateur();
+				ax12.fermer(callback);
 			break;
 			case "ouvrir_ax12":
 				ax12.ouvrir(callback);
@@ -370,52 +350,51 @@ module.exports = (function () {
 				others.monterAscenseur(callback);
 			break;
 			case "clap_1":
-				// asserv.goa(3.1416, function() {
-				others.sortirClap(function() {
+				others.sortirClap();
 				asserv.goxy(400, 140, "osef", function() {
-				others.rangerClap(callback);
-				}); }); //});
+					callback();
+					others.rangerClap();
+				});
 			break;
 			case "clap_3":
-				// asserv.goa(3.1416, function() {
-				others.sortirClap(function() {
+				others.sortirClap();
 				asserv.goxy(1000, 140, "osef", function() {
-				callback();
-				others.rangerClap();
-				}); }); //});
+					callback();
+					others.rangerClap();
+				});
 			break;
 			case "clap_5":
-				// asserv.goa(3.1416, function() {
-				others.sortirClap(function() {
+				others.sortirClap();
 				asserv.goxy(2300, 140, "osef", function() {
-				callback();
-				others.rangerClap();
-				}); }); //});
+					callback();
+					others.rangerClap();
+				});
 			break;
+
 			// Asserv
 			case "pwm":
-				asserv.pwm(params.left, params.right, params.ms,callback);
+				asserv.pwm(params.left, params.right, params.ms, callback);
 			break;
 			case "setvit":
-				asserv.setVitesse(params.v, params.r,callback);
+				asserv.setVitesse(params.v, params.r, callback);
 			break;
 			case "clean":
 				asserv.clean(callback);
 			break;
 			case "goa":
-				asserv.goa(params.a,callback);
+				asserv.goa(params.a, callback, true);
 			break;
 			case "goxy":
-				asserv.goxy(params.x, params.y, params.sens,callback);
+				asserv.goxy(params.x, params.y, params.sens, callback, true);
 			break;
 			case "setpos":
 				asserv.setPos(params, callback);
 			break;
 			case "setacc":
-				asserv.setAcc(params.acc,callback);
+				asserv.setAcc(params.acc, callback);
 			break;
 			case "setpid":
-				asserv.setPid(params.p, params.i, params.d,callback);
+				asserv.setPid(params.p, params.i, params.d, callback);
 			break;
 			case "sync_git":
 				spawn('/root/sync_git.sh', [], {

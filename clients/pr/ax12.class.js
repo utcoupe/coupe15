@@ -29,11 +29,12 @@ module.exports = (function () {
 		}
 	};
 
-	function Ax12(sp, sendStatus) {
+	function Ax12(sp, sendStatus, fifo) {
 		// sp is Serial Port NAME
 		this.ready = false;
 		this.sendStatus = sendStatus;
 		this.orders_sent = [];
+		this.fifo = fifo;
 
 		this.connect(sp);
 	}
@@ -48,7 +49,7 @@ module.exports = (function () {
 
 
 	Ax12.prototype.connect = function(sp) {
-		if(libusb2ax.dxl_initialize(sp[sp.length-1], 1) <= 0) {
+		if(libusb2ax.dxl_initialize(sp.substring("/dev/ttyACM".length), 1) <= 0) {
 			logger.error("Impossible de se connecter à l'USB2AX");
 		} else {
 			logger.info("Connecté à l'USB2AX !");
@@ -61,7 +62,7 @@ module.exports = (function () {
 		libusb2ax.dxl_write_word(2, P_COUPLE, 400);
 		libusb2ax.dxl_write_word(3, P_COUPLE, 400);
 
-		this.ouvrir(function(){});
+		this.ouvrir();
 		this.loopAX12();
 	};
 
@@ -94,11 +95,15 @@ module.exports = (function () {
 				ax12s[i].arrived = true;
 			}
 		}
-
+		// logger.debug(ax12s['2'].pos + ' ; ' + ax12s['3'].pos);
 		if(ax12s['2'].started && ax12s['3'].started && this.type_callback == "ouvrir" ||
 		   ax12s['2'].arrived && ax12s['3'].arrived && this.type_callback) {
 			this.type_callback = null;
-			this.callback.call();
+			if(this.callback !== undefined) {
+				// logger.debug('AX12');
+				this.callback();
+				this.fifo.orderFinished();
+			}
 		}
 
 		setTimeout(function() { this.loopAX12(); }.bind(this), 50);
@@ -109,48 +114,68 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.ouvrir = function(callback) {
-		ax12s['2'].obj = this.degToAx12(0);
-		ax12s['3'].obj = this.degToAx12(0);
-		ax12s['2'].arrived = false;
-		ax12s['2'].started = false;
-		ax12s['3'].arrived = false;
-		ax12s['3'].started = false;
-		this.callback = callback;
-		this.type_callback = 'ouvrir';
+		this.fifo.newOrder(function() {
+			ax12s['2'].obj = this.degToAx12(0);
+			ax12s['3'].obj = this.degToAx12(0);
+			ax12s['2'].arrived = false;
+			ax12s['2'].started = false;
+			ax12s['3'].arrived = false;
+			ax12s['3'].started = false;
+			this.callback = callback;
+			this.type_callback = 'ouvrir';
+			if(this.callback === undefined) {
+				this.fifo.orderFinished();
+			}
+		}.bind(this));
 	};
 
 	Ax12.prototype.fermer = function(callback) {
-		ax12s['2'].obj = this.degToAx12(-85);
-		ax12s['3'].obj = this.degToAx12(85);
-		// logger.debug(ax12s['2'].obj);
-		ax12s['2'].arrived = false;
-		ax12s['2'].started = false;
-		ax12s['3'].arrived = false;
-		ax12s['3'].started = false;
-		this.callback = callback;
-		this.type_callback = 'fermer';
+		this.fifo.newOrder(function() {
+			ax12s['2'].obj = this.degToAx12(-85);
+			ax12s['3'].obj = this.degToAx12(85);
+			// logger.debug(ax12s['2'].obj);
+			ax12s['2'].arrived = false;
+			ax12s['2'].started = false;
+			ax12s['3'].arrived = false;
+			ax12s['3'].started = false;
+			this.callback = callback;
+			this.type_callback = 'fermer';
+			if(this.callback === undefined) {
+				this.fifo.orderFinished();
+			}
+		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle = function(callback) {
-		ax12s['2'].obj = this.degToAx12(-50);
-		ax12s['3'].obj = this.degToAx12(50);
-		// logger.debug(ax12s['2'].obj);
-		ax12s['2'].arrived = false;
-		ax12s['2'].started = false;
-		ax12s['3'].arrived = false;
-		ax12s['3'].started = false;
-		this.callback = callback;
-		this.type_callback = 'fermer';
+		this.fifo.newOrder(function() {
+			ax12s['2'].obj = this.degToAx12(-50);
+			ax12s['3'].obj = this.degToAx12(50);
+			// logger.debug(ax12s['2'].obj);
+			ax12s['2'].arrived = false;
+			ax12s['2'].started = false;
+			ax12s['3'].arrived = false;
+			ax12s['3'].started = false;
+			this.callback = callback;
+			this.type_callback = 'fermer';
+			if(this.callback === undefined) {
+				this.fifo.orderFinished();
+			}
+		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle2 = function(callback) {
-		ax12s['2'].obj = this.degToAx12(-75);
-		ax12s['3'].obj = this.degToAx12(75);
-		// logger.debug(ax12s['2'].obj);
-		ax12s['2'].arrived = false;
-		ax12s['2'].started = false;
-		ax12s['3'].arrived = false;
-		ax12s['3'].started = false;
-		this.callback = callback;
-		this.type_callback = 'fermer';
+		this.fifo.newOrder(function() {
+			ax12s['2'].obj = this.degToAx12(-75);
+			ax12s['3'].obj = this.degToAx12(75);
+			// logger.debug(ax12s['2'].obj);
+			ax12s['2'].arrived = false;
+			ax12s['2'].started = false;
+			ax12s['3'].arrived = false;
+			ax12s['3'].started = false;
+			this.callback = callback;
+			this.type_callback = 'fermer';
+			if(this.callback === undefined) {
+				this.fifo.orderFinished();
+			}
+		}.bind(this));
 	};
 
 	return Ax12;
