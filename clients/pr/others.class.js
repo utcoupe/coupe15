@@ -27,27 +27,21 @@ module.exports = (function () {
 				this.fifo.orderFinished();
 			}.bind(this), this.callback_delay);
 		} else {
-			logger.warn("Arduino others unknown: "+data);
+			logger.warn("Arduino others unknown: "+data+" (order_sent : "+this.order_sent+")");
 		}
 	};
 
 	Others.prototype.sendCommand = function(callback, cmd, args, callback_delay){
-		var fake = false;
-		if(callback == 'fake') {
-			fake = true;
+		if(callback === undefined) {
 			callback = function(){};
 		}
 
 		this.fifo.newOrder(function() {
-			logger.fatal(cmd);
 			this.callback = callback;
-			if(!fake)
-				this.callback_delay = callback_delay;
-			else
-				this.callback_delay = 0;
+			this.callback_delay = callback_delay;
 			this.order_sent = cmd;
 
-			//logger.debug([cmd].concat(args).join(";"));
+			// logger.debug([cmd].concat(args).join(";"));
 			this.sp.write([cmd].concat(args).join(";")+"\n");
 		}.bind(this));
 	};

@@ -62,7 +62,7 @@ module.exports = (function () {
 		libusb2ax.dxl_write_word(2, P_COUPLE, 400);
 		libusb2ax.dxl_write_word(3, P_COUPLE, 400);
 
-		this.ouvrir('fake');
+		this.ouvrir();
 		this.loopAX12();
 	};
 
@@ -99,8 +99,8 @@ module.exports = (function () {
 		if(ax12s['2'].started && ax12s['3'].started && this.type_callback == "ouvrir" ||
 		   ax12s['2'].arrived && ax12s['3'].arrived && this.type_callback) {
 			this.type_callback = null;
-			if(this.callback != 'fake') {
-				logger.debug('AX12');
+			if(this.callback !== undefined) {
+				// logger.debug('AX12');
 				this.callback();
 				this.fifo.orderFinished();
 			}
@@ -123,8 +123,9 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'ouvrir';
-			if(callback == 'fake')
+			if(this.callback === undefined) {
 				this.fifo.orderFinished();
+			}
 		}.bind(this));
 	};
 
@@ -139,8 +140,9 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(callback == 'fake')
+			if(this.callback === undefined) {
 				this.fifo.orderFinished();
+			}
 		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle = function(callback) {
@@ -154,8 +156,9 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(callback == 'fake')
+			if(this.callback === undefined) {
 				this.fifo.orderFinished();
+			}
 		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle2 = function(callback) {
@@ -169,8 +172,9 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(callback == 'fake')
+			if(this.callback === undefined) {
 				this.fifo.orderFinished();
+			}
 		}.bind(this));
 	};
 

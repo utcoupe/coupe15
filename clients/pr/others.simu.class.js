@@ -10,12 +10,13 @@ module.exports = (function () {
 	};
 
 	Others.prototype.callCallback = function(callback, ms) {
-		if(callback != 'fake') {
+			if(callback === undefined)
+				callback = function(){};
+			}
 			this.fifo.newOrder(callback);
 			setTimeout(function() {
 				this.fifo.orderFinished();
 			}.bind(this), ms);
-		}
 	}
 
 

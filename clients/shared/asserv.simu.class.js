@@ -10,25 +10,20 @@ module.exports = (function () {
 	function SIMU_ROT_TIME(a, vitesse) { return SIMU_DIST_ROT(a)/(vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
 	var FPS = 30;
 
-	function Asserv(client, who) {
+	function Asserv(client, who, fifo) {
 		this.ready = true;
 		this.client = client;
 		this.who = who;
 		this.pos = {
 			x:0,y:0,a:0
 		};
+		this.fifo = fifo;
 		this.vitesse = 800;
 		this.getPos();
 	}
 
 	Asserv.prototype.callCallback = function(callback, ms) {
-		// if(callback != 'fake') {
-		// 	this.fifo.newOrder(callback);
-		// 	setTimeout(function() {
-		// 		this.fifo.orderFinished();
-		// 	}.bind(this), ms);
-		// }
-		if(callback != 'fake') {
+		if(callback !== undefined)
 			setTimeout(callback, ms);
 		}
 	}
