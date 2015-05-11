@@ -134,7 +134,7 @@ int sortAndSelectRobots(int n, Cluster_t *robots, int nb_robots_to_find){
 	return i;
 }
 
-int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result, int nb_robots_to_find) {
+int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result) {
 	Cluster_t all_bots[2*MAX_ROBOTS];
 	int i, n_tot=0;
 

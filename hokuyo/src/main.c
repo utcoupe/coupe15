@@ -14,7 +14,8 @@
 #include "gui.h"
 #endif
 
-void frame(int nb_robots_to_find);
+// void frame(int nb_robots_to_find);
+void frame();
 
 static int symetry = 0;
 static long timeStart = 0;
@@ -46,7 +47,7 @@ int main(int argc, char **argv){
 	// Disable buffering on stdout
 	setvbuf(stdout, NULL, _IOLBF, 0);
 
-	int nb_robots_to_find = 4;
+	// int nb_robots_to_find = 4;
 	hok1.urg = 0;
 	hok2.urg = 0;
 
@@ -62,7 +63,8 @@ int main(int argc, char **argv){
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 	
 	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		fprintf(stderr, "usage: hokuyo {green|yellow} [nbr_robots]\n");
+		// fprintf(stderr, "usage: hokuyo {green|yellow} [nbr_robots]\n");
+		fprintf(stderr, "usage: hokuyo {green|yellow}\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -71,11 +73,11 @@ int main(int argc, char **argv){
 		exit(EXIT_FAILURE);
 	 }
 
-	if (argc >= 3) {
-		nb_robots_to_find = atoi(argv[2]);
-	} else {
-		nb_robots_to_find = MAX_ROBOTS;
-	}
+	// if (argc >= 3) {
+	// 	nb_robots_to_find = atoi(argv[2]);
+	// } else {
+	// 	nb_robots_to_find = MAX_ROBOTS;
+	// }
 
 	char paths[2][SERIAL_STR_LEN];
 
@@ -108,7 +110,7 @@ int main(int argc, char **argv){
 	initSDL();
 	#endif
 
-	fprintf(logfile, "%sStarting hokuyo :\n%sLooking for %d robots\n%s%s color\n", PREFIX, PREFIX, nb_robots_to_find, PREFIX, argv[1]);
+	fprintf(logfile, "%sStarting hokuyo :\n%sLooking for %s robots\n", PREFIX, PREFIX, argv[1]);
 	fflush(stdout);
 	timeStart = timeMillis();
 	long time_last_try = 0;
@@ -128,7 +130,7 @@ int main(int argc, char **argv){
 					
 					checkAndConnect(&hok1);
 					if (!hok1.isWorking) {
-						pushInfo('1');
+						// pushInfo('1');
 						fprintf(logfile, "%sHokuyo 1 not working\n", PREFIX);
 				}
 				}
@@ -140,21 +142,21 @@ int main(int argc, char **argv){
 					strcpy(hok1.path, paths[1]);
 					checkAndConnect(&hok2);
 					if (!hok2.isWorking) {
-						pushInfo('1');
+						// pushInfo('1');
 						fprintf(logfile, "%sHokuyo 2 not working\n", PREFIX);
 					}
 				}
 			}
 			time_last_try = now;
 		}
-		frame(nb_robots_to_find);
+		frame();
 		fflush(logfile);
 	}
 	exit(EXIT_SUCCESS);
 }
 
 
-void frame(int nb_robots_to_find){
+void frame(){
 	long timestamp;
 	//static long lastTime = 0;
 	Pt_t pts1[MAX_DATA], pts2[MAX_DATA];
@@ -204,7 +206,7 @@ void frame(int nb_robots_to_find){
 		// nRobots1 = sortAndSelectRobots(nRobots1, robots1, nb_robots_to_find);
 		// nRobots2 = sortAndSelectRobots(nRobots2, robots2, nb_robots_to_find);
 
-		nRobots = mergeRobots(robots1, nRobots1, robots2, nRobots2, robots, nb_robots_to_find);
+		nRobots = mergeRobots(robots1, nRobots1, robots2, nRobots2, robots);
 		//fprintf(logfile, "%sGot %d robots\n", PREFIX, nRobots);
 		
 		#ifdef SDL
