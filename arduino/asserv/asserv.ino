@@ -5,6 +5,7 @@
  ****************************************/
   
 #include <Arduino.h>
+#include "block.h"
 #include "compat.h"
 #include "parameters.h"
 #include "protocol.h"
@@ -64,6 +65,7 @@ void loop(){
 
 	//Action asserv
 	ComputeEmergency();
+	ComputeIsBlocked();
 	ControlCompute();
 
 	// Flush serial every time to stay in time
