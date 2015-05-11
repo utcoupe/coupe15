@@ -31,9 +31,16 @@
 	client.order(function (from, name, params){
 		// logger.info("Recieved an order "+name);
 		switch (name){
-			case "queue_flush":
+			case "pause":
 				queue = [];
-				break;
+				acts.pause();
+			break;
+			case "stop":
+				queue = [];
+				acts.stop();
+			break;
+
+			// useless //
 			case "start":
 				queue = [];
 				start();

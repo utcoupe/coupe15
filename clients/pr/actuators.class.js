@@ -24,6 +24,17 @@ module.exports = (function () {
 		
 	};
 
+	// Collision, on finit le script mais on arrête l'asserv si go(xy)(a)
+	Acts.prototype.pause = function(){
+		asserv.clean();
+	};
+
+	// Fin du match, on arrête tout
+	Acts.prototype.stop = function(){
+		asserv.clean();
+		fifo.clean();
+	};
+
 	Acts.prototype.connectTo = function(struct){
 		if (!struct.others) {
 			logger.fatal("Lancement de others pr en mode simu !");

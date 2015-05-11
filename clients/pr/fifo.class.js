@@ -2,6 +2,9 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('Fifo');
 
 	function Fifo() {
+		this.clean();
+	}
+	Fifo.prototype.clean = function(callback) {
 		this.fifo = [];
 		this.order_in_progress = false;
 	}
@@ -23,6 +26,7 @@ module.exports = (function () {
 			(this.fifo.shift())();
 		}
 	}
+
 
 	return Fifo;
 })();
