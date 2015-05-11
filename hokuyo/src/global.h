@@ -48,5 +48,9 @@
 #define MAX_SIZE_TO_MERGE 200
 #define NB_PTS_MIN 3 // pour qu'un cluster soit gardé
 
+// Position zone escalier
+#define STAIRS_Y_MIN 1420
+#define STAIRS_X_MIN 967
+#define STAIRS_X_MAX 2033
 
 #endif
