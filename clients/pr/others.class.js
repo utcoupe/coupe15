@@ -1,12 +1,13 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('Others');
 
-	function Others(sp, sendStatus) {
+	function Others(sp, sendStatus, fifo) {
 		this.sp = sp;
 		// this.client = client;
 		this.ready = false;
 			logger.debug(sendStatus);
 		this.sendStatus = sendStatus;
+		this.fifo = fifo;
 
 		this.sp.on("data", function(data){
 			this.ready = true;
@@ -23,6 +24,7 @@ module.exports = (function () {
 			this.order_sent = '';
 			setTimeout(function() {
 				this.callback();
+				this.fifo.orderFinished();
 			}.bind(this), this.callback_delay);
 		} else {
 			logger.warn("Arduino others unknown: "+data);
@@ -30,14 +32,24 @@ module.exports = (function () {
 	};
 
 	Others.prototype.sendCommand = function(callback, cmd, args, callback_delay){
-		if(typeof callback !== "function")
+		var fake = false;
+		if(callback == 'fake') {
+			fake = true;
 			callback = function(){};
-		this.callback = callback;
-		this.callback_delay = callback_delay;
-		this.order_sent = cmd;
+		}
 
-		//logger.debug([cmd].concat(args).join(";"));
-		this.sp.write([cmd].concat(args).join(";")+"\n");
+		this.fifo.newOrder(function() {
+			logger.fatal(cmd);
+			this.callback = callback;
+			if(!fake)
+				this.callback_delay = callback_delay;
+			else
+				this.callback_delay = 0;
+			this.order_sent = cmd;
+
+			//logger.debug([cmd].concat(args).join(";"));
+			this.sp.write([cmd].concat(args).join(";")+"\n");
+		}.bind(this));
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
@@ -77,7 +89,7 @@ module.exports = (function () {
 	};
 
 	Others.prototype.rangerClap = function(callback) {
-		this.sendCommand(callback, 'C', [40], 150);
+		this.sendCommand(callback, 'C', [40], 100);
 	};
 
 	Others.prototype.monterAscenseur = function(callback) {

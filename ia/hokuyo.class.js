@@ -25,7 +25,7 @@ module.exports = (function () {
 		this.matchStarted = true;
 
 		logger.info("La classe hokuyo attend...");
-		timeout = setTimeout(function() {this.timedOut().bind(this);}.bind(this) , 1000);
+		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , 1000);
 	};
 
 	Hokuyo.prototype.timedOut = function() {

@@ -74,8 +74,8 @@ module.exports = (function () {
 	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
 		this.sendCommand(COMMANDS.SET_POS, [
-			this.convertColorX(parseInt(this.pos.x)),
-			this.convertColorY(parseInt(this.pos.y)),
+			parseInt(this.convertColorX(this.pos.x)),
+			parseInt(this.convertColorY(this.pos.y)),
 			myWriteFloat(this.convertColorA(this.pos.a))
 		], false, callback);
 	}
@@ -137,7 +137,7 @@ module.exports = (function () {
 		}
 	}
 	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback){
-		if(typeof callback !== "function")
+		if(callback == 'fake')
 			callback = function(){};
 		this.callback = callback;
 		args = args || [];
