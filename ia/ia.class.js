@@ -18,8 +18,8 @@ module.exports = (function () {
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
 		
-		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
-		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
+		//this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
+		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
 		this.timer = new (require('./timer.class.js'))();
 		this.pathfinding = new (require('./pathfinding.class.js'))(this.color);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);

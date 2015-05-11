@@ -12,13 +12,11 @@ module.exports = (function () {
 	Others.prototype.callCallback = function(callback, ms) {
 			if(callback === undefined)
 				callback = function(){};
-			}
 			this.fifo.newOrder(callback);
 			setTimeout(function() {
 				this.fifo.orderFinished();
 			}.bind(this), ms);
-	}
-
+	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
 		this.callCallback(callback, 200);
@@ -70,6 +68,14 @@ module.exports = (function () {
 
 	Others.prototype.descendreUnPeuAscenseur = function(callback) {
 		this.callCallback(callback, 300);
+	};
+
+	Others.prototype.monterMoyenAscenseur = function(callback) {
+		this.callCallback(callback, 500);
+	};
+
+	Others.prototype.descendreMoyenAscenseur = function(callback) {
+		this.callCallback(callback, 500);
 	};
 
 	Others.prototype.descendreAscenseur = function(callback) {

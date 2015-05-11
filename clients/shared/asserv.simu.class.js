@@ -25,7 +25,6 @@ module.exports = (function () {
 	Asserv.prototype.callCallback = function(callback, ms) {
 		if(callback !== undefined)
 			setTimeout(callback, ms);
-		}
 	}
 
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }

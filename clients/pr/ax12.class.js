@@ -114,6 +114,9 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.ouvrir = function(callback) {
+		if(callback === undefined) {
+			callback = function(){};
+		}
 		this.fifo.newOrder(function() {
 			ax12s['2'].obj = this.degToAx12(0);
 			ax12s['3'].obj = this.degToAx12(0);
@@ -123,9 +126,6 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'ouvrir';
-			if(this.callback === undefined) {
-				this.fifo.orderFinished();
-			}
 		}.bind(this));
 	};
 

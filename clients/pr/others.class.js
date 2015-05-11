@@ -47,65 +47,124 @@ module.exports = (function () {
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {
-		this.sendCommand(callback, 'H', [136, 1], 100);
+		if (time === undefined) {
+			time = 100;
+		}
+		this.sendCommand(callback, 'H', [136, 1], time);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
-		this.sendCommand(callback, 'H', [126, 11], 100);
+		if (time === undefined) {
+			time = 100;
+		}
+		this.sendCommand(callback, 'H', [126, 11], time);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
-		this.sendCommand(callback, 'H', [60, 66], 400);
+		if (time === undefined) {
+			time = 400;
+		}
+		this.sendCommand(callback, 'H', [60, 66], time);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback) {
-		this.sendCommand(callback, 'M', [75, 155], 200);
+		if (time === undefined) {
+			time = 200;
+		}
+		this.sendCommand(callback, 'M', [75, 155], time);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback) {
-		this.sendCommand(callback, 'M', [100, 130], 200);
+		if (time === undefined) {
+			time = 200;
+		}
+		this.sendCommand(callback, 'M', [100, 130], time);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback) {
-		this.sendCommand(callback, 'M', [140, 90], 400);
+		if (time === undefined) {
+			time = 400;
+		}
+		this.sendCommand(callback, 'M', [140, 90], time);
 	};
 
 	Others.prototype.prendreGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [115], 200);
+		if (time === undefined) {
+			time = 200;
+		}
+		this.sendCommand(callback, 'G', [115], time);
 	};
 
 	Others.prototype.lacherGobelet = function(callback) {
-		this.sendCommand(callback, 'G', [40], 200);
+		if (time === undefined) {
+			time = 200;
+		}
+		this.sendCommand(callback, 'G', [40], time);
 	};
 
 	Others.prototype.sortirClap = function(callback) {
-		this.sendCommand(callback, 'C', [125], 200);
+		if (time === undefined) {
+			time = 200;
+		}
+		this.sendCommand(callback, 'C', [125], time);
 	};
 
-	Others.prototype.rangerClap = function(callback) {
-		this.sendCommand(callback, 'C', [40], 100);
+	Others.prototype.rangerClap = function(callback, time) {
+		if (time === undefined) {
+			time = 100;
+		}
+		this.sendCommand(callback, 'C', [40], time);
 	};
 
 	Others.prototype.monterAscenseur = function(callback) {
-		this.sendCommand(callback, 'S', [-250], 0);
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [-250], time);
 	};
 
 	Others.prototype.monterUnPeuAscenseur = function(callback) {
-		this.sendCommand(callback, 'S', [-30], 0);
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [-30], time);
 	};
 
 	Others.prototype.descendreUnPeuAscenseur = function(callback) {
-		this.sendCommand(callback, 'S', [30], 0);
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [30], time);
+	};
+
+	Others.prototype.monterMoyenAscenseur = function(callback) {
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [-60], time);
+	};
+
+	Others.prototype.descendreMoyenAscenseur = function(callback) {
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [60], time);
 	};
 
 	Others.prototype.relacherAscenseur = function(callback) {
-		this.sendCommand(callback, 'S', [0], 0);
+		if (time === undefined) {
+			time = 0;
+		}
+		this.sendCommand(callback, 'S', [0], time);
 	};
 
 	Others.prototype.descendreAscenseur = function(callback) {
+		if (time === undefined) {
+			time = 0;
+		}
 		this.sendCommand(function() {
 		this.relacherAscenseur(callback);
-		}.bind(this), 'S', [250], 0);
+		}.bind(this), 'S', [250], time);
 	};
 
 

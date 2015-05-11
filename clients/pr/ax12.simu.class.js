@@ -10,12 +10,13 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.callCallback = function(callback, ms) {
-		// if(callback != 'fake') {
-			this.fifo.newOrder(callback);
-			setTimeout(function() {
-				this.fifo.orderFinished();
-			}.bind(this), ms);
-		// }
+		if(callback === undefined) {
+			callback = function(){};
+		}
+		this.fifo.newOrder(callback);
+		setTimeout(function() {
+			this.fifo.orderFinished();
+		}.bind(this), ms);
 	}
 
 	Ax12.prototype.ouvrir = function(callback) {
