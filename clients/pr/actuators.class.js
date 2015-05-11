@@ -21,7 +21,7 @@ module.exports = (function () {
 	}
 
 	Acts.prototype.start = function(){
-		// this.startArduino(this);
+		
 	};
 
 	Acts.prototype.connectTo = function(struct){
