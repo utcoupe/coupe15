@@ -24,11 +24,11 @@
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
 
-	var server = config.server || "";
-	var command = config.command || "";
+	var server = process.argv[2] || config.server || "";
+	var command = process.argv[3] || config.command || "";
 
 	var client = new SocketClient({
-		server_ip: process.argv[2] || server,
+		server_ip: server,
 		type: "hokuyo",
 	});
 

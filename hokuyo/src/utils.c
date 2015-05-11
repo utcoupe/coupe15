@@ -145,6 +145,14 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 	for (i=0; i<n2; i++) {
 		all_bots[n_tot++] = r2[i];
 	}
+
+	// À faire uniquement si la seconde partie est commentée !
+	memcpy(result, all_bots, n_tot*sizeof(Cluster_t));
+
+	// La partie suivante n'est utile que pour la partie du milieu (dans le cas où chaque
+		// hokuyo scanne la moitié du terrain) ou si on scanne toute la carte
+		// Maintenant, osef parce que l'IA se charge de ça
+	/*
 	if (n_tot <= nb_robots_to_find) {
 		memcpy(result, all_bots, n_tot*sizeof(Cluster_t));
 		return n_tot;
@@ -192,6 +200,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 		}
 		n_tot--;
 	}
+	*/
 	return n_tot;
 }
 
@@ -300,7 +309,7 @@ int mergeRobots(Cluster_t *r1, int n1, Cluster_t *r2, int n2, Cluster_t *result,
 	nbr_found = sortAndSelectRobots(nbr_found, result, nb_robots_to_find);
 	return nbr_found;
 }
-*/
+
 
 int isIn(int e, int *tab, int tab_size) {
 	int i, ret = 0;
@@ -312,6 +321,7 @@ int isIn(int e, int *tab, int tab_size) {
 	}
 	return ret;
 }
+*/
 
 
 // Cluster_simple_t findCone(int n, Cluster_t *clusters, Pt_t coneCenter){

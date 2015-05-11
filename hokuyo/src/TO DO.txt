@@ -1,6 +1,0 @@
-TO DO :
-
-- discuter de l'utilité de sortAndSelectRobots et mergeRobots avec l'IA
-
-À améliorer :
-- correction du cap dans le programme

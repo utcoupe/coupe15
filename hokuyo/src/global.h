@@ -44,7 +44,7 @@
 
 // CLUSTERS :
 #define CLUSTER_POINTS_BACKWARDS 15
-#define MAX_DIST 200 // entre deux points pour les considérer dans le même cluster
+#define MAX_DIST 100 // entre deux points pour les considérer dans le même cluster, old: 200
 #define MAX_SIZE_TO_MERGE 200
 #define NB_PTS_MIN 3 // pour qu'un cluster soit gardé
 

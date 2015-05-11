@@ -51,7 +51,7 @@ int main(int argc, char **argv){
 	hok2.urg = 0;
 
 	// Open log file
-	logfile = fopen("/var/log/hokuyo.log", "a+");
+	logfile = fopen("/var/log/utcoupe/hokuyo.log", "a+");
 	if (logfile == NULL) {
 		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
 		exit(EXIT_FAILURE);
@@ -199,10 +199,10 @@ void frame(int nb_robots_to_find){
 		nRobots1 = getClustersFromPts(pts1, nPts1, robots1);
 		nRobots2 = getClustersFromPts(pts2, nPts2, robots2);
 
-		//fprintf(logfile, "%sCalculated %d and %d clusters\n", PREFIX, nRobots1, nRobots2);
+		fprintf(logfile, "%sCalculated %d and %d clusters\n", PREFIX, nRobots1, nRobots2);
 
-		nRobots1 = sortAndSelectRobots(nRobots1, robots1, nb_robots_to_find);
-		nRobots2 = sortAndSelectRobots(nRobots2, robots2, nb_robots_to_find);
+		// nRobots1 = sortAndSelectRobots(nRobots1, robots1, nb_robots_to_find);
+		// nRobots2 = sortAndSelectRobots(nRobots2, robots2, nb_robots_to_find);
 
 		nRobots = mergeRobots(robots1, nRobots1, robots2, nRobots2, robots, nb_robots_to_find);
 		//fprintf(logfile, "%sGot %d robots\n", PREFIX, nRobots);
