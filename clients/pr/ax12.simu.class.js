@@ -13,10 +13,12 @@ module.exports = (function () {
 		if(callback === undefined) {
 			callback = function(){};
 		}
-		this.fifo.newOrder(callback);
-		setTimeout(function() {
-			this.fifo.orderFinished();
-		}.bind(this), ms);
+		this.fifo.newOrder(function() {
+			setTimeout(function() {
+				callback();
+				this.fifo.orderFinished();
+			}.bind(this), parseInt(ms/10));
+		}.bind(this));
 	}
 
 	Ax12.prototype.ouvrir = function(callback) {
