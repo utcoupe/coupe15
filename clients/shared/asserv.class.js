@@ -77,7 +77,7 @@ module.exports = (function () {
 		this.pos.y = pos.y;
 		this.setA(pos.a);
 	}
-	Asserv.prototype.setPos = function(pos, callback) {
+	Asserv.prototype.setPos = function(pos, callback, use_fifo) {
 		if(pos.color !== undefined)
 			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
@@ -86,7 +86,8 @@ module.exports = (function () {
 			myWriteFloat(this.convertColorA(pos.a))
 		], false, function() {
 			callback();
-			this.fifo.orderFinished();
+			if(use_fifo !== undefined)
+				this.fifo.orderFinished();
 		}.bind(this));
 	}
 	Asserv.prototype.getPos = function(pos) {
@@ -100,14 +101,14 @@ module.exports = (function () {
 		if(callback === undefined)
 			callback = function(){};
 		this.fifo.newOrder(function() {
-			this.setPos({x: x, y: this.pos.y, a: a}, callback);
+			this.setPos({x: x, y: this.pos.y, a: a}, callback, true);
 		}.bind(this));
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
 		if(callback === undefined)
 			callback = function(){};
 		this.fifo.newOrder(function() {
-			this.setPos({x: this.pos.x, y: y, a: a}, callback);
+			this.setPos({x: this.pos.x, y: y, a: a}, callback, true);
 		}.bind(this));
 	}
 
