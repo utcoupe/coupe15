@@ -4,8 +4,6 @@ module.exports = (function () {
 	var logger = log4js.getLogger('ia.ia');
 
 	function Ia(color, nb_erobots, we_have_hats) {
-		logger.info("Launching a "+color+" AI with "+nb_erobots+" ennemies.");
-		
 		if(!color) {
 			logger.error('Please give a color to ia');
 		}
@@ -17,6 +15,7 @@ module.exports = (function () {
 		}
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
+		logger.info("Launching a "+this.color+" AI with "+this.nb_erobots+" ennemies.");
 		
 		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});

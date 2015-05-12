@@ -42,7 +42,7 @@
 
 	client.order(function(from, name, params){
 		var now = Date.now();
-		logger.info(now - lastT - startingT);
+		logger.info("Time since last order : "+(now - lastT));
 		if (now - lastT > 500) { // half a second between two orders
 			logger.info("Just received an order `" + name + "` from " + from + " with params :");
 			logger.info(params);
@@ -88,7 +88,7 @@
 			child.kill('SIGINT');
 			child = null;
 		} else {
-			logger.info("Can't close child : never born :P");
+			logger.info("Can't close child at "+code+" : never born :P");
 			logger.info("Father's pid : " + process.pid);
 			// process.kill(process.pid, 'SIGINT');
 		}
@@ -251,10 +251,10 @@
 		});
 		
 		child.on('close', function(code) {
-			if (code == 1)
+			if (code == 0)
 				logger.info('Child closed correctly');
 			else
-				logger.info('Child closed with code: ' + code);
+				logger.error('Child closed with code: ' + code);
 
 			// Send message
 			if (code != -1)
