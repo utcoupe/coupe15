@@ -2,6 +2,7 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.acts');
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
+	var fifo = new (require('../shared/fifo.class.js'))();
 
 	var servos = null;
 	var asserv = null;
@@ -15,7 +16,12 @@ module.exports = (function () {
 	}
 
 	Acts.prototype.start = function(){
-		// this.startArduino(this);
+
+	};
+	
+	Acts.prototype.clean = function(){
+		fifo.clean(); // A priori déjà vide
+		asserv.clean();
 	};
 
 	Acts.prototype.connectTo = function(struct){
@@ -27,13 +33,13 @@ module.exports = (function () {
 		}
 		if (!struct.asserv) {
 			logger.fatal("Lancement de l'asserv gr en mode simu !");
-			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'gr');
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'gr', fifo);
 		} else {
 			asserv = new (require('../shared/asserv.class.js'))(
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
 					parser:serialPort.parsers.readline('\n'),
-				}), this.client, 'gr', this.sendStatus
+				}), this.client, 'gr', this.sendStatus, fifo
 			);
 		}
 	};

@@ -57,6 +57,7 @@ module.exports = (function () {
 		this.callbacks.order = callback;
 	};
 	SocketClient.prototype.send = function (to, name, params) {
+		// logger.debug('send %s to %s', name, to);
 		this.client.emit('order', {
 			to: to,
 			name: name,

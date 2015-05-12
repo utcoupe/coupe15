@@ -3,7 +3,7 @@ module.exports = (function () {
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
 	var spawn = require('child_process').spawn;
-	var fifo = new (require('./fifo.class.js'))();
+	var fifo = new (require('../shared/fifo.class.js'))();
 
 	var others = null;
 	var asserv = null;
@@ -24,8 +24,8 @@ module.exports = (function () {
 		
 	};
 
-	// Collision, on finit le script mais on arrête l'asserv si go(xy)(a)
-	Acts.prototype.collision = function(){
+	Acts.prototype.clean = function(){
+		fifo.clean();  // A priori déjà vide
 		asserv.clean();
 	};
 

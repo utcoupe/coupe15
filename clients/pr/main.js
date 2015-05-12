@@ -7,8 +7,8 @@
 	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	// var server = "127.0.0.1:3128" // server adress
-	var server = "192.168.0.100:3128" // server adress
+	// var server = "127.0.0.1:3128" // server address
+	var server = "192.168.0.100:3128" // server address
 	var client = new SocketClient({
 		server_ip: server,
 		type: "pr"
@@ -24,7 +24,6 @@
 
 	var queue = [];
 	var orderInProgress = false;
-	var in_pause = false;
 
 	start();
 
@@ -34,10 +33,11 @@
 		switch (name){
 			case "collision":
 				queue = [];
-				acts.collision();
+				acts.clean();
 				orderInProgress = false;
 			break;
 			case "stop":
+				acts.clean();
 				logger.fatal("Stop PR");
 				process.exit();
 			break;
@@ -46,16 +46,9 @@
 			case "start":
 				queue = [];
 				start();
-				break;
-			// case "stop":
-			// 	queue = [];
-			// 	// quitC("stop");
-			// 	stop();
-			// 	break;
+			break;
 			default:
-				if(!in_pause) {
-					addOrder2Queue(from, name, params);
-				}
+				addOrder2Queue(from, name, params);
 		}
 	});
 

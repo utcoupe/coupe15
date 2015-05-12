@@ -7,7 +7,7 @@
 	// logger.info("Started NodeJS client with pid " + process.pid);
 
 	var SocketClient = require('../../server/socket_client.class.js');
-	var server = "127.0.0.1:3128"; // server adress
+	var server = "127.0.0.1:3128"; // server address
 	var client = new SocketClient({
 		server_ip: server,
 		type: "gr"
@@ -30,17 +30,22 @@
 	client.order(function (from, name, params){
 		// logger.info("Recieved an order "+name);
 		switch (name){
-			case "queue_flush":
+			case "collision":
 				queue = [];
-				break;
+				acts.clean();
+				orderInProgress = false;
+			break;
+			case "stop":
+				acts.clean();
+				logger.fatal("Stop GR");
+				process.exit();
+			break;
+
+			// useless //
 			case "start":
 				queue = [];
 				start();
-				break;
-			case "stop":
-				logger.fatal("Stopped GR");
-				process.exit();
-				break;
+			break;
 			default:
 				addOrder2Queue(from, name, params);
 		}

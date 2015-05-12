@@ -86,6 +86,7 @@ module.exports = (function () {
 
 			// When the client send an order
 			client.on('order', function(data) {
+				// console.log(data);
 				if(typeof data !== 'object') {
 					logger.error("The client order sent isn't a object");
 					return;

@@ -22,21 +22,13 @@ module.exports = (function () {
 			gobelet:false
 		};
 		this.color = color;
-		this.stopped = false;
-
-		// if (this.color == "green"){
-		// 	this.pos.x = 3000 - this.pos.x;
-		// 	this.pos.a = 3.1416;
-		// }
 	}
 
 	Pr.prototype.loop = function () {
-		if(!this.stopped) {
-			logger.debug('loop');
-			this.ia.actions.doNextAction(function() {
-				this.loop();
-			}.bind(this));
-		}
+		logger.debug('loop');
+		this.ia.actions.doNextAction(function() {
+			this.loop();
+		}.bind(this));
 	};
 
 	Pr.prototype.collision = function() {
@@ -51,7 +43,6 @@ module.exports = (function () {
 		this.loop();
 	}
 	Pr.prototype.stop = function() {
-		this.stopped = true;
 		this.ia.client.send('pr', 'stop');
 	}
 

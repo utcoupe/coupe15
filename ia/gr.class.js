@@ -5,26 +5,26 @@ module.exports = (function () {
 
 	function Gr(ia, color) {
 		this.ia = ia;
-		this.pos = this.orders = require('./gr.json')['pos'];
+		this.pos = require('./gr.json')['pos'];
+		this.pos.color = color;
 		this.size = {
 			l: 290,
 			L: 290,
 			d: 420
 		};
-		if(!color) color = "yellow";
-		this.orders = require('./gr.json')['script_'+color];
+		this.orders = require('./gr.json')['script'];
 		// logger.debug(this.orders);
 		this.path = null;
-
-		if (color == "green"){
-			this.pos.x = 3000 - this.pos.x;
-			this.pos.a = 3.1416;
-		}
 	}
 
 	Gr.prototype.start = function () {
 		this.sendOrders();
 	};
+
+	Gr.prototype.stop = function() {
+		logger.debug('stop GR');
+		this.ia.client.send('gr', 'stop');
+	}
 
 	Gr.prototype.sendPos = function () {
 		this.ia.client.send("gr", "setpos", this.pos);
@@ -54,9 +54,6 @@ module.exports = (function () {
 		// TODO send order STOP
 	};
 
-	Gr.prototype.stop = function() {
-		this.ia.client.send('gr', 'stop');
-	}
 
 	
 	return Gr;
