@@ -5,7 +5,7 @@
 #include "lib/map.hpp"
 
 #define DEBUG 1
-#define RENDER_BMP 1
+#define RENDER_BMP 0
 
 using namespace std;
 

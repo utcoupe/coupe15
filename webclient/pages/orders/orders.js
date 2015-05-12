@@ -11,7 +11,8 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 			if(	   name != 'logger'
 				&& name != 'utcoupe'
 				&& name != 'simulateur'
-				&& name != 'gr.pos') {
+				&& name != 'gr.pos'
+				&& name != 'pr.pos') {
 				this.orders.unshift({
 					from: from,
 					name: name,

@@ -10,12 +10,15 @@ module.exports = (function () {
 	};
 
 	Others.prototype.callCallback = function(callback, ms) {
-			if(callback === undefined)
-				callback = function(){};
-			this.fifo.newOrder(callback);
+		if(callback === undefined) {
+			callback = function(){};
+		}
+		this.fifo.newOrder(function() {
 			setTimeout(function() {
+				callback();
 				this.fifo.orderFinished();
-			}.bind(this), ms);
+			}.bind(this), parseInt(ms/5));
+		}.bind(this));
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback) {

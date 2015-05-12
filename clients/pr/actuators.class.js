@@ -24,6 +24,11 @@ module.exports = (function () {
 		
 	};
 
+	// Collision, on finit le script mais on arrête l'asserv si go(xy)(a)
+	Acts.prototype.collision = function(){
+		asserv.clean();
+	};
+
 	Acts.prototype.connectTo = function(struct){
 		if (!struct.others) {
 			logger.fatal("Lancement de others pr en mode simu !");
@@ -113,7 +118,13 @@ module.exports = (function () {
 
 	function fake() {}
 	Acts.prototype.delay = function(ms, callback){
-		setTimeout(callback, ms);
+		fifo.newOrder(function() {
+			setTimeout(function() {
+				if(callback !== undefined)
+					callback();
+				fifo.orderFinished();
+			}, ms);
+		});
 	}
 
 	Acts.prototype.prendre_plot = function(callback){
@@ -135,7 +146,6 @@ module.exports = (function () {
 			others.monterUnPeuAscenseur();
 			others.monterAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
-				that.nb_plots++;
 				callback();
 			});
 			others.fermerBloqueur();
@@ -151,7 +161,6 @@ module.exports = (function () {
 			others.ouvrirBloqueurMoyen();
 			others.monterAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
-				that.nb_plots++;
 				callback();
 			});
 			others.fermerBloqueur();
@@ -164,7 +173,6 @@ module.exports = (function () {
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
-				that.nb_plots++;
 				callback();
 			});
 			others.ouvrirBloqueurMoyen();
@@ -176,7 +184,6 @@ module.exports = (function () {
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
-				that.nb_plots++;
 				callback();
 			});
 			others.ouvrirBloqueurMoyen();
@@ -185,6 +192,7 @@ module.exports = (function () {
 			ax12.ouvrir();
 			others.descendreAscenseur();					
 		}
+		that.nb_plots++;
 	}
 
 	// Order switch
@@ -195,6 +203,12 @@ module.exports = (function () {
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			// others
+			case "placer":
+				asserv.setPid(0.25, 200, 14);
+				asserv.goxy(500, 940);
+				asserv.goa(-0.62);
+				this.orderHandler('ia','fermer_tout', {}, callback);
+			break;
 			case "prendre_plot":
 				this.prendre_plot(callback);
 			break;	
@@ -226,9 +240,10 @@ module.exports = (function () {
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(fake,0);
 				asserv.goxy(275, 240, "arriere");
-				others.prendreGobelet();
-				that.has_gobelet = true;
-				that.client.send('ia', 'pr.gobelet1');
+				others.prendreGobelet(function() {
+					that.has_gobelet = true;
+					that.client.send('ia', 'pr.gobelet1');
+				});
 				asserv.speed(500, 0, 500); 
 				asserv.goxy(175, 250, "avant"); //100 au lieu de 90 pos plot
 				that.prendre_plot();

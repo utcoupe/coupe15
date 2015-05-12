@@ -18,9 +18,9 @@ module.exports = (function () {
 		this.color = color || "yellow";
 		this.nb_erobots = nb_erobots || 2;
 		
-		//this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
+		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
-		this.timer = new (require('./timer.class.js'))();
+		this.timer = new (require('./timer.class.js'))(this);
 		this.pathfinding = new (require('./pathfinding.class.js'))(this.color);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
 		this.actions = new (require('./actions.class.js'))(this);
@@ -42,6 +42,9 @@ module.exports = (function () {
 				switch(name) {
 					case 'ia.jack':
 						this.jack();
+					break;
+					case 'ia.stop':
+						this.stop();
 					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);
@@ -68,12 +71,20 @@ module.exports = (function () {
 		if(!this.timer.match_started) {
 			logger.info("Démarrage du match");
 			this.timer.start();
-			this.gr.start();
+			setTimeout(function() {
+				this.gr.start();
+			}.bind(this), 3000);
 			this.pr.start();
 			this.hokuyo.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}
+	};
+
+	Ia.prototype.stop = function() {
+		logger.fatal('Stop IA');
+		this.pr.stop();
+		process.exit();
 	};
 
 	return Ia;

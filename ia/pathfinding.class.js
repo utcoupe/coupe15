@@ -39,12 +39,12 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			logger.debug(data);
+			// logger.debug(data);
 			parse(data);
 		});
 
 		instance.stderr.on('data', function(data) {
-			logger.info(data.toString());
+			// logger.info(data.toString());
 		});
 
 

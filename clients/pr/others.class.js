@@ -167,7 +167,5 @@ module.exports = (function () {
 		}.bind(this), 'S', [250], time);
 	};
 
-
-
 	return Others;
 })();
