@@ -85,7 +85,7 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [60, 80], time);
+		this.sendCommand(callback, 'M', [70, 70], time);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback, time) {

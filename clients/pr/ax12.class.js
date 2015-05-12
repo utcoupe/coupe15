@@ -11,7 +11,7 @@ module.exports = (function () {
 	});
 
 	// Constants
-	var AX12_COUPLE = 1000;
+	var AX12_COUPLE = 800;
 	var P_GOAL_POSITION_L = 30;
 	var P_POSITION = 36;
 	var P_SPEED	= 0x26;
