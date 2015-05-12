@@ -95,13 +95,19 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.avancerPlot = function(callback) {
+		if(callback === undefined)
+			callback = function(){};
 		this.speed(200, 0, 600, function(){});
 		setTimeout(callback, 400);
 	}
 	Asserv.prototype.calageX = function(x, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
 		this.setPos({x: x, y: this.pos.y, a: a}, callback);
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
 		this.setPos({x: this.pos.x, y: y, a: a}, callback);
 	}
 

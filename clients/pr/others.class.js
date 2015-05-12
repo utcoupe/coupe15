@@ -48,7 +48,7 @@ module.exports = (function () {
 			this.callback_delay = callback_delay;
 			this.order_sent = cmd;
 
-			// logger.debug([cmd].concat(args).join(";"));
+			logger.debug([cmd].concat(args).join(";"));
 			this.sp.write([cmd].concat(args).join(";")+"\n");
 		}.bind(this));
 	};
@@ -85,7 +85,7 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [40, 80], time);
+		this.sendCommand(callback, 'M', [60, 80], time);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback, time) {
