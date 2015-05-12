@@ -4,19 +4,26 @@ module.exports = (function () {
 	function Others(sp, sendStatus, fifo) {
 		this.sp = sp;
 		// this.client = client;
-		this.ready = false;
+		this.ready = true;
 			logger.debug(sendStatus);
 		this.sendStatus = sendStatus;
 		this.fifo = fifo;
 
 		this.sp.on("data", function(data){
-			this.ready = true;
-			this.sendStatus();
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
 			logger.debug(data.toString());
 		});
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug(data.toString());
+		}.bind(this));
 	}
 
 	Others.prototype.parseCommand = function(data) {
@@ -50,42 +57,42 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 100;
 		}
-		this.sendCommand(callback, 'H', [136, 1], time);
+		this.sendCommand(callback, 'H', [98, 26], time);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback, time) {
 		if (time === undefined) {
 			time = 100;
 		}
-		this.sendCommand(callback, 'H', [126, 11], time);
+		this.sendCommand(callback, 'H', [90, 30], time);
 	};
 
 	Others.prototype.ouvrirStabilisateurGrand = function(callback, time) {
 		if (time === undefined) {
 			time = 400;
 		}
-		this.sendCommand(callback, 'H', [60, 66], time);
+		this.sendCommand(callback, 'H', [40, 80], time);
 	};
 
 	Others.prototype.fermerBloqueur = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [75, 155], time);
+		this.sendCommand(callback, 'M', [39, 106], time);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [100, 130], time);
+		this.sendCommand(callback, 'M', [40, 80], time);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback, time) {
 		if (time === undefined) {
 			time = 400;
 		}
-		this.sendCommand(callback, 'M', [140, 90], time);
+		this.sendCommand(callback, 'M', [110, 40], time);
 	};
 
 	Others.prototype.prendreGobelet = function(callback, time) {
@@ -99,14 +106,14 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'G', [40], time);
+		this.sendCommand(callback, 'G', [50], time);
 	};
 
 	Others.prototype.sortirClap = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'C', [125], time);
+		this.sendCommand(callback, 'C', [130], time);
 	};
 
 	Others.prototype.rangerClap = function(callback, time) {

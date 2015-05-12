@@ -13,7 +13,7 @@ module.exports = (function () {
 	// }
 
 	function Asserv(sp, client, who, sendStatus, fifo) {
-		this.ready = false;
+		this.ready = true;
 		this.sendStatus = sendStatus;
 		this.sp = sp;
 		this.client = client;
@@ -24,14 +24,21 @@ module.exports = (function () {
 		this.fifo = fifo;
 
 		this.sp.on("data", function(data){
-			this.ready = true;
-			this.sendStatus();
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
 			this.ready = false;
 			this.sendStatus();
 			logger.debug("error", data.toString());
+		}.bind(this));
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug(data.toString());
 		}.bind(this));
 
 		setTimeout(function() {

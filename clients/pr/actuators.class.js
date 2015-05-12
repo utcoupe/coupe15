@@ -87,17 +87,17 @@ module.exports = (function () {
 
 		data.status = "everythingIsAwesome";
 
-		if(others)
+		if(others && !!others.ready)
 			data.children.push("Arduino others");
 		else
 			data.status = "ok";
 
-		if(ax12 && ax12.ready)
+		if(ax12 && !!ax12.ready)
 			data.children.push("USB2AX");
 		else
 			data.status = "ok";
 
-		if(asserv && asserv.ready)
+		if(asserv && !!asserv.ready)
 			data.children.push("Arduino asserv");
 		else
 			data.status = "error";
@@ -106,12 +106,6 @@ module.exports = (function () {
 	};
 
 	Acts.prototype.quit = function(){
-		if (others)
-			others.disconnect();
-
-		if (asserv && asserv.ready)
-			asserv.disconnect();
-
 		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};

@@ -13,7 +13,6 @@ module.exports = (function () {
 	var timeouts = [];
 
 	function Asserv(client, who, fifo) {
-		this.ready = true;
 		this.client = client;
 		this.who = who;
 		this.pos = {
