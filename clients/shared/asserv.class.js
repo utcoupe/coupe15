@@ -149,7 +149,7 @@ module.exports = (function () {
 				// logger.fatal('finish id', lastFinishedId);
 				this.currentId = lastFinishedId;
 				this.callback();
-				if(this.use_fifo)
+				// if(this.use_fifo)
 					this.fifo.orderFinished();
 			}
 		} else if(cmd == this.order_sent) {
@@ -157,7 +157,7 @@ module.exports = (function () {
 			// logger.debug('finish', datas.shift());
 			if(!this.wait_for_id) {
 				this.callback();
-				if(this.use_fifo)
+				// if(this.use_fifo)
 					this.fifo.orderFinished();
 			}
 		} else if (cmd == COMMANDS.JACK) {
@@ -184,7 +184,7 @@ module.exports = (function () {
 		if(this.use_fifo) {
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
-			nextOrder.call(this);
+			this.fifo.newOrderPrio(nextOrder.bind(this));
 		}
 	}
 
