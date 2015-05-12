@@ -46,63 +46,63 @@ module.exports = (function () {
 		}.bind(this));
 	};
 
-	Others.prototype.fermerStabilisateur = function(callback) {
+	Others.prototype.fermerStabilisateur = function(callback, time) {
 		if (time === undefined) {
 			time = 100;
 		}
 		this.sendCommand(callback, 'H', [136, 1], time);
 	};
 
-	Others.prototype.ouvrirStabilisateurMoyen = function(callback) {
+	Others.prototype.ouvrirStabilisateurMoyen = function(callback, time) {
 		if (time === undefined) {
 			time = 100;
 		}
 		this.sendCommand(callback, 'H', [126, 11], time);
 	};
 
-	Others.prototype.ouvrirStabilisateurGrand = function(callback) {
+	Others.prototype.ouvrirStabilisateurGrand = function(callback, time) {
 		if (time === undefined) {
 			time = 400;
 		}
 		this.sendCommand(callback, 'H', [60, 66], time);
 	};
 
-	Others.prototype.fermerBloqueur = function(callback) {
+	Others.prototype.fermerBloqueur = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
 		this.sendCommand(callback, 'M', [75, 155], time);
 	};
 
-	Others.prototype.ouvrirBloqueurMoyen = function(callback) {
+	Others.prototype.ouvrirBloqueurMoyen = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
 		this.sendCommand(callback, 'M', [100, 130], time);
 	};
 
-	Others.prototype.ouvrirBloqueurGrand = function(callback) {
+	Others.prototype.ouvrirBloqueurGrand = function(callback, time) {
 		if (time === undefined) {
 			time = 400;
 		}
 		this.sendCommand(callback, 'M', [140, 90], time);
 	};
 
-	Others.prototype.prendreGobelet = function(callback) {
+	Others.prototype.prendreGobelet = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
 		this.sendCommand(callback, 'G', [115], time);
 	};
 
-	Others.prototype.lacherGobelet = function(callback) {
+	Others.prototype.lacherGobelet = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
 		this.sendCommand(callback, 'G', [40], time);
 	};
 
-	Others.prototype.sortirClap = function(callback) {
+	Others.prototype.sortirClap = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
@@ -116,49 +116,49 @@ module.exports = (function () {
 		this.sendCommand(callback, 'C', [40], time);
 	};
 
-	Others.prototype.monterAscenseur = function(callback) {
+	Others.prototype.monterAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [-250], time);
 	};
 
-	Others.prototype.monterUnPeuAscenseur = function(callback) {
+	Others.prototype.monterUnPeuAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [-30], time);
 	};
 
-	Others.prototype.descendreUnPeuAscenseur = function(callback) {
+	Others.prototype.descendreUnPeuAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [30], time);
 	};
 
-	Others.prototype.monterMoyenAscenseur = function(callback) {
+	Others.prototype.monterMoyenAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [-60], time);
 	};
 
-	Others.prototype.descendreMoyenAscenseur = function(callback) {
+	Others.prototype.descendreMoyenAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [60], time);
 	};
 
-	Others.prototype.relacherAscenseur = function(callback) {
+	Others.prototype.relacherAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
 		this.sendCommand(callback, 'S', [0], time);
 	};
 
-	Others.prototype.descendreAscenseur = function(callback) {
+	Others.prototype.descendreAscenseur = function(callback, time) {
 		if (time === undefined) {
 			time = 0;
 		}
