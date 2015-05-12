@@ -18,10 +18,6 @@ module.exports = (function () {
 		this.fifo.push(callback);
 		this.nextOrder();
 	}
-	Fifo.prototype.newOrder = function(callback) {
-		this.fifo.unshift(callback);
-		this.nextOrder();
-	}
 
 	Fifo.prototype.nextOrder = function() {
 		if(!this.order_in_progress && this.fifo.length > 0) {
