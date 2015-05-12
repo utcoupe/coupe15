@@ -94,14 +94,14 @@ module.exports = (function () {
 		// takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost" 
 
 		Object.keys(this.plot).forEach(function(c) {
-			if (this.getDistance(pos, this.plot[c].pos) < 0.55*this.erobot[e_robot_id].d) {
+			if ((this.getDistance(pos, this.plot[c].pos) < 0.55*this.erobot[e_robot_id].d) && (this.plot[c].status != "lost")) {
 				logger.info("Le plot " + c + " est marqué lost");
 				this.plot[c].status = "lost";
 			}
 		}.bind(this));
-
+		var min_dist = Infinity;
 		Object.keys(this.gobelet).forEach(function(g) {
-			if (this.getDistance(pos, this.gobelet[g].pos).d < 0.55*this.erobot[e_robot_id].d) {
+			if ((this.getDistance(pos, this.gobelet[g].pos) < 0.55*this.erobot[e_robot_id].d) && (this.gobelet[g].status != "lost")) {
 				logger.info("Le gobelet" + g + " est marqué lost");
 				this.gobelet[g].status = "lost";
 			}
