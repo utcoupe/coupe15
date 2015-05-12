@@ -9,6 +9,8 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 	$scope.vueDeDroite = function() { Simu.vueDeDroite(); }
 	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
 	$scope.iaPlacerPr = function() { Client.send("ia", "pr.placer"); }
+	$scope.iaCollisionPr = function() { Client.send("ia", "pr.collision"); }
+	$scope.iaStop = function() { Client.send("ia", "ia.stop"); }
 }]);
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {

@@ -10,7 +10,7 @@ module.exports = (function () {
 		this.t0 = Date.now();
 		this.match_started = true; // le match commence
 		setTimeout(function() {
-			this.ia.client.send('pr', 'stop');
+			this.ia.stop();
 		}.bind(this), 90000);
 	};
 

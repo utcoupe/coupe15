@@ -25,14 +25,8 @@ module.exports = (function () {
 	};
 
 	// Collision, on finit le script mais on arrête l'asserv si go(xy)(a)
-	Acts.prototype.pause = function(){
+	Acts.prototype.collision = function(){
 		asserv.clean();
-	};
-
-	// Fin du match, on arrête tout
-	Acts.prototype.stop = function(){
-		asserv.clean();
-		fifo.clean();
 	};
 
 	Acts.prototype.connectTo = function(struct){
@@ -209,6 +203,12 @@ module.exports = (function () {
 		// TODO : add a callback parameter to all functions (and call it)
 		switch (name){
 			// others
+			case "placer":
+				asserv.setPid(0.25, 200, 14);
+				asserv.goxy(500, 940);
+				asserv.goa(-0.62);
+				this.orderHandler('ia','fermer_tout', {}, callback);
+			break;
 			case "prendre_plot":
 				this.prendre_plot(callback);
 			break;	
@@ -241,7 +241,6 @@ module.exports = (function () {
 				others.lacherGobelet(fake,0);
 				asserv.goxy(275, 240, "arriere");
 				others.prendreGobelet(function() {
-					logger.debug('has gobelet');
 					that.has_gobelet = true;
 					that.client.send('ia', 'pr.gobelet1');
 				});

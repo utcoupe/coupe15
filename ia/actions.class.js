@@ -8,8 +8,10 @@ module.exports = (function () {
 
 		this.done = {};
 		this.todo = {};
-		this.inprogress = {};
+		this.inprogress = null;
 		this.killed = {};
+
+		this.valid_id_do_action = -1;
 
 		this.todo = this.importActions(ia.data);
 	}
@@ -18,6 +20,20 @@ module.exports = (function () {
 	var __nb_startpoints_plot = 128;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 
+	Actions.prototype.collision = function() {
+		if(this.inprogress !== null) {
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// Décommenter la ligne, juste pour tester
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// this.todo[this.inprogress.name] = this.inprogress;
+			this.inprogress = null;
+		}
+	}
+
 	Actions.prototype.importActions = function (data) {
 		var req;
 
@@ -25,7 +41,7 @@ module.exports = (function () {
 			req = require('./actions.json');
 		}
 		catch(err) {
-		    logger.fatal("Erreur lors de l'importation des actions dans l'IA");
+		    logger.fatal("Erreur lors de l'importation des actions dans l'IA: "+err);
 		}
 		var actions = req.actions;
 
@@ -54,7 +70,12 @@ module.exports = (function () {
 	Actions.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'actions.action_finished':
-				this.actionFinished(params.action_name);
+			// logger.debug('received action_finished');
+				this.actionFinished();
+			break;
+			case 'actions.path_finished':
+			logger.debug('received path_finished');
+				this.ia.pr.path = [];
 			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.gr: '+name);
@@ -134,6 +155,7 @@ module.exports = (function () {
 	};
 	
 	Actions.prototype.doNextAction = function(callback) {
+		this.valid_id_do_action++;
 		var actions_todo = [];
 
 		// Get les actions possibles
@@ -154,7 +176,7 @@ module.exports = (function () {
 		// }
 
 		// Va choisir l'action la plus proche, demander le path et faire doAction
-		this.pathDoAction(callback, actions_todo);
+		this.pathDoAction(callback, actions_todo, this.valid_id_do_action);
 	};
 
 	Actions.prototype.getNearestStartpoint = function(pos, startpoints) {
@@ -173,7 +195,9 @@ module.exports = (function () {
 		return nearest;
 	};
 
-	Actions.prototype.pathDoAction = function(callback, actions) {
+	Actions.prototype.pathDoAction = function(callback, actions, id) {
+		if(id != this.valid_id_do_action)
+			return;
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		if(actions.length > 0) {
 			var action = this.todo[actions.shift()];
@@ -181,26 +205,29 @@ module.exports = (function () {
 			this.ia.pathfinding.getPath(this.ia.pr.pos, startpoint, function(path) {
 				if(path !== null) {
 					this.ia.pr.path = path;
-					this.doAction(callback, action, startpoint);
+					this.doAction(callback, action, startpoint, id);
 				} else {
 					// Si le pathfinding foire, on fait la deuxième action la plus importante
-					this.pathDoAction(callback, actions);
+					this.pathDoAction(callback, actions, id);
 				}
 			}.bind(this));
 		} else {
-			this.doNextAction();
+			setTimeout(function() {
+				this.doNextAction();
+			}.bind(this), 500);
 		}
 	};
 
-	Actions.prototype.doAction = function (callback, action, startpoint) {
+	Actions.prototype.doAction = function (callback, action, startpoint, id) {
+		if(id != this.valid_id_do_action)
+			return;
 		this.callback = callback;
 		
 		// // Change action to state "in progress"
-		this.inprogress[action.name] = action;
+		this.inprogress = action;
 		delete this.todo[action.name];
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
-		// logger.debug(this.ia.pr.path);
 		this.ia.pr.path.map(function(checkpoint) {
 			this.ia.client.send('pr', "goxy", {
 				x: checkpoint.x,
@@ -214,13 +241,15 @@ module.exports = (function () {
 			});
 		}
 
+		this.ia.client.send('pr', "send_message", {
+			name: "actions.path_finished"
+		});
 		// 1 order for 1 action
 		// action.orders.forEach(function (order, index, array){
 		this.ia.client.send('pr', action.orders[0].name, action.orders[0].params);
 		// }.bind(this));
 		this.ia.client.send('pr', "send_message", {
-			name: "actions.action_finished",
-			action_name: action.name
+			name: "actions.action_finished"
 		});
 
 		// // Set object to "done" ! XXX
@@ -232,13 +261,15 @@ module.exports = (function () {
 		// console.log(this.done);
 	};
 
-	Actions.prototype.actionFinished = function (action_name) {
-		this.done[action_name] = this.inprogress[action_name];
-		delete this.inprogress[action_name];
-		logger.info('Action %s est finie !', action_name);
-		var temp = this.callback;
-		this.callback = function() {logger.warn('callback vide'); };
-		temp.call();
+	Actions.prototype.actionFinished = function () {
+		if(this.inprogress !== null) {
+			this.done[this.inprogress.name] = this.inprogress;
+			logger.info('Action %s est finie !', this.inprogress.name);
+			this.inprogress = null;
+			var temp = this.callback;
+			this.callback = function() {logger.warn('callback vide'); };
+			temp();
+		}
 	};
 	
 	return Actions;

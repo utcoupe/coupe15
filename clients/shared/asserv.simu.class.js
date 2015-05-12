@@ -2,13 +2,15 @@ module.exports = (function () {
 	var logger = require('log4js').getLogger('asserv');
 
 	// For simu
-	var SIMU_FACTOR_VIT = 3;
+	var SIMU_FACTOR_VIT = 1;
 	var SIMU_FACTOR_A = 0.3; 	// Facteur
 	// var SIMU_PWM_REF = 255; 	// à une PWM de 80
 	function SIMU_DIST(pwm, dt, vitesse) { return (vitesse*SIMU_FACTOR_VIT)*dt; }
 	function SIMU_DIST_ROT(a) { return Math.abs(a)*100; } // Rayon aproximatif de 10cm
 	function SIMU_ROT_TIME(a, vitesse) { return SIMU_DIST_ROT(a)/(vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
 	var FPS = 30;
+
+	var timeouts = [];
 
 	function Asserv(client, who, fifo) {
 		this.ready = true;
@@ -30,12 +32,12 @@ module.exports = (function () {
 		if(delay_order_finished === undefined) delay_order_finished = 0;
 
 		function nextOrder() {
-			setTimeout(function() {
+			timeouts.push(setTimeout(function() {
 				callback();
-				setTimeout(function() {
+				timeouts.push(setTimeout(function() {
 					this.fifo.orderFinished();
-				}.bind(this), delay_order_finished);
-			}.bind(this), ms);
+				}.bind(this), delay_order_finished));
+			}.bind(this), ms));
 		}
 
 		if(use_fifo) {
@@ -43,7 +45,7 @@ module.exports = (function () {
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
 			// logger.debug('no_fifo');
-			setTimeout(callback, ms);//.call(this);
+			timeouts.push(setTimeout(callback, ms));//.call(this));
 		}
 	}
 
@@ -69,8 +71,11 @@ module.exports = (function () {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
-	Asserv.prototype.clean = function(callback){
-		this.newOrder(callback);
+	Asserv.prototype.clean = function(){
+		logger.debug('cleaning %d timeouts', timeouts.length);
+		while(timeouts.length > 0) {
+			clearTimeout(timeouts.shift());
+		}
 	};
 	Asserv.prototype.avancerPlot = function(callback) {
 		this.newOrder(callback, 1200);
@@ -102,10 +107,10 @@ module.exports = (function () {
 		this.newOrder(function() {
 			// this.simu.pwm(callback, l/3, l/3, ms);
 			for(var t = 0; t < ms; t += 1000/FPS) {
-				setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t);
+				timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
-			setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms);
-			setTimeout(callback, ms);
+			timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms));
+			timeouts.push(setTimeout(callback, ms));
 		}.bind(this), 0, false, ms);
 	};
 
@@ -123,10 +128,10 @@ module.exports = (function () {
 		this.newOrder(function() {
 			var pwm = (left+right)/2;
 			for(var t = 0; t < ms; t += 1000/FPS) {
-				setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t);
+				timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
-			setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, ms), ms);
-			setTimeout(callback, ms);
+			timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, ms), ms));
+			timeouts.push(setTimeout(callback, ms));
 		}.bind(this), 0, false, ms);
 	};
 
@@ -162,10 +167,10 @@ module.exports = (function () {
 			this.goa(angle_depart+this.pos.a, function() {
 				this.newOrder(function() {
 					for(var t = 0; t < tf; t += 1000/FPS) {
-						setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t);
+						timeouts.push(setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t));
 					}
-					setTimeout(this.simu_goxy(x, y), tf);
-					setTimeout(callback, tf);
+					timeouts.push(setTimeout(this.simu_goxy(x, y), tf));
+					timeouts.push(setTimeout(callback, tf));
 				}.bind(this), 0, no_fifo, tf);
 			}.bind(this), no_fifo);
 	};
@@ -186,10 +191,10 @@ module.exports = (function () {
 		this.newOrder(function() {
 			for(var t = 0; t < tf; t += 1000/FPS) {
 				// logger.debug(this.pos.a+da*t/tf);
-				setTimeout(this.simu_goa(this.pos.a+da*t/tf), t);
+				timeouts.push(setTimeout(this.simu_goa(this.pos.a+da*t/tf), t));
 			}
-			setTimeout(this.simu_goa(a), tf);
-			setTimeout(callback, tf);
+			timeouts.push(setTimeout(this.simu_goa(a), tf));
+			timeouts.push(setTimeout(callback, tf));
 		}.bind(this), 0, no_fifo, tf);
 	};
 

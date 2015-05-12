@@ -17,12 +17,12 @@ module.exports = (function () {
 		this.current_action = null;
 		//this.path = null;
 		this.path = [];
-		this.nb = 0;
 		this.content = {
 			nb_plots: 0,
 			gobelet:false
 		};
 		this.color = color;
+		this.stopped = false;
 
 		// if (this.color == "green"){
 		// 	this.pos.x = 3000 - this.pos.x;
@@ -31,34 +31,34 @@ module.exports = (function () {
 	}
 
 	Pr.prototype.loop = function () {
-		if(this.nb < 99) {
+		if(!this.stopped) {
 			logger.debug('loop');
-			this.nb++;
 			this.ia.actions.doNextAction(function() {
 				this.loop();
 			}.bind(this));
 		}
 	};
 
-	Pr.prototype.place = function () {
-		logger.debug('place');
-		this.sendInitialPos();
-		this.ia.client.send("pr", "setpid", { p:0.25, i:200, d:14 });
-		this.ia.client.send("pr", "goxy", { x: 500, y: 940});
-		this.ia.client.send("pr", "goa", { a: -0.62 });
-		this.ia.client.send("pr", "fermer_tout");
+	Pr.prototype.collision = function() {
+		if(this.path.length === 0) { // Utile quand on clique nous même sur le bouton dans le simu
+			logger.warn("Normalement impossible, collision sur un path vide ?");
+			return;
+		}
 
-		// Calage auto, fonctionne pas
-		// this.ia.client.send("pr", "goxy", { x: 300, y: 1000});
-		// this.ia.client.send("pr", "goa", { a: -1.5708 });
-		// this.ia.client.send("pr", "monter_ascenseur");
-		// this.ia.client.send("pr", "pwm", { left: 20, right: 20, ms: 1500 });
-		// setTimeout(function() {
-		// 	this.ia.client.send("pr", "setpos", { x: this.pos.x, y: 1200-65, a: -1.5708 });
-		// 	this.ia.client.send("pr", "pwm", { left: -20, right: -20, ms: 1000 });
-		// 	this.ia.client.send("pr", "goxy", { x: 250, y: 1000});
-		// 	this.ia.client.send("pr", "goa", { a: 3.1416 });
-		// 	this.ia.client.send("pr", "fermer_pour_charger_balle");
+		logger.info('collision');
+		this.ia.client.send('pr', "collision");
+		this.ia.actions.collision();
+		this.loop();
+	}
+	Pr.prototype.stop = function() {
+		this.stopped = true;
+		this.ia.client.send('pr', 'stop');
+	}
+
+	Pr.prototype.place = function () {
+		// logger.debug('place');
+		this.sendInitialPos();
+		this.ia.client.send('pr', 'placer');
 	};
 
 	Pr.prototype.start = function () {
@@ -77,6 +77,9 @@ module.exports = (function () {
 
 	Pr.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
+			case 'pr.collision':
+				this.collision();
+			break;
 			// Asserv
 			case 'pr.pos':
 				this.pos = params;

@@ -24,6 +24,7 @@
 
 	var queue = [];
 	var orderInProgress = false;
+	var in_pause = false;
 
 	start();
 
@@ -31,13 +32,14 @@
 	client.order(function (from, name, params){
 		// logger.info("Recieved an order "+name);
 		switch (name){
-			case "pause":
+			case "collision":
 				queue = [];
-				acts.pause();
+				acts.collision();
+				orderInProgress = false;
 			break;
 			case "stop":
-				queue = [];
-				acts.stop();
+				logger.fatal("Stop PR");
+				process.exit();
 			break;
 
 			// useless //
@@ -45,13 +47,15 @@
 				queue = [];
 				start();
 				break;
-			case "stop":
-				queue = [];
-				// quitC("stop");
-				stop();
-				break;
+			// case "stop":
+			// 	queue = [];
+			// 	// quitC("stop");
+			// 	stop();
+			// 	break;
 			default:
-				addOrder2Queue(from, name, params);
+				if(!in_pause) {
+					addOrder2Queue(from, name, params);
+				}
 		}
 	});
 
@@ -64,15 +68,15 @@
 		detect = new (require('./detect.class.js'))(devicesDetected);
 	}
 
-	function stop(){
-		acts.quit();
+	// function stop(){
+	// 	acts.quit();
 
-		// Send struct to server
-		sendChildren({
-			status: "waiting", 
-			children:[]
-		});
-	}
+	// 	// Send struct to server
+	// 	sendChildren({
+	// 		status: "waiting", 
+	// 		children:[]
+	// 	});
+	// }
 
 	function devicesDetected(struct){
 		// Verify content
@@ -113,10 +117,11 @@
 
 	// Push the order (enfiler)
 	function addOrder2Queue(f, n, p){
-		if(n == 'clean') {
-			logger.info(n+" : Begin");
-			acts.orderHandler(f, n, p, actionFinished);
-		} else if(queue.length < 50){
+		// if(n == 'clean') {
+		// 	logger.info(n+" : Begin");
+		// 	acts.orderHandler(f, n, p, actionFinished);
+		// } else
+		if(queue.length < 100){
 			// Adds the order to the queue
 			queue.push({
 				from: f,
@@ -136,7 +141,8 @@
 			var order = queue.shift();
 			if(order.name == "send_message") {
 				// logger.debug("Send message %s", order.params.name);
-				client.send('ia', order.params.name, order.params);
+				client.send('ia', order.params.name, order.params || {});
+				executeNextOrder();
 			} else {
 				orderInProgress = order.name;
 				
@@ -144,7 +150,7 @@
 				// logger.debug(order.params);
 				acts.orderHandler(order.from, order.name, order.params, actionFinished);
 				
-				executeNextOrder();
+				// executeNextOrder();
 			}
 		}
 	}

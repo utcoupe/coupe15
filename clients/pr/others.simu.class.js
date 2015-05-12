@@ -17,7 +17,7 @@ module.exports = (function () {
 			setTimeout(function() {
 				callback();
 				this.fifo.orderFinished();
-			}.bind(this), parseInt(ms/10));
+			}.bind(this), parseInt(ms/5));
 		}.bind(this));
 	};
 

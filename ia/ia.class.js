@@ -43,6 +43,9 @@ module.exports = (function () {
 					case 'ia.jack':
 						this.jack();
 					break;
+					case 'ia.stop':
+						this.stop();
+					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);
 				}
@@ -68,12 +71,20 @@ module.exports = (function () {
 		if(!this.timer.match_started) {
 			logger.info("Démarrage du match");
 			this.timer.start();
-			this.gr.start();
+			setTimeout(function() {
+				this.gr.start();
+			}.bind(this), 3000);
 			this.pr.start();
 			this.hokuyo.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}
+	};
+
+	Ia.prototype.stop = function() {
+		logger.fatal('Stop IA');
+		this.pr.stop();
+		process.exit();
 	};
 
 	return Ia;
