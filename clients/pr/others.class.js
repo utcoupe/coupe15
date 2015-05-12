@@ -48,9 +48,9 @@ module.exports = (function () {
 			this.callback_delay = callback_delay;
 			this.order_sent = cmd;
 
-			logger.debug([cmd].concat(args).join(";"));
+			//logger.debug([cmd].concat(args).join(";"));
 			this.sp.write([cmd].concat(args).join(";")+"\n");
-		}.bind(this));
+		}.bind(this), 'sendCommandOther('+cmd+':'+args+')');
 	};
 
 	Others.prototype.fermerStabilisateur = function(callback, time) {

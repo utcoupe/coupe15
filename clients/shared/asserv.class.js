@@ -101,7 +101,7 @@ module.exports = (function () {
 		], false, function() {
 			callback();
 			this.fifo.orderFinished();
-		}.bind(this));
+		}.bind(this), true);
 	}
 
 	Asserv.prototype.calageX = function(x, a, callback) {
@@ -109,7 +109,7 @@ module.exports = (function () {
 			callback = function(){};
 		this.fifo.newOrder(function() {
 			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
-		}.bind(this));
+		}.bind(this), 'calageX');
 
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
@@ -117,7 +117,7 @@ module.exports = (function () {
 			callback = function(){};
 		this.fifo.newOrder(function() {
 			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
-		}.bind(this));
+		}.bind(this), 'calageY');
 	}
 
 	// For float
@@ -147,6 +147,8 @@ module.exports = (function () {
 				this.callback();
 				if(this.use_fifo)
 					this.fifo.orderFinished();
+				else
+					this.use_fifo = this.old_use_fifo;
 			}
 		} else if(cmd == this.order_sent) {
 			this.order_sent = '';
@@ -155,6 +157,8 @@ module.exports = (function () {
 				this.callback();
 				if(this.use_fifo)
 					this.fifo.orderFinished();
+				else
+					this.use_fifo = this.old_use_fifo;
 			}
 		} else if (cmd == COMMANDS.JACK) {
 			logger.info("JACK !");
@@ -175,10 +179,11 @@ module.exports = (function () {
 			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		}
 
+		this.old_use_fifo = this.use_fifo;
 		this.use_fifo = !no_fifo;
 
 		if(this.use_fifo) {
-			this.fifo.newOrder(nextOrder.bind(this));
+			this.fifo.newOrder(nextOrder.bind(this), 'sendCommandAsserv('+cmd+':'+args+')');
 		} else {
 			nextOrder.call(this);
 		}

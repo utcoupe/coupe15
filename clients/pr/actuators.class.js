@@ -118,7 +118,7 @@ module.exports = (function () {
 					callback();
 				fifo.orderFinished();
 			}, ms);
-		});
+		}, 'delay');
 	}
 
 	Acts.prototype.prendre_plot = function(callback){

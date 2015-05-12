@@ -122,7 +122,7 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'ouvrir';
-		}.bind(this));
+		}.bind(this), 'AX12-Ouvrir');
 	};
 
 	Ax12.prototype.fermer = function(callback) {
@@ -139,7 +139,7 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-		}.bind(this));
+		}.bind(this), 'AX12-Fermer');
 	};
 	Ax12.prototype.fermerBalle = function(callback) {
 		if(callback === undefined) {
@@ -155,7 +155,7 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-		}.bind(this));
+		}.bind(this), 'AX12-Fermer balle');
 	};
 	Ax12.prototype.fermerBalle2 = function(callback) {
 		if(callback === undefined) {
@@ -171,7 +171,7 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-		}.bind(this));
+		}.bind(this), 'AX12-Fermer balle 2');
 	};
 
 	return Ax12;

@@ -14,8 +14,10 @@ module.exports = (function () {
 		this.nextOrder();
 	}
 
-	Fifo.prototype.newOrder = function(callback) {
-		this.fifo.push(callback);
+	Fifo.prototype.newOrder = function(callback, name) {
+		if (name === undefined)
+			name = "";
+		this.fifo.push({callback: callback, name: name});
 		this.nextOrder();
 	}
 
@@ -23,7 +25,9 @@ module.exports = (function () {
 		if(!this.order_in_progress && this.fifo.length > 0) {
 			// logger.debug(this.fifo.length);
 			this.order_in_progress = true;
-			(this.fifo.shift())();
+			object = this.fifo.shift();
+			logger.debug("Calling : "+object.name);
+			object.callback();
 		}
 	}
 
