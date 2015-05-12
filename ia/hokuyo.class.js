@@ -185,7 +185,7 @@ module.exports = (function () {
 				// if some robots aren't already matched
 				var e_r2Bmatched = [];
 
-				for (var i = 0; i < this.ia.data.erobot.length; i++) {
+				for (var i = 0; i < this.ia.data.nb_erobots; i++) {
 					if(this.ia.data.erobot[i].lastUpdate < now){
 						// logger.debug(this.ia.data.erobot[i].name + " last update :");
 						// logger.debug(this.ia.data.erobot[i].lastUpdate);
@@ -274,7 +274,7 @@ module.exports = (function () {
 
 			// if there's some robots to be matched (but no real point left :/), they're lost...
 			// we estimate their position and tag them with "lost"
-			for (var i = 0; i < this.ia.data.erobot.length; i++) {
+			for (var i = 0; i < this.ia.data.nb_erobots; i++) {
 				if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "moving")){
 					this.ia.data.erobot[i].pos = {
 						x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),

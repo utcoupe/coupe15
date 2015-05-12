@@ -4,19 +4,26 @@ module.exports = (function () {
 	function Others(sp, sendStatus, fifo) {
 		this.sp = sp;
 		// this.client = client;
-		this.ready = false;
+		this.ready = true;
 			logger.debug(sendStatus);
 		this.sendStatus = sendStatus;
 		this.fifo = fifo;
 
 		this.sp.on("data", function(data){
-			this.ready = true;
-			this.sendStatus();
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
 			this.parseCommand(data.toString());
 		}.bind(this));
 		this.sp.on("error", function(data){
 			logger.debug(data.toString());
 		});
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug(data.toString());
+		}.bind(this));
 	}
 
 	Others.prototype.parseCommand = function(data) {

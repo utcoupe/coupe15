@@ -67,7 +67,6 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.disconnect = function(x) {
-		this.sp.close();
 		this.ready = false;
 		this.sendStatus();
 	};
