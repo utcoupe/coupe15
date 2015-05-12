@@ -309,12 +309,12 @@ Simu.init = function(){
 	Simu.update = function (data){
 
 	// update des robots
-
-		var t = data.robots.gr;
+	var t; // temp
+		t = data.robots.gr;
 		Simu.GR.position.set(t.x,0.11,t.y);
 		Simu.GR.rotation.y = t.a;
 
-		var t = data.robots.pr;
+		t = data.robots.pr;
 		Simu.PR.position.set(t.x,0.185,t.y);
 		Simu.PR.rotation.y = t.a;
 
@@ -323,16 +323,16 @@ Simu.init = function(){
 			return new THREE.Vector3(pos[0], 0.01, pos[1]);
 		}));
 
-
-/* TEMP on n'update que les robots
-		var t = data.robots.ge;
+		t = data.robots.egr;
+		var t = data.robots.egr;
 		Simu.GE.position.set(t.x,0.185,t.y);
 		
 
-		var t = data.robots.pe;
+		var t = data.robots.epr;
 		Simu.PE.position.set(t.x,0.185,t.y);
 		
 
+/* TEMP on n'update que les robots
 	// update des ampoules
 
 		var t = data.ampoules;

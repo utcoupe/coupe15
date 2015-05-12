@@ -53,9 +53,17 @@ module.exports = (function () {
 				path: [this.ia.pr.pos].concat(this.ia.pr.path).map(function(pos){
 					return [convertX(pos.x), convertY(pos.y)];
 				})
+			},
+			egr: {
+				x: convertX(this.ia.data.erobot[0].pos.x),
+				y: convertY(this.ia.data.erobot[0].pos.y)
+			},
+			epr: {
+				x: convertX(this.ia.data.erobot[1].pos.x),
+				y: convertY(this.ia.data.erobot[1].pos.y)
 			}
 		}
-		// logger.debug(data.robots.pr);
+		// logger.debug(data.robots.egr);
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);

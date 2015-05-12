@@ -17,8 +17,8 @@ module.exports = (function () {
 		this.nb_erobots = nb_erobots || 2;
 		logger.info("Launching a "+this.color+" AI with "+this.nb_erobots+" ennemies.");
 		
-		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
-		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
+		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
+		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
 		this.timer = new (require('./timer.class.js'))(this);
 		this.pathfinding = new (require('./pathfinding.class.js'))(this.color);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
@@ -84,7 +84,7 @@ module.exports = (function () {
 		logger.fatal('Stop IA');
 		this.gr.stop();
 		this.pr.stop();
-		setTimeout(process.exit, 200);
+		setTimeout(process.exit, 2000);
 	};
 
 	return Ia;

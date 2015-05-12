@@ -18,7 +18,7 @@ module.exports = (function () {
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:1500,
+					x:3500,
 					y:1000
 				},
 				speed:{ // in mm/sec
@@ -28,14 +28,11 @@ module.exports = (function () {
 				lastUpdate: 0, // time in ms from the beining of the match
 				d:320, // en mm, penser à la modifier !!
 				status: "lost"
-			}];
-
-		if (this.nb_erobots == 2) {
-			this.erobot.push({ // small robot on position 1
+			},{ // small robot on position 1
 				name: "pr",
 				pos:{
-					x:2555,
-					y:0
+					x:3200,
+					y:1000
 				},
 				speed:{
 					x:0,
@@ -44,8 +41,7 @@ module.exports = (function () {
 				lastUpdate: 0,
 				d:200, // en mm, penser à la modifier !!
 				status: "lost"
-			});
-		}
+			}];
 	}
 
 	Data.prototype.importObjects = function () {
