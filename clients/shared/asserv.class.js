@@ -76,11 +76,10 @@ module.exports = (function () {
 		this.pos.x = pos.x;
 		this.pos.y = pos.y;
 		this.setA(pos.a);
-		if(pos.color !== undefined)
-			this.color = pos.color;
 	}
 	Asserv.prototype.setPos = function(pos, callback) {
-		this.Pos(pos);
+		if(pos.color !== undefined)
+			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
 			parseInt(this.convertColorX(this.pos.x)),
 			parseInt(this.convertColorY(this.pos.y)),
@@ -94,15 +93,31 @@ module.exports = (function () {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
-	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(200, 0, 600, function(){});
-		setTimeout(callback, 400);
+	Asserv.prototype.setPosCalage = function(pos, callback) {
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this));
 	}
+
 	Asserv.prototype.calageX = function(x, a, callback) {
-		this.setPos({x: x, y: this.pos.y, a: a}, callback);
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
+		}.bind(this));
+
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
-		this.setPos({x: this.pos.x, y: y, a: a}, callback);
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
+		}.bind(this));
 	}
 
 	// For float
@@ -130,21 +145,23 @@ module.exports = (function () {
 				// logger.fatal('finish id', lastFinishedId);
 				this.currentId = lastFinishedId;
 				this.callback();
-				this.fifo.orderFinished();
+				if(this.use_fifo)
+					this.fifo.orderFinished();
 			}
 		} else if(cmd == this.order_sent) {
 			this.order_sent = '';
 			// logger.debug('finish', datas.shift());
 			if(!this.wait_for_id) {
 				this.callback();
-				this.fifo.orderFinished();
+				if(this.use_fifo)
+					this.fifo.orderFinished();
 			}
 		} else if (cmd == COMMANDS.JACK) {
 			logger.info("JACK !");
 			this.client.send("ia", "ia.jack");
 		} else {
 			// logger.warn(datas);
-			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
+			logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
 	}
 	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
@@ -158,9 +175,9 @@ module.exports = (function () {
 			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		}
 
-		var use_fifo = !no_fifo;
+		this.use_fifo = !no_fifo;
 
-		if(use_fifo) {
+		if(this.use_fifo) {
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
 			nextOrder.call(this);

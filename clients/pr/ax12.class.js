@@ -11,7 +11,7 @@ module.exports = (function () {
 	});
 
 	// Constants
-	var AX12_COUPLE = 1000;
+	var AX12_COUPLE = 800;
 	var P_GOAL_POSITION_L = 30;
 	var P_POSITION = 36;
 	var P_SPEED	= 0x26;
@@ -126,6 +126,9 @@ module.exports = (function () {
 	};
 
 	Ax12.prototype.fermer = function(callback) {
+		if(callback === undefined) {
+			callback = function(){};
+		}
 		this.fifo.newOrder(function() {
 			ax12s['2'].obj = this.degToAx12(-85);
 			ax12s['3'].obj = this.degToAx12(85);
@@ -136,12 +139,12 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(this.callback === undefined) {
-				this.fifo.orderFinished();
-			}
 		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle = function(callback) {
+		if(callback === undefined) {
+			callback = function(){};
+		}
 		this.fifo.newOrder(function() {
 			ax12s['2'].obj = this.degToAx12(-50);
 			ax12s['3'].obj = this.degToAx12(50);
@@ -152,12 +155,12 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(this.callback === undefined) {
-				this.fifo.orderFinished();
-			}
 		}.bind(this));
 	};
 	Ax12.prototype.fermerBalle2 = function(callback) {
+		if(callback === undefined) {
+			callback = function(){};
+		}
 		this.fifo.newOrder(function() {
 			ax12s['2'].obj = this.degToAx12(-75);
 			ax12s['3'].obj = this.degToAx12(75);
@@ -168,9 +171,6 @@ module.exports = (function () {
 			ax12s['3'].started = false;
 			this.callback = callback;
 			this.type_callback = 'fermer';
-			if(this.callback === undefined) {
-				this.fifo.orderFinished();
-			}
 		}.bind(this));
 	};
 
