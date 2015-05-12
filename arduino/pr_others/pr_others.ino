@@ -24,19 +24,19 @@ void setup()
 
   stepper.setSpeed(60); 
   // /!\  Pour éviter les conflits, il ne faut pas utiliser les PIN deja prisent par la shield !!!
-  H_servo1.attach(2);  //2 5 6 9 10  OK
-  H_servo2.attach(5);  //13=led BOF BOF
-  M_servo1.attach(6);  //3 4=vibre 7 8 11 12 !OK
+  H_servo1.attach(5);  //2 5 6 9 10  OK
+  H_servo2.attach(13);  //13=led BOF BOF
+  M_servo1.attach(2);  //3 4=vibre 7 8 11 12 !OK
   M_servo2.attach(9);
   G_servo.attach(10);
-  C_servo.attach(13);
+  C_servo.attach(6);
 
-  H_servo1.write(136); 
-  H_servo2.write(1); 
-  M_servo1.write(80);
-  M_servo2.write(150);
-  G_servo.write(40);
-  C_servo.write(40);
+  H_servo1.write(50); 
+  H_servo2.write(50); 
+  M_servo1.write(70);
+  M_servo2.write(50);
+  G_servo.write(70);
+  C_servo.write(50);
 } 
 
 
