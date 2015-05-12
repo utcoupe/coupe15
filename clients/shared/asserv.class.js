@@ -81,9 +81,9 @@ module.exports = (function () {
 		if(pos.color !== undefined)
 			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
-			parseInt(this.convertColorX(this.pos.x)),
-			parseInt(this.convertColorY(this.pos.y)),
-			myWriteFloat(this.convertColorA(this.pos.a))
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
 		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
