@@ -76,16 +76,18 @@ module.exports = (function () {
 		this.pos.x = pos.x;
 		this.pos.y = pos.y;
 		this.setA(pos.a);
-		if(pos.color !== undefined)
-			this.color = pos.color;
 	}
 	Asserv.prototype.setPos = function(pos, callback) {
-		this.Pos(pos);
+		if(pos.color !== undefined)
+			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
-			parseInt(this.convertColorX(this.pos.x)),
-			parseInt(this.convertColorY(this.pos.y)),
-			myWriteFloat(this.convertColorA(this.pos.a))
-		], false, callback);
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this));
 	}
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
@@ -94,15 +96,15 @@ module.exports = (function () {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
-	Asserv.prototype.avancerPlot = function(callback) {
-		this.speed(200, 0, 600, function(){});
-		setTimeout(callback, 400);
-	}
 	Asserv.prototype.calageX = function(x, a, callback) {
-		this.setPos({x: x, y: this.pos.y, a: a}, callback);
+		this.fifo.newOrder(function() {
+			this.setPos({x: x, y: this.pos.y, a: a}, callback);
+		}.bind(this));
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
-		this.setPos({x: this.pos.x, y: y, a: a}, callback);
+		this.fifo.newOrder(function() {
+			this.setPos({x: this.pos.x, y: y, a: a}, callback);
+		}.bind(this));
 	}
 
 	// For float
@@ -146,7 +148,7 @@ module.exports = (function () {
 			this.client.send("ia", "ia.jack");
 		} else {
 			// logger.warn(datas);
-			// logger.warn("Command return from Arduino to unknown cmd="+cmd);
+			logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
 	}
 	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
