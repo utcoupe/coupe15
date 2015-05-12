@@ -130,14 +130,16 @@ module.exports = (function () {
 				// logger.fatal('finish id', lastFinishedId);
 				this.currentId = lastFinishedId;
 				this.callback();
-				this.fifo.orderFinished();
+				if(this.use_fifo)
+					this.fifo.orderFinished();
 			}
 		} else if(cmd == this.order_sent) {
 			this.order_sent = '';
 			// logger.debug('finish', datas.shift());
 			if(!this.wait_for_id) {
 				this.callback();
-				this.fifo.orderFinished();
+				if(this.use_fifo)
+					this.fifo.orderFinished();
 			}
 		} else if (cmd == COMMANDS.JACK) {
 			logger.info("JACK !");
@@ -158,9 +160,9 @@ module.exports = (function () {
 			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		}
 
-		var use_fifo = !no_fifo;
+		this.use_fifo = !no_fifo;
 
-		if(use_fifo) {
+		if(this.use_fifo) {
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
 			nextOrder.call(this);
