@@ -14,7 +14,8 @@ module.exports = (function () {
 
 	function Pathfinding() {
 		var fifo = [];
-		var instance = Child_process.spawn(programm, [ image ]);
+		var instance = Child_process.spawn("bash", [ "-c", "pkill pathfinding; "+programm+" "+image ]);
+		//var instance = Child_process.spawn(programm, [ image ]);
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
