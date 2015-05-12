@@ -97,11 +97,15 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.calageX = function(x, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
 		this.fifo.newOrder(function() {
 			this.setPos({x: x, y: this.pos.y, a: a}, callback);
 		}.bind(this));
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
 		this.fifo.newOrder(function() {
 			this.setPos({x: this.pos.x, y: y, a: a}, callback);
 		}.bind(this));
