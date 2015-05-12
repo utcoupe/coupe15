@@ -94,11 +94,13 @@ module.exports = (function () {
 	}
 
 	Asserv.prototype.setPosCalage = function(pos, callback) {
+		logger.debug("Pushing setPosCalage");
 		this.sendCommand(COMMANDS.SET_POS, [
 			parseInt(this.convertColorX(pos.x)),
 			parseInt(this.convertColorY(pos.y)),
 			myWriteFloat(this.convertColorA(pos.a))
 		], false, function() {
+			logger.debug("Doing setPosCalage");
 			callback();
 			this.fifo.orderFinished();
 		}.bind(this));
@@ -115,7 +117,9 @@ module.exports = (function () {
 	Asserv.prototype.calageY = function(y, a, callback) {
 		if(callback === undefined)
 			callback = function(){};
+		logger.debug("Pushing calageY");
 		this.fifo.newOrder(function() {
+			logger.debug("Doing calageY");
 			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
 		}.bind(this));
 	}
