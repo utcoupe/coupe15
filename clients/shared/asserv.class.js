@@ -77,18 +77,14 @@ module.exports = (function () {
 		this.pos.y = pos.y;
 		this.setA(pos.a);
 	}
-	Asserv.prototype.setPos = function(pos, callback, use_fifo) {
+	Asserv.prototype.setPos = function(pos, callback) {
 		if(pos.color !== undefined)
 			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
-			parseInt(this.convertColorX(pos.x)),
-			parseInt(this.convertColorY(pos.y)),
-			myWriteFloat(this.convertColorA(pos.a))
-		], false, function() {
-			callback();
-			if(use_fifo !== undefined)
-				this.fifo.orderFinished();
-		}.bind(this));
+			parseInt(this.convertColorX(this.pos.x)),
+			parseInt(this.convertColorY(this.pos.y)),
+			myWriteFloat(this.convertColorA(this.pos.a))
+		], false, callback);
 	}
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
@@ -97,18 +93,30 @@ module.exports = (function () {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
+	Asserv.prototype.setPosCalage = function(pos, callback) {
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this));
+	}
+
 	Asserv.prototype.calageX = function(x, a, callback) {
 		if(callback === undefined)
 			callback = function(){};
 		this.fifo.newOrder(function() {
-			this.setPos({x: x, y: this.pos.y, a: a}, callback, true);
+			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
 		}.bind(this));
+
 	}
 	Asserv.prototype.calageY = function(y, a, callback) {
 		if(callback === undefined)
 			callback = function(){};
 		this.fifo.newOrder(function() {
-			this.setPos({x: this.pos.x, y: y, a: a}, callback, true);
+			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
 		}.bind(this));
 	}
 
