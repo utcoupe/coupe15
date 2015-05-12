@@ -83,6 +83,7 @@ module.exports = (function () {
 	Ia.prototype.stop = function() {
 		logger.fatal('Stop IA');
 		this.pr.stop();
+		this.gr.stop();
 		process.exit();
 	};
 

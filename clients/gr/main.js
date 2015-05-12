@@ -38,10 +38,8 @@
 				start();
 				break;
 			case "stop":
-				// TODO send stop to actuators
-				queue = [];
-				// quitC("stop");
-				stop();
+				logger.fatal("Stopped GR");
+				process.exit();
 				break;
 			default:
 				addOrder2Queue(from, name, params);

@@ -53,6 +53,11 @@ module.exports = (function () {
 		logger.warn("Collision du gros robot");
 		// TODO send order STOP
 	};
+
+	Gr.prototype.stop = function() {
+		this.ia.client.send('gr', 'stop');
+	}
+
 	
 	return Gr;
 })();
