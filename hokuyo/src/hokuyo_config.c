@@ -65,6 +65,15 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 			} while (!(answer[size] == '\n' && answer[size-1] == '\n'));
 			answer[size] = '\0';
 
+#if DEBUG
+			fprintf(stderr, "Answer is: %s\n", answer);
+			fprintf(stderr, "strstr: %s\n", strstr(answer, "SERI:"));
+#endif
+			if (strstr(answer, "SERI:") == 0)
+			{
+				fprintf(stderr, "FATAL: Hokuyo communication problem, no serial number !\n");
+				fprintf(logfile, "FATAL: Hokuyo communication problem, no serial number !\n");
+			}
 			serial_nr = strstr(answer, "SERI:") + sizeof("SERI:");
 			k = 0;
 			while (serial_nr[++k] != ';');

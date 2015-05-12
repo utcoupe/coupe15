@@ -76,8 +76,8 @@
 	});
 
 	function matchLogger(name, line){
-		fs.appendFile('/var/log/utcoupe/'+name+'.log', line+'\n', function (err) {
-			if (err) logger.error('Ecriture dans le fichier de log de match impossible');
+		fs.appendFile('/var/log/'+name+'.log', line+'\n', function (err) {
+			if (err) logger.error('Ecriture dans le fichier de log de match "/var/log/'+name+'.log" impossible');
 			// logger.debug('The "data to append" was appended to file!');
 		});
 	}
