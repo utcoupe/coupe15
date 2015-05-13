@@ -124,41 +124,41 @@ module.exports = (function () {
 	};
 	
 	Actions.prototype.getPriorityAction = function(an) {
-		return this.todo[an].priority;
+		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
 	};
 	
 	Actions.prototype.isDoable = function(action) {
 		// Verifies some things about the action
 
-		if (!!action.dependency && !this.isDone(action.dependency)){
-			// Depends on an action, but it hasn't already been done
-			return false;
-		}
+		// if (!!action.dependency && !this.isDone(action.dependency)){
+		// 	// Depends on an action, but it hasn't already been done
+		// 	return false;
+		// }
 
-		if (action.dependencyRobotContent !== undefined){
-			// Depends on the robot content
+		// if (action.dependencyRobotContent !== undefined){
+		// 	// Depends on the robot content
 
-			if ((action.dependencyRobotContent.gobelet !== undefined) &&
-				(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
-				// The cup holder position isn't consistent with needed state
-				return false;
-			}
+		// 	if ((action.dependencyRobotContent.gobelet !== undefined) &&
+		// 		(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
+		// 		// The cup holder position isn't consistent with needed state
+		// 		return false;
+		// 	}
 
-			// If there's a constraint about the current number of cylinders
-			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
-				(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
-				return false;
-			}
-			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
-				(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
-				return false;
-			}
+		// 	// If there's a constraint about the current number of cylinders
+		// 	if ((action.dependencyRobotContent.invPlot !== undefined)  &&
+		// 		(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
+		// 		return false;
+		// 	}
+		// 	if ((action.dependencyRobotContent.subPlot !== undefined)  &&
+		// 		(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
+		// 		return false;
+		// 	}
 			
-		}
+		// }
 
-		if (action.object.status == "lost"){
-			return false;
-		}
+		// if (action.object.status == "lost"){
+		// 	return false;
+		// }
 
 		return true;
 	};
@@ -180,9 +180,9 @@ module.exports = (function () {
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
-		// for(var i in actions_todo) {
-		// 	logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
-		// }
+		for(var i in actions_todo) {
+			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		}
 
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		this.pathDoAction(callback, actions_todo, this.valid_id_do_action);
@@ -205,8 +205,10 @@ module.exports = (function () {
 	};
 
 	Actions.prototype.pathDoAction = function(callback, actions, id) {
-		if(id != this.valid_id_do_action)
+		if(id != this.valid_id_do_action) {
+			logger.Debug('id different');
 			return;
+		}
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		if(actions.length > 0) {
 			var action = this.todo[actions.shift()];
