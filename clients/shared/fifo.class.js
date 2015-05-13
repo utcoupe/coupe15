@@ -26,7 +26,7 @@ module.exports = (function () {
 			// logger.debug(this.fifo.length);
 			this.order_in_progress = true;
 			object = this.fifo.shift();
-			logger.debug("Calling : "+object.name);
+			// logger.debug("Calling : "+object.name);
 			object.callback();
 		}
 	}

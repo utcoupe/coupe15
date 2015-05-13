@@ -130,31 +130,31 @@ module.exports = (function () {
 	Actions.prototype.isDoable = function(action) {
 		// Verifies some things about the action
 
-		// if (!!action.dependency && !this.isDone(action.dependency)){
-		// 	// Depends on an action, but it hasn't already been done
-		// 	return false;
-		// }
+		if (!!action.dependency && !this.isDone(action.dependency)){
+			// Depends on an action, but it hasn't already been done
+			return false;
+		}
 
-		// if (action.dependencyRobotContent !== undefined){
-		// 	// Depends on the robot content
+		if (action.dependencyRobotContent !== undefined){
+			// Depends on the robot content
 
-		// 	if ((action.dependencyRobotContent.gobelet !== undefined) &&
-		// 		(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
-		// 		// The cup holder position isn't consistent with needed state
-		// 		return false;
-		// 	}
+			if ((action.dependencyRobotContent.gobelet !== undefined) &&
+				(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
+				// The cup holder position isn't consistent with needed state
+				return false;
+			}
 
-		// 	// If there's a constraint about the current number of cylinders
-		// 	if ((action.dependencyRobotContent.invPlot !== undefined)  &&
-		// 		(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
-		// 		return false;
-		// 	}
-		// 	if ((action.dependencyRobotContent.subPlot !== undefined)  &&
-		// 		(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
-		// 		return false;
-		// 	}
-			
-		// }
+			// If there's a constraint about the current number of cylinders
+			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
+				(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
+				return false;
+			}
+			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
+				(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
+				return false;
+			}
+		 
+		}
 
 		// if (action.object.status == "lost"){
 		// 	return false;

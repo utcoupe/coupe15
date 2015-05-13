@@ -11,6 +11,7 @@ module.exports = (function () {
 		this.erobot = [];
 		this.gobelet = [];
 		this.pile = [];
+		this.depot = [];
 		this.nb_erobots = nb_erobots;
 
 		this.importObjects();
@@ -53,6 +54,7 @@ module.exports = (function () {
 		this.plot = ret.plot;
 		this.gobelet = ret.gobelet;
 		this.pile = ret.pile;
+		this.depot = ret.depot;
 		return ret;
 	};
 

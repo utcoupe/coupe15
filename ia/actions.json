@@ -211,7 +211,7 @@
 		"deposer_gobelet_rear_right": {
 			"type": "depot_gobelet",
 			"owner": "pr",
-			"objectname": "gobelet__depot_left",
+			"objectname": "depot__gobelet_rear_right",
 			"startpoints": [{
 				"x": 2650,
 				"y": 1400,
@@ -233,7 +233,7 @@
 		"deposer_gobelet_front_right": {
 			"type": "depot_gobelet",
 			"owner": "pr",
-			"objectname": "gobelet__depot_left",
+			"objectname": "depot__gobelet_front_right",
 			"startpoints": [{
 				"x": 2650,
 				"y": 600,
