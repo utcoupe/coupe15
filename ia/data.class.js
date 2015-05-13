@@ -18,7 +18,7 @@ module.exports = (function () {
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:3500,
+					x:3200,
 					y:1000
 				},
 				speed:{ // in mm/sec
@@ -31,7 +31,7 @@ module.exports = (function () {
 			},{ // small robot on position 1
 				name: "pr",
 				pos:{
-					x:3200,
+					x:3500,
 					y:1000
 				},
 				speed:{
