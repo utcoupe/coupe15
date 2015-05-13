@@ -216,11 +216,13 @@ module.exports = (function () {
 					this.ia.pr.path = path;
 					this.doAction(callback, action, startpoint, id);
 				} else {
+					logger.debug("path not found");
 					// Si le pathfinding foire, on fait la deuxième action la plus importante
 					this.pathDoAction(callback, actions, id);
 				}
 			}.bind(this));
 		} else {
+			logger.debug("all paths not found");
 			setTimeout(function() {
 				this.doNextAction();
 			}.bind(this), 500);

@@ -305,6 +305,8 @@ module.exports = (function () {
 
 			this.lastNow = now;
 
+			// Envoi au pathfinding
+			this.ia.pathfinding.updateMap();
 
 			this.detectCollision();
 
