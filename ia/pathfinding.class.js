@@ -76,14 +76,17 @@ module.exports = (function () {
 
 		function parse (data) {
 			// X0; Y0; ... Xn; Yn
-			var path = [];
-			var splitted = data.split(SEPARATOR);
-			while(splitted.length > 1){
-				path.push( vecMultiply([splitted.shift(), splitted.shift()], RATIO) );
-			}
-
 			var ret = null;
-			if(path.length > 0) ret = path;
+			if(data != "FAIL") {
+				var path = [];
+				var splitted = data.split(SEPARATOR);
+				while(splitted.length > 1){
+					path.push( vecMultiply([splitted.shift(), splitted.shift()], RATIO) );
+				}
+
+				
+				if(path.length > 0) ret = path;
+			}
 
 			var callback = fifo.shift();
 			callback(ret); // if(typeof callback === "function") 
