@@ -150,8 +150,8 @@ module.exports = (function () {
 			}
 		}
 
-		// logger.debug("Coefficients de matching");
-		// logger.debug(matching_coef);
+		//logger.debug("Coefficients de matching");
+		//logger.debug(matching_coef);
 
 		return best_coef;
 	};
@@ -223,12 +223,12 @@ module.exports = (function () {
 
 					if (best_coef.e_robot == -1){
 						logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
-						logger.warn(e_r2Bmatched);
-						logger.warn(dots);
+						//logger.warn(e_r2Bmatched);
+						//logger.warn(dots);
 						break;
 					}
 
-					logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
+					//logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
@@ -268,10 +268,10 @@ module.exports = (function () {
 					dots.splice(best_coef.dot,1);
 				} else {
 					// if all the robots are tidied up, ouw, that's strange ^^
-					logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
-					logger.warn(dots);
-					logger.warn("e_r2Bmatched");
-					logger.warn(e_r2Bmatched);
+					//logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
+					//logger.warn(dots);
+					//logger.warn("e_r2Bmatched");
+					//logger.warn(e_r2Bmatched);
 					break;
 				}
 
