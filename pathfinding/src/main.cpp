@@ -5,7 +5,8 @@
 #include "lib/map.hpp"
 
 #define DEBUG 1
-#define RENDER_BMP 1
+#define RENDER_BMP 0
+#define FAILED_STR "FAIL\n"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ void command_add_dynamic(string& command, MAP &map) {
  * 	 		x_start;y_start;x1;y1;...;xn;xy;x_end;y_end;path_length\n
  * 			all coordinates are integers, path_length is a float 		
  * 		if invalid (no path found or parsing error):
- * 			\n
+ * 			FAILED\n
  *
  * if start point is not valid, find the nearest valid point
  * if end point is not valid, do the same, except if
@@ -66,17 +67,17 @@ string command_calc_path(string& command, MAP &map) {
 	command = command.substr(2);
 	if (sscanf(command.c_str(), "%i;%i;%i;%i", &x_s, &y_s, &x_e, &y_e) < 4) {
 		cerr << "Did not parse the input correctly" << endl;
-		return "\n";
+		return FAILED_STR;
 	}
 	if (!(is_valid(x_s, y_s, map) && is_valid(x_e, y_e, map))) {
 		cerr << "Start or end point is not in the map" << endl;
-		return "\n";
+		return FAILED_STR;
 	}
 
 	end = map.get_vertex(x_e, y_e);
 	if (map.has_dynamic_barrier(end)) {
 		cerr << "End point on a dynamic object" << endl;
-		return "\n";
+		return FAILED_STR;
 	}
 	end_valid = map.find_nearest_valid(end);
 
@@ -90,8 +91,10 @@ string command_calc_path(string& command, MAP &map) {
 #endif
 
 	map.solve(start_valid, end_valid);
-	if (!map.solved())
-		return "\n";
+	if (!map.solved()) {
+		cerr << "Could not find any path" << endl;
+		return FAILED_STR;
+	}
 	map.solve_smooth();
 	path = map.get_smooth_solution();
 	distance = map.get_smooth_solution_length();
