@@ -362,7 +362,7 @@ module.exports = (function () {
 		}
 
 		if (collision) {
-			this.ia.pr.onColision();
+			this.ia.pr.colision();
 		}
 	};
 
