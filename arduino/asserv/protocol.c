@@ -5,15 +5,18 @@
 #include "robotstate.h"
 #include "control.h"
 
-int sendResponse(char order, char *buf, int size){
+int sendResponse(char order, char *buf, int size, int ID){
 	char message[MAX_COMMAND_LEN];
-	message[0] = order;
-	message[1] = ';';
-	memcpy(message+2, buf, size*sizeof(char));
-	message[2+size] = '\n';
-	message[3+size] = '\0';
+	int wsize = 0;
+	message[wsize++] = order;
+	message[wsize++] = ';';
+	wsize += sprintf(&message[wsize], "%d", ID);
+	memcpy(message+wsize, buf, size*sizeof(char));
+	wsize += size;
+	message[wsize++] = '\n';
+	message[wsize++] = '\0';
 	serial_print(message);
-	return 4+size;
+	return wsize;
 }
 
 void clean_current_command(char *buffer, int* end_of_cmd) {
@@ -95,7 +98,7 @@ int ProtocolExecuteCmd(char data) {
 		sscanf(&current_command[ID_START_INDEX], "%i", &id);
 
 		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
-		sent_size = sendResponse(order, response, response_size);
+		sent_size = sendResponse(order, response, response_size, id);
 		clean_current_command(current_command, &index);
 		return sent_size;
 	}
