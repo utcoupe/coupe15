@@ -94,10 +94,10 @@ module.exports = (function () {
 			case 'pr.gobelet0':
 				this.content.gobelet = false;
 			break;
-			case 'noplotlift':
+			case 'pr.noplotlift':
 				this.content.un_plot_dans_lascenceur = false;
 			break;
-			case 'plotlift':
+			case 'pr.plotlift':
 				this.content.un_plot_dans_lascenceur = true;
 			break;
 			default:
