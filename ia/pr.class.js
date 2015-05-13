@@ -97,10 +97,6 @@ module.exports = (function () {
 				logger.warn('Ordre inconnu dans ia.pr: '+name);
 		}
 	};
-
-	Pr.prototype.onColision = function () {
-		logger.warn("Collision du petit robot");
-	};
 	
 	return Pr;
 })();
