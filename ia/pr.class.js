@@ -19,7 +19,8 @@ module.exports = (function () {
 		this.path = [];
 		this.content = {
 			nb_plots: 0,
-			gobelet:false
+			gobelet:false,
+			un_plot_dans_lascenceur: false
 		};
 		this.color = color;
 	}
@@ -92,6 +93,12 @@ module.exports = (function () {
 			break;
 			case 'pr.gobelet0':
 				this.content.gobelet = false;
+			break;
+			case 'noplotlift':
+				this.content.un_plot_dans_lascenceur = false;
+			break;
+			case 'plotlift':
+				this.content.un_plot_dans_lascenceur = true;
 			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.pr: '+name);
