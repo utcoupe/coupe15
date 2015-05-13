@@ -216,11 +216,13 @@ module.exports = (function () {
 					this.ia.pr.path = path;
 					this.doAction(callback, action, startpoint, id);
 				} else {
+					logger.debug("path not found");
 					// Si le pathfinding foire, on fait la deuxième action la plus importante
 					this.pathDoAction(callback, actions, id);
 				}
 			}.bind(this));
 		} else {
+			logger.debug("all paths not found");
 			setTimeout(function() {
 				this.doNextAction();
 			}.bind(this), 500);
@@ -237,6 +239,12 @@ module.exports = (function () {
 		delete this.todo[action.name];
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+
+		// If we are going to take a cylinder and there's one in the lift
+		if ((action.type == "plot") && this.ia.pr.content.un_plot_dans_lascenceur){
+			this.ia.client.send('pr', "monter_plot", {});
+		}
+
 		this.ia.pr.path.map(function(checkpoint) {
 			this.ia.client.send('pr', "goxy", {
 				x: checkpoint.x,

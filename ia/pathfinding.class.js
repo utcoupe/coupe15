@@ -12,7 +12,8 @@ module.exports = (function () {
 	var Child_process = require('child_process');
 	var Byline = require('byline');
 
-	function Pathfinding() {
+	function Pathfinding(ia) {
+		this.ia = ia;
 		var fifo = [];
 		var instance = Child_process.spawn("bash", [ "-c", "pkill pathfinding; "+programm+" "+image ]);
 		//var instance = Child_process.spawn(programm, [ image ]);
@@ -40,12 +41,12 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			// logger.debug(data);
+			logger.debug(data);
 			parse(data);
 		});
 
 		instance.stderr.on('data', function(data) {
-			// logger.info(data.toString());
+			logger.info(data.toString());
 		});
 
 
@@ -68,7 +69,8 @@ module.exports = (function () {
 			//X0, Y0, R0, ...
 			var str = ["D"].concat(objects.reduce(function(acc, obj){
 				return acc.concat( vecMultiply(obj, 1/RATIO) );
-			}, [])).join(SEPARATOR);
+			}, [])).join(SEPARATOR) + "\n";
+			logger.debug(str);
 			instance.stdin.write(str);
 		}
 
@@ -90,6 +92,7 @@ module.exports = (function () {
 	}
 
 	Pathfinding.prototype.getPath = function (start, end, callback) {
+		this.ia.pathfinding.updateMap();
 		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
 			if(path !== null) {
 				path.shift();
@@ -103,11 +106,24 @@ module.exports = (function () {
 			callback(path);
 		});
 	};
+
+	function borne(x, min, max) {
+		return x > max ? max : x < min ? min : x;
+	}
 	
 	//[ [x, y, r], ... ]
-	Pathfinding.prototype.updateMap = function (objects) {
+	Pathfinding.prototype.updateMap = function () {
+		// var objects = [];
+		// objects.push();
+		var objects = [{
+			pos: this.ia.gr.pos,
+			d: this.ia.gr.size.d
+		}].concat(this.ia.data.erobot);
+
+		// logger.debug(objects);
+
 		this.sendDynamic( objects.map(function(val){
-				return [val.x, val.y, val.R];
+			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), val.d/2];
 		}) );
 	};
 

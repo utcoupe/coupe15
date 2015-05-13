@@ -40,6 +40,7 @@ module.exports = (function () {
 
 	ExportSimulator.prototype.orderToSimu = function() {
 		var data = {};
+		
 		data.robots = {
 			gr: {
 				x: convertX(this.ia.gr.pos.x),
