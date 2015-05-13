@@ -84,6 +84,7 @@ module.exports = (function () {
 		logger.fatal('Stop IA');
 		this.gr.stop();
 		this.pr.stop();
+		this.hokuyo.stop();
 		setTimeout(process.exit, 2000);
 	};
 

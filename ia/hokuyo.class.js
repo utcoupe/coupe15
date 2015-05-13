@@ -10,6 +10,7 @@ module.exports = (function () {
 	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
 	var DEBUG = false; // mettre à true LE TEMPS DU DEBUG !!!!!
 	var LOST_TIMEOUT = 10;
+	var SECURITY_COEF = 1.1;
 	var timeout;
 
 	function Hokuyo(ia, params) {
@@ -25,8 +26,15 @@ module.exports = (function () {
 		this.matchStarted = true;
 
 		logger.info("La classe hokuyo attend...");
-		this.ia.client.send("hokuyo", "start", this.params);
+		// this.ia.client.send("hokuyo", "start", this.params); // à décommenter !!!!!!!!!!!!!!!!!!!
+		this.ia.client.send("hokuyo", "start", {color:"green"});
 		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
+	};
+
+	Hokuyo.prototype.stop = function () {
+		this.matchStarted = false;
+		this.ia.client.send("hokuyo", "stop", {});
+		clearTimeout(timeout);
 	};
 
 	Hokuyo.prototype.timedOut = function() {
@@ -220,7 +228,7 @@ module.exports = (function () {
 						break;
 					}
 
-					logger.debug("Le"+e_r2Bmatched[best_coef.e_robot].name+" est passé de"+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
+					logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
@@ -243,7 +251,7 @@ module.exports = (function () {
 					};
 
 					// logger.debug("Position et vitesse du robot :");
-					logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
+					// logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
 					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
 
 
@@ -331,22 +339,22 @@ module.exports = (function () {
 			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength; (j++) && !collision) {
 
 				var segPoint = {
-					x: segment[0][0] + nthX*k,
-					y: segment[0][1] + nthY*k
+					x: segment[0][0] + nthX*j,
+					y: segment[0][1] + nthY*j
 				};
 
 				// distance to each estimated position of the ennemi robots
 				var minDist = getDistance(ebots[0], segPoint);
 
 				if (ebots.length == 2) {
-					var tmp = getDistance(ebots[0], segPoint);
+					var tmp = getDistance(ebots[1], segPoint);
 					if (tmp < minDist) {
 						minDist = tmp;
 					}
 				}
 
 				// if one of the dist < security diameter, there will be a collision
-				if (minDist < SECURITY_COEF) {
+				if (minDist < SECURITY_COEF*ebots[0].d) {
 					collision = true;
 				}
 				
@@ -354,7 +362,7 @@ module.exports = (function () {
 		}
 
 		if (collision) {
-			this.ia.pr.onColision();
+			this.ia.pr.colision();
 		}
 	};
 

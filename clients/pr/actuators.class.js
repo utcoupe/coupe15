@@ -136,12 +136,13 @@ module.exports = (function () {
 		else if (that.nb_plots==0) {
 			ax12.ouvrir();
 			others.ouvrirBloqueurMoyen();
+			//asserv.speed(500, 0, 500);
 			ax12.fermer();
-			others.monterUnPeuAscenseur();
-			others.monterAscenseur(function() {
+			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
 				callback();
 			});
+			others.monterAscenseur();
 			others.fermerBloqueur();
 			ax12.ouvrir();
 			others.ouvrirStabilisateurMoyen();
@@ -150,13 +151,14 @@ module.exports = (function () {
 		else if(that.nb_plots==1){
 			ax12.ouvrir();
 			others.ouvrirStabilisateurMoyen();
+			//asserv.speed(500, 0, 500);
 			ax12.fermer();
-			others.monterUnPeuAscenseur();
-			others.ouvrirBloqueurMoyen();
-			others.monterAscenseur(function() {
+			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
 				callback();
 			});
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
 			others.fermerBloqueur();
 			ax12.ouvrir();
 			others.descendreAscenseur();
@@ -164,6 +166,7 @@ module.exports = (function () {
 		else if (that.nb_plots>=4){
 			ax12.ouvrir();
 			others.fermerStabilisateur();
+			//asserv.speed(500, 0, 500);
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
@@ -174,7 +177,8 @@ module.exports = (function () {
 		}
 		else {
 			ax12.ouvrir();
-			others.fermerStabilisateur();
+			others.ouvrirStabilisateurMoyen();
+			//asserv.speed(500, 0, 500);
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
@@ -183,6 +187,7 @@ module.exports = (function () {
 			others.ouvrirBloqueurMoyen();
 			others.monterAscenseur();
 			others.fermerBloqueur();
+			others.fermerStabilisateur();
 			ax12.ouvrir();
 			others.descendreAscenseur();					
 		}
@@ -318,6 +323,8 @@ module.exports = (function () {
 				ax12.ouvrir();
 				others.ouvrirStabilisateurGrand();
 				asserv.speed(-300, 0, 750, callback);
+				that.nb_plots = 0;
+				that.client.send('ia', 'pr.plot0');
 			break;
 
 			case "deposer_gobelet_front_right":
