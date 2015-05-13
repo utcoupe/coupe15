@@ -16,8 +16,8 @@ module.exports = (function () {
 		this.todo = this.importActions(ia.data);
 	}
 
-	var __dist_startpoints_plot = 20;
-	var __nb_startpoints_plot = 128;
+	var __dist_startpoints_plot = 120;
+	var __nb_startpoints_plot = 16;
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 
 	Actions.prototype.collision = function() {
@@ -51,10 +51,19 @@ module.exports = (function () {
 			actions[i].name = i;
 
 			if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
-				actions[i].startpoints.push({
-					x: actions[i].object.pos.x,
-					y: actions[i].object.pos.y
-				});
+				// actions[i].startpoints.push({
+				// 	x: actions[i].object.pos.x,
+				// 	y: actions[i].object.pos.y
+				// });
+				var temp;
+				for(var j = 0; j < __nb_startpoints_plot; j++) {
+					temp = j*2*Math.PI/__nb_startpoints_plot;
+					actions[i].startpoints.push({
+						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+						y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+						a: convertA(temp+Math.PI)
+					});
+				}
 			}
 			else if((actions[i].object !== null) && (actions[i].type == "clap")) {
 				if(this.color != "yellow") {
