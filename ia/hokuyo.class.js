@@ -25,8 +25,14 @@ module.exports = (function () {
 		this.matchStarted = true;
 
 		logger.info("La classe hokuyo attend...");
-		this.ia.client.send("hokuyo", "start", this.params);
+		// this.ia.client.send("hokuyo", "start", this.params); // à décommenter !!!!!!!!!!!!!!!!!!!
+		this.ia.client.send("hokuyo", "start", {color:"green"});
 		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
+	};
+
+	Hokuyo.prototype.stop = function () {
+		this.matchStarted = false;
+		this.ia.client.send("hokuyo", "stop", {});
 	};
 
 	Hokuyo.prototype.timedOut = function() {
@@ -220,7 +226,7 @@ module.exports = (function () {
 						break;
 					}
 
-					logger.debug("Le"+e_r2Bmatched[best_coef.e_robot].name+" est passé de"+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
+					logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
 
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
@@ -243,7 +249,7 @@ module.exports = (function () {
 					};
 
 					// logger.debug("Position et vitesse du robot :");
-					logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
+					// logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
 					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
 
 
