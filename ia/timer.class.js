@@ -11,7 +11,7 @@ module.exports = (function () {
 		this.match_started = true; // le match commence
 		setTimeout(function() {
 			this.ia.stop();
-		}.bind(this), 90000);
+		}.bind(this), 89000);
 	};
 
 
