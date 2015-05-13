@@ -41,12 +41,12 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			logger.debug(data);
+			// logger.debug(data);
 			parse(data);
 		});
 
 		instance.stderr.on('data', function(data) {
-			logger.info(data.toString());
+			// logger.info(data.toString());
 		});
 
 
@@ -70,7 +70,7 @@ module.exports = (function () {
 			var str = ["D"].concat(objects.reduce(function(acc, obj){
 				return acc.concat( vecMultiply(obj, 1/RATIO) );
 			}, [])).join(SEPARATOR) + "\n";
-			logger.debug(str);
+			// logger.debug(str);
 			instance.stdin.write(str);
 		}
 
@@ -123,8 +123,8 @@ module.exports = (function () {
 		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
-			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), val.d/2];
-		}) );
+			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(this.ia.pr.size.d/2))];
+		}.bind(this)) );
 	};
 
 	return Pathfinding;

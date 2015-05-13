@@ -95,8 +95,8 @@
 		var tmp = new Date();
 		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
 		var now = Date.now() - lastT;
-		var x1 = 2300, y1 = 400;
-		var x2 = 1800, y2 = 600;
+		var x1 = 1500, y1 = 400;
+		var x2 = 1500, y2 = 600;
 		var x1_inc= -20, y1_inc = 50;
 		var x2_inc= -25, y2_inc = 35;
 		matchLogger(match_name, now+"; color:"+color);
@@ -110,7 +110,7 @@
 			x1 += x1_inc;
 			y1 += y1_inc;
 
-			if (x1 < 1000 || x1 > 2500)
+			if (x1 < 1000 || x1 > 1800)
 				x1_inc = -x1_inc;
 			if (y1 < 200 || y1 > 800)
 				y1_inc = -y1_inc;

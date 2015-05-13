@@ -39,6 +39,7 @@ module.exports = (function () {
 		}
 
 		logger.info('collision');
+		this.path = [];
 		this.ia.client.send('pr', "collision");
 		this.ia.actions.collision();
 		this.loop();

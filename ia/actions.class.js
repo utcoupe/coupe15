@@ -29,7 +29,7 @@ module.exports = (function () {
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			// this.todo[this.inprogress.name] = this.inprogress;
+			this.todo[this.inprogress.name] = this.inprogress;
 			this.inprogress = null;
 		}
 	}
@@ -224,7 +224,7 @@ module.exports = (function () {
 		} else {
 			logger.debug("all paths not found");
 			setTimeout(function() {
-				this.doNextAction();
+				this.doNextAction(callback);
 			}.bind(this), 500);
 		}
 	};
