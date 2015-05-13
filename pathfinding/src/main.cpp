@@ -74,8 +74,10 @@ string command_calc_path(string& command, MAP &map) {
 	}
 
 	end = map.get_vertex(x_e, y_e);
-	if (map.has_dynamic_barrier(end))
+	if (map.has_dynamic_barrier(end)) {
+		cerr << "End point on a dynamic object" << endl;
 		return "\n";
+	}
 	end_valid = map.find_nearest_valid(end);
 
 	start = map.get_vertex(x_s, y_s);
@@ -163,6 +165,9 @@ int main(int argc, char **argv) {
 			answer = command_calc_path(command, map);
 			cout << answer;
 			cout.flush();
+			break;
+			default:
+			cerr << "Default : " << command[0] << endl;
 			break;
 		}
 	}

@@ -41,12 +41,12 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			// logger.debug(data);
+			logger.debug("Received: "+data);
 			parse(data);
 		});
 
 		instance.stderr.on('data', function(data) {
-			// logger.info(data.toString());
+			logger.error("stderr :"+data.toString());
 		});
 
 
@@ -62,7 +62,7 @@ module.exports = (function () {
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
 			instance.stdin.write( str );
-			//logger.info("Sending:"+str);
+			logger.info("Sending:"+str);
 		};
 
 		this.sendDynamic = function(objects){
@@ -86,14 +86,19 @@ module.exports = (function () {
 			if(path.length > 0) ret = path;
 
 			var callback = fifo.shift();
-			if(typeof callback === "function") callback(ret);
+			callback(ret); // if(typeof callback === "function") 
 		}
 
 	}
 
 	Pathfinding.prototype.getPath = function (start, end, callback) {
 		this.ia.pathfinding.updateMap();
+		this.timeout_getpath = setTimeout(function() {
+			callback(null);
+			callback = function() {};
+		}, 1000);
 		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
+			clearTimeout(this.timeout_getpath);
 			if(path !== null) {
 				path.shift();
 				path = path.map(function(val) {
@@ -104,7 +109,7 @@ module.exports = (function () {
 				});
 			}
 			callback(path);
-		});
+		}.bind(this));
 	};
 
 	function borne(x, min, max) {
