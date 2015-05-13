@@ -11,6 +11,7 @@ module.exports = (function () {
 	var DEBUG = false; // mettre à true LE TEMPS DU DEBUG !!!!!
 	var LOST_TIMEOUT = 10;
 	var SECURITY_COEF = 1.1;
+	var MAX_SPD = 1;
 	var timeout;
 
 	function Hokuyo(ia, params) {
@@ -233,9 +234,22 @@ module.exports = (function () {
 					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
 					var deltaT = now - this.lastNow;
 					if (deltaT !== 0){
+						var x_spd = (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT;
+						var y_spd = (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT;
+						if (x_spd > MAX_SPD) {
+							x_spd = MAX_SPD;
+						} else if (x_spd < -MAX_SPD) {
+							x_spd = -MAX_SPD;
+						}
+						if (y_spd > MAX_SPD) {
+							y_spd = MAX_SPD;
+						} else if (y_spd < -MAX_SPD) {
+							y_spd = -MAX_SPD;
+						}
+
 						e_r2Bmatched[best_coef.e_robot].speed = {
-							x: (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT,
-							y: (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT
+							x: x_spd,
+							y: y_spd
 						};
 					} else {
 						logger.warn("Tiens, deltaT = 0, c'est bizarre...");
