@@ -68,6 +68,10 @@ module.exports = (function () {
 		});
 	};
 
+	function borne(x, min, max) {
+		return x > max ? max : x < min ? min : x;
+	}
+
 	Pr.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'pr.collision':
@@ -75,6 +79,8 @@ module.exports = (function () {
 			break;
 			// Asserv
 			case 'pr.pos':
+				params.x = borne(params.x, 0, 3000);
+				params.y = borne(params.y, 0, 2000);
 				this.pos = params;
 			break;
 			case 'pr.getpos':
@@ -95,10 +101,10 @@ module.exports = (function () {
 			case 'pr.gobelet0':
 				this.content.gobelet = false;
 			break;
-			case 'noplotlift':
+			case 'pr.noplotlift':
 				this.content.un_plot_dans_lascenceur = false;
 			break;
-			case 'plotlift':
+			case 'pr.plotlift':
 				this.content.un_plot_dans_lascenceur = true;
 			break;
 			default:
