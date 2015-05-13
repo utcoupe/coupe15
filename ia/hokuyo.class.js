@@ -10,6 +10,7 @@ module.exports = (function () {
 	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
 	var DEBUG = false; // mettre à true LE TEMPS DU DEBUG !!!!!
 	var LOST_TIMEOUT = 10;
+	var SECURITY_COEF = 1.1;
 	var timeout;
 
 	function Hokuyo(ia, params) {
@@ -33,6 +34,7 @@ module.exports = (function () {
 	Hokuyo.prototype.stop = function () {
 		this.matchStarted = false;
 		this.ia.client.send("hokuyo", "stop", {});
+		clearTimeout(timeout);
 	};
 
 	Hokuyo.prototype.timedOut = function() {
@@ -337,22 +339,22 @@ module.exports = (function () {
 			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength; (j++) && !collision) {
 
 				var segPoint = {
-					x: segment[0][0] + nthX*k,
-					y: segment[0][1] + nthY*k
+					x: segment[0][0] + nthX*j,
+					y: segment[0][1] + nthY*j
 				};
 
 				// distance to each estimated position of the ennemi robots
 				var minDist = getDistance(ebots[0], segPoint);
 
 				if (ebots.length == 2) {
-					var tmp = getDistance(ebots[0], segPoint);
+					var tmp = getDistance(ebots[1], segPoint);
 					if (tmp < minDist) {
 						minDist = tmp;
 					}
 				}
 
 				// if one of the dist < security diameter, there will be a collision
-				if (minDist < SECURITY_COEF) {
+				if (minDist < SECURITY_COEF*ebots[0].d) {
 					collision = true;
 				}
 				
