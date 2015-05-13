@@ -433,7 +433,7 @@ module.exports = (function () {
 				that.client.send('ia', 'pr.plot0');
 			break;
 
-			case "deposer_gobelet_front_right":
+			case "deposer_gobelet":
 				asserv.goa(3.1416);
 				that.delay(100);
 				others.lacherGobelet();
