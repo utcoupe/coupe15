@@ -319,7 +319,6 @@ module.exports = (function () {
 
 			this.lastNow = now;
 
-
 			this.detectCollision();
 
 			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);

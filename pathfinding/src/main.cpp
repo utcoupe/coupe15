@@ -5,7 +5,7 @@
 #include "lib/map.hpp"
 
 #define DEBUG 1
-#define RENDER_BMP 0
+#define RENDER_BMP 1
 
 using namespace std;
 
@@ -20,6 +20,9 @@ inline bool is_valid(int x, int y, MAP &map) {
 void command_add_dynamic(string& command, MAP &map) {
 	vector<dynamic_object> objs;
 	command = command.substr(2);
+#if DEBUG
+	cerr << "Objects this time :" << endl;
+#endif
 	while (command.find(';') != string::npos) {
 		dynamic_object obj;
 		sscanf(command.c_str(), "%i;%i;%i", &obj.x, &obj.y, &obj.r);
@@ -28,7 +31,7 @@ void command_add_dynamic(string& command, MAP &map) {
 		command = command.substr(command.find(';')+1);
 		command = command.substr(command.find(';')+1);
 #if DEBUG
-		cerr << "Object : " << obj.x << ":" << obj.y << ":" << obj.r << endl;
+		cerr << obj.x << ":" << obj.y << ":" << obj.r << endl;
 #endif
 	}
 	map.clear_dynamic_barriers();

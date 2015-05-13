@@ -17,10 +17,10 @@ module.exports = (function () {
 		this.nb_erobots = nb_erobots || 2;
 		logger.info("Launching a "+this.color+" AI with "+this.nb_erobots+" ennemies.");
 		
-		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
-		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
+		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"127.0.0.1:3128"});
+		// this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip:"192.168.0.100:3128"});
 		this.timer = new (require('./timer.class.js'))(this);
-		this.pathfinding = new (require('./pathfinding.class.js'))(this.color);
+		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		this.data = new (require('./data.class.js'))(this, this.nb_erobots);
 		this.actions = new (require('./actions.class.js'))(this);
 		this.gr = new (require('./gr.class.js'))(this, this.color);

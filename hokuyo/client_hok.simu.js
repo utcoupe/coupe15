@@ -123,7 +123,7 @@
 			if (y2 < 600 || y2 > 1200)
 				y2_inc = -y2_inc;
 
-			logger.debug("x:"+x1+" y:"+y1+"  x:"+x1+" y:"+y1);
+			//logger.debug("x:"+x1+" y:"+y1+"  x:"+x1+" y:"+y1);
 
 			dots.push({x: x1, y: y1});
 			dots.push({x: x2, y: y2});
