@@ -17,7 +17,7 @@ unsigned long nextTime = 0;
 
 #ifdef PIN_JACK
 int JackCheck(void) {
-	static int last_jack_status = 0;
+	static int last_jack_status = 1;
 	int i, jack_status, sent_bytes = 0;
 	jack_status = digitalRead(PIN_JACK);
 	if (last_jack_status == 0 && jack_status == 1) {
