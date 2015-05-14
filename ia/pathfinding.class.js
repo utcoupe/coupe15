@@ -127,7 +127,7 @@ module.exports = (function () {
 			pos: this.ia.gr.pos,
 			d: this.ia.gr.size.d
 		}].concat(this.ia.data.erobot).concat(
-			Object.keys(this.ia.data.pile).filter(function(key){ //remove unwanted elements
+			Object.keys(this.ia.data.pile_pose).filter(function(key){ //remove unwanted elements
 				return this.ia.data.pile.hasOwnProperty(key);
 			}, this).map(function(key){ //return object instead of key
 				return this.ia.data.pile[key];
