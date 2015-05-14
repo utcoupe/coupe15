@@ -188,135 +188,137 @@ module.exports = (function () {
 			if (this.params.we_have_hats)
 				this.deleteOurRobots(dots);
 
-			// until there are dots left to be matched with ennmies
-			while (dots.length > 0){
-				// if some robots aren't already matched
-				var e_r2Bmatched = [];
+			// // until there are dots left to be matched with ennmies
+			// while (dots.length > 0){
+			// 	// if some robots aren't already matched
+			// 	var e_r2Bmatched = [];
 
-				for (var i = 0; i < this.ia.data.nb_erobots; i++) {
-					if(this.ia.data.erobot[i].lastUpdate < now){
-						// logger.debug(this.ia.data.erobot[i].name + " last update :");
-						// logger.debug(this.ia.data.erobot[i].lastUpdate);
-						e_r2Bmatched.push(this.ia.data.erobot[i]);
-					}
-				}
+			// 	for (var i = 0; i < this.ia.data.nb_erobots; i++) {
+			// 		if(this.ia.data.erobot[i].lastUpdate < now){
+			// 			// logger.debug(this.ia.data.erobot[i].name + " last update :");
+			// 			// logger.debug(this.ia.data.erobot[i].lastUpdate);
+			// 			e_r2Bmatched.push(this.ia.data.erobot[i]);
+			// 		}
+			// 	}
 
-				if (e_r2Bmatched.length > 0) {
-					// logger.debug("On s'occupe des robots :");
-					// logger.debug(e_r2Bmatched);
-					// logger.debug("Avec les points :");
-					// logger.debug(dots);
-
-
-					// for each eatimated position of the robots
-					var best_coef = this.getBestMatchingCoef(dots, e_r2Bmatched, now);
-					// logger.debug(best_coef);
-
-					// if the bigger coefficient is under the arbitrary threshold
-					// XXX
-
-					// we take the best/bigger coefficient (well named best_coef :P )
-
-					// if it isn't, set the new position, speed, status, call the "ennemy went there" function
-					// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
-					// logger.debug(dots[best_coef.dot]);
-
-					if (best_coef.e_robot == -1){
-						logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
-						//logger.warn(e_r2Bmatched);
-						//logger.warn(dots);
-						break;
-					}
-
-					//logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
-
-					e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
-					var deltaT = now - this.lastNow;
-					if (deltaT !== 0){
-						var x_spd = (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT;
-						var y_spd = (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT;
-						if (x_spd > MAX_SPD) {
-							x_spd = MAX_SPD;
-						} else if (x_spd < -MAX_SPD) {
-							x_spd = -MAX_SPD;
-						}
-						if (y_spd > MAX_SPD) {
-							y_spd = MAX_SPD;
-						} else if (y_spd < -MAX_SPD) {
-							y_spd = -MAX_SPD;
-						}
-
-						e_r2Bmatched[best_coef.e_robot].speed = {
-							x: x_spd,
-							y: y_spd
-						};
-					} else {
-						logger.warn("Tiens, deltaT = 0, c'est bizarre...");
-						e_r2Bmatched[best_coef.e_robot].speed = {
-							x:0,
-							y:0
-						};
-					}
-
-					e_r2Bmatched[best_coef.e_robot].pos = {
-						x: dots[best_coef.dot].x,
-						y: dots[best_coef.dot].y,
-					};
-
-					// logger.debug("Position et vitesse du robot :");
-					// logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
-					// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
+			// 	if (e_r2Bmatched.length > 0) {
+			// 		// logger.debug("On s'occupe des robots :");
+			// 		// logger.debug(e_r2Bmatched);
+			// 		// logger.debug("Avec les points :");
+			// 		// logger.debug(dots);
 
 
-					// if it's climbing the stairs, set the correct status
-					if (this.isOnTheStairs(dots[best_coef.dot])){
-						e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
-						logger.info(e_r2Bmatched[best_coef.e_robot].status);
-					} else {
-						e_r2Bmatched[best_coef.e_robot].status = "moving";
-						this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
-					}
+			// 		// for each eatimated position of the robots
+			// 		var best_coef = this.getBestMatchingCoef(dots, e_r2Bmatched, now);
+			// 		// logger.debug(best_coef);
+
+			// 		// if the bigger coefficient is under the arbitrary threshold
+			// 		// XXX
+
+			// 		// we take the best/bigger coefficient (well named best_coef :P )
+
+			// 		// if it isn't, set the new position, speed, status, call the "ennemy went there" function
+			// 		// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
+			// 		// logger.debug(dots[best_coef.dot]);
+
+			// 		if (best_coef.e_robot == -1){
+			// 			logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
+			// 			//logger.warn(e_r2Bmatched);
+			// 			//logger.warn(dots);
+			// 			break;
+			// 		}
+
+			// 		//logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
+
+			// 		e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
+			// 		var deltaT = now - this.lastNow;
+			// 		if (deltaT !== 0){
+			// 			var x_spd = (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT;
+			// 			var y_spd = (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT;
+			// 			if (x_spd > MAX_SPD) {
+			// 				x_spd = MAX_SPD;
+			// 			} else if (x_spd < -MAX_SPD) {
+			// 				x_spd = -MAX_SPD;
+			// 			}
+			// 			if (y_spd > MAX_SPD) {
+			// 				y_spd = MAX_SPD;
+			// 			} else if (y_spd < -MAX_SPD) {
+			// 				y_spd = -MAX_SPD;
+			// 			}
+
+			// 			e_r2Bmatched[best_coef.e_robot].speed = {
+			// 				x: x_spd,
+			// 				y: y_spd
+			// 			};
+			// 		} else {
+			// 			logger.warn("Tiens, deltaT = 0, c'est bizarre...");
+			// 			e_r2Bmatched[best_coef.e_robot].speed = {
+			// 				x:0,
+			// 				y:0
+			// 			};
+			// 		}
+
+			// 		e_r2Bmatched[best_coef.e_robot].pos = {
+			// 			x: dots[best_coef.dot].x,
+			// 			y: dots[best_coef.dot].y,
+			// 		};
+
+			// 		// logger.debug("Position et vitesse du robot :");
+			// 		// logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
+			// 		// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
+
+
+			// 		// if it's climbing the stairs, set the correct status
+			// 		if (this.isOnTheStairs(dots[best_coef.dot])){
+			// 			e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
+			// 			logger.info(e_r2Bmatched[best_coef.e_robot].status);
+			// 		} else {
+			// 			e_r2Bmatched[best_coef.e_robot].status = "moving";
+			// 			this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
+			// 		}
 					
-					// and delete the dot
-					dots.splice(best_coef.dot,1);
-				} else {
-					// if all the robots are tidied up, ouw, that's strange ^^
-					//logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
-					//logger.warn(dots);
-					//logger.warn("e_r2Bmatched");
-					//logger.warn(e_r2Bmatched);
-					break;
-				}
+			// 		// and delete the dot
+			// 		dots.splice(best_coef.dot,1);
+			// 	} else {
+			// 		// if all the robots are tidied up, ouw, that's strange ^^
+			// 		//logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
+			// 		//logger.warn(dots);
+			// 		//logger.warn("e_r2Bmatched");
+			// 		//logger.warn(e_r2Bmatched);
+			// 		break;
+			// 	}
 
-			}
+			// }
 
-			// XXX /!\ robots on the stairs !
+			// // XXX /!\ robots on the stairs !
 
 
-			// if there's some robots to be matched (but no real point left :/), they're lost...
-			// we estimate their position and tag them with "lost"
-			for (var i = 0; i < this.ia.data.nb_erobots; i++) {
-				if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "moving")){
-					this.ia.data.erobot[i].pos = {
-						x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
-						y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
-					};
-					this.ia.data.erobot[i].speed = {
-						x:0,
-						y:0,
-					};
-					this.ia.data.erobot[i].status = "lost";
-					this.ia.data.erobot[i].lastUpdate = now;
-					this.nb_lost = 0;
-				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost<LOST_TIMEOUT)){
-					this.nb_lost += 1;
-				} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost==LOST_TIMEOUT)){
-					// Si le robot était déjà perdu à l'itération d'avant
-					this.mayday("On a perdu le "+this.ia.data.erobot[i].name + " ennemi");
-				}
-			}
+			// // if there's some robots to be matched (but no real point left :/), they're lost...
+			// // we estimate their position and tag them with "lost"
+			// for (var i = 0; i < this.ia.data.nb_erobots; i++) {
+			// 	if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "moving")){
+			// 		this.ia.data.erobot[i].pos = {
+			// 			x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
+			// 			y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
+			// 		};
+			// 		this.ia.data.erobot[i].speed = {
+			// 			x:0,
+			// 			y:0,
+			// 		};
+			// 		this.ia.data.erobot[i].status = "lost";
+			// 		this.ia.data.erobot[i].lastUpdate = now;
+			// 		this.nb_lost = 0;
+			// 	} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost<LOST_TIMEOUT)){
+			// 		this.nb_lost += 1;
+			// 	} else if ((this.ia.data.erobot[i].lastUpdate < now) && (this.ia.data.erobot[i].status == "lost") && (this.nb_lost==LOST_TIMEOUT)){
+			// 		// Si le robot était déjà perdu à l'itération d'avant
+			// 		this.mayday("On a perdu le "+this.ia.data.erobot[i].name + " ennemi");
+			// 	}
+			// }
 
-			this.lastNow = now;
+			// this.lastNow = now;
+
+			this.ia.data.dots = dots;
 
 			this.detectCollision();
 
@@ -325,22 +327,9 @@ module.exports = (function () {
 
 	};
 
-	Hokuyo.prototype.detectCollision = function() {
+	Hokuyo.prototype.detectCollision = function(dots) {
 		var collision = false;
 		var pf = this.ia.pr.path;
-		var ebots = [{ // estimated positions
-				x:this.ia.data.erobot[0].pos.x +  this.ia.data.erobot[0].speed.x*DELTA_T,
-				y:this.ia.data.erobot[0].pos.y +  this.ia.data.erobot[0].speed.y*DELTA_T,
-				d:this.ia.data.erobot[0].d
-			}];
-
-		if (this.ia.data.nb_erobots == 2) {
-			ebots.push = {
-				x:this.ia.data.erobot[1].pos.x +  this.ia.data.erobot[1].speed.x*DELTA_T,
-				y:this.ia.data.erobot[1].pos.y +  this.ia.data.erobot[1].speed.y*DELTA_T,
-				d:this.ia.data.erobot[1].d
-			};
-		}
 
 		// for each path segment
 		var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
@@ -359,15 +348,20 @@ module.exports = (function () {
 				};
 
 				// distance to each estimated position of the ennemi robots
-				var minDist = this.getDistance(ebots[0], segPoint);
+				var minDist = this.getDistance(dots[0], segPoint);
 
-				/*
-				if (ebots.length == 2) {
-					var tmp = this.getDistance(ebots[1], segPoint);
+				for(k = 1; k < dots.length; k++) {
+					var tmp = this.getDistance(ebots[k], segPoint);
 					if (tmp < minDist) {
 						minDist = tmp;
 					}
-				}*/
+				}
+				// if (ebots.length == 2) {
+				// 	var tmp = this.getDistance(ebots[1], segPoint);
+				// 	if (tmp < minDist) {
+				// 		minDist = tmp;
+				// 	}
+				// }
 
 				// if one of the dist < security diameter, there will be a collision
 				if (minDist < SECURITY_COEF*ebots[0].d/2.0) {
@@ -381,6 +375,63 @@ module.exports = (function () {
 			this.ia.pr.collision();
 		}
 	};
+
+	// Hokuyo.prototype.detectCollision = function() {
+	// 	var collision = false;
+	// 	var pf = this.ia.pr.path;
+	// 	var ebots = [{ // estimated positions
+	// 			x:this.ia.data.erobot[0].pos.x +  this.ia.data.erobot[0].speed.x*DELTA_T,
+	// 			y:this.ia.data.erobot[0].pos.y +  this.ia.data.erobot[0].speed.y*DELTA_T,
+	// 			d:this.ia.data.erobot[0].d
+	// 		}];
+
+	// 	if (this.ia.data.nb_erobots == 2) {
+	// 		ebots.push = {
+	// 			x:this.ia.data.erobot[1].pos.x +  this.ia.data.erobot[1].speed.x*DELTA_T,
+	// 			y:this.ia.data.erobot[1].pos.y +  this.ia.data.erobot[1].speed.y*DELTA_T,
+	// 			d:this.ia.data.erobot[1].d
+	// 		};
+	// 	}
+
+	// 	// for each path segment
+	// 	var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
+	// 	for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
+	// 		var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+	// 		var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+	// 		var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+	// 		var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+
+	// 		// for each X cm of the segment
+	// 		for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
+
+	// 			var segPoint = {
+	// 				x: segment[0].x + nthX*j,
+	// 				y: segment[0].y + nthY*j
+	// 			};
+
+	// 			// distance to each estimated position of the ennemi robots
+	// 			var minDist = this.getDistance(ebots[0], segPoint);
+
+	// 			/*
+	// 			if (ebots.length == 2) {
+	// 				var tmp = this.getDistance(ebots[1], segPoint);
+	// 				if (tmp < minDist) {
+	// 					minDist = tmp;
+	// 				}
+	// 			}*/
+
+	// 			// if one of the dist < security diameter, there will be a collision
+	// 			if (minDist < SECURITY_COEF*ebots[0].d/2.0) {
+	// 				collision = true;
+	// 			}
+				
+	// 		}
+	// 	}
+
+	// 	if (collision) {
+	// 		this.ia.pr.collision();
+	// 	}
+	// };
 
 	Hokuyo.prototype.updateNumberOfRobots = function (nb) {
 		switch (nb){
