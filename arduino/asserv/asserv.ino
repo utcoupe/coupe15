@@ -83,7 +83,7 @@ void loop(){
 
 #if DEBUG_MAINLOOP
 	now = micros();
-	if (now - start_overtime > 1000000) {
+	if (now - start_overtime > 10000000) {
 		digitalWrite(LED_DEBUG, LOW);
 	}
 	if (now >= nextTime) {

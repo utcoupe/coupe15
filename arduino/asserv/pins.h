@@ -20,7 +20,7 @@
 #define INTERRUPT_ENC_LEFT_A 0
 #define INTERRUPT_ENC_RIGHT_A 1
 
-#define LED_MAINLOOP 13
+#define LED_MAINLOOP 14
 #define LED_DEBUG 13
 #define LED_BLOCKED 14
 #endif

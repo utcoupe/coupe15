@@ -50,7 +50,8 @@ void ControlInit(void) {
 	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
-	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
+	control.max_spd = SPD_MAX; 
+	control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
 
 	MotorsInit();
 	RobotStateInit();
