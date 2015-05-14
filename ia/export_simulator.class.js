@@ -62,8 +62,7 @@ module.exports = (function () {
 			epr: {
 				x: convertX(this.ia.data.erobot[1].pos.x),
 				y: convertY(this.ia.data.erobot[1].pos.y)
-			},
-			dynamic: this.ia.data.dynamic
+			}
 		}
 		// logger.debug(data.robots.egr);
 		this.ia.client.send("webclient", "simulateur", data);
