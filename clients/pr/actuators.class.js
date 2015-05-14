@@ -136,37 +136,32 @@ module.exports = (function () {
 		else if (that.nb_plots==0) {
 			ax12.ouvrir();
 			others.ouvrirBloqueurMoyen();
-			//asserv.speed(500, 0, 500);
 			ax12.fermer();
-			others.monterUnPeuAscenseur(function() {
-				that.client.send('ia', 'pr.plot++');
-				callback();
-			});
 			others.monterAscenseur();
 			others.fermerBloqueur();
 			ax12.ouvrir();
-			others.ouvrirStabilisateurMoyen();
-			others.descendreAscenseur();
+			others.ouvrirStabilisateurMoyen(fake,0);
+			others.descendreAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
 		}
 		else if(that.nb_plots==1){
 			ax12.ouvrir();
 			others.ouvrirStabilisateurMoyen();
-			//asserv.speed(500, 0, 500);
 			ax12.fermer();
-			others.monterUnPeuAscenseur(function() {
-				that.client.send('ia', 'pr.plot++');
-				callback();
-			});
 			others.ouvrirBloqueurMoyen();
 			others.monterAscenseur();
 			others.fermerBloqueur();
 			ax12.ouvrir();
-			others.descendreAscenseur();
+			others.descendreAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
 		}
 		else if (that.nb_plots>=4){
 			ax12.ouvrir();
 			others.fermerStabilisateur();
-			//asserv.speed(500, 0, 500);
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
@@ -178,18 +173,16 @@ module.exports = (function () {
 		else {
 			ax12.ouvrir();
 			others.ouvrirStabilisateurMoyen();
-			//asserv.speed(500, 0, 500);
 			ax12.fermer();
-			others.monterUnPeuAscenseur(function() {
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerStabilisateur(fake,0);
+			others.fermerBloqueur();
+			ax12.ouvrir();
+			others.descendreAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
 				callback();
 			});
-			others.ouvrirBloqueurMoyen();
-			others.monterAscenseur();
-			others.fermerBloqueur();
-			others.fermerStabilisateur();
-			ax12.ouvrir();
-			others.descendreAscenseur();					
 		}
 		that.nb_plots++;
 	}
