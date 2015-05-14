@@ -19,3 +19,8 @@ li {
 	width: 200px;
 	display: inline-block;
 }
+
+.logger{
+	background: black;
+	color: white;
+}
