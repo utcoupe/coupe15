@@ -23,6 +23,7 @@ li {
 .logger{
 	background: black;
 	color: white;
+	padding: 3px;
 }
 
 .logger_head{
