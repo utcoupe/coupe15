@@ -34,7 +34,7 @@
 
 #define USE_SHARP 1
 #define EMERGENCY_STOP_DISTANCE 0.32 // m
-#define EMERGENCY_WAIT_TIME 10 // seconds
+#define EMERGENCY_WAIT_TIME 20 // seconds
 #define EMERGENCY_SLOW_GO_RATIO 0.3 // spd = 0.3*max_spd in slow_go mode
 
 #define HZ 100

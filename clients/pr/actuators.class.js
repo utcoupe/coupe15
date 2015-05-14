@@ -137,27 +137,27 @@ module.exports = (function () {
 			ax12.ouvrir();
 			others.ouvrirBloqueurMoyen();
 			ax12.fermer();
-			others.monterAscenseur();
+			others.monterAscenseur(function() {);
+				that.client.send('ia', 'pr.plot++');
+				setTimeout(callback, 200);
+			});
 			others.fermerBloqueur();
 			ax12.ouvrir();
-			others.ouvrirStabilisateurMoyen(fake,0);
-			others.descendreAscenseur(function() {
-				that.client.send('ia', 'pr.plot++');
-				callback();
-			});
+			others.ouvrirStabilisateurMoyen(function() {}, 0);
+			others.descendreAscenseur();
 		}
 		else if(that.nb_plots==1){
 			ax12.ouvrir();
 			others.ouvrirStabilisateurMoyen();
 			ax12.fermer();
 			others.ouvrirBloqueurMoyen();
-			others.monterAscenseur();
-			others.fermerBloqueur();
-			ax12.ouvrir();
-			others.descendreAscenseur(function() {
+			others.monterAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
-				callback();
+				setTimeout(callback, 200);
 			});
+			others.fermerBloqueur();
+			ax12.ouvrir(function() {});
+			others.descendreAscenseur();
 		}
 		else if (that.nb_plots>=4){
 			ax12.ouvrir();
@@ -175,14 +175,14 @@ module.exports = (function () {
 			others.ouvrirStabilisateurMoyen();
 			ax12.fermer();
 			others.ouvrirBloqueurMoyen();
-			others.monterAscenseur();
+			others.monterAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				setTimeout(callback, 200);
+			});
 			others.fermerStabilisateur(fake,0);
 			others.fermerBloqueur();
-			ax12.ouvrir();
-			others.descendreAscenseur(function() {
-				that.client.send('ia', 'pr.plot++');
-				callback();
-			});
+			ax12.ouvrir(function() {});
+			others.descendreAscenseur();
 		}
 		that.nb_plots++;
 	}
@@ -264,8 +264,8 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
-				asserv.goxy(500, 1100, "avant");
-				asserv.goa(2.3562);
+				//asserv.goxy(500, 900, "avant");
+				//asserv.goa(-2.3562);
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
@@ -275,17 +275,17 @@ module.exports = (function () {
 				others.ouvrirStabilisateurMoyen(fake,0);
 				others.monterMoyenAscenseur();
 
-				asserv.goxy(260, 1000, "osef");
-				asserv.goa(-3.1416/2);
-				asserv.pwm(50, 80, 1500);
-				asserv.calageY(874, -3.1416/2);
+				asserv.goxy(260, 1020, "osef");
+				asserv.goa(3.1416/2);
+				asserv.pwm(50, 50, 1500);
+				asserv.calageY(1126, 3.1416/2);
 				asserv.goxy(260, 1000, "arriere");
 				asserv.goa(3.1416);
 
 				asserv.goxy(200, 1000, "avant");
 				asserv.goa(3.1416);
-				asserv.pwm(50, 80, 1500);
-				asserv.calageX(142, 3.1416);
+				asserv.pwm(50, 50, 1500);
+				asserv.calageX(145, 3.1416);
 				ax12.fermerBalle();
 				asserv.goxy(260, 1000, "arriere");
 				others.descendreMoyenAscenseur();
@@ -293,7 +293,7 @@ module.exports = (function () {
 				asserv.goxy(260, 1000, "arriere");
 				others.monterAscenseur();
 				asserv.goxy(330, 1000, "avant");
-				asserv.goa(-0.1863);
+				asserv.goa(0.1863);
 				others.lacherGobelet();
 				that.delay(100);
 				that.new_has_ball = true;
@@ -301,7 +301,7 @@ module.exports = (function () {
 				that.client.send('ia', 'pr.gobelet0');
 				that.nb_plots = 0;
 				that.has_gobelet = false;
-				asserv.goxy(600, 950, "avant", callback);
+				asserv.goxy(600, 1050, "avant", callback);
 			break;
 
 			case "deposer_pile_front_calage":
