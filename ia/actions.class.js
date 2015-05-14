@@ -29,7 +29,7 @@ module.exports = (function () {
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			// this.todo[this.inprogress.name] = this.inprogress;
+			this.todo[this.inprogress.name] = this.inprogress;
 			this.inprogress = null;
 		}
 	}

@@ -5,7 +5,7 @@
 #include "lib/map.hpp"
 
 #define DEBUG 0
-#define RENDER_BMP 0
+#define RENDER_BMP 1
 #define FAILED_STR "FAIL\n"
 
 using namespace std;

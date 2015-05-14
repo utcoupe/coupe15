@@ -318,11 +318,14 @@ module.exports = (function () {
 
 			// this.lastNow = now;
 
-			this.ia.data.dots = dots;
+			this.detectCollision(dots);
+			this.ia.data.dots = dots.map(function(val){
+				return {
+					pos: val,
+					d: 320
+				};	
+			});
 
-			this.detectCollision(dots.map(function(val){
-				return { pos: val };	
-			}));
 
 			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);
 		}
@@ -366,7 +369,7 @@ module.exports = (function () {
 				// }
 
 				// if one of the dist < security diameter, there will be a collision
-				if (minDist < 5500) {
+				if (minDist < 450) {
 					collision = true;
 				}
 				
