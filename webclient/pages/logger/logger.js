@@ -14,7 +14,7 @@ angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client',
 				// console.log('log', data);
 				var head = data.head ? data.head : "";
 				var text =  data.text ? data.text : "";
-				var print = "<span class=\"logger_head\">"+head+"</head>"+text;
+				var print = "<span class=\"logger_head\">"+head+"</span>"+text;
 				this.logs.unshift($sce.trustAsHtml(print));
 				this.logs.splice(LOG_MAX_LENGTH, 1000); //remove all logs index > 500
 				

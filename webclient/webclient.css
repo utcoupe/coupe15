@@ -26,6 +26,7 @@ li {
 }
 
 .logger_head{
-	min-width: 40em;
+	min-width: 6em;
 	color: DeepPink;
+	display:inline-block;
 }
