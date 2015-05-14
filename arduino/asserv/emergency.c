@@ -5,8 +5,8 @@
 #include "Arduino.h"
 
 emergency_status_t emergency_status[2] = {
-	{.phase = NO_EMERGENCY, .in_use = USE_SHARP},
-	{.phase = NO_EMERGENCY, .in_use = USE_SHARP},
+	{.phase = NO_EMERGENCY, .in_use = USE_SHARP, .total_time = 0},
+	{.phase = NO_EMERGENCY, .in_use = USE_SHARP, .total_time = 0},
 };
 
 void ComputeEmergencyOnPin(int pin, emergency_status_t *status);
@@ -50,18 +50,18 @@ void ComputeEmergencyOnPin(int pin, emergency_status_t *status) {
 				if (status->start_detection_time < 0) {
 					status->start_detection_time = now;
 				} else if (now - status->start_detection_time > 300) {
-					status->start_time = now;
 					status->start_detection_time = -1;
 					status->phase = FIRST_STOP;
 				}
 			}
 			break;
 		case FIRST_STOP:
+			status->total_time += DT;
 			if (distance > EMERGENCY_STOP_DISTANCE) {
 				status->phase = NO_EMERGENCY;
 			}
-			if ((now - status->start_time) > (EMERGENCY_WAIT_TIME*1000)) {
-				status->phase = SLOW_GO;
+			if ((status->total_time) > (EMERGENCY_WAIT_TIME)) {
+				status->phase = NO_EMERGENCY;
 			}
 			break;
 		case SLOW_GO:
