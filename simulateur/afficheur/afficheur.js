@@ -122,6 +122,8 @@ Simu.init = function(){
 		//afficherPath PR
 		Simu.initPath();
 
+		Simu.initPiles();
+
 		t = data.robots.ge;
 		Simu.afficherGE(t.x,t.y,t.z,t.coul);
 
@@ -322,6 +324,8 @@ Simu.init = function(){
 		Simu.updatePath(data.robots.pr.path.map(function(pos){
 			return new THREE.Vector3(pos[0], 0.01, pos[1]);
 		}));
+
+		Simu.updatePiles(data.dynamic);
 
 		t = data.robots.egr;
 		var t = data.robots.egr;

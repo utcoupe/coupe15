@@ -23,7 +23,7 @@ Simu.initPath = function(){
 };
 
 
-Simu.updatePath = function(vecArray){
+Simu.updatePath = function (vecArray){
 
 	//Simu.pathPR.geometry.dynamic = true;
 	var i=0;
