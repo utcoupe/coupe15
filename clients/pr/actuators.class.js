@@ -27,6 +27,9 @@ module.exports = (function () {
 	Acts.prototype.clean = function(){
 		fifo.clean();  // A priori déjà vide
 		asserv.clean();
+		ax12.ouvrir();
+		others.ouvrirStabilisateurGrand();
+		other.ouvrirBloqueurGrand();
 	};
 
 	Acts.prototype.connectTo = function(struct){
@@ -187,6 +190,57 @@ module.exports = (function () {
 		that.nb_plots++;
 	}
 
+	Acts.prototype.prendre_plot2 = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+		asserv.speed(300, 0, 750);
+		if (that.new_has_ball) {
+			that.new_has_ball = false;
+			others.descendreUnPeuAscenseur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+			that.prendre_plot(callback);
+		}
+		else {
+
+			ax12.ouvrir();
+			ax12.fermer();
+			others.monterUnPeuAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
+		}
+		
+		that.nb_plots++;
+	}
+
+	Acts.prototype.monter_plot2 = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+
+		callback();
+		if (that.nb_plots == 1) {
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			others.fermerStabilisateur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+		} else {
+			others.ouvrirStabilisateurMoyen();
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			others.fermerStabilisateur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+		}
+	}
+
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
@@ -203,6 +257,16 @@ module.exports = (function () {
 			break;
 			case "prendre_plot":
 				this.prendre_plot(callback);
+			break;
+			case "prendre_plot2":
+				this.prendre_plot2(callback);
+			break;
+			case "monter_plot2":
+				this.monter_plot2(callback);
+			break;
+			case "reset_nb_plots":
+				this.nb_plots = 0;
+				callback();
 			break;	
 			case "prendre_plot_rear_left":
 				asserv.goxy(150, 1800, "avant");

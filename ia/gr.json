@@ -8,9 +8,9 @@
 		{
 			"name": "setpid",
 			"data": {
-				"p": 1.5,
+				"p": 0.8,
 				"i": 30,
-				"d": 5
+				"d": 8
 			}
 		},{
 			"name": "setpos",
