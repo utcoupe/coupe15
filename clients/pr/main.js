@@ -38,8 +38,12 @@
 			break;
 			case "stop":
 				acts.clean();
-				logger.fatal("Stop PR");
-				process.exit();
+				ax12.ouvrir();
+				others.ouvrirStabilisateurGrand(fake,0);
+				other.ouvrirBloqueurGrand(function() {
+					logger.fatal("Stop PR");
+					process.exit();
+				});
 			break;
 
 			// useless //

@@ -4,7 +4,7 @@
 
 #include "lib/map.hpp"
 
-#define DEBUG 1
+#define DEBUG 0
 #define RENDER_BMP 0
 #define FAILED_STR "FAIL\n"
 

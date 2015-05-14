@@ -137,7 +137,7 @@ module.exports = (function () {
 			ax12.ouvrir();
 			others.ouvrirBloqueurMoyen();
 			ax12.fermer();
-			others.monterAscenseur(function() {);
+			others.monterAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
 				setTimeout(callback, 200);
 			});
@@ -205,7 +205,7 @@ module.exports = (function () {
 				this.prendre_plot(callback);
 			break;	
 			case "prendre_plot_rear_left":
-				asserv.goxy(160, 1800, "avant");
+				asserv.goxy(150, 1800, "avant");
 				that.prendre_plot();
 				asserv.goxy(270, 1800, "arriere", callback);
 			break;
@@ -245,10 +245,10 @@ module.exports = (function () {
 			break;
 
 			case "prendre_2_plots_stairs":
-				asserv.goxy(810, 1740, "avant");
+				asserv.goxy(803, 1745, "avant");
 				that.prendre_plot();
 				that.delay(1000);
-				asserv.goxy(830, 1855, "avant");
+				asserv.goxy(825, 1860, "avant");
 				that.prendre_plot();
 				asserv.speed(-300, -100, 1000, callback);
 			break;
@@ -270,7 +270,9 @@ module.exports = (function () {
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
 				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 750);
+				asserv.speed(-300, 0, 750, function() {
+					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
+				});
 				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurMoyen(fake,0);
 				others.monterMoyenAscenseur();
@@ -315,7 +317,10 @@ module.exports = (function () {
 				others.ouvrirBloqueurGrand(fake,0);
 				ax12.ouvrir();
 				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 750, callback);
+				asserv.speed(-300, 0, 750, function() {
+					callback();
+					that.client.send('ia', 'data.add_dynamic', {pos:{x:asserv.pos.x, y:180}, d:8});
+				});
 				that.nb_plots = 0;
 				that.client.send('ia', 'pr.plot0');
 			break;
@@ -328,7 +333,10 @@ module.exports = (function () {
 				others.descendreMoyenAscenseur();
 				others.ouvrirBloqueurGrand(fake,0);
 				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 1000, callback);
+				asserv.speed(-300, 0, 750, function() {
+					callback();
+					that.client.send('ia', 'data.add_dynamic', {pos:{x:asserv.pos.x, y:180}, d:8});
+				});
 				that.nb_plots = 0;
 				that.client.send('ia', 'pr.plot0');
 			break;
