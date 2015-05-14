@@ -121,7 +121,7 @@ module.exports = (function () {
 		}, 'delay');
 	}
 
-	Acts.prototype.prendre_plot = function(callback){
+	Acts.prototype.prendre_plot_old = function(callback){
 		if(callback === undefined) {
 			callback = function() {};
 		}
@@ -193,6 +193,69 @@ module.exports = (function () {
 		}
 		that.nb_plots++;
 	}
+	Acts.prototype.monter_plot = function(callback) {
+		logger.debug("monter_plot");
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+
+		that.client.send('ia', 'pr.noplotlift');
+		callback();
+		if (that.new_has_ball) {
+			logger.info('On est pas censés monter un plot si on a qu\'une balle, si ?');
+		}
+		else if (that.nb_plots==0) {
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			ax12.ouvrir();
+			others.ouvrirStabilisateurMoyen();
+			others.descendreAscenseur();
+		}
+		else if(that.nb_plots==1){
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+		}
+		else if (that.nb_plots>=4){
+			others.ouvrirBloqueurMoyen();
+			others.fermerBloqueur();
+		}
+		else {
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			others.fermerStabilisateur();
+			ax12.ouvrir();
+			others.descendreAscenseur();					
+		}
+	};
+
+	Acts.prototype.prendre_plot = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+		if (that.new_has_ball) {
+			that.new_has_ball = false;
+			others.descendreUnPeuAscenseur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+			that.prendre_plot(callback);
+		}
+		that.client.send('ia', 'pr.plotlift');
+		ax12.ouvrir();
+		asserv.speed(500, 0, 500);
+		ax12.fermer();
+		others.ouvrirStabilisateurMoyen();
+		others.monterUnPeuAscenseur(function() {
+			that.client.send('ia', 'pr.plot++');
+			callback();
+		});					
+		that.nb_plots++;
+	}
 
 	// Order switch
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
@@ -210,7 +273,10 @@ module.exports = (function () {
 			break;
 			case "prendre_plot":
 				this.prendre_plot(callback);
-			break;	
+			break;
+			case "monter_plot":
+				this.monter_plot(callback);
+			break;
 			case "prendre_plot_rear_left":
 				asserv.goxy(160, 1800, "avant");
 				that.prendre_plot();
@@ -246,6 +312,7 @@ module.exports = (function () {
 				asserv.speed(500, 0, 500); 
 				asserv.goxy(175, 250, "avant"); //100 au lieu de 90 pos plot
 				that.prendre_plot();
+				that.monter_plot();
 				asserv.speed(-300, 0, 700); 
 				asserv.goxy(180, 160, "avant");
 				that.prendre_plot(callback);
@@ -254,6 +321,7 @@ module.exports = (function () {
 			case "prendre_2_plots_stairs":
 				asserv.goxy(810, 1740, "avant");
 				that.prendre_plot();
+				that.monter_plot();
 				that.delay(1000);
 				asserv.goxy(830, 1855, "avant");
 				that.prendre_plot();
@@ -272,6 +340,7 @@ module.exports = (function () {
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				asserv.goxy(500, 1100, "avant");
+				that.client.send('ia', 'pr.noplotlift');
 				asserv.goa(2.3562);
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
@@ -312,6 +381,7 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_front_calage":
+				that.client.send('ia', 'pr.noplotlift');
 				ax12.ouvrir(fake);
 				others.monterMoyenAscenseur();
 				asserv.pwm(80, 80, 1000);
@@ -328,6 +398,7 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_front":
+				that.client.send('ia', 'pr.noplotlift');
 				ax12.ouvrir();
 				ohers.ouvrirBloqueurMoyen();
 				asserv.speed(200, 0, 500);

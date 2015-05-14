@@ -51,19 +51,19 @@ module.exports = (function () {
 			actions[i].name = i;
 
 			if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
-				actions[i].startpoints.push({
-					x: actions[i].object.pos.x,
-					y: actions[i].object.pos.y
-				});
-				// var temp;
-				// for(var j = 0; j < __nb_startpoints_plot; j++) {
-				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
-				// 	actions[i].startpoints.push({
-				// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-				// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
-				// 		a: convertA(temp+Math.PI)
-				// 	});
-				// }
+				// actions[i].startpoints.push({
+				// 	x: actions[i].object.pos.x,
+				// 	y: actions[i].object.pos.y
+				// });
+				var temp;
+				for(var j = 0; j < __nb_startpoints_plot; j++) {
+					temp = j*2*Math.PI/__nb_startpoints_plot;
+					actions[i].startpoints.push({
+						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+						y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+						a: convertA(temp+Math.PI)
+					});
+				}
 			}
 			else if((actions[i].object !== null) && (actions[i].type == "clap")) {
 				if(this.color != "yellow") {
@@ -241,6 +241,13 @@ module.exports = (function () {
 		delete this.todo[action.name];
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+
+		// If we are going to take a cylinder and there's one in the lift
+		logger.debug(action);
+		if ((action.type == "plot") && this.ia.pr.content.un_plot_dans_lascenceur){
+			this.ia.client.send('pr', "monter_plot", {});
+		}
+
 		this.ia.pr.path.map(function(checkpoint) {
 			this.ia.client.send('pr', "goxy", {
 				x: checkpoint.x,
