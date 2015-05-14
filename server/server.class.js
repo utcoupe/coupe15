@@ -172,7 +172,10 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: '[ERROR]['+prog+'](code:'+err.code+') '+JSON.stringify(err),
+					params: {
+						head: '[ERROR]['+prog+'](code:'+err.code+')',
+						text: convert.toHtml(JSON.stringify(err))						
+					},
 					from: 'server'
 				});
 			}.bind(this, prog));
@@ -182,7 +185,10 @@ module.exports = (function () {
 					to: 'webclient',
 					name: 'logger',
 					// params: '[CLOSE]['+prog+'] '+data.toString(),
-					params: '[CLOSE]['+prog+'](code:'+code+')',
+					params: {
+						head: '[CLOSE]['+prog+'](code:'+code+')',
+						text: ""						
+					},
 					from: 'server'
 				});
 				this.stop(prog);
@@ -197,7 +203,10 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: '['+prog+'][stdout]'+convert.toHtml(data.toString()),
+					params: {
+						head: '['+prog+'][stdout]',
+						text: convert.toHtml(data.toString())						
+					},
 					from: 'server'
 				});
 			}.bind(this, prog));
@@ -205,7 +214,10 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: '['+prog+'][stderr]'+convert.toHtml(data.toString()),
+					params: {
+						source: '['+prog+'][stderr]',
+						text: convert.toHtml(data.toString())						
+					},
 					from: 'server'
 				});
 			}.bind(this, prog));
@@ -220,7 +232,7 @@ module.exports = (function () {
 	Server.prototype.stop = function(prog) {
 		if(this.utcoupe[prog]) {
 			this.progs[prog].kill();
-
+			logger.info("stopped "+prog);
 			this.utcoupe[prog] = false;
 		}
 		this.sendUTCoupe();
