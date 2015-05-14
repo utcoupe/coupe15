@@ -29,7 +29,7 @@ module.exports = (function () {
 		asserv.clean();
 		ax12.ouvrir();
 		others.ouvrirStabilisateurGrand();
-		other.ouvrirBloqueurGrand();
+		others.ouvrirBloqueurGrand();
 	};
 
 	Acts.prototype.connectTo = function(struct){
@@ -250,7 +250,7 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "placer":
-				asserv.setPid(0.25, 200, 14);
+				asserv.setPid(0.2, 8, 5);
 				asserv.goxy(500, 940);
 				asserv.goa(-0.62);
 				this.orderHandler('ia','fermer_tout', {}, callback);

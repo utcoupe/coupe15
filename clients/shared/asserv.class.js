@@ -78,6 +78,7 @@ module.exports = (function () {
 		this.setA(pos.a);
 	}
 	Asserv.prototype.setPos = function(pos, callback) {
+		logger.debug(pos);
 		if(pos.color !== undefined)
 			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
