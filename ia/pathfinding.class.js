@@ -15,8 +15,16 @@ module.exports = (function () {
 	function Pathfinding(ia) {
 		this.ia = ia;
 		var fifo = [];
-		var instance = Child_process.spawn("bash", [ "-c", "pkill pathfinding; "+programm+" "+image ]);
-		//var instance = Child_process.spawn(programm, [ image ]);
+
+		var instance_pkill = Child_process.spawn("pkill", ["pathfinding"]);
+		instance_pkill.on('error', function(err){
+			logger.error("error pkilling pathfinding code:"+err.code);
+		});
+		instance_pkill.on('exit', function(code){
+			logger.info("successfully pkilled all old instances of pathfinding");
+		});
+
+		var instance = Child_process.spawn(programm, [ image ]);
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){

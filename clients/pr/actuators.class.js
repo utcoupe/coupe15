@@ -327,7 +327,7 @@ module.exports = (function () {
 
 			case "deposer_pile_front":
 				ax12.ouvrir();
-				ohers.ouvrirBloqueurMoyen();
+				others.ouvrirBloqueurMoyen();
 				asserv.speed(200, 0, 500);
 				others.ouvrirStabilisateurMoyen(fake,0);
 				others.descendreMoyenAscenseur();

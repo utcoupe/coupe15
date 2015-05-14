@@ -29,12 +29,25 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 	for (i=0; i<nr; i++) {
 		char *path = paths[i];
 		int j;
-		// int found = 0;
+		int found = 0;
+		fprintf(stderr, "Searching hokuyo %d\n", i);
 		for (j=0; j<NR_ACM_TRY; j++) {
 			char *answer, *serial_nr;
 			char *try_path = base_path;
 			int fd, n, size, k;
+			int try = 0;
+			int port_already_used = 0;
 			try_path[11] = '0' + j;
+			for (k=0; k<i; k++) {
+				if (strstr(paths[k], try_path))
+					port_already_used = 1;
+			}
+
+			if (port_already_used) {
+				continue;
+			}
+
+			fprintf(stderr, "Opening port %d\n", j);
 
 			// open serial
 			fd = open(try_path, O_RDWR | O_NOCTTY | O_NDELAY);
@@ -44,53 +57,59 @@ int detectHokuyos(char (*paths)[SERIAL_STR_LEN], int nr) {
 			}
 			set_interface_attribs(fd, B115200, 0);  
 			set_blocking(fd, 1);
+			
+			while (!found && try<3) {
+				// ask for serial number
+				n = write(fd, VVCOMMAND, sizeof(VVCOMMAND));
+				if (n < 0) {
+					fprintf(stderr, "Failed to write on serial port %s\n", try_path);
+					break;
+				}
+				answer = malloc(200*sizeof(char));
+				if (!answer) {
+					fprintf(stderr, "Failed to allocate answer buffer\n");
+					exit(EXIT_FAILURE);
+				}
+				size = 0;
+				answer[size] = serial_read(fd);
 
-			// ask for serial number
-			n = write(fd, VVCOMMAND, sizeof(VVCOMMAND));
-			if (n < 0) {
-				fprintf(stderr, "Failed to write on serial port %s\n", try_path);
-				continue;
-			}
-			answer = malloc(200*sizeof(char));
-			if (!answer) {
-				fprintf(stderr, "Failed to allocate answer buffer\n");
-				exit(EXIT_FAILURE);
-			}
-			size = 0;
-			answer[size] = serial_read(fd);
-
-			// read until \n\n
-			do {
-				answer[++size] = serial_read(fd);
-			} while (!(answer[size] == '\n' && answer[size-1] == '\n'));
-			answer[size] = '\0';
-
-#if DEBUG
-			fprintf(stderr, "Answer is: %s\n", answer);
-			fprintf(stderr, "strstr: %s\n", strstr(answer, "SERI:"));
-#endif
-			if (strstr(answer, "SERI:") == 0)
-			{
-				fprintf(stderr, "FATAL: Hokuyo communication problem, no serial number !\n");
-				fprintf(logfile, "FATAL: Hokuyo communication problem, no serial number !\n");
-			}
-			serial_nr = strstr(answer, "SERI:") + sizeof("SERI:");
-			k = 0;
-			while (serial_nr[++k] != ';');
-			serial_nr[k] = '\0';
+				// read until \n\n
+				do {
+					answer[++size] = serial_read(fd);
+				} while (!(answer[size] == '\n' && answer[size-1] == '\n'));
+				answer[size] = '\0';
 
 #if DEBUG
-			fprintf(stderr, "Found serial %s on port %s\n", serial_nr, try_path);
+				fprintf(stderr, "Answer is: %s\n", answer);
+				fprintf(stderr, "strstr: %s\n", strstr(answer, "SERI:"));
+#endif
+				if (strstr(answer, "SERI:") == 0)
+				{
+					fprintf(stderr, "FATAL: Hokuyo communication problem, no serial number !\n");
+					fprintf(logfile, "FATAL: Hokuyo communication problem, no serial number !\n");
+					try++;
+					continue;
+				}
+				serial_nr = strstr(answer, "SERI:") + sizeof("SERI:");
+				k = 0;
+				while (serial_nr[++k] != ';');
+				serial_nr[k] = '\0';
+
+#if DEBUG
+				fprintf(stderr, "Found serial %s on port %s\n", serial_nr, try_path);
 #endif
 
-			// check if it is the right hokuyo
-			if (strcmp(serial_nr, expected_serial[i]) == 0) {
-				strcpy(path, try_path);
-				// found = 1;
-				break;
+				// check if it is the right hokuyo
+				if (strcmp(serial_nr, expected_serial[i]) == 0) {
+					strcpy(path, try_path);
+					found = 1;
+				}
+			}
+	 		if (found) {
 #if DEBUG
 				fprintf(stderr, "Found hokuyo %d (%s) on port %s\n", i, expected_serial[i], path);
 #endif
+				break;
 			}
 
 			free(answer);
