@@ -27,8 +27,7 @@ module.exports = (function () {
 		this.matchStarted = true;
 
 		logger.info("La classe hokuyo attend...");
-		// this.ia.client.send("hokuyo", "start", this.params); // à décommenter !!!!!!!!!!!!!!!!!!!
-		this.ia.client.send("hokuyo", "start", {color:params});
+		this.ia.client.send("hokuyo", "start", {color:this.params.color});
 		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
 	};
 

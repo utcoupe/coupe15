@@ -231,6 +231,7 @@
 
 		// Events
 		child.stdout.on('data', function(data) {
+			logger.debug(data.toString());
 			dataFromCHandler(data);
 		});
 
@@ -249,6 +250,11 @@
 				sendChildren({"status": "waiting", "children":[]});
 			}, 5000);
 		});
+
+		child.stderr.on('data', function(data) {
+			logger.error(data.toString());
+		});
+		
 		
 		child.on('close', function(code) {
 			if (code == 0)
