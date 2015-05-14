@@ -126,7 +126,14 @@ module.exports = (function () {
 		var objects = [{
 			pos: this.ia.gr.pos,
 			d: this.ia.gr.size.d
-		}].concat(this.ia.data.erobot);
+		}].concat(this.ia.data.erobot).concat(
+			Object.keys(this.ia.data.pile).filter(function(key){ //remove unwanted elements
+				return this.ia.data.pile.hasOwnProperty(key);
+			}).map(function(key){ //return object instead of key
+				return this.ia.data.pile[key];
+			})
+		);
+
 
 		// logger.debug(objects);
 
