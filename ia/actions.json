@@ -319,7 +319,7 @@
 				"a": 0
 			}],
 			"sens": "arriere",
-			"priority": 16,
+			"priority": 6,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"gobelet": false
