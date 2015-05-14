@@ -142,6 +142,7 @@ module.exports = (function () {
 		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
+			logger.debug(val);
 			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(this.ia.pr.size.d/2))];
 		}.bind(this)) );
 	};

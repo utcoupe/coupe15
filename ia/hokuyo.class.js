@@ -165,7 +165,7 @@ module.exports = (function () {
 		}
 
 		if (!this.matchStarted){
-			logger.debug("Le match n'a pas commencé");
+//			logger.debug("Le match n'a pas commencé");
 			return;
 		}
 
@@ -176,8 +176,8 @@ module.exports = (function () {
 			clearTimeout(timeout);
 
 			if (dots.length != ((this.params.we_have_hats?2:0) + this.params.nb_erobots)) {
-				logger.info("On a pas le meme nombre de spots ("+dots.length+") que de robots à détecter ("+
-					((this.params.we_have_hats?2:0) + this.params.nb_erobots) + ").");
+			//	logger.info("On a pas le meme nombre de spots ("+dots.length+") que de robots à détecter ("+
+//					((this.params.we_have_hats?2:0) + this.params.nb_erobots) + ").");
 			}
 
 			// takes a timestamp to be able to compute speeds
@@ -320,7 +320,9 @@ module.exports = (function () {
 
 			this.ia.data.dots = dots;
 
-			this.detectCollision();
+			this.detectCollision(dots.map(function(val){
+				return { pos: val };	
+			}));
 
 			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);
 		}
@@ -330,7 +332,7 @@ module.exports = (function () {
 	Hokuyo.prototype.detectCollision = function(dots) {
 		var collision = false;
 		var pf = this.ia.pr.path;
-
+		var minDist;
 		// for each path segment
 		var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
 		for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
@@ -348,10 +350,10 @@ module.exports = (function () {
 				};
 
 				// distance to each estimated position of the ennemi robots
-				var minDist = this.getDistance(dots[0], segPoint);
+				minDist = 10000;//this.getDistance(dots[0], segPoint);
 
-				for(k = 1; k < dots.length; k++) {
-					var tmp = this.getDistance(ebots[k], segPoint);
+				for(var k = 0; k < dots.length; k++) {
+					var tmp = this.getDistance(dots[k], segPoint);
 					if (tmp < minDist) {
 						minDist = tmp;
 					}
@@ -364,7 +366,7 @@ module.exports = (function () {
 				// }
 
 				// if one of the dist < security diameter, there will be a collision
-				if (minDist < SECURITY_COEF*ebots[0].d/2.0) {
+				if (minDist < 5500) {
 					collision = true;
 				}
 				
