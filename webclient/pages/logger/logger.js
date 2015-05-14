@@ -12,7 +12,10 @@ angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client',
 		Client.order(function (from, name, data) {
 			if(name == 'logger') {
 				// console.log('log', data);
-				this.logs.unshift($sce.trustAsHtml(data));
+				var head = data.head ? data.head : "";
+				var text =  data.text ? data.text : "";
+				var print = "<span class=\"logger_head\">"+head+"</head>"+text;
+				this.logs.unshift($sce.trustAsHtml(print));
 				this.logs.splice(LOG_MAX_LENGTH, 1000); //remove all logs index > 500
 				
 				if($rootScope.act_page == 'index') {

@@ -24,3 +24,8 @@ li {
 	background: black;
 	color: white;
 }
+
+.logger_head{
+	min-width: 40em;
+	color: DeepPink;
+}
