@@ -55,7 +55,7 @@
 						started = true;
 						start(params.color);
 					} else
-						logger.error("Missing parameters !");
+						logger.error("ALready started or Missing parameters !");
 					break;
 				case "shutdown":
 					quitC("stop");
@@ -79,8 +79,8 @@
 	});
 
 	function matchLogger(name, line){
-		fs.appendFile('/var/log/'+name+'.log', line+'\n', function (err) {
-			if (err) logger.error('Ecriture dans le fichier de log de match "/var/log/'+name+'.log" impossible');
+		fs.appendFile('/var/log/utcoupe/'+name+'.log', line+'\n', function (err) {
+			if (err) logger.error('Ecriture dans le fichier de log de match "/var/log/utcoupe/'+name+'.log" impossible');
 			// logger.debug('The "data to append" was appended to file!');
 		});
 	}
