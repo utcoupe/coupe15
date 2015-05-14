@@ -114,6 +114,7 @@ module.exports = (function () {
 	Data.prototype.parseOrder = function(from, name, param){
 		switch(name){
 			case "data.add_dynamic" :
+				if(!!param.pos && !!params.pos.x && !!param.pos.y && !!param.d){
 					this.dynamic.push(param);
 					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));
 				}else{
