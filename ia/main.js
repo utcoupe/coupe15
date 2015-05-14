@@ -9,8 +9,10 @@
 	if(!color) color = null;
 	var nb_erobots = process.argv[3];
 	if(!nb_erobots) nb_erobots = null;
-	var we_have_hats = process.argv[4];
-	if(!we_have_hats) we_have_hats = null;
+	var EGR_d = process.argv[4];
+	if(!EGR_d) EGR_d = null;
+	var EPR_d = process.argv[5];
+	if(!EPR_d) EPR_d = null;
 
-	var ia = new (require('./ia.class.js'))(color, nb_erobots, we_have_hats);
+	var ia = new (require('./ia.class.js'))(color, nb_erobots, EGR_d, EPR_d);
 })();

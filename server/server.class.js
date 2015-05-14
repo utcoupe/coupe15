@@ -152,7 +152,7 @@ module.exports = (function () {
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['./ia/main.js', params.color]);
+					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.nb_erobots, params.EGR_d, params.EPR_d]);
 				break;
 				case 'pr':
 					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);

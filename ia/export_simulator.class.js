@@ -57,7 +57,7 @@ module.exports = (function () {
 			},
 			egr: {
 				x: convertX(this.ia.data.erobot[0].pos.x),
-				y: convertY(this.ia.data.erobot[0].pos.y)
+				y: convertY(this.ia.data.erobot[0].pos.y),
 			},
 			epr: {
 				x: convertX(this.ia.data.erobot[1].pos.x),
