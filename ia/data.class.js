@@ -117,6 +117,7 @@ module.exports = (function () {
 				var pos_name = param;
 				if(this.pile_pose.hasOwnProperty(pos_name)){
 					this.pile[pos_name] = this.pile_pose[pos_name];
+					logger.info("added pile "+pos_name+"to pile_pose");
 				}else{
 					logger.error("Invalid pile_depose pos_name:"+pos_name+" from:"+from);
 				}
