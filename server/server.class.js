@@ -152,7 +152,7 @@ module.exports = (function () {
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['./ia/main.js', params.color]);
+					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.nb_erobots, params.EGR_d, params.EPR_d]);
 				break;
 				case 'pr':
 					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);
@@ -165,7 +165,30 @@ module.exports = (function () {
 				break;
 			}
 
-			this.progs[prog].stdout.on('data', function (data) {
+			logger.info("[Launch]"+prog);
+
+
+			this.progs[prog].on('error', function (prog, err) {
+				this.server.to('webclient').emit('order', {
+					to: 'webclient',
+					name: 'logger',
+					params: '[ERROR]['+prog+'](code:'+err.code+') '+JSON.stringify(err),
+					from: 'server'
+				});
+			}.bind(this, prog));
+			this.progs[prog].on('close', function (prog, code) {
+				logger.error("[CLOSE]"+prog);
+				this.server.to('webclient').emit('order', {
+					to: 'webclient',
+					name: 'logger',
+					// params: '[CLOSE]['+prog+'] '+data.toString(),
+					params: '[CLOSE]['+prog+'](code:'+code+')',
+					from: 'server'
+				});
+				this.stop(prog);
+			}.bind(this, prog));
+
+			this.progs[prog].stdout.on('data', function (prog, data) {
 				// logger.debug(data);
 				// for(var i in data) {
 				// 	if(data[i] == 5)
@@ -174,27 +197,17 @@ module.exports = (function () {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					params: convert.toHtml(data.toString()),
-					from: 'server'
-				});
-			}.bind(this));
-			this.progs[prog].on('error', function (prog, data) {
-				this.server.to('webclient').emit('order', {
-					to: 'webclient',
-					name: 'logger',
-					params: '[ERROR]['+prog+'] '+data.toString(),
+					params: '['+prog+'][stdout]'+convert.toHtml(data.toString()),
 					from: 'server'
 				});
 			}.bind(this, prog));
-			this.progs[prog].on('close', function (prog, data) {
+			this.progs[prog].stderr.on('data', function (prog, data) {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
-					// params: '[CLOSE]['+prog+'] '+data.toString(),
-					params: '[CLOSE]['+prog+']',
+					params: '['+prog+'][stderr]'+convert.toHtml(data.toString()),
 					from: 'server'
 				});
-				this.stop(prog);
 			}.bind(this, prog));
 			 
 				// logger.debug(prog);

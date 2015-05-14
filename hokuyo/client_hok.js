@@ -17,15 +17,15 @@
 	var child_process = require('child_process');
 	var child;
 	var SocketClient = require('../server/socket_client.class.js');
-	var config = require('./config.js');
+	var config = require('../config.js');
 	var lastT = Date.now();
 	var startingT = lastT;
 
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
 
-	var server = process.argv[2] || config.server || "";
-	var command = process.argv[3] || config.command || "";
+	var server = process.argv[2] || config.server;
+	var command = process.argv[3] || config.hokuyo_command;
 
 	var client = new SocketClient({
 		server_ip: server,

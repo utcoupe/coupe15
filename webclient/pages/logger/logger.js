@@ -8,12 +8,13 @@ angular.module('app').service('Logger', ['$rootScope', '$sce', 'Client',
 	function($rootScope, $sce, Client) {
 	this.logs = [];
 	this.init = function () {
+		var LOG_MAX_LENGTH = 500;
 		Client.order(function (from, name, data) {
 			if(name == 'logger') {
 				// console.log('log', data);
 				this.logs.unshift($sce.trustAsHtml(data));
-				if(this.logs.length > 500)
-					this.logs.pop();
+				this.logs.splice(LOG_MAX_LENGTH, 1000); //remove all logs index > 500
+				
 				if($rootScope.act_page == 'index') {
 					$rootScope.$apply();
 				}

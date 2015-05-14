@@ -16,10 +16,25 @@
 	<li>
 		<span class="utcoupe" ng-class="{launched: utcoupe.ia}" >IA</span>
 		<button type="button" class="btn" ng-hide="utcoupe.ia" ng-click="launch('ia')">Lancer</button> 
-		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button> 
-		Color: <span style="color:{{ our_color }};background-color:#000;">{{ our_color }}</span> ; Changer pour 
+		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button> <br/>
+		<span class="legend">Color:</span>
+		<span style="color:{{ our_color }};" class="config" >{{ our_color }}</span>
 		<button class="btn" ng-show="our_color=='yellow'" ng-click="our_color='green'">Green</button>
 		<button class="btn" ng-show="our_color=='green'" ng-click="our_color='yellow'">Yellow</button>
+		<br />
+		<span class="legend">Erobots:</span> <span class="config" >{{ nb_erobots }}</span>
+		<button class="btn" ng-show="nb_erobots==1" ng-click="nb_erobots=2">2</button>
+		<button class="btn" ng-show="nb_erobots==2" ng-click="nb_erobots=1">1</button>
+		<br />
+		<div ng-show="nb_erobots>=1" >
+			<span class="legend">Diamètre EGR:</span> <span class="config" >{{ EGR_d }}mm</span>
+			<input type="text" ng-model="EGR_d" />
+		</div>
+		<div ng-show="nb_erobots>=2" >
+			<span class="legend">Diamètre EPR:</span> <span class="config" >{{ EPR_d }}mm</span>
+			<input type="text" ng-model="EPR_d" />
+		</div>
+
 		<br /><br />
 	</li>
 	<li>
