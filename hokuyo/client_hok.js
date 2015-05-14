@@ -32,6 +32,7 @@
 		type: "hokuyo",
 	});
 
+	var started = false;
 	var nb_active_hokuyos = -1;
 	var lastStatus = {
 		"status": "waiting"
@@ -50,9 +51,10 @@
 			lastT = now;
 			switch (name){
 				case "start":
-					if(!!params.color)
+					if(!!params.color && !started) {
+						started = true;
 						start(params.color);
-					else
+					} else
 						logger.error("Missing parameters !");
 					break;
 				case "shutdown":
@@ -60,6 +62,7 @@
 					spawn('sudo', ['halt']);
 					break;
 				case "stop":
+					started = false;
 					quitC("stop");
 					break;
 				case "sync_git":
@@ -257,6 +260,7 @@
 		
 		
 		child.on('close', function(code) {
+			started = false;
 			if (code == 0)
 				logger.info('Child closed correctly');
 			else
