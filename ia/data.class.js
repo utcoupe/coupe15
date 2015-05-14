@@ -11,7 +11,7 @@ module.exports = (function () {
 		this.erobot = [];
 		this.gobelet = [];
 		this.pile = {};
-		this.pile_pose = {};
+		this.dynamic = []; //used for laid stacks
 		this.depot = [];
 		this.nb_erobots = nb_erobots;
 
@@ -113,14 +113,12 @@ module.exports = (function () {
 
 	Data.prototype.parseOrder = function(from, name, param){
 		switch(name){
-			case "data.pile_depose" :
-				var pos_name = param;
-				if(this.pile_pose.hasOwnProperty(pos_name)){
-					this.pile[pos_name] = this.pile_pose[pos_name];
-					logger.info("added pile "+pos_name+"to pile_pose");
+			case "data.add_dynamic" :
+					this.dynamic.push(param);
+					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));
 				}else{
-					logger.error("Invalid pile_depose pos_name:"+pos_name+" from:"+from);
-				}
+					logger.error("invalid dynamic from :"+from+" params:"+JSON.stringify(param));
+				}				
 			break;
 			default: logger.error("Unknown order name:"+name+" from:"+from);
 		}
