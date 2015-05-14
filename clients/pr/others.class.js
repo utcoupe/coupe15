@@ -19,10 +19,10 @@ module.exports = (function () {
 		this.sp.on("error", function(data){
 			logger.debug(data.toString());
 		});
-		this.sp.on("close", function(data){
+		this.sp.on("close", function(){
 			this.ready = false;
 			this.sendStatus();
-			logger.debug(data.toString());
+			logger.error("Serial port close");
 		}.bind(this));
 	}
 

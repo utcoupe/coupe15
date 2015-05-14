@@ -33,7 +33,9 @@ module.exports = (function () {
 	Gr.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'gr.pos':
-				this.pos = params;
+				this.pos.x = params.x;
+				this.pos.y = params.y;
+				this.pos.a = params.a;
 			break;
 			case 'gr.getpos':
 				this.sendPos();

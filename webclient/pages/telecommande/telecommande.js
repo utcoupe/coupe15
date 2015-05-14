@@ -22,7 +22,16 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 
 	// PR Luc
 	$scope.prPrendrePlot = function() {
-		Client.send("pr", "prendre_plot");
+		Client.send("pr", "prendre_plot2");
+	}
+	$scope.prMonterPlot = function() {
+		Client.send("pr", "monter_plot2");
+	}
+	$scope.prFermerTout = function() {
+		Client.send("pr", "fermer_tout");
+	}
+	$scope.prResetNbPlots = function() {
+		Client.send("pr", "reset_nb_plots");
 	}
 
 	// IA

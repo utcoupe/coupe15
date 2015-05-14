@@ -38,7 +38,7 @@ module.exports = (function () {
 		this.sp.on("close", function(data){
 			this.ready = false;
 			this.sendStatus();
-			logger.debug(data.toString());
+			logger.error("Serial port close");
 		}.bind(this));
 
 		setTimeout(function() {
@@ -78,6 +78,7 @@ module.exports = (function () {
 		this.setA(pos.a);
 	}
 	Asserv.prototype.setPos = function(pos, callback) {
+		logger.debug(pos);
 		if(pos.color !== undefined)
 			this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
@@ -176,6 +177,7 @@ module.exports = (function () {
 			args = args || [];
 			this.order_sent = cmd;
 			this.wait_for_id = wait_for_id;
+			logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
 			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
 		}
 

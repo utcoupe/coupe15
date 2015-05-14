@@ -187,7 +187,7 @@ module.exports = (function () {
 					// params: '[CLOSE]['+prog+'] '+data.toString(),
 					params: {
 						head: '[CLOSE]['+prog+'](code:'+code+')',
-						text: ""						
+						text: " "						
 					},
 					from: 'server'
 				});

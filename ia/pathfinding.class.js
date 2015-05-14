@@ -136,12 +136,13 @@ module.exports = (function () {
 		var objects = [{
 			pos: this.ia.gr.pos,
 			d: this.ia.gr.size.d
-		}].concat(this.ia.data.erobot).concat(this.ia.data.dynamic);
+		}].concat(this.ia.data.dots).concat(this.ia.data.dynamic);
 
 
 		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
+			logger.debug(val);
 			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(this.ia.pr.size.d/2))];
 		}.bind(this)) );
 	};

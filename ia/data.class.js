@@ -15,6 +15,8 @@ module.exports = (function () {
 		this.depot = [];
 		this.nb_erobots = nb_erobots;
 
+		this.dots = [];
+
 		this.importObjects();
 		
 		this.erobot = [{ // big robot on position 0

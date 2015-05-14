@@ -34,7 +34,7 @@ module.exports = (function () {
 	Pr.prototype.collision = function() {
 		if(this.path.length === 0) { // Utile quand on clique nous même sur le bouton dans le simu
 			logger.warn("Normalement impossible, collision sur un path vide ?");
-			return;
+			//return;
 		}
 
 		logger.info('collision');
