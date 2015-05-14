@@ -103,7 +103,7 @@ void ControlCompute(void) {
 	}
 
 
-	if (control.status_bits) {
+	if (control.status_bits & EMERGENCY_BIT || control.status_bits & PAUSE_BIT) {
 		stopRobot();
 	} else {
 		switch (current_goal->type) {

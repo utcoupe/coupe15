@@ -61,7 +61,7 @@ void ComputeEmergencyOnPin(int pin, emergency_status_t *status) {
 				status->phase = NO_EMERGENCY;
 			}
 			if ((status->total_time) > (EMERGENCY_WAIT_TIME)) {
-				status->phase = NO_EMERGENCY;
+				status->phase = SLOW_GO;
 			}
 			break;
 		case SLOW_GO:
