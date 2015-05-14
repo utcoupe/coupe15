@@ -28,7 +28,7 @@ module.exports = (function () {
 
 		logger.info("La classe hokuyo attend...");
 		// this.ia.client.send("hokuyo", "start", this.params); // à décommenter !!!!!!!!!!!!!!!!!!!
-		this.ia.client.send("hokuyo", "start", {color:"green"});
+		this.ia.client.send("hokuyo", "start", {color:params});
 		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
 	};
 
