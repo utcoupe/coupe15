@@ -12,7 +12,8 @@ typedef enum emergency_phase {
 
 typedef struct emergency_status {
 	int in_use;
-	long start_time, start_detection_time;
+	long start_detection_time;
+	double total_time;
 	emergency_phase_t phase;
 } emergency_status_t;
 

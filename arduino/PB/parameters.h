@@ -43,11 +43,11 @@
 #define ACC_MAX 1500  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 30 // réduction de la vitesse linéaire quand on tourne
-#define EMERGENCY_WAIT_TIME 10 // seconds
+#define EMERGENCY_WAIT_TIME 30 // seconds
 #define EMERGENCY_SLOW_GO_RATIO 0.3 // spd = 0.3*max_spd in slow_go mode
 
-#define BLOCK_TIME 1500 // ms - time between each block check
-#define BLOCK_MIN_DIST 10 // mm - distance to move to consider we moved
+#define BLOCK_TIME 0 // ms - time between each block check
+#define BLOCK_MIN_DIST 3 // mm - distance to move to consider we moved
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
@@ -62,8 +62,8 @@
 #define CONE_ALIGNEMENT (M_PI/2.0) 
 
 #define PID_P 0.2
-#define PID_I 150
-#define PID_D 14
+#define PID_I 8 
+#define PID_D 5
 #define PID_BIAS 0
 
 #define LEFT_P (PID_P)

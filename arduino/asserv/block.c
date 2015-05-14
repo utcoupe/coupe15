@@ -17,16 +17,15 @@ void ComputeIsBlocked(void) {
 	if (now - last_time < BLOCK_TIME)
 		return;
 	last_time = now;
-	last_pos = current_pos;
 
 	current_goal = FifoCurrentGoal();
 	if (current_goal->type == NO_GOAL || 
 		current_goal->type == TYPE_PWM ||
 		current_goal->type == TYPE_SPD)
-		return;
+		goto end;
 	if (fifo.current_goal != last_goal_nr) {
 		last_goal_nr = fifo.current_goal;
-		return;
+		goto end;
 	}
 
 	// goals type is pos or angle, goal didn't change and 
@@ -39,5 +38,7 @@ void ComputeIsBlocked(void) {
 		// consider the goal reached
 		current_goal->is_reached = 1;
 	}
+end:
+	last_pos = current_pos;
 #endif
 }

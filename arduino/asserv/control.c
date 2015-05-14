@@ -50,7 +50,8 @@ void ControlInit(void) {
 	control.last_finished_id = 0;
 
 	control.max_acc = ACC_MAX;
-	control.max_spd = SPD_MAX; control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
+	control.max_spd = SPD_MAX; 
+	control.rot_spd_ratio = RATIO_ROT_SPD_MAX;
 
 	MotorsInit();
 	RobotStateInit();
@@ -102,7 +103,7 @@ void ControlCompute(void) {
 	}
 
 
-	if (control.status_bits) {
+	if (control.status_bits & EMERGENCY_BIT || control.status_bits & PAUSE_BIT) {
 		stopRobot();
 	} else {
 		switch (current_goal->type) {
