@@ -10,7 +10,8 @@ module.exports = (function () {
 		this.plot = [];
 		this.erobot = [];
 		this.gobelet = [];
-		this.pile = [];
+		this.pile = {};
+		this.pile_pose = {};
 		this.depot = [];
 		this.nb_erobots = nb_erobots;
 
@@ -108,6 +109,20 @@ module.exports = (function () {
 				this.gobelet[g].status = "lost";
 			}
 		}.bind(this));
+	};
+
+	Data.prototype.parseOrder = function(from, name, param){
+		switch(name){
+			case "data.pile_depose" :
+				var pos_name = param;
+				if(this.pile_pose.hasOwnProperty(pos_name)){
+					this.pile[pos_name] = this.pile_pose[pos_name];
+				}else{
+					logger.error("Invalid pile_depose pos_name:"+pos_name+" from:"+from);
+				}
+			break;
+			default: logger.error("Unknown order name:"+name+" from:"+from);
+		}
 	};
 
 	var data = new Data();
