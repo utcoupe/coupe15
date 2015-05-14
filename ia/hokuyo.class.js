@@ -318,14 +318,19 @@ module.exports = (function () {
 
 			// this.lastNow = now;
 
-			this.detectCollision(dots);
-			this.ia.data.dots = dots.map(function(val){
-				return {
-					pos: val,
-					d: 320
-				};	
-			});
+			// this.detectCollision(dots);
+			// this.ia.data.dots = dots.map(function(val){
+			// 	return {
+			// 		pos: val,
+			// 		d: 320
+			// 	};	
+			// });
 
+			for(var d in dots) {
+				if(d.x > 300 && d.x < 2700 && d.y > 300 && d.y < 1700) {
+					this.ia.pr.stop();
+				}
+			}
 
 			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);
 		}
