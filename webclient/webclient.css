@@ -23,9 +23,11 @@ li {
 .logger{
 	background: black;
 	color: white;
+	padding: 3px;
 }
 
 .logger_head{
-	min-width: 40em;
+	min-width: 6em;
 	color: DeepPink;
+	display: inline-block;
 }
