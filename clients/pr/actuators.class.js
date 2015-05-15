@@ -372,24 +372,28 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_gobelet":
-				asserv.goxy(200, 1000, "avant");
+				asserv.goxy(170, 1000, "avant");
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
-				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurGrand();
+				that.delay(100);
+				others.ouvrirBloqueurGrand(fake,0);
 
 				asserv.goxy(300, 1000, "arriere");
 				asserv.goa(0);
 				others.lacherGobelet();
-				that.delay(100);
+				that.delay(100, callback);
 			break;
 
 			case "deposer_pile":
 				asserv.goxy(450, 1000, "avant");
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
-				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurGrand();
+				that.delay(100);
+				others.ouvrirBloqueurGrand();
 			break;
 
 			case "deposer_pile_front_calage":
