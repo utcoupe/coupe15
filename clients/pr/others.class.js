@@ -78,21 +78,21 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [39, 106], time);
+		this.sendCommand(callback, 'M', [35, 65], time);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback, time) {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [70, 70], time);
+		this.sendCommand(callback, 'M', [66, 29], time);
 	};
 
 	Others.prototype.ouvrirBloqueurGrand = function(callback, time) {
 		if (time === undefined) {
 			time = 400;
 		}
-		this.sendCommand(callback, 'M', [110, 40], time);
+		this.sendCommand(callback, 'M', [106, 1], time);
 	};
 
 	Others.prototype.prendreGobelet = function(callback, time) {

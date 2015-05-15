@@ -192,8 +192,8 @@
 			"objectname": "pile__left",
 			"startpoints": [{
 				"x": 500,
-				"y": 900,
-				"a": -2.3562
+				"y": 1100,
+				"a": 2.3562
 			}],
 			"sens": "avant",
 			"priority": 10,
