@@ -1,7 +1,11 @@
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.ia');
+	var logger = log4js.getLogger('ia.ia'); 
+
+	function norm(Ax, Ay, Bx, By) {
+		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
+	}
 
 	function Ia(color, nb_erobots, EGR_d, EPR_d) {
 		var we_have_hats = true;
@@ -59,6 +63,13 @@ module.exports = (function () {
 									return [val[0], 2000-val[1]];
 								});
 							}
+							logger.debug("before "+params.length);
+							for(var i in params) {
+								if(norm(params[i][0], params[i][1], this.pr.pos.x, this.pr.pos.y) < 150 ||
+									norm(params[i][0], params[i][1], this.gr.pos.x, this.gr.pos.y) < 150)
+								params.splice(i, 1);
+							}
+							logger.debug("after "+params.length);
 							this.pr.detectCollision(params);
 							this.data.dots = params.map(function(val) {
 								return {
