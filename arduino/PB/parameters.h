@@ -55,7 +55,7 @@
 #define ENC_RIGHT_RADIUS 31.49 //REGLE PAR TEST - rayon de la roue codeuse
 #define ENTRAXE_ENC 202.87 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
 
-#define ERROR_ANGLE 0.015 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
+#define ERROR_ANGLE 0.030 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
 #define SPD_TO_STOP 10
 
