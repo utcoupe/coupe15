@@ -327,6 +327,22 @@ module.exports = (function () {
 				});
 			break;
 
+			case "deposer_pile_et_gobelet":
+				asserv.goxy(300, 1000, "avant");
+				//asserv.goa(-2.3562);
+				others.descendreUnPeuAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
+				others.ouvrirStabilisateurGrand();
+				asserv.speed(-300, 0, 1000);
+				asserv.goa(0);
+				others.lacherGobelet();
+				that.delay(300);
+				asserv.speed(300, 0, 750);
+				break;
+
 			case "deposer_pile_gobelet_prendre_balle_gauche":
 				asserv.goxy(300, 1000, "avant");
 				//asserv.goa(-2.3562);
@@ -337,7 +353,10 @@ module.exports = (function () {
 				that.delay(500);
 				others.ouvrirStabilisateurGrand();
 				asserv.speed(-300, 0, 1000);
+				asserv.goa(0);
 				others.lacherGobelet();
+				that.delay(300);
+				asserv.speed(300, 0, 750);
 				/*asserv.goxy(700, 1300, "arriere", function() {
 					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
 				});

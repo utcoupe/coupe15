@@ -138,7 +138,7 @@
 				},
 			"duration": 1,
 			"orders":[{
-				"name": "deposer_pile_gobelet_prendre_balle_gauche",
+				"name": "deposer_pile_et_gobelet",
 				"params": {}
 				}],
 			"kill": null
