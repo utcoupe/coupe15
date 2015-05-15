@@ -51,19 +51,19 @@ module.exports = (function () {
 			actions[i].name = i;
 
 			if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
-				actions[i].startpoints.push({
-					x: actions[i].object.pos.x,
-					y: actions[i].object.pos.y
-				});
-				// var temp;
-				// for(var j = 0; j < __nb_startpoints_plot; j++) {
-				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
-				// 	actions[i].startpoints.push({
-				// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-				// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
-				// 		a: convertA(temp+Math.PI)
-				// 	});
-				// }
+				// actions[i].startpoints.push({
+				// 	x: actions[i].object.pos.x,
+				// 	y: actions[i].object.pos.y
+				// });
+				var temp;
+				for(var j = 0; j < __nb_startpoints_plot; j++) {
+					temp = j*2*Math.PI/__nb_startpoints_plot;
+					actions[i].startpoints.push({
+						x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+						y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+						a: convertA(temp+Math.PI)
+					});
+				}
 			}
 			else if((actions[i].object !== null) && (actions[i].type == "clap")) {
 				if(this.color != "yellow") {
@@ -239,6 +239,15 @@ module.exports = (function () {
 		// // Change action to state "in progress"
 		this.inprogress = action;
 		delete this.todo[action.name];
+
+		if(["prendre_gobelet_et_2_plots_front_left",
+			"prendre_plot_middle_left1",
+			"prendre_plot_middle_left2",
+			"prendre_plot_middle_left3",
+			"prendre_plot_rear_left",
+			"prendre_2_plots_stairs_left"].indexOf(action.name)) {
+			this.ia.client.send('pr', "monter_plot2");
+		}
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.ia.pr.path.map(function(checkpoint) {
