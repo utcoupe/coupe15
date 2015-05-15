@@ -31,11 +31,11 @@ module.exports = (function () {
 		this.actions = new (require('./actions.class.js'))(this);
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		this.pr = new (require('./pr.class.js'))(this, this.color);
-		this.hokuyo = new (require('./hokuyo.class.js'))(this, {
-			color: this.color,
-			nb_erobots: parseInt(this.nb_erobots),
-			we_have_hats: (we_have_hats === "true")
-		});
+		// this.hokuyo = new (require('./hokuyo.class.js'))(this, {
+		// 	color: this.color,
+		// 	nb_erobots: parseInt(this.nb_erobots),
+		// 	we_have_hats: (we_have_hats === "true")
+		// });
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
 		this.client.send("server", "server.iaColor", {color: this.color});
@@ -50,6 +50,21 @@ module.exports = (function () {
 					break;
 					case 'ia.stop':
 						this.stop();
+					break;
+					case 'ia.hok':
+						// logger.fatal(params);
+						if(this.timer.match_started) {	
+							this.pr.detectCollision(params);
+							this.data.dots = params.map(function(val) {
+								return {
+									pos: {
+										x: val[0],
+										y: val[1],
+									},
+									d: 320
+								}
+							});
+						}
 					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);
@@ -80,7 +95,7 @@ module.exports = (function () {
 				this.gr.start();
 			}.bind(this), 3000);
 			this.pr.start();
-			this.hokuyo.start();
+			// this.hokuyo.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}
@@ -90,7 +105,7 @@ module.exports = (function () {
 		logger.fatal('Stop IA');
 		this.gr.stop();
 		this.pr.stop();
-		this.hokuyo.stop();
+		// this.hokuyo.stop();
 		setTimeout(process.exit, 2000);
 	};
 

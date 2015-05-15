@@ -104,6 +104,59 @@ module.exports = (function () {
 				logger.warn('Ordre inconnu dans ia.pr: '+name);
 		}
 	};
+
+	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+	Pr.prototype.getDistance = function (spot1, spot2) {
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
+	};
+	Pr.prototype.detectCollision = function(dots) {
+		var collision = false;
+		var pf = this.path;
+		var minDist;
+		// for each path segment
+		var complete_path = [this.pos].concat(this.path);
+		for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
+			var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+			var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+			var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+			var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+
+			// for each X cm of the segment
+			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
+
+				var segPoint = {
+					x: segment[0].x + nthX*j,
+					y: segment[0].y + nthY*j
+				};
+
+				// distance to each estimated position of the ennemi robots
+				minDist = 10000;//this.getDistance(dots[0], segPoint);
+
+				for(var k = 0; k < dots.length; k++) {
+					var tmp = this.getDistance(dots[k], segPoint);
+					if (tmp < minDist) {
+						minDist = tmp;
+					}
+				}
+				// if (ebots.length == 2) {
+				// 	var tmp = this.getDistance(ebots[1], segPoint);
+				// 	if (tmp < minDist) {
+				// 		minDist = tmp;
+				// 	}
+				// }
+
+				// if one of the dist < security diameter, there will be a collision
+				if (minDist < 450) {
+					collision = true;
+				}
+				
+			}
+		}
+
+		if (collision) {
+			this.collision();
+		}
+	}
 	
 	return Pr;
 })();
