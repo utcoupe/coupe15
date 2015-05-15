@@ -12,6 +12,7 @@
 #define PAUSE_BIT (1<<0)
 #define EMERGENCY_BIT (1<<1)
 #define SLOWGO_BIT (1<<2)
+#define TIME_ORDER_BIT (1<<3)
 
 #define ANY 0
 #define FORWARD 1
