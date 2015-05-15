@@ -250,7 +250,7 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "placer":
-				asserv.setPid(0.2, 30, 5);
+				asserv.setPid(0.25, 130, 13);
 				asserv.goxy(500, 940);
 				asserv.goa(-0.62);
 				this.orderHandler('ia','fermer_tout', {}, callback);
@@ -328,7 +328,7 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
-				//asserv.goxy(500, 900, "avant");
+				asserv.goxy(300, 1000, "avant");
 				//asserv.goa(-2.3562);
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
