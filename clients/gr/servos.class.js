@@ -35,7 +35,23 @@ module.exports = (function () {
 	Servos.prototype.vendre = function(callback) {
 		servo_gauche.to(50);
 		servo_droit.to(120);
-		setTimeout(callback, 500);
+		setTimeout(function(){ // remontée lente
+			servo_gauche.to(100, 1000);
+			servo_droit.to(70, 1000);
+		}, 500);
+		setTimeout(function(){
+			servo_gauche.to(50);
+			servo_droit.to(120);
+		}, 2000);
+		setTimeout(function(){ // remontée lente
+			servo_gauche.to(100, 1000);
+			servo_droit.to(70, 1000);
+		}, 2500);
+		setTimeout(function(){
+			servo_gauche.to(50);
+			servo_droit.to(120);
+		}, 4000);
+		setTimeout(callback, 6000);
 	};
 
 	return Servos;
