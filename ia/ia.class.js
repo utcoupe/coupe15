@@ -93,7 +93,7 @@ module.exports = (function () {
 			this.timer.start();
 			setTimeout(function() {
 				this.gr.start();
-			}.bind(this), 3000);
+			}.bind(this), 2000);
 			this.pr.start();
 			// this.hokuyo.start();
 		} else {
@@ -106,7 +106,7 @@ module.exports = (function () {
 		this.gr.stop();
 		this.pr.stop();
 		// this.hokuyo.stop();
-		setTimeout(process.exit, 2000);
+		setTimeout(process.exit, 1000);
 	};
 
 	return Ia;

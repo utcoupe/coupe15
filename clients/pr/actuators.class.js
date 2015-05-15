@@ -334,17 +334,18 @@ module.exports = (function () {
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
 				others.ouvrirStabilisateurGrand();
-				asserv.speed(-400, 0, 1000, function() {
+				others.lacherGobelet();
+				/*asserv.goxy(700, 1300, "arriere", function() {
 					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
 				});
 				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurMoyen(fake,0);
 				others.monterMoyenAscenseur();
 
-				asserv.goxy(260, 950, "osef");
-				asserv.goa(-3.1416/2);
+				asserv.goxy(260, 1050, "osef");
+				asserv.goa(3.1416/2);
 				asserv.pwm(50, 50, 1500);
-				asserv.calageY(874, -3.1416/2);
+				asserv.calageY(1126, 3.1416/2);
 				asserv.goxy(260, 1000, "arriere");
 				asserv.goa(3.1416);
 
@@ -367,7 +368,7 @@ module.exports = (function () {
 				that.client.send('ia', 'pr.gobelet0');
 				that.nb_plots = 0;
 				that.has_gobelet = false;
-				asserv.goxy(600, 1050, "avant", callback);
+				asserv.goxy(600, 1050, "avant", callback);*/
 			break;
 
 			case "deposer_pile_front_calage":

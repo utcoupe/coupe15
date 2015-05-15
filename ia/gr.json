@@ -17,7 +17,8 @@
 			"data": {
 				"x": 130,
 				"y": 1000,
-				"a": 0
+				"a": 0,
+				"color": "yellow"
 			}
 		},{
 			"name": "acheter",
@@ -58,7 +59,7 @@
 			"name": "goxy",
 			"data": {
 				"x": 1230,
-				"y": 1830
+				"y": 1800
 			}
 		},{
 			"name": "acheter",
