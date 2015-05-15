@@ -328,7 +328,7 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
-				//asserv.goxy(500, 900, "avant");
+				asserv.goxy(300, 1000, "avant");
 				//asserv.goa(-2.3562);
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
