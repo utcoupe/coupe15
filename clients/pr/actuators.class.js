@@ -252,7 +252,7 @@ module.exports = (function () {
 		switch (name){
 			// others
 			case "placer":
-				asserv.setPid(0.2, 8, 5);
+				asserv.setPid(0.2, 20, 5);
 				asserv.goxy(500, 940);
 				asserv.goa(-0.62);
 				this.orderHandler('ia','fermer_tout', {}, callback);
@@ -271,7 +271,7 @@ module.exports = (function () {
 				callback();
 			break;	
 			case "prendre_plot_rear_left":
-				asserv.goxy(150, 1800, "avant");
+				asserv.goxy(140, 1800, "avant");
 				that.prendre_plot2();
 				asserv.goxy(270, 1800, "arriere", callback);
 			break;
@@ -307,7 +307,7 @@ module.exports = (function () {
 				that.prendre_plot2();
 				that.monter_plot2();
 				asserv.speed(-300, 0, 700); 
-				asserv.goxy(180, 160, "avant");
+				asserv.goxy(185, 160, "avant");
 				that.prendre_plot2(callback);
 			break;
 
@@ -338,17 +338,17 @@ module.exports = (function () {
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
 				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 750, function() {
+				asserv.speed(-400, 0, 1000, function() {
 					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
 				});
 				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurMoyen(fake,0);
 				others.monterMoyenAscenseur();
 
-				asserv.goxy(260, 1020, "osef");
-				asserv.goa(3.1416/2);
+				asserv.goxy(260, 950, "osef");
+				asserv.goa(-3.1416/2);
 				asserv.pwm(50, 50, 1500);
-				asserv.calageY(1126, 3.1416/2);
+				asserv.calageY(874, -3.1416/2);
 				asserv.goxy(260, 1000, "arriere");
 				asserv.goa(3.1416);
 
