@@ -177,10 +177,11 @@ module.exports = (function () {
 			}
 
 			// Delete our robots
-			// logger.fatal(dots);
-			if (this.we_have_hats)
-				this.deleteOurRobots(dots);
-			// logger.fatal(dots);
+			for(var i in dots) {
+				if(this.norm(dots[i][0], dots[i][1], this.pos.x, this.pos.y) < 150 ||
+					this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < 150)
+				dots.splice(i, 1);
+			}
 
 			// Check path
 			this.detectCollision(dots);
@@ -214,6 +215,10 @@ module.exports = (function () {
 			// logger.fatal(this.ia.data.erobot);
 		}
 	};
+
+	Pr.prototype.norm = function(Ax, Ay, Bx, By) {
+		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
+	}
 	
 	return Pr;
 })();

@@ -57,30 +57,7 @@ module.exports = (function () {
 					break;
 					case 'ia.hok':
 						// logger.fatal(params);
-						if(this.timer.match_started) {
-							if(this.color == "green") {
-								params = params.map(function(val) {
-									return [val[0], 2000-val[1]];
-								});
-							}
-							logger.debug("before "+params.length);
-							for(var i in params) {
-								if(norm(params[i][0], params[i][1], this.pr.pos.x, this.pr.pos.y) < 150 ||
-									norm(params[i][0], params[i][1], this.gr.pos.x, this.gr.pos.y) < 150)
-								params.splice(i, 1);
-							}
-							logger.debug("after "+params.length);
-							this.pr.detectCollision(params);
-							this.data.dots = params.map(function(val) {
-								return {
-									pos: {
-										x: val[0],
-										y: val[1],
-									},
-									d: 320
-								}
-							});
-						}
+						this.pr.updatePos(params);
 					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);
