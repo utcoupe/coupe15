@@ -6,13 +6,13 @@
 			"owner": "pr",
 			"objectname": "clap__1",
 			"startpoints": [{
-				"x": 150,
+				"x": 140,
 				"y": 140,
 				"a": 3.1416
 			}],
 			"sens": "osef",
 			"priority": 18,
-			"dependency": "prendre_gobelet_et_2_plots_front_left",
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
 				"name": "clap_1",
@@ -25,7 +25,7 @@
 			"owner": "pr",
 			"objectname": "clap__3",
 			"startpoints": [{
-				"x": 740,
+				"x": 730,
 				"y": 140,
 				"a": 3.1416
 			}],

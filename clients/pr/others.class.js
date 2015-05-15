@@ -57,7 +57,7 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 100;
 		}
-		this.sendCommand(callback, 'H', [98, 26], time);
+		this.sendCommand(callback, 'H', [100, 23], time);
 	};
 
 	Others.prototype.ouvrirStabilisateurMoyen = function(callback, time) {
@@ -78,7 +78,7 @@ module.exports = (function () {
 		if (time === undefined) {
 			time = 200;
 		}
-		this.sendCommand(callback, 'M', [35, 65], time);
+		this.sendCommand(callback, 'M', [32, 68], time);
 	};
 
 	Others.prototype.ouvrirBloqueurMoyen = function(callback, time) {

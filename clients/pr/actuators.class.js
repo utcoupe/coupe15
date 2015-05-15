@@ -295,16 +295,16 @@ module.exports = (function () {
 			break;
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(fake,0);
-				asserv.goxy(275, 240, "arriere");
+				asserv.goxy(275, 260, "arriere");
 				others.prendreGobelet(function() {
 					that.has_gobelet = true;
 					that.client.send('ia', 'pr.gobelet1');
 				});
 				asserv.speed(500, 0, 500); 
-				asserv.goxy(175, 250, "avant"); //100 au lieu de 90 pos plot
+				asserv.goxy(165, 260, "avant"); //100 au lieu de 90 pos plot
 				that.prendre_plot();
 				asserv.speed(-300, 0, 700); 
-				asserv.goxy(185, 160, "avant");
+				asserv.goxy(175, 185, "avant");
 				that.prendre_plot(callback);
 			break;
 
@@ -333,7 +333,10 @@ module.exports = (function () {
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
 				others.ouvrirStabilisateurGrand();
+				asserv.speed(-300, 0, 1000);
 				others.lacherGobelet();
 				/*asserv.goxy(700, 1300, "arriere", function() {
 					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
@@ -449,7 +452,7 @@ module.exports = (function () {
 			break;
 			case "clap_1":
 				others.sortirClap();
-				asserv.goxy(400, 140, "osef", function() {
+				asserv.goxy(330, 140, "osef", function() {
 					callback();
 					others.rangerClap();
 				});

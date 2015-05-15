@@ -86,7 +86,7 @@ module.exports = (function () {
 			this.timer.start();
 			setTimeout(function() {
 				this.gr.start();
-			}.bind(this), 3000);
+			}.bind(this), 10000);
 			this.pr.start();
 			// this.hokuyo.start();
 		} else {

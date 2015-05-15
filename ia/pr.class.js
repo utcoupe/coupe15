@@ -23,7 +23,7 @@ module.exports = (function () {
 			nb_plots: 0,
 			gobelet:false
 		};
-		this.we_have_hats = true;
+		this.we_have_hats = false;
 		this.color = color;
 	}
 
