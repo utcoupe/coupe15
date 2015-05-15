@@ -301,17 +301,18 @@ module.exports = (function () {
 					that.client.send('ia', 'pr.gobelet1');
 				});
 				asserv.speed(500, 0, 500); 
-				asserv.goxy(165, 260, "avant"); //100 au lieu de 90 pos plot
+				asserv.goxy(165, 270, "avant"); //100 au lieu de 90 pos plot
 				that.prendre_plot();
-				asserv.speed(-300, 0, 700); 
-				asserv.goxy(175, 185, "avant");
+				//asserv.speed(-300, -300, 600); 
+				asserv.goxy(285, 310, "arriere");
+				asserv.goxy(155, 180, "avant");
 				that.prendre_plot(callback);
 			break;
 
 			case "prendre_2_plots_stairs":
 				asserv.goxy(803, 1745, "avant");
 				that.prendre_plot();
-				that.delay(1000);
+				that.delay(1001);
 				asserv.goxy(825, 1860, "avant");
 				that.prendre_plot();
 				asserv.speed(-300, -100, 1000, callback);
@@ -329,7 +330,6 @@ module.exports = (function () {
 
 			case "deposer_pile_et_gobelet":
 				asserv.goxy(300, 1000, "avant");
-				//asserv.goa(-2.3562);
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
 				others.ouvrirBloqueurGrand(fake,0);
