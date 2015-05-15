@@ -199,16 +199,17 @@ module.exports = (function () {
 		if (that.new_has_ball) {
 			that.new_has_ball = false;
 			others.descendreUnPeuAscenseur();
-			ax12.ouvrir();
+			ax12.fermer();
+			others.ouvrirBloqueurMoyen();
 			others.descendreAscenseur();
 			that.prendre_plot(callback);
 		}
 		else {
-
 			ax12.ouvrir();
 			ax12.fermer();
 			others.monterUnPeuAscenseur(function() {
 				that.client.send('ia', 'pr.plot++');
+				that.client.send('ia', 'pr.plot_down');
 				callback();
 			});
 		}
@@ -223,6 +224,7 @@ module.exports = (function () {
 		var that = this;
 
 		callback();
+		that.client.send('ia', 'pr.plot_up');
 		if (that.nb_plots == 1) {
 			others.ouvrirBloqueurMoyen();
 			others.monterAscenseur();
@@ -270,7 +272,7 @@ module.exports = (function () {
 			break;	
 			case "prendre_plot_rear_left":
 				asserv.goxy(150, 1800, "avant");
-				that.prendre_plot();
+				that.prendre_plot2();
 				asserv.goxy(270, 1800, "arriere", callback);
 			break;
 			case "prendre_plot_rear_left_calage":
@@ -287,7 +289,7 @@ module.exports = (function () {
 				asserv.goxy(300, 1600, "arriere");
 				asserv.goxy(300, 1800, "osef");
 				asserv.goxy(160, 1800, "avant");
-				that.prendre_plot();
+				that.prendre_plot2();
 				asserv.goa(1.5708);
 				asserv.pwm(50, 50, 1500);
 				asserv.calageY(1860, 1.5708);
@@ -302,18 +304,20 @@ module.exports = (function () {
 				});
 				asserv.speed(500, 0, 500); 
 				asserv.goxy(175, 250, "avant"); //100 au lieu de 90 pos plot
-				that.prendre_plot();
+				that.prendre_plot2();
+				that.monter_plot2();
 				asserv.speed(-300, 0, 700); 
 				asserv.goxy(180, 160, "avant");
-				that.prendre_plot(callback);
+				that.prendre_plot2(callback);
 			break;
 
 			case "prendre_2_plots_stairs":
 				asserv.goxy(803, 1745, "avant");
-				that.prendre_plot();
+				that.prendre_plot2();
+				that.monter_plot2();
 				that.delay(1000);
 				asserv.goxy(825, 1860, "avant");
-				that.prendre_plot();
+				that.prendre_plot2();
 				asserv.speed(-300, -100, 1000, callback);
 			break;
 
@@ -367,7 +371,10 @@ module.exports = (function () {
 				that.client.send('ia', 'pr.gobelet0');
 				that.nb_plots = 0;
 				that.has_gobelet = false;
-				asserv.goxy(600, 1050, "avant", callback);
+				asserv.goxy(600, 1050, "avant", function() {
+					that.client.send('ia', 'pr.plot_up');
+					callback()
+				});
 			break;
 
 			case "deposer_pile_front_calage":
