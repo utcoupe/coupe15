@@ -53,7 +53,12 @@ module.exports = (function () {
 					break;
 					case 'ia.hok':
 						// logger.fatal(params);
-						if(this.timer.match_started) {	
+						if(this.timer.match_started) {
+							if(this.color == "green") {
+								params = params.map(function(val) {
+									return [val[0], 2000-val[1]];
+								});
+							}
 							this.pr.detectCollision(params);
 							this.data.dots = params.map(function(val) {
 								return {
