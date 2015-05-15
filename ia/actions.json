@@ -126,7 +126,7 @@
 			"owner": "pr",
 			"objectname": "pile__left",
 			"startpoints": [{
-				"x": 500,
+				"x": 700,
 				"y": 1000,
 				"a": 3.1416
 			}],

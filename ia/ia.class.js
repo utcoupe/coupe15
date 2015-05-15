@@ -1,7 +1,11 @@
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.ia');
+	var logger = log4js.getLogger('ia.ia'); 
+
+	function norm(Ax, Ay, Bx, By) {
+		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
+	}
 
 	function Ia(color, nb_erobots, EGR_d, EPR_d) {
 		var we_have_hats = true;
@@ -53,23 +57,7 @@ module.exports = (function () {
 					break;
 					case 'ia.hok':
 						// logger.fatal(params);
-						if(this.timer.match_started) {
-							if(this.color == "green") {
-								params = params.map(function(val) {
-									return [val[0], 2000-val[1]];
-								});
-							}
-							this.pr.detectCollision(params);
-							this.data.dots = params.map(function(val) {
-								return {
-									pos: {
-										x: val[0],
-										y: val[1],
-									},
-									d: 320
-								}
-							});
-						}
+						this.pr.updatePos(params);
 					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);

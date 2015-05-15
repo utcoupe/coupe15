@@ -1,6 +1,8 @@
 module.exports = (function () {
 	"use strict";
 	var logger = require('log4js').getLogger('ia.pr');
+	var GR_OFFSET = 110;
+	var PR_GR_COEF = 1;
 
 	function Pr(ia, color) {
 		this.ia = ia;
@@ -21,6 +23,7 @@ module.exports = (function () {
 			nb_plots: 0,
 			gobelet:false
 		};
+		this.we_have_hats = true;
 		this.color = color;
 	}
 
@@ -100,15 +103,20 @@ module.exports = (function () {
 			case 'pr.gobelet0':
 				this.content.gobelet = false;
 			break;
+			case 'pr.hok':
+				this.updatePos(params);
+			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.pr: '+name);
 		}
 	};
 
 	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+
 	Pr.prototype.getDistance = function (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
 	};
+
 	Pr.prototype.detectCollision = function(dots) {
 		var collision = false;
 		var pf = this.path;
@@ -156,6 +164,60 @@ module.exports = (function () {
 		if (collision) {
 			this.collision();
 		}
+	}
+
+	Pr.prototype.updatePos = function(dots) {
+		if(this.ia.timer.match_started) {
+
+			// Invert if green
+			if(this.color == "green") {
+				dots = dots.map(function(val) {
+					return [val[0], 2000-val[1]];
+				});
+			}
+
+			// Delete our robots
+			for(var i in dots) {
+				if(this.norm(dots[i][0], dots[i][1], this.pos.x, this.pos.y) < 150 ||
+					this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < 150)
+				dots.splice(i, 1);
+			}
+
+			// Check path
+			this.detectCollision(dots);
+
+			// Update data
+			this.ia.data.dots = dots.map(function(val) {
+				return {
+					pos: {
+						x: val[0],
+						y: val[1],
+					},
+					d: 320
+				}
+			});
+			if (dots.length > 0) {
+				this.ia.data.erobot[0].pos= {
+					x: dots[0][0],
+					y: dots[0][1]
+				};
+
+				if (dots.length > 1) {
+					this.ia.data.erobot[1].pos= {
+						x: dots[1][0],
+						y: dots[1][1]
+					};
+				};
+			};
+
+			// logger.fatal(dots);
+			// logger.fatal(this.pos);
+			// logger.fatal(this.ia.data.erobot);
+		}
+	};
+
+	Pr.prototype.norm = function(Ax, Ay, Bx, By) {
+		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
 	}
 	
 	return Pr;
