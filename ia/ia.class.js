@@ -56,7 +56,11 @@ module.exports = (function () {
 						this.stop();
 					break;
 					case 'ia.hok':
-						// logger.fatal(params);
+						 logger.debug(params);
+						this.pr.updatePos(params);
+					break;
+					case 'ia.hokfailed':
+						 logger.fatal("HOKUYO NOT WORKING, UNPLUG AND REPLUG USB");
 						this.pr.updatePos(params);
 					break;
 					default:

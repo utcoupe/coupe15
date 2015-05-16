@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
         perror("urg_max_index()");
         return 1;
     }
-    int MAXITE;
-    for(MAXITE = 0; MAXITE < 100000; MAXITE++) {
+    while (1) {
         nb_clusters = 0;
 
         // \~japanese ƒf[ƒ^Žæ“¾
