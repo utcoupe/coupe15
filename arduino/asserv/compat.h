@@ -47,6 +47,9 @@ extern inline void initPins(){
 	digitalWrite(LED_MAINLOOP, LOW); //LOW = eteinte
 	digitalWrite(LED_BLOCKED, LOW); //LOW = eteinte
 	//Definition des interruptions arduino en fonction du type d'évaluation
+#ifdef LED_JACK
+	pinMode(LED_JACK, OUTPUT);
+#endif
 #if ENCODER_EVAL == 4
 	attachInterrupt(INTERRUPT_ENC_LEFT_A,leftInterruptA,CHANGE);
 	attachInterrupt(INTERRUPT_ENC_RIGHT_A,rightInterruptA,CHANGE);

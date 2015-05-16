@@ -39,7 +39,7 @@
 #define DT (1.0/HZ)
 #define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 1500 //mm/s
+#define SPD_MAX 1000 //mm/s
 #define ACC_MAX 1500  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.6
 #define K_DISTANCE_REDUCTION 20 // réduction de la vitesse linéaire quand on tourne
@@ -51,9 +51,9 @@
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
-#define ENC_LEFT_RADIUS 31.49 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENC_RIGHT_RADIUS 31.49 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENTRAXE_ENC 202.87 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
+#define ENC_LEFT_RADIUS 31.38 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENC_RIGHT_RADIUS 31.24 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENTRAXE_ENC 202.27 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
 
 #define ERROR_ANGLE 0.030 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint

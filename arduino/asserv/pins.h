@@ -49,6 +49,7 @@
 #define INTERRUPT_ENC_RIGHT_B 2
 
 #define PIN_JACK 52
+#define LED_JACK 51
 
 #define LED_DEBUG 14
 #define LED_BLOCKED 15
