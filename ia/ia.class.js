@@ -2,6 +2,7 @@ module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.ia'); 
+	var log_counter = 0;
 
 	function norm(Ax, Ay, Bx, By) {
 		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
@@ -56,7 +57,9 @@ module.exports = (function () {
 						this.stop();
 					break;
 					case 'ia.hok':
-						 logger.debug(params);
+						if ((log_counter++ % 15) == 0) {
+							logger.debug(params);
+						}
 						this.pr.updatePos(params);
 					break;
 					case 'ia.hokfailed':
