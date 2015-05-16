@@ -338,7 +338,7 @@ module.exports = (function () {
 				asserv.goxy(800, 1740, "avant");
 				that.prendre_plot(undefined, 1);
 				that.delay(1000);
-				asserv.goxy(830, 1855, "avant");
+				asserv.goxy(830, 1850, "avant");
 				that.prendre_plot(undefined, 0);
 				asserv.speed(-300, 0, 1000, callback); 
 			break;
