@@ -121,17 +121,17 @@
 				}],
 			"kill": null
 		},
-		"deposer_pile_gobelet_prendre_balle_gauche":{
+		"deposer_pile_gobelet_gauche":{
 			"type": "depot_pile",
 			"owner": "pr",
 			"objectname": "pile__left",
 			"startpoints": [{
-				"x": 700,
-				"y": 1000,
-				"a": 3.1416
-			}],
+					"x": 700,
+					"y": 1000,
+					"a": 3.1416
+				}],
 			"sens": "avant",
-			"priority": 10,
+			"priority": 14,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"invPlot": 1
@@ -139,6 +139,72 @@
 			"duration": 1,
 			"orders":[{
 				"name": "deposer_pile_et_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_plot_rear_left":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__rear_left",
+			"startpoints": [{
+				"x": 650,
+				"y": 1450,
+				"a": 0
+			}],
+			"sens": "avant",
+			"priority": 13,
+			"dependency": "deposer_pile_gobelet_gauche",
+			"dependencyRobotContent": {
+				"subPlot": 4
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_plot_rear_left_calage",
+				"params": {}
+			}],
+			"kill": null
+		},
+		"prendre_2_plots_stairs_left":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__stairs_left2",
+			"startpoints": [{
+				"x": 705,
+				"y": 1640,
+				"a": 0
+			}],
+			"sens": "avant",
+			"priority": 12,
+			"dependency": "prendre_plot_rear_left",
+			"dependencyRobotContent": {
+				"subPlot": 3
+				},
+			"duration": 2,
+				"orders":[{
+				"name": "prendre_2_plots_stairs",
+				"params": {}
+			}],
+			"kill": null
+		},
+		"deposer_pile_gauche_2":{
+			"type": "depot_pile",
+			"owner": "pr",
+			"objectname": "pile__left2",
+			"startpoints": [{
+				"x": 700,
+				"y": 1000,
+				"a": -1.5708
+			}],
+			"sens": "avant",
+			"priority": 9,
+			"dependency": "deposer_pile_gobelet_gauche",
+			"dependencyRobotContent": {
+				"invPlot": 1
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_pile_left_2",
 				"params": {}
 				}],
 			"kill": null

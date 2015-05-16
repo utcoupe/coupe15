@@ -213,8 +213,17 @@
 			"color": "none",
 			"status": "initial",
 			"pos": {
-				"x":450,
-				"y":950
+				"x":-200,
+				"y":1000
+			},
+			"d" : 6
+		},
+		"left2": {
+			"color": "none",
+			"status": "initial",
+			"pos": {
+				"x":550,
+				"y":1000
 			},
 			"d" : 6
 		},

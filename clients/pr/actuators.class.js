@@ -124,9 +124,12 @@ module.exports = (function () {
 		}, 'delay');
 	}
 
-	Acts.prototype.prendre_plot = function(callback){
+	Acts.prototype.prendre_plot = function(callback, monter){
 		if(callback === undefined) {
 			callback = function() {};
+		}
+		if (monter === undefined) {
+			monter = 1;
 		}
 		var that = this;
 		if (that.new_has_ball) {
@@ -135,6 +138,17 @@ module.exports = (function () {
 			ax12.ouvrir();
 			others.descendreAscenseur();
 			that.prendre_plot(callback);
+		}
+		else if (that.nb_plots>=4 || !monter){
+			ax12.ouvrir();
+			others.fermerStabilisateur();
+			ax12.fermer();
+			others.monterUnPeuAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
+			others.ouvrirBloqueurMoyen();
+			others.fermerBloqueur();
 		}
 		else if (that.nb_plots==0) {
 			ax12.ouvrir();
@@ -161,17 +175,6 @@ module.exports = (function () {
 			others.fermerBloqueur();
 			ax12.ouvrir(function() {});
 			others.descendreAscenseur();
-		}
-		else if (that.nb_plots>=4){
-			ax12.ouvrir();
-			others.fermerStabilisateur();
-			ax12.fermer();
-			others.monterUnPeuAscenseur(function() {
-				that.client.send('ia', 'pr.plot++');
-				callback();
-			});
-			others.ouvrirBloqueurMoyen();
-			others.fermerBloqueur();
 		}
 		else {
 			ax12.ouvrir();
@@ -269,29 +272,24 @@ module.exports = (function () {
 				callback();
 			break;	
 			case "prendre_plot_rear_left":
-				asserv.goxy(140, 1800, "avant");
-				that.prendre_plot();
+				asserv.goxy(160, 1800, "avant");
+				that.prendre_plot(undefined, 0);
 				asserv.goxy(270, 1800, "arriere", callback);
 			break;
 			case "prendre_plot_rear_left_calage":
-				var x, time;
-				if (that.new_has_ball) {
-					pwm_time = 2000;
-					x = 75;
-				} else {
-					pwm_time = 1500;
-					x = 140;
-				}
-				asserv.pwm(50, 50, pwm_time);
-				asserv.calageX(x, 3.1416);
-				asserv.goxy(300, 1600, "arriere");
-				asserv.goxy(300, 1800, "osef");
-				asserv.goxy(160, 1800, "avant");
-				that.prendre_plot();
+				asserv.goxy(250, 1450, "arriere");
 				asserv.goa(1.5708);
-				asserv.pwm(50, 50, 1500);
-				asserv.calageY(1860, 1.5708);
-				asserv.speed(-300, 0, 750, callback);
+				asserv.pwm(-70, -70, 1500);
+				asserv.calageY(1288, 1.5708);
+				asserv.goxy(250, 1450, 500);
+				asserv.goa(0);
+				asserv.pwm(-70, -70, 1500);
+				asserv.calageX(65, 0);
+				asserv.goxy(120, 1450, "avant");
+				asserv.goxy(120, 1790, "avant");
+				that.prendre_plot();
+				asserv.goa(-1);
+				asserv.speed(500, 0, 750, callback);
 			break;
 			case "prendre_gobelet_et_2_plots_front":
 				others.lacherGobelet(fake,0);
@@ -302,20 +300,47 @@ module.exports = (function () {
 				});
 				asserv.speed(500, 0, 500); 
 				asserv.goxy(165, 270, "avant"); //100 au lieu de 90 pos plot
-				that.prendre_plot();
+				that.prendre_plot(undefined, 1);
 				//asserv.speed(-300, -300, 600); 
 				asserv.goxy(285, 310, "arriere");
 				asserv.goxy(155, 180, "avant");
 				that.prendre_plot(callback);
 			break;
 
+			case "deposer_pile_left_2":
+				asserv.goxy(650, 1000, "avant");
+				others.descendreAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurGrand(function() {
+					that.nb_plots = 0;
+					that.client.send('ia', 'pr.plot0');
+				});
+				asserv.speed(-300, 0, 1000);
+			break;
+
+			case "recalage_stairs":
+				asserv.goxy(250, 1450, "arriere");
+				asserv.goa(1.5708);
+				asserv.pwm(-80, -80, 1500);
+				asserv.calageY(1288, 1.5708);
+				asserv.goxy(250, 1450, 500);
+				asserv.goa(0);
+				asserv.pwm(-80, -80, 1500);
+				asserv.calageY(65, 0);
+				asserv.goxy(120, 1450, "avant");
+			break;
+
 			case "prendre_2_plots_stairs":
-				asserv.goxy(803, 1745, "avant");
-				that.prendre_plot();
-				that.delay(1001);
-				asserv.goxy(825, 1860, "avant");
-				that.prendre_plot();
-				asserv.speed(-300, -100, 1000, callback);
+				asserv.goxy(800, 1740, "avant");
+				that.prendre_plot(undefined, 1);
+				that.delay(1000);
+				asserv.goxy(830, 1855, "avant");
+				that.prendre_plot(undefined, 0);
+				asserv.speed(-300, 0, 1000, callback); 
 			break;
 
 			case "prendre_gobelet":
@@ -329,18 +354,27 @@ module.exports = (function () {
 			break;
 
 			case "deposer_pile_et_gobelet":
-				asserv.goxy(300, 1000, "avant");
+				asserv.goxy(250, 1000, "avant");
 				others.descendreUnPeuAscenseur();
 				ax12.ouvrir();
-				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirBloqueurMoyen(fake,0);
 				others.ouvrirStabilisateurMoyen();
 				that.delay(500);
-				others.ouvrirStabilisateurGrand();
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurGrand(function() {
+					that.nb_plots = 0;
+					that.client.send('ia', 'pr.plot0');
+				});
 				asserv.speed(-300, 0, 1000);
 				asserv.goa(0);
-				others.lacherGobelet();
+				others.lacherGobelet(function() {
+					that.client.send('ia', 'pr.gobelet0');
+				});
 				that.delay(300);
-				asserv.speed(300, 0, 750);
+				asserv.speed(300, 0, 750, callback);
+				others.ouvrirStabilisateurMoyen(fake,0);
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.descendreAscenseur();
 				break;
 
 			case "deposer_pile_gobelet_prendre_balle_gauche":
@@ -393,41 +427,6 @@ module.exports = (function () {
 				asserv.goxy(600, 1050, "avant", callback);*/
 			break;
 
-			case "deposer_pile_front_calage":
-				ax12.ouvrir(fake);
-				others.monterMoyenAscenseur();
-				asserv.pwm(80, 80, 1000);
-				asserv.calageY(240, -1.5708);
-				asserv.speed(-200, 0, 1000);
-				others.ouvrirStabilisateurMoyen(fake,0);
-				others.descendreMoyenAscenseur();
-				others.ouvrirBloqueurGrand(fake,0);
-				ax12.ouvrir();
-				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 750, function() {
-					callback();
-					that.client.send('ia', 'data.add_dynamic', {pos:{x:asserv.pos.x, y:180}, d:8});
-				});
-				that.nb_plots = 0;
-				that.client.send('ia', 'pr.plot0');
-			break;
-
-			case "deposer_pile_front":
-				ax12.ouvrir();
-				others.ouvrirBloqueurMoyen();
-				asserv.speed(200, 0, 500);
-				others.ouvrirStabilisateurMoyen(fake,0);
-				others.descendreMoyenAscenseur();
-				others.ouvrirBloqueurGrand(fake,0);
-				others.ouvrirStabilisateurGrand();
-				asserv.speed(-300, 0, 750, function() {
-					callback();
-					that.client.send('ia', 'data.add_dynamic', {pos:{x:asserv.pos.x, y:180}, d:8});
-				});
-				that.nb_plots = 0;
-				that.client.send('ia', 'pr.plot0');
-			break;
-
 			case "deposer_gobelet":
 				asserv.goa(3.1416);
 				that.delay(100);
@@ -436,25 +435,6 @@ module.exports = (function () {
 				asserv.speed(500, 0, 800, callback);
 			break;
 
-			case "deposer_gobelet_front_right_calage":
-				asserv.goxy(2840, 600, "avant");
-				asserv.goa(0);
-				asserv.goa(0);
-				asserv.pwm(80, 80, 1500);
-				asserv.calageX(2863, 0);
-				asserv.goxy(2800, 600, "arriere");
-				asserv.goa(1.5708);
-				others.monterMoyenAscenseur();
-				asserv.pwm(80, 80, 1500);
-				asserv.calageY(704, 1.5708);
-				asserv.speed(-200, 0, 500);
-				asserv.goa(3.1416);
-				that.delay(100);
-				others.lacherGobelet();
-				that.client.send('ia', 'pr.gobelet0');
-				asserv.speed(500, 0, 800, callback);
-				others.descendreMoyenAscenseur();
-			break;
 			case "fermer_tout":
 				others.lacherGobelet();
 				others.fermerBloqueur();

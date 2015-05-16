@@ -10,6 +10,7 @@ module.exports = (function () {
 		this.t0 = Date.now();
 		this.match_started = true; // le match commence
 		setTimeout(function() {
+			logger.fatal("TIME OVER");
 			this.ia.stop();
 		}.bind(this), 89000);
 	};
