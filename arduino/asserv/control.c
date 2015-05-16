@@ -79,13 +79,15 @@ void ControlPrepareNewGoal(void) {
 void ControlCompute(void) {
 #if TIME_BETWEEN_ORDERS
 	static long time_reached = -1;
+	long now;
+	now = timeMicros();
 #endif
 	goal_t* current_goal = FifoCurrentGoal();
 	RobotStateUpdate();
 
 	// clear emergency everytime, it will be reset if necessary
-	control.status_bits &= ~EMERGENCY_BIT;
-	control.status_bits &= ~SLOWGO_BIT;
+	ControlUnsetStop(EMERGENCY_BIT);
+	ControlUnsetStop(SLOWGO_BIT);
 	
 	if (abs(control.speeds.linear_speed) > 1) {
 		int direction;
@@ -96,14 +98,16 @@ void ControlCompute(void) {
 		}
 
 		if (emergency_status[direction].phase == FIRST_STOP) {
-			control.status_bits |= EMERGENCY_BIT;
+			ControlSetStop(EMERGENCY_BIT);
 		} else if (emergency_status[direction].phase == SLOW_GO) {
-			control.status_bits |= SLOWGO_BIT;
+			ControlSetStop(SLOWGO_BIT);
 		}
 	}
 
 
-	if (control.status_bits & EMERGENCY_BIT || control.status_bits & PAUSE_BIT) {
+	if (control.status_bits & EMERGENCY_BIT || 
+		control.status_bits & PAUSE_BIT ||
+		control.status_bits & TIME_ORDER_BIT) {
 		stopRobot();
 	} else {
 		switch (current_goal->type) {
@@ -127,28 +131,20 @@ void ControlCompute(void) {
 
 	applyPwm();
 
-#if TIME_BETWEEN_ORDERS
-	if (current_goal->is_reached) {
-		long now = timeMicros();
-		if (time_reached < 0) {
-			time_reached = now;
-		}
-		control.last_finished_id = current_goal->ID;
-		if ((now-time_reached) > (TIME_BETWEEN_ORDERS*1000000)) {
-			//Si le but est atteint et que ce n'est pas 
-			//le dernier, on passe au suivant
-			FifoNextGoal();
-			ControlPrepareNewGoal();
-			time_reached = -1;
-		}
-	}
-#else
 	if (current_goal->is_reached) {
 		control.last_finished_id = current_goal->ID;
 		FifoNextGoal();
 		ControlPrepareNewGoal();
+#if TIME_BETWEEN_ORDERS
+		time_reached = now;
 	}
+	if (time_reached > 0 && (now - time_reached) < TIME_BETWEEN_ORDERS*1000000) {
+		ControlSetStop(TIME_ORDER_BIT);
+	} else {
+		ControlUnsetStop(TIME_ORDER_BIT);
+		time_reached = -1;
 #endif
+	}
 }
 
 /* INTERNAL FUNCTIONS */
