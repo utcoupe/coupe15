@@ -56,7 +56,11 @@ module.exports = (function () {
 						this.stop();
 					break;
 					case 'ia.hok':
-						// logger.fatal(params);
+						 logger.debug(params);
+						this.pr.updatePos(params);
+					break;
+					case 'ia.hokfailed':
+						 logger.fatal("HOKUYO NOT WORKING, UNPLUG AND REPLUG USB");
 						this.pr.updatePos(params);
 					break;
 					default:
@@ -86,7 +90,7 @@ module.exports = (function () {
 			this.timer.start();
 			setTimeout(function() {
 				this.gr.start();
-			}.bind(this), 3000);
+			}.bind(this), 10000);
 			this.pr.start();
 			// this.hokuyo.start();
 		} else {
