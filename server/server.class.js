@@ -155,13 +155,13 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.nb_erobots, params.EGR_d, params.EPR_d]);
 				break;
 				case 'pr':
-					this.progs[prog] = spawn('node', ['./clients/pr/main.js']);
+					this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
 				break;
 				case 'gr':
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
-					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.simu.js']);
+					this.progs[prog] = spawn('ssh', ['raspi', '/root/main.sh']);
 				break;
 			}
 
@@ -230,6 +230,11 @@ module.exports = (function () {
 	}
 
 	Server.prototype.stop = function(prog) {
+		if (prog == "pr") {
+			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
+		} else if (prog == "hokuyo") {
+			this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
+		}
 		if(this.utcoupe[prog]) {
 			this.progs[prog].kill();
 			logger.info("stopped "+prog);
