@@ -20,6 +20,7 @@ int JackCheck(void) {
 	static int last_jack_status = 1;
 	int i, jack_status, sent_bytes = 0;
 	jack_status = digitalRead(PIN_JACK);
+	digitalWrite(LED_JACK, !jack_status);
 	if (last_jack_status == 0 && jack_status == 1) {
 		for (i=0; i<JACK_SEND_NR; i++) {
 			Serial.write(JACK);
