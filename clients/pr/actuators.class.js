@@ -139,7 +139,7 @@ module.exports = (function () {
 			others.descendreAscenseur();
 			that.prendre_plot(callback);
 		}
-		else if (that.nb_plots>=4 || !monter){
+		else if (that.nb_plots>=3 || !monter){
 			ax12.ouvrir();
 			others.fermerStabilisateur();
 			ax12.fermer();

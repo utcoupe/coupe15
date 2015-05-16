@@ -54,7 +54,7 @@
 			"dependency": "",
 			"dependencyRobotContent": {
 				"gobelet": false,
-				"subPlot": 3,
+				"subPlot": 2,
 				"invPlot": 0
 				},
 			"duration": 1,
@@ -73,7 +73,7 @@
 			"priority": 21, 
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 4,
+				"subPlot": 3,
 				"invPlot": 0
 				},
 			"duration": 1,
@@ -92,7 +92,7 @@
 			"priority": 20, 
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 4,
+				"subPlot": 3,
 				"invPlot": 0
 				},
 			"duration": 1,
@@ -111,7 +111,7 @@
 			"priority": 21,  
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 4,
+				"subPlot": 3,
 				"invPlot": 0
 				},
 			"duration": 1,
@@ -156,7 +156,7 @@
 			"priority": 13,
 			"dependency": "deposer_pile_gobelet_gauche",
 			"dependencyRobotContent": {
-				"subPlot": 4
+				"subPlot": 3
 				},
 			"duration": 1,
 			"orders":[{
@@ -178,7 +178,7 @@
 			"priority": 12,
 			"dependency": "prendre_plot_rear_left",
 			"dependencyRobotContent": {
-				"subPlot": 3
+				"subPlot": 2
 				},
 			"duration": 2,
 				"orders":[{
