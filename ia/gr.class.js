@@ -5,14 +5,14 @@ module.exports = (function () {
 
 	function Gr(ia, color) {
 		this.ia = ia;
-		this.pos = require('./gr.json')['pos'];
+		this.pos = require('./gr.'+color+'.json')['pos'];
 		this.pos.color = color;
 		this.size = {
 			l: 290,
 			L: 290,
 			d: 420
 		};
-		this.orders = require('./gr.json')['script'];
+		this.orders = require('./gr.'+color+'.json')['script'];
 		// logger.debug(this.orders);
 		this.path = null;
 	}
