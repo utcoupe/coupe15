@@ -70,7 +70,7 @@
 			"objectname": "plot__middle_left1",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 20, 
+			"priority": 21, 
 			"dependency": "",
 			"dependencyRobotContent": {
 				"subPlot": 4,
@@ -102,13 +102,13 @@
 				}],
 			"kill": null
 		},
-		"prendre_plot_middle_left3":{
+		"pousser_plot_middle_left3":{
 			"type": "plot",
 			"owner": "pr",
 			"objectname": "plot__middle_left3",
 			"startpoints": [],
 			"sens": "avant",
-			"priority": 20,  
+			"priority": 21,  
 			"dependency": "",
 			"dependencyRobotContent": {
 				"subPlot": 4,
@@ -116,7 +116,7 @@
 				},
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_plot",
+				"name": "pousser_plot",
 				"params": {}
 				}],
 			"kill": null

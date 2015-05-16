@@ -193,6 +193,15 @@ module.exports = (function () {
 		that.nb_plots++;
 	}
 
+	Acts.prototype.pousser_plot = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		ax12.ouvrir();
+		asserv.goxy(1150, 200, "avant");
+		asserv.goxy(1100, 250, "arriere", callback);
+	}
+
 	Acts.prototype.prendre_plot2 = function(callback){
 		if(callback === undefined) {
 			callback = function() {};
@@ -260,6 +269,9 @@ module.exports = (function () {
 			break;
 			case "prendre_plot":
 				this.prendre_plot(callback);
+			break;
+			case "pousser_plot":
+				this.pousser_plot(callback);
 			break;
 			case "prendre_plot2":
 				this.prendre_plot2(callback);
